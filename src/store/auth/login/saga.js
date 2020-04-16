@@ -1,10 +1,9 @@
-import { takeEvery, fork, put, all, call } from 'redux-saga/effects';
+import { takeEvery, fork, put, all, call, select } from 'redux-saga/effects';
 
 // Login Redux States
 import { LOGIN_USER, LOGOUT_USER } from './actionTypes';
 import { loginSuccess, logoutUserSuccess, apiError } from './actions';
-import { loginUserService } from '../../../helpers/auth';
-
+import { loginUserService, sanctumService } from '../../../helpers/auth';
 
 //AUTH related methods
 import { getFirebaseBackend } from '../../../helpers/authUtils';
@@ -13,7 +12,7 @@ const fireBaseBackend = getFirebaseBackend();
 
 function* loginUser({ payload: { user, history } }) {
     try {
-        const response = yield call(loginUserService, user);
+        const response = yield call(sanctumService, user);
         yield put(loginSuccess(response));
         history.push('/dashboard');
     } catch (error) {

@@ -1,22 +1,11 @@
 import React, { Component } from "react";
-import SettingMenu from "../Shared/SettingMenu";
 import {
   Row,
   Col,
-  Button,
-  Input,
   Card,
   CardBody,
-  Nav,
-  NavItem,
-  NavLink,
-  TabContent,
-  TabPane,
-  CardText,
-  Table
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import { MDBDataTable, MDBBtn, MDBTableHead, MDBTableBody } from "mdbreact";
 import "chartist/dist/scss/chartist.scss";
 
 class UserAdd extends Component {

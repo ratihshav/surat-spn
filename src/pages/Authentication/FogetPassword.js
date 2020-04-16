@@ -125,7 +125,6 @@ class ForgetPasswordPage extends Component {
 }
 
 const mapStatetoProps = state => {
-  console.log(state.forgetSuccessMsg);
   const { forgetError, forgetSuccessMsg } = state.ForgetPassword;
   return { forgetError, forgetSuccessMsg };
 };

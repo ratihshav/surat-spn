@@ -25,6 +25,7 @@ import Profile from "../pages/Profile"
 
 import User from "../pages/User"
 import UserAdd from "../pages/User/add"
+import UserEdit from "../pages/User/edit"
 
 
 // UI Pages
@@ -189,6 +190,7 @@ const authProtectedRoutes = [
   //User
   { path: "/user", component: User },
   { path: "/user-add", component: UserAdd },
+  { path: "/user-edit", component: UserEdit },
 
 
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> }

@@ -37,14 +37,11 @@ export const loginUserService = (request) => {
   };
   return fetch(LOGIN_API_ENDPOINT, parameters)
     .then(response => {
-
       return response.json();
     })
     .then(json => {
-      const storedToken = json.token
-      console.log('storedToken', storedToken)
-      const setAuthUser = sessionStorage.setItem('authUser', JSON.stringify(storedToken))
-      console.log('setAuthUser', setAuthUser)
+      const storedToken = json.data.token
+      localStorage.setItem('authUser', JSON.stringify(storedToken))
       return json;
     })
     .catch(error => {
@@ -52,17 +49,35 @@ export const loginUserService = (request) => {
     })
 };
 
+export const sanctumService = (request) => {
+  const sanctum = config.endpoint + '/sanctum/csrf-cookie';
+  const parameters = {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+  };
+  return fetch(sanctum, parameters)
+    .then(response => {
+      return loginUserService(request)
+    })
+    .catch(error => {
+      return this._handleError(error);
+    })
+}
+
 export const setLoggeedInUser = user => {
-  sessionStorage.setItem("authUser", JSON.stringify(user));
+  localStorage.setItem("authUser", JSON.stringify(user));
 };
 
 /**
  * Returns the authenticated user
  */
 export const getAuthenticatedUser = () => {
-
-  return JSON.parse(sessionStorage.getItem("authUser"));
-
+  if (!localStorage.getItem("authUser")) return null;
+  return JSON.parse(localStorage.getItem("authUser"));
 };
 
 export async function _handleError(error) {

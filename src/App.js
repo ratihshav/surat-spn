@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 // Import Routes
 import { authProtectedRoutes, publicRoutes } from "./routes/";
 import AppRoute from "./routes/route";
+import { getAuthenticatedUser } from "./helpers/auth";
+
 
 // layouts
 import VerticalLayout from "./components/VerticalLayout/";
@@ -13,7 +15,8 @@ import NonAuthLayout from "./components/NonAuthLayout";
 
 // Import scss
 import "./assets/scss/theme.scss";
-
+import 'devextreme/dist/css/dx.common.css';
+import 'devextreme/dist/css/dx.light.css';
 
 class App extends Component {
   constructor(props) {
@@ -46,7 +49,7 @@ class App extends Component {
       <React.Fragment>
         <Router>
           <Switch>
-            {publicRoutes.map((route, idx) => (
+            {!getAuthenticatedUser() ? publicRoutes.map((route, idx) => (
               <AppRoute
                 path={route.path}
                 layout={NonAuthLayout}
@@ -54,17 +57,17 @@ class App extends Component {
                 key={idx}
                 isAuthProtected={false}
               />
-            ))}
-
-            {authProtectedRoutes.map((route, idx) => (
-              <AppRoute
-                path={route.path}
-                layout={Layout}
-                component={route.component}
-                key={idx}
-                isAuthProtected={true}
-              />
-            ))}
+            ))
+              :
+              authProtectedRoutes.map((route, idx) => (
+                <AppRoute
+                  path={route.path}
+                  layout={Layout}
+                  component={route.component}
+                  key={idx}
+                  isAuthProtected={true}
+                />
+              ))}
           </Switch>
         </Router>
       </React.Fragment>
@@ -73,8 +76,10 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
+  console.log('state', state)
   return {
-    layout: state.Layout
+    layout: state.Layout,
+    login: state.Login
   };
 };
 

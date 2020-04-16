@@ -29,27 +29,13 @@ class Login extends Component {
     this.props.loginUserAction(values, this.props.history);
   }
 
-  componentDidUpdate() {
-
-    if (this.props.response !== undefined) {
-      // return (
-      //   <Redirect
-      //     to={{ pathname: "/dashboard" }}
-      //   />
-      // );
-      this.props.history.push('/dashboard');
-      //path is ok!!!
-    }
-  }
 
   render() {
     let token
 
     if (this.props.response) {
-      // isSuccess = this.props.response.login.response.success;
-      // message = this.props.response.login.response.message;
-      token = this.props.response.payload.token
-
+      token = this.props.response.payload.data.token
+      this.props.history.push('/dashboard');
     }
     return (
       < React.Fragment >

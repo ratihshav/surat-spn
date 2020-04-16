@@ -9,10 +9,10 @@ export const loginUser = (user, history) => {
 
 export const loginUserAction = (user, history) => {
     return {
-      type: LOGIN_USER,
-      payload: {user, history}
+        type: LOGIN_USER,
+        payload: { user, history }
     }
-  };
+};
 
 export const loginSuccess = (user) => {
     return {
