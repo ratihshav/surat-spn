@@ -5,7 +5,10 @@ import {
   GET_MASTER_USER,
   SAVE_MASTER_USER,
   DELETE_MASTER_USER,
-  UPDATE_MASTER_USER
+  UPDATE_MASTER_USER,
+  GET_DETAIL_USER,
+  CHANGE_PASSWORD_USER,
+  CHANGE_PHOTO_USER,
 } from './actionTypes';
 
 import {
@@ -16,18 +19,25 @@ import {
   deleteMasterUserSuccess,
   deleteMasterUserFail,
   updateMasterUserSuccess,
-  updateMasterUserFail
+  updateMasterUserFail,
+  getDetailUserSuccess,
+  getDetailUserFail,
+  changePasswordUserSuccess,
+  changePasswordUserFail,
+  changePhotoUserSuccess,
+  changePhotoUserFail,
+
 } from './actions';
 
 import {
   getMasterUserServices,
   saveMasterUserService,
   deleteMasterUserService,
-  updateMasterUserService
-} from '../../../helpers/master';
-
-//AUTH related methods
-import { getFirebaseBackend } from '../../../helpers/authUtils';
+  updateMasterUserService,
+  getDetailUserService,
+  changePasswordUserService,
+  changePhotoUserService,
+} from '../../../helpers/master/user';
 
 
 function* getMasterUserSaga({ payload }) {
@@ -66,6 +76,34 @@ function* updateMasterUserSaga({ payload: { request } }) {
   }
 }
 
+function* getDetailUserSaga({ payload: { request } }) {
+  try {
+    const response = yield call(getDetailUserService, request);
+    yield put(getDetailUserSuccess(response));
+  } catch (error) {
+    yield put(getDetailUserFail(error));
+  }
+}
+
+function* changePasswordUserSaga({ payload: { request } }) {
+  try {
+    const response = yield call(changePasswordUserService, request);
+    yield put(changePasswordUserSuccess(response));
+  } catch (error) {
+    yield put(changePasswordUserFail(error));
+  }
+}
+
+function* changePhotoUserSaga({ payload: { request } }) {
+  try {
+    const response = yield call(changePhotoUserService, request);
+    yield put(changePhotoUserSuccess(response));
+  } catch (error) {
+    yield put(changePhotoUserFail(error));
+  }
+}
+
+
 export function* watchGetMasterUser() {
   yield takeLatest(GET_MASTER_USER, getMasterUserSaga)
 }
@@ -82,12 +120,29 @@ export function* watchUpdateMasterUser() {
   yield takeEvery(UPDATE_MASTER_USER, updateMasterUserSaga)
 }
 
+export function* watchGetDetailUser() {
+  yield takeEvery(GET_DETAIL_USER, getDetailUserSaga)
+}
+
+export function* watchChangePasswordUser() {
+  yield takeEvery(CHANGE_PASSWORD_USER, changePasswordUserSaga)
+}
+
+export function* watchChangePhotoUser() {
+  yield takeEvery(CHANGE_PHOTO_USER, changePhotoUserSaga)
+}
+
+
+
 function* MasterUserSaga() {
   yield all([
     fork(watchGetMasterUser),
     fork(watchSaveMasterUser),
     fork(watchDeleteMasterUser),
-    fork(watchUpdateMasterUser)
+    fork(watchUpdateMasterUser),
+    fork(watchGetDetailUser),
+    fork(watchChangePasswordUser),
+    fork(watchChangePhotoUser),
   ]);
 }
 

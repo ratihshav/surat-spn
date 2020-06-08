@@ -20,114 +20,44 @@ const SidebarContent = props => {
           </Link>
         </li>
 
-        <li>
-          <Link to="/calendar" className=" waves-effect">
-            <i className="ti-calendar"></i>
-            <span>Calendar</span>
-          </Link>
-        </li>
 
         <li>
           <Link to="/#" className="has-arrow waves-effect">
             <i className="ti-email"></i>
-            <span>Email</span>
+            <span>Surat</span>
           </Link>
           <ul className="sub-menu" aria-expanded="false">
             <li>
-              <Link to="/email-inbox">Inbox</Link>
+              <Link to="/email-read">Surat Masuk</Link>
             </li>
             <li>
-              <Link to="/email-read">Email Read</Link>
-            </li>
-            <li>
-              <Link to="/email-compose">Email Compose</Link>
+              <Link to="/outgoing-mail-create">Surat Keluar</Link>
             </li>
           </ul>
         </li>
+
+
         <li>
           <Link to="/#" className="has-arrow waves-effect">
-            <i className="ti-user"></i>
-            <span>User</span>
+            <i className="ti-email"></i>
+            <span>Master Data</span>
           </Link>
           <ul className="sub-menu" aria-expanded="false">
             <li>
-              <Link to="/user">Daftar User</Link>
+              <Link to="/user">Data User</Link>
             </li>
             <li>
-              <Link to="/user-add">Tambah User</Link>
+              <Link to="/group">Data Divisi</Link>
+            </li>
+            <li>
+              <Link to="/email-compose">Data Jabatan</Link>
             </li>
           </ul>
         </li>
 
+        <li className="menu-title">Extras</li>
 
-        <li className="menu-title">Components</li>
-        <li>
-          <Link to="/#" className="has-arrow waves-effect">
-            <i className="ti-package"></i>
-            <span>UI Elements</span>
-          </Link>
-          <ul className="sub-menu" aria-expanded="false">
-            <li>
-              <Link to="ui-alerts">Alerts</Link>
-            </li>
-            <li>
-              <Link to="ui-buttons">Buttons</Link>
-            </li>
-            <li>
-              <Link to="ui-cards">Cards</Link>
-            </li>
-            <li>
-              <Link to="ui-carousel">Carousel</Link>
-            </li>
-            <li>
-              <Link to="ui-dropdowns">Dropdowns</Link>
-            </li>
-            <li>
-              <Link to="ui-grid">Grid</Link>
-            </li>
-            <li>
-              <Link to="ui-images">Images</Link>
-            </li>
-            <li>
-              <Link to="ui-lightbox">Lightbox</Link>
-            </li>
-            <li>
-              <Link to="ui-modals">Modals</Link>
-            </li>
-            <li>
-              <Link to="ui-rangeslider">Range Slider</Link>
-            </li>
-            <li>
-              <Link to="ui-session-timeout">Session Timeout</Link>
-            </li>
-            <li>
-              <Link to="ui-progressbars">Progress Bars</Link>
-            </li>
-            <li>
-              <Link to="ui-sweet-alert">Sweet-Alert</Link>
-            </li>
-            <li>
-              <Link to="ui-tabs-accordions">Tabs &amp; Accordions</Link>
-            </li>
-            <li>
-              <Link to="ui-typography">Typography</Link>
-            </li>
-            <li>
-              <Link to="ui-video">Video</Link>
-            </li>
-            <li>
-              <Link to="ui-general">General</Link>
-            </li>
-            <li>
-              <Link to="ui-colors">Colors</Link>
-            </li>
-            <li>
-              <Link to="ui-rating">Rating</Link>
-            </li>
-          </ul>
-        </li>
-
-        <li>
+        {/* <li>
           <Link to="/#" className="waves-effect">
             <i className="ti-receipt"></i>
             <span className="badge badge-pill badge-success float-right">
@@ -164,118 +94,7 @@ const SidebarContent = props => {
               <Link to="form-mask">Form Mask</Link>
             </li>
           </ul>
-        </li>
-
-        <li>
-          <Link to="/#" className="has-arrow waves-effect">
-            <i className="ti-pie-chart"></i>
-            <span>Charts</span>
-          </Link>
-          <ul className="sub-menu" aria-expanded="false">
-            <li>
-              <Link to="charts-chartist">Chartist Chart</Link>
-            </li>
-            <li>
-              <Link to="e-charts">E Chart</Link>
-            </li>
-            <li>
-              <Link to="charts-chartjs">Chartjs Chart</Link>
-            </li>
-            <li>
-              <Link to="apex-chart">Apex Chart</Link>
-            </li>
-            <li>
-              <Link to="charts-sparkline">Sparkline Chart</Link>
-            </li>
-          </ul>
-        </li>
-
-        <li>
-          <Link to="/#" className="has-arrow waves-effect">
-            <i className="ti-view-grid"></i>
-            <span>Tables</span>
-          </Link>
-          <ul className="sub-menu" aria-expanded="false">
-            <li>
-              <Link to="tables-basic">Basic Tables</Link>
-            </li>
-            <li>
-              <Link to="tables-datatable">Data Table</Link>
-            </li>
-            <li>
-              <Link to="tables-responsive">Responsive Table</Link>
-            </li>
-            <li>
-              <Link to="tables-editable">Editable Table</Link>
-            </li>
-          </ul>
-        </li>
-
-        <li>
-          <Link to="/#" className="has-arrow waves-effect">
-            <i className="ti-face-smile"></i>
-            <span>Icons</span>
-          </Link>
-          <ul className="sub-menu" aria-expanded="false">
-            <li>
-              <Link to="icons-material">Material Design</Link>
-            </li>
-            <li>
-              <Link to="icons-fontawesome">Font Awesome</Link>
-            </li>
-            <li>
-              <Link to="icons-ion">Ion Icons</Link>
-            </li>
-            <li>
-              <Link to="icons-themify">Themify Icons</Link>
-            </li>
-            <li>
-              <Link to="icons-dripicons">Dripicons</Link>
-            </li>
-            <li>
-              <Link to="icons-typicons">Typicons Icons</Link>
-            </li>
-          </ul>
-        </li>
-
-        <li>
-          <Link to="/#" className="waves-effect">
-            <i className="ti-location-pin"></i>
-            <span className="badge badge-pill badge-danger float-right">2</span>
-            <span>Maps</span>
-          </Link>
-          <ul className="sub-menu" aria-expanded="false">
-            <li>
-              <Link to="maps-google"> Google Map</Link>
-            </li>
-            <li>
-              <Link to="maps-vector"> Vector Map</Link>
-            </li>
-          </ul>
-        </li>
-
-        <li className="menu-title">Extras</li>
-
-        <li>
-          <Link to="/#" className="has-arrow waves-effect">
-            <i className="ti-archive"></i>
-            <span> Authentication </span>
-          </Link>
-          <ul className="sub-menu" aria-expanded="false">
-            <li>
-              <Link to="pages-login-2">Login 2</Link>
-            </li>
-            <li>
-              <Link to="pages-register-2">Register 2</Link>
-            </li>
-            <li>
-              <Link to="pages-recoverpw-2">Recover Password 2</Link>
-            </li>
-            <li>
-              <Link to="pages-lock-screen-2">Lock Screen 2</Link>
-            </li>
-          </ul>
-        </li>
+        </li> */}
 
         <li>
           <Link to="/#" className="has-arrow waves-effect">

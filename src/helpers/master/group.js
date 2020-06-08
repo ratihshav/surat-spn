@@ -1,6 +1,6 @@
 import axios from 'axios'
-import config from './config'
-import { getAuthenticatedUser } from "../helpers/auth";
+import config from '../config'
+import { getAuthenticatedUser } from "../auth";
 
 var token = getAuthenticatedUser()
 const CancelToken = axios.CancelToken;
@@ -19,21 +19,21 @@ const instance = axios.create({
   })
 });
 
-
-export const getMasterUserServices = (request) => {
-  const GET_MASTER_USER_API = config.api_endpoint + `/user/list`;
-  return instance.get(GET_MASTER_USER_API + `${request}`)
+//get list group directly
+export const getMasterGroupServices = () => {
+  const GET_MASTER_GROUP_API = config.api_endpoint + `/jabatan/list`;
+  return instance.get(GET_MASTER_GROUP_API)
     .then((data) => {
       return {
-        data: data.data.data.data,
-        totalCount: data.data.data.totalCount
+        data: data.data.data,
       };
     })
     .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
 }
-//get
-export const getMasterUserService = (request) => {
-  const GET_MASTER_USER_API = config.api_endpoint + `/user/list`;
+
+//get group for Saga
+export const getMasterGroupService = () => {
+  const GET_MASTER_GROUP_API = config.api_endpoint + `/jabatan/list`;
   const parameters = {
     method: 'GET',
     headers: {
@@ -41,16 +41,16 @@ export const getMasterUserService = (request) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify(request)
+    // body: JSON.stringify(request)
   };
-  return fetch(GET_MASTER_USER_API, parameters)
+  return fetch(GET_MASTER_GROUP_API, parameters)
     .then(response => {
       return response.json();
     })
     .then(json => {
       return {
-        data: json.data.data,
-        totalCount: json.data.totalCount
+        data: json.data,
+        // totalCount: json.data.totalCount
       };
     })
     .catch(error => {
@@ -60,8 +60,8 @@ export const getMasterUserService = (request) => {
 
 
 //create
-export const saveMasterUserService = (request) => {
-  const SAVE_MASTER_USER_API = config.api_endpoint + '/user/save';
+export const saveMasterGroupService = (request) => {
+  const SAVE_MASTER_GROUP_API = config.api_endpoint + '/jabatan/save';
   const parameters = {
     method: 'POST',
     headers: {
@@ -71,32 +71,7 @@ export const saveMasterUserService = (request) => {
     },
     body: JSON.stringify(request)
   };
-  return fetch(SAVE_MASTER_USER_API, parameters)
-    .then(response => {
-      return response.json();
-    })
-    .then(json => {
-      return json;
-    })
-    .catch(error => {
-      return this._handleError(error);
-    })
-};
-
-//delete
-export const deleteMasterUserService = (request) => {
-  const id = request.id
-  const UPDATE_MASTER_USER_API = config.api_endpoint + `/user/save/${id}`;
-  const parameters = {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify(request)
-  };
-  return fetch(UPDATE_MASTER_USER_API, parameters)
+  return fetch(SAVE_MASTER_GROUP_API, parameters)
     .then(response => {
       return response.json();
     })
@@ -109,9 +84,9 @@ export const deleteMasterUserService = (request) => {
 };
 
 //update
-export const updateMasterUserService = (request) => {
+export const updateMasterGroupService = (request) => {
   const id = request.id
-  const DELETE_MASTER_USER_API_ENDPOINT = config.api_endpoint + `/user/delete/${id}`;
+  const UPDATE_MASTER_GROUP_API = config.api_endpoint + `/jabatan/save/${id}`;
   const parameters = {
     method: 'POST',
     headers: {
@@ -121,7 +96,7 @@ export const updateMasterUserService = (request) => {
     },
     body: JSON.stringify(request)
   };
-  return fetch(DELETE_MASTER_USER_API_ENDPOINT, parameters)
+  return fetch(UPDATE_MASTER_GROUP_API, parameters)
     .then(response => {
       return response.json();
     })
@@ -132,6 +107,57 @@ export const updateMasterUserService = (request) => {
       return this._handleError(error);
     })
 };
+
+//delete
+export const deleteMasterGroupService = (request) => {
+  const id = request.id
+  const DELETE_MASTER_GROUP_API_ENDPOINT = config.api_endpoint + `/jabatan/delete/${id}`;
+  const parameters = {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(request)
+  };
+  return fetch(DELETE_MASTER_GROUP_API_ENDPOINT, parameters)
+    .then(response => {
+      return response.json();
+    })
+    .then(json => {
+      return json;
+    })
+    .catch(error => {
+      return this._handleError(error);
+    })
+};
+
+//detail
+export const getDetailGroupService = (request) => {
+  // const id = request.id
+  const GET_DETAIL_GROUP_API = config.api_endpoint + `/jabatan/view/${request}`;
+  const parameters = {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    // body: JSON.stringify(request)
+  };
+  return fetch(GET_DETAIL_GROUP_API, parameters)
+    .then(response => {
+      return response.json();
+    })
+    .then(json => {
+      return json;
+    })
+    .catch(error => {
+      return error.message
+    })
+};
+
 
 export async function _handleError(error) {
   // var errorCode = error.code;

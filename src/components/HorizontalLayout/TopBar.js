@@ -81,7 +81,7 @@ class TopBar extends Component {
                     <img src={logosmImg} alt="" height="22" />
                   </span>
                   <span className="logo-lg">
-                    <img src={logodarkImg} alt="" height="17" />
+                    Sistem Surat Dinas Pemerintahan
                   </span>
                 </Link>
 
@@ -90,7 +90,7 @@ class TopBar extends Component {
                     <img src={logosmImg} alt="" height="22" />
                   </span>
                   <span className="logo-lg">
-                    <img src={logolightImg} alt="" height="18" />
+                  Sistem Surat Dinas Pemerintahan
                   </span>
                 </Link>
               </div>

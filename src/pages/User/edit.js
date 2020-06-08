@@ -2,52 +2,24 @@ import React, { Component } from "react";
 import {
   Row,
   Col,
-  Button,
-  Input,
   Card,
   CardBody,
-  Nav,
-  NavItem,
-  NavLink,
-  TabContent,
-  TabPane,
-  CardText,
-  Table
+  Button,
 } from "reactstrap";
 import Form, {
   Item,
   ButtonItem,
-  GroupItem,
-  SimpleItem,
-  Label,
-  CompareRule,
-  EmailRule,
-  PatternRule,
-  RangeRule,
-  RequiredRule,
-  StringLengthRule,
-  AsyncRule
 } from 'devextreme-react/form';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Link } from "react-router-dom";
-import classnames from "classnames";
+import { connect } from "react-redux";
+import { withRouter, Link } from "react-router-dom";
+import {
+  updateMasterUser,
+  updateMasterUserSuccess
+} from "../../store/business/master-user/actions";
 
 // import images
 import user2 from "../../assets/images/users/user-2.jpg";
 import "chartist/dist/scss/chartist.scss";
-
-const dataUsers = {
-  id: 33,
-  group_name: null,
-  group_id: null,
-  username: "Prof. Marian O'Connell",
-  full_name: "Estefania Bartoletti",
-  email: "marjolaine07@example.org",
-  phone: "081352",
-  address: "9045 Britney Neck↵Casperland, KY 80676",
-  last_login: null,
-  date_of_birth: new Date(1964, 2, 16)
-}
 
 class UserEdit extends Component {
   constructor(props) {
@@ -56,18 +28,6 @@ class UserEdit extends Component {
       dataUser: '',
     };
     this.groupedItems = {
-      // systemInformation: [
-      //   'ID', 'FirstName', 'LastName', 'HireDate', 'Position', 'OfficeNo'
-      // ],
-      // personalData: [
-      //   'BirthDate',
-      //   {
-      //     itemType: 'group',
-      //     caption: 'Home Address',
-      //     items: ['Address', 'City', 'State', 'Zipcode']
-      //   }
-
-      // ],
       contactInformation: [{
         itemType: 'tabbed',
         tabPanelOptions: {
@@ -80,11 +40,17 @@ class UserEdit extends Component {
           title: 'Personal Data',
           items: ['full_name', 'date_of_birth', 'address', 'phone']
         }, {
-          title: 'Jabatan',
+          title: 'Divisi',
           items: ['group_name']
         }]
       }
       ]
+    };
+    this.buttonOptions = {
+      text: 'Submit',
+      type: 'success',
+      // useSubmitBehavior: true,
+      onClick: (e) => this.submitUpdatedData(e)
     };
   }
 
@@ -93,6 +59,27 @@ class UserEdit extends Component {
     this.setState({
       dataUser: this.props.location.params
     })
+  }
+
+  submitUpdatedData = (value) => {
+    console.log('submit update', value)
+    this.props.updateMasterUser(this.props.location.params)
+  }
+
+  goToChangePassword = () => {
+    const data = this.props.location.params
+    this.props.history.push({
+      pathname: '/user-change-password',
+      params: data,
+    });
+  }
+
+  goToChangePhoto = () => {
+    const data = this.props.location.params
+    this.props.history.push({
+      pathname: '/user-change-photo',
+      params: data,
+    });
   }
 
   render() {
@@ -104,7 +91,13 @@ class UserEdit extends Component {
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">
-                <h4 className="font-size-18">Profile</h4>
+                <h4 className="font-size-18">Edit Profil</h4>
+                <ol className="breadcrumb mb-0">
+                  <li className="breadcrumb-item">
+                    <Link to="#">User</Link>
+                  </li>
+                  <li className="breadcrumb-item active">Edit Profil</li>
+                </ol>
               </div>
             </Col>
           </Row>
@@ -128,21 +121,28 @@ class UserEdit extends Component {
                         <Button
                           color="primary"
                           className="btn btn-primary btn-block waves-effect waves-light"
-                        >
+                          onClick={this.goToChangePhoto}>
                           Ganti Foto
+                    </Button>
+                        <Button
+                          color="primary"
+                          className="btn btn-primary btn-block waves-effect waves-light"
+                          onClick={this.goToChangePassword}>
+                          Ganti Password
                     </Button>
                       </div>
                     </Col>
                     <Col md={8}>
                       <form action="your-action" onSubmit={this.handleSubmit}>
                         <Form
-                          formData={dataUsers}
+                          formData={dataUser}
                           readOnly={false}
                           showColonAfterLabel={true}
-                          showValidationSummary={true}
-                          validationGroup="customerData"
                         >
                           <Item itemType="group" items={this.groupedItems.contactInformation} />
+                          <ButtonItem horizontalAlignment="right"
+                            buttonOptions={this.buttonOptions}
+                          />
                         </Form>
                       </form>
                     </Col>
@@ -157,4 +157,12 @@ class UserEdit extends Component {
   }
 }
 
-export default UserEdit;
+const mapStatetoProps = state => {
+  const { error, loading, response } = state.MasterUser;
+  return { error, loading, response };
+};
+
+export default withRouter(connect(mapStatetoProps, {
+  updateMasterUser,
+  updateMasterUserSuccess
+})(UserEdit));

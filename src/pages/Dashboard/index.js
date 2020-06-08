@@ -43,16 +43,8 @@ class Dashboard extends Component {
               <div className="page-title-box">
                 <h4 className="font-size-18">Dashboard</h4>
                 <ol className="breadcrumb mb-0">
-                  <li className="breadcrumb-item active">
-                    Welcome to Veltrix Dashboard
-                  </li>
-                </ol>
-              </div>
-            </Col>
 
-            <Col sm="6">
-              <div className="float-right d-none d-md-block">
-                <SettingMenu />
+                </ol>
               </div>
             </Col>
           </Row>
@@ -66,7 +58,7 @@ class Dashboard extends Component {
                       <img src={servicesIcon1} alt="" />
                     </div>
                     <h5 className="font-size-16 text-uppercase mt-0 text-white-50">
-                      Orders
+                      Surat Masuk
                     </h5>
                     <h4 className="font-weight-medium font-size-24">
                       1,685{" "}
@@ -95,7 +87,7 @@ class Dashboard extends Component {
                       <img src={servicesIcon2} alt="" />
                     </div>
                     <h5 className="font-size-16 text-uppercase mt-0 text-white-50">
-                      Revenue
+                      Surat Keluar
                     </h5>
                     <h4 className="font-weight-medium font-size-24">
                       52,368{" "}
@@ -125,7 +117,7 @@ class Dashboard extends Component {
                       <img src={servicesIcon3} alt="" />
                     </div>
                     <h5 className="font-size-16 text-uppercase mt-0 text-white-50">
-                      Average Price
+                      Asistensi
                     </h5>
                     <h4 className="font-weight-medium font-size-24">
                       15.8{" "}
@@ -155,7 +147,7 @@ class Dashboard extends Component {
                       <img src={servicesIcon4} alt="" />
                     </div>
                     <h5 className="font-size-16 text-uppercase mt-0 text-white-50">
-                      Product Sold
+                      Tugas
                     </h5>
                     <h4 className="font-weight-medium font-size-24">
                       2436{" "}

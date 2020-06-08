@@ -24,19 +24,19 @@ import { Template } from 'devextreme-react/core/template';
 import CustomStore from 'devextreme/data/custom_store';
 import DataStore from 'devextreme/data/data_source';
 import { isNotEmpty, dxGridFilter } from '../../helpers/gridFilter'
-import { getMasterUserServices } from '../../helpers/master/user'
+import { getMasterGroupServices } from '../../helpers/master/group'
 
 //Reducer
 import {
-  getMasterUser,
-  getMasterUserSuccess,
-  saveMasterUser,
-  saveMasterUserSuccess,
-  deleteMasterUser,
-  deleteMasterUserSuccess
-} from "../../store/business/master-user/actions";
+  getMasterGroup,
+  getMasterGroupSuccess,
+  saveMasterGroup,
+  saveMasterGroupSuccess,
+  deleteMasterGroup,
+  deleteMasterGroupSuccess
+} from "../../store/business/master-group/actions";
 
-class User extends Component {
+class Group extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -65,10 +65,10 @@ class User extends Component {
           else if (i in loadOptions && isNotEmpty(loadOptions[i])) { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
         });
         params = params.slice(0, -1);
-        return getMasterUserServices(params)
+        return getMasterGroupServices()
       },
-      insert: (values) => { this.props.saveMasterUser(values) },
-      remove: (values) => { this.props.deleteMasterUser(values) }
+      insert: (values) => { this.props.saveMasterGroup(values) },
+      remove: (values) => { this.props.deleteMasterGroup(values) }
     })
   }
 
@@ -82,6 +82,7 @@ class User extends Component {
 
   navigateToDetail = (val) => {
     const data = val.row.data
+    console.log('ke detail', data)
     this.props.history.push({
       pathname: '/user-detail',
       params: data,
@@ -101,6 +102,9 @@ class User extends Component {
               <div className="page-title-box">
                 <h4 className="font-size-18">Daftar User</h4>
                 <ol className="breadcrumb mb-0">
+                  <li className="breadcrumb-item">
+                    <Link to="#">Veltrix</Link>
+                  </li>
                   <li className="breadcrumb-item">
                     <Link to="#">User</Link>
                   </li>
@@ -126,38 +130,17 @@ class User extends Component {
                     onRowClick={this.onRowClick}
                   >
                     <FilterRow visible={true} />
-                    <Editing mode="popup" allowUpdating={true} allowAdding={true} allowDeleting={true} >
-                      <Popup title="Menu" showTitle={true} width={700} height={525}>
-                        <Position my="top" at="top" of={window} />
-                      </Popup>
-                      <Form>
-                        <Item itemType="group" colCount={1} colSpan={2}>
-                          <Item dataField="username" />
-                          <Item dataField="full_name" />
-                          <Item dataField="email" />
-                          <Item dataField="password" editorOptions={{ mode: 'password' }} />
-                          <Item dataField="confirm_password" editorOptions={{ mode: 'password' }} />
-                          <Item dataField="phone" />
-                          <Item dataField="address" />
-                        </Item>
-                      </Form>
-                    </Editing>
                     <Paging defaultPageSize={10} />
                     <Pager
                       showPageSizeSelector={true}
                       allowedPageSizes={[5, 10, 20]}
                       showInfo={true} />
 
-                    <Column dataField="id" />
-                    <Column dataField="password" visible={false} />
-                    <Column dataField="confirm_password" visible={false} />
-                    <Column dataField="full_name" />
-                    <Column dataField="username" />
-                    <Column dataField="email" />
-                    <Column dataField="group_name" visible={false} />
-                    <Column dataField="address" visible={false} />
-                    <Column dataField="phone" visible={false} />
-                    <Column dataField="last_login" visible={false} />
+                    <Column dataField="id" visible={false} />
+                    <Column dataField="unit_id" />
+                    <Column dataField="group_code" />
+                    <Column dataField="group_name" />
+                    <Column dataField="active" />
                     <Column dataField="created_at" visible={false} />
                     <Column dataField="created_by" visible={false} />
                     <Column dataField="modified_at" visible={false} />
@@ -187,15 +170,15 @@ class User extends Component {
 }
 
 const mapStatetoProps = state => {
-  const { error, loading, data, totalCount } = state.MasterUser;
+  const { error, loading, data, totalCount } = state.MasterGroup;
   return { error, loading, data, totalCount };
 };
 
 export default withRouter(connect(mapStatetoProps, {
-  getMasterUser,
-  getMasterUserSuccess,
-  saveMasterUser,
-  saveMasterUserSuccess,
-  deleteMasterUser,
-  deleteMasterUserSuccess
-})(User));
+  getMasterGroup,
+  getMasterGroupSuccess,
+  saveMasterGroup,
+  saveMasterGroupSuccess,
+  deleteMasterGroup,
+  deleteMasterGroupSuccess
+})(Group));

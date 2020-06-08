@@ -10,7 +10,17 @@ import {
   DELETE_MASTER_USER_FAIL,
   UPDATE_MASTER_USER,
   UPDATE_MASTER_USER_SUCCESS,
-  UPDATE_MASTER_USER_FAIL
+  UPDATE_MASTER_USER_FAIL,
+  GET_DETAIL_USER,
+  GET_DETAIL_USER_SUCCESS,
+  GET_DETAIL_USER_FAIL,
+  CHANGE_PASSWORD_USER,
+  CHANGE_PASSWORD_USER_SUCCESS,
+  CHANGE_PASSWORD_USER_FAIL,
+  CHANGE_PHOTO_USER,
+  CHANGE_PHOTO_USER_SUCCESS,
+  CHANGE_PHOTO_USER_FAIL,
+
 } from './actionTypes';
 
 const initialState = {
@@ -97,6 +107,64 @@ const masterUser = (state = initialState, action) => {
         loading: false
       }
 
+    //get detail user
+    case GET_DETAIL_USER:
+      return {
+        ...state,
+        loading: true
+      };
+    case GET_DETAIL_USER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        data: action.payload,
+      }
+    case GET_DETAIL_USER_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        loading: false
+      }
+
+    //change password user
+    case CHANGE_PASSWORD_USER:
+      return {
+        ...state,
+        loading: true
+      };
+    case CHANGE_PASSWORD_USER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        data: action.payload,
+      }
+    case CHANGE_PASSWORD_USER_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        loading: false
+      }
+
+    //change photo user 
+    case CHANGE_PHOTO_USER:
+      return {
+        ...state,
+        loading: true
+      };
+    case CHANGE_PHOTO_USER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        data: action.payload,
+      }
+    case CHANGE_PHOTO_USER_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        loading: false
+      }
+
+ 
     default:
       return state
   }
