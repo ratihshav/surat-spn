@@ -24,6 +24,7 @@ class UserChangePassword extends Component {
     this.state = { selectedFiles: [] };
   }
   handleAcceptedFiles = files => {
+    console.log('files', files)
     files.map(file =>
       Object.assign(file, {
         preview: URL.createObjectURL(file),

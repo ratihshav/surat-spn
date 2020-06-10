@@ -107,7 +107,6 @@ const outgoingMail = (state = initialState, action) => {
         loading: true
       };
     case SEARCH_USER_SUCCESS:
-      console.log('state', action.payload)
       return {
         ...state,
         loading: false,

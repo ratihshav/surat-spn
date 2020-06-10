@@ -18,7 +18,8 @@ import LanguageDropdown from "../../components/LanguageDropdown";
 import NotificationDropdown from "../../components/NotificationDropdown";
 import ProfileMenu from "../../components/ProfileMenu";
 
-import logoSungaiPenuh from "../../assets/images/logo-kota-sungaipenuh.png"
+import logoKabKerinci from "../../assets/images/logo-kab-kerinci.png"
+
 
 class TopBar extends Component {
   constructor(props) {
@@ -105,7 +106,7 @@ class TopBar extends Component {
                     <img src={logosmImg} alt="" height="22" />
                   </span>
                   <span className="logo-lg">
-                    <img src={logoSungaiPenuh} height="100" alt="" style={{ marginTop: 50}} />
+                    <img src={logoKabKerinci} height="100" alt="" style={{ marginTop: 50 }} />
                   </span>
                 </Link>
               </div>

@@ -13,7 +13,7 @@ import Loader from "../../components/Loader";
 import { loginUserAction, loginSuccess } from "../../store/actions";
 
 // import images
-import logoSungaiPenuh from "../../assets/images/logo-kota-sungaipenuh.png"
+import logoKabKerinci from "../../assets/images/logo-kab-kerinci.png"
 
 class Login extends Component {
   constructor(props) {
@@ -54,11 +54,11 @@ class Login extends Component {
 
                     <div className="text-primary text-center p-4">
                       <Link to="/" className="logo logo-admin">
-                        <img src={logoSungaiPenuh} height="150" alt="" />
+                        <img src={logoKabKerinci} height="150" alt="" />
                         <h1 className="text-blue">
-                          Dinas Kepegawaian
+                          e-Office Dinas Pendidikan
                             <br />
-                          Kota Sungai Penuh
+                          Kabupaten Kerinci
                         </h1>
                       </Link>
                     </div>
@@ -76,7 +76,7 @@ class Login extends Component {
                       <CardBody className="p-4">
                         <div className="">
                           <Alert color="info">
-                            <strong>Selamat Datang</strong> di Portal Resmi Dinas Kepegawaian Pemerintah Kota Sungai Penuh
+                            <strong>Selamat Datang</strong> di e-Office Dinas Pendidikan Kabupaten Kerinci
                               </Alert>
                         </div>
 
@@ -94,7 +94,7 @@ class Login extends Component {
                                 name="email"
                                 label="Email"
                                 className="form-control"
-                                value="afd.zik@gmail.com"
+                                value=""
                                 placeholder="Enter email"
                                 required
                               />
@@ -105,7 +105,7 @@ class Login extends Component {
                                 label="Password"
                                 type="password"
                                 required
-                                value="afd"
+                                value=""
                                 placeholder="Enter Password"
                               />
                             </div>

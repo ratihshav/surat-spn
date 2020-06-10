@@ -31,6 +31,7 @@ function* createOutgoingMailSaga({ payload: { request } }) {
 function* searchUserSaga({ payload: { request } }) {
   try {
     const response = yield call(searchUserService, request);
+    console.log('saga', response)
     yield put(searchUserSuccess(response));
   } catch (error) {
     yield put(searchUserFail(error));

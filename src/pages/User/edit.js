@@ -55,14 +55,12 @@ class UserEdit extends Component {
   }
 
   componentDidMount() {
-    console.log('param', this.props.location.params)
     this.setState({
       dataUser: this.props.location.params
     })
   }
 
   submitUpdatedData = (value) => {
-    console.log('submit update', value)
     this.props.updateMasterUser(this.props.location.params)
   }
 
@@ -84,7 +82,6 @@ class UserEdit extends Component {
 
   render() {
     const { animationEnabled, loop, selectedIndex, swipeEnabled, dataUser } = this.state;
-    console.log('dataUser', this.props.location.params)
     return (
       <React.Fragment>
         <div className="container-fluid">

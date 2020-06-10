@@ -7,6 +7,8 @@ import { withRouter, Link } from "react-router-dom";
 import {
   searchUser,
   searchUserSuccess,
+  createOutgoingMail,
+  createOutgoingMailSuccess
 } from "../../store/business/outgoing-mail/actions";
 
 const type = [
@@ -42,6 +44,8 @@ const urgency = [
   }
 ]
 
+
+
 class OutgoingMailCreate extends Component {
   constructor(props) {
     super(props);
@@ -49,13 +53,19 @@ class OutgoingMailCreate extends Component {
       selectedGroup: null,
       selectedClass: null,
       selectedUrgency: null,
-      selectedFile: null
+      selectedFile: null,
+      selectedSignature: null,
+      selectedSubmit: null,
+      dataUser: []
     };
   }
 
   componentDidMount() {
+    this.getDataUser()
+  }
+
+  getDataUser = () => {
     this.props.searchUser()
-    console.log('a', this.state)
   }
 
   handleSelectGroup = selectedGroup => {
@@ -70,18 +80,57 @@ class OutgoingMailCreate extends Component {
     this.setState({ selectedUrgency })
   }
 
+  handleSelectSignature = selectedSignature => {
+    this.setState({ selectedSignature })
+  }
+
+  handleSelectSubmit = selectedSubmit => {
+    this.setState({ selectedSubmit })
+  }
+
   onFileChange = event => {
-    // Update the state 
     this.setState({ selectedFile: event.target.files[0] });
   };
 
-  onSearchUser = event => {
-    this.props.searchUser()
+  saveOutgoingMail = (e) => {
+    const params = {
+      jenis_surat: e.target.type.value,
+      klasifikasi_surat: e.target.classification.value,
+      sifat_surat: e.target.urgency.value,
+      tujuan_surat: e.target.destination.value,
+      hal_surat: e.target.subject.value,
+      lampiran_surat: e.target.attachment.value,
+      approval_user: e.target.approval.value,
+      to_user: e.target.sendto.value,
+      file: this.state.selectedFile
+    }
+    this.props.createOutgoingMail(params)
+    e.preventDefault();
+
   }
 
   render() {
-    const { selectedGroup, selectedClass, selectedUrgency, selectedFile } = this.state;
-    console.log('selectedFile', selectedFile, this.props)
+    const {
+      selectedGroup,
+      selectedClass,
+      selectedUrgency,
+      selectedFile,
+      selectedSignature,
+      selectedSubmit } = this.state;
+    const dataUser = this.props.data.data
+
+    const optionsSignature = dataUser !== undefined ?
+      dataUser.data.map(function (data) {
+        return { value: data.id, label: data.text };
+      })
+      : null
+
+    const optionsSubmit = dataUser !== undefined ?
+      dataUser.data.map(function (data) {
+        return { value: data.id, label: data.text };
+      })
+      : null
+
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -100,196 +149,220 @@ class OutgoingMailCreate extends Component {
             </Col>
           </Row>
 
-          <Row>
-            <div className="col-12">
-              <Card>
-                <CardBody>
+          <form action="#" onSubmit={this.saveOutgoingMail}>
+            <Row>
+              <div className="col-12">
+                <Card>
+                  <CardBody>
 
-
-                  <Row className="form-group">
-                    <label className="col-sm-2 col-form-label">
-                      Tipe Surat
+                    <Row className="form-group">
+                      <label className="col-sm-2 col-form-label">
+                        Tipe Surat
                     </label>
-                    <Col sm={10}>
-                      <Select
-                        value={selectedGroup}
-                        onChange={this.handleSelectGroup}
-                        options={type}
-                      />
-                    </Col>
-                  </Row>
+                      <Col sm={10}>
+                        <Select
+                          value={selectedGroup}
+                          onChange={this.handleSelectGroup}
+                          options={type}
+                          name="type"
+                          ref={node => (this.inputNode = node)}
+                          required
+                        />
+                      </Col>
+                    </Row>
 
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-search-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Klasifikasi Surat
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-search-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Klasifikasi Surat
                     </label>
-                    <Col sm={10}>
-                      <Select
-                        value={selectedClass}
-                        onChange={this.handleSelectClass}
-                        options={classification}
-                      />
-                    </Col>
-                  </Row>
+                      <Col sm={10}>
+                        <Select
+                          value={selectedClass}
+                          onChange={this.handleSelectClass}
+                          options={classification}
+                          name="classification"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
 
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-search-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Sifat Surat
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-search-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Sifat Surat
                     </label>
-                    <Col sm={10}>
-                      <Select
-                        value={selectedUrgency}
-                        onChange={this.handleSelectUrgency}
-                        options={urgency}
-                      />
-                    </Col>
-                  </Row>
+                      <Col sm={10}>
+                        <Select
+                          value={selectedUrgency}
+                          onChange={this.handleSelectUrgency}
+                          options={urgency}
+                          name="urgency"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
 
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Tujuan Surat
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Tujuan Surat
                     </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="text"
-                        defaultValue="Ikhwan Komputer"
-                        id="example-text-input"
-                      />
-                    </Col>
-                  </Row>
+                      <Col sm={10}>
+                        <input
+                          name="destination"
+                          className="form-control"
+                          type="text"
+                          defaultValue="Ikhwan Komputer"
+                          id="example-text-input"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
 
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Hal Surat
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Hal Surat
                     </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="text"
-                        defaultValue="Izin Penggunaan Website"
-                        id="example-text-input"
-                      />
-                    </Col>
-                  </Row>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="text"
+                          defaultValue="Izin Penggunaan Website"
+                          id="example-text-input"
+                          name="subject"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
 
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Lampiran Surat
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Lampiran Surat
                     </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="text"
-                        defaultValue=""
-                        id="example-text-input"
-                      />
-                    </Col>
-                  </Row>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="text"
+                          defaultValue=""
+                          id="example-text-input"
+                          name="attachment"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
 
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-search-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Penandatanganan Surat
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-search-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Penandatanganan Surat
                     </label>
-                    <Col sm={10}>
-                      <Select
-                        value={selectedClass}
-                        onChange={this.onSearchUser}
-                        options={classification}
-                      />
-                    </Col>
-                  </Row>
+                      <Col sm={10}>
+                        <Select
+                          value={selectedSignature}
+                          onChange={this.handleSelectSignature}
+                          options={optionsSignature}
+                          name="approval"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
 
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-search-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Diajukan Kepada
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-search-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Diajukan Kepada
                     </label>
-                    <Col sm={10}>
-                      <Select
-                        value={selectedClass}
-                        onChange={this.handleSelectClass}
-                        options={classification}
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-search-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Dokumen
+                      <Col sm={10}>
+                        <Select
+                          value={selectedSubmit}
+                          onChange={this.handleSelectSubmit}
+                          options={optionsSubmit}
+                          name="sendto"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-search-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Dokumen
                     </label>
-                    <Col sm={10}>
-                      <form action="#">
-                        <div className="custom-file">
-                          <input
-                            type="file"
-                            className="custom-file-input"
-                            id="validatedCustomFile"
-                            required
-                            onChange={this.onFileChange}
-                            accept=".doc, .docx"
-                          />
-                          <label
-                            className="custom-file-label"
-                            for="validatedCustomFile"
-                          >
-                            {selectedFile !== null && selectedFile !== undefined ? selectedFile.name : 'No file chosen'}
-                          </label>
-                          <div className="invalid-feedback">
-                            Example invalid custom file feedback
-                      </div>
-                        </div>
-                      </form>
-                    </Col>
-                  </Row>
+                      <Col sm={10} style={styles.height}>
+                        <form action="#">
+                          <div className="custom-file">
+                            <input
+                              type="file"
+                              className="form-control"
+                              id="validatedCustomFile"
+                              required
+                              onChange={this.onFileChange}
+                              accept=".doc, .docx, .pdf"
+                              name="file"
+                              ref={node => (this.inputNode = node)}
+                            />
+                            <label
+                              className="custom-file-label"
+                              for="validatedCustomFile">
+                              {selectedFile !== null && selectedFile !== undefined ? selectedFile.name : 'No file chosen'}
+                            </label>
+                          </div>
+                        </form>
+                      </Col>
+                    </Row>
 
-                  <div className="text-center mt-4">
-                    <Button
-                      color="success"
-                      className="mt-1"
-                      onClick={this.uploadImage}
-                    >
-                      <i className="typcn typcn-input-checked" />Simpan
+                    <div className="text-center mt-4">
+                      <Button
+                        color="success"
+                        className="mt-1"
+                      // onClick={this.saveOutgoingMail}
+                      >
+                        <i className="typcn typcn-input-checked" />Simpan
                     </Button>
-                  </div>
-                </CardBody>
-              </Card>
-            </div>
-          </Row>
+                    </div>
+                  </CardBody>
+                </Card>
+              </div>
+            </Row>
+          </form>
         </div>
       </React.Fragment>
     );
   }
 }
 
+const styles = {
+  col: {
+    height: '100vh'
+  }
+}
+
 const mapStatetoProps = state => {
-  const { error, loading, response } = state.OutgoingMail;
-  return { error, loading, response };
+  const { error, loading, data } = state.OutgoingMail;
+  return { error, loading, data };
 };
 
-export default withRouter(connect(mapStatetoProps, {
+export default connect(mapStatetoProps, {
   searchUser,
   searchUserSuccess,
-})(OutgoingMailCreate));
+  createOutgoingMail,
+  createOutgoingMailSuccess
+})(OutgoingMailCreate);

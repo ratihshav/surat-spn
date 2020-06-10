@@ -85,7 +85,6 @@ export const saveMasterUserService = (request) => {
 
 //update
 export const updateMasterUserService = (request) => {
-  console.log('e', request)
   const id = request.id
   const UPDATE_MASTER_USER_API = config.api_endpoint + `/user/save/${id}`;
   const formData = new FormData();

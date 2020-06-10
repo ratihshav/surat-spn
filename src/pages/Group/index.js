@@ -82,7 +82,6 @@ class Group extends Component {
 
   navigateToDetail = (val) => {
     const data = val.row.data
-    console.log('ke detail', data)
     this.props.history.push({
       pathname: '/user-detail',
       params: data,

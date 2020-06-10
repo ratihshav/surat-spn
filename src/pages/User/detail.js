@@ -148,7 +148,6 @@ class UserDetail extends Component {
   }
 
   render() {
-    console.log('data', this.props.data)
     return (
       <React.Fragment>
         <div className="container-fluid">

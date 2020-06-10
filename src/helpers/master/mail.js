@@ -20,8 +20,16 @@ const instance = axios.create({
 });
 
 export const createOutgoingMailService = (request) => {
-  const id = request.id
   const formData = new FormData();
+  formData.append('jenis_surat', request.jenis_surat);
+  formData.append('klasifikasi_surat', request.klasifikasi_surat);
+  formData.append('sifat_surat', request.sifat_surat);
+  formData.append('tujuan_surat', request.tujuan_surat);
+  formData.append('hal_surat', request.hal_surat);
+  formData.append('lampiran_surat', request.lampiran_surat);
+  formData.append('approval_user', request.approval_user);
+  formData.append('to_user', request.to_user);
+  formData.append('file', request.file);
 
   const CREATE_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/save`
   return instance.post(CREATE_OUTGOING_MAIL_API, formData)
