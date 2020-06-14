@@ -13,7 +13,10 @@ import {
     GET_DETAIL_OUTGOING_MAIL_FAIL,
     SEARCH_USER,
     SEARCH_USER_SUCCESS,
-    SEARCH_USER_FAIL
+    SEARCH_USER_FAIL,
+    CREATE_DISPOSE_OUTGOING_MAIL,
+    CREATE_DISPOSE_OUTGOING_MAIL_SUCCESS,
+    CREATE_DISPOSE_OUTGOING_MAIL_FAIL
 } from './actionTypes';
 
 //get 
@@ -106,3 +109,21 @@ export const searchUserFail = error => ({
     type: SEARCH_USER_FAIL,
     payload: error
 });
+
+//dispose mail
+export const createDisposeOutgoingMail = (request) => (
+    {
+        type: CREATE_DISPOSE_OUTGOING_MAIL,
+        payload: { request }
+    });
+
+export const createDisposeOutgoingMailSuccess = response => ({
+    type: CREATE_DISPOSE_OUTGOING_MAIL_SUCCESS,
+    payload: response
+});
+
+export const createDisposeOutgoingMailFail = error => ({
+    type: CREATE_DISPOSE_OUTGOING_MAIL_FAIL,
+    payload: error
+});
+

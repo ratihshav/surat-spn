@@ -80,6 +80,24 @@ export const getDetailOutgoingMailService = (request) => {
     .catch(() => { throw 'Gagal Mengubah Data'; });
 }
 
+export const createDisposeOutgoingMailService = (request) => {
+  console.log('reqq', request)
+  const formData = new FormData();
+  formData.append('surat_keluar_id', request.surat_keluar_id);
+  formData.append('tujuan_user', request.tujuan_user);
+  formData.append('file', request.file);
+  formData.append('keterangan', request.keterangan);
+
+  const CREATE_DISPOSE_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/disposisi`
+  return instance.post(CREATE_DISPOSE_OUTGOING_MAIL_API, formData)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
+
 export async function _handleError(error) {
   // var errorCode = error.code;
   var errorMessage = error.message;

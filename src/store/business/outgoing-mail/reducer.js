@@ -13,7 +13,10 @@ import {
   GET_DETAIL_OUTGOING_MAIL_FAIL,
   SEARCH_USER,
   SEARCH_USER_SUCCESS,
-  SEARCH_USER_FAIL
+  SEARCH_USER_FAIL,
+  CREATE_DISPOSE_OUTGOING_MAIL,
+  CREATE_DISPOSE_OUTGOING_MAIL_SUCCESS,
+  CREATE_DISPOSE_OUTGOING_MAIL_FAIL
 } from './actionTypes';
 
 const initialState = {
@@ -119,6 +122,24 @@ const outgoingMail = (state = initialState, action) => {
         loading: false
       }
 
+    //dispose mail
+    case CREATE_DISPOSE_OUTGOING_MAIL:
+      return {
+        ...state,
+        loading: true
+      };
+    case CREATE_DISPOSE_OUTGOING_MAIL_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        data: action.payload,
+      }
+    case CREATE_DISPOSE_OUTGOING_MAIL_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        loading: false
+      }
 
     default:
       return state

@@ -111,7 +111,6 @@ class OutgoingMailCreate extends Component {
     }
     this.props.createOutgoingMail(params)
     e.preventDefault();
-
   }
 
   render() {

@@ -117,7 +117,7 @@ class OutgoingMail extends Component {
 
   getSubjectMail = (rowData) => {
     return (
-      rowData.status + "\b" + rowData.position_name + ")"
+      rowData.status + "-" + rowData.position_name + "-" + rowData.group_name
     )
   }
 
@@ -170,11 +170,11 @@ class OutgoingMail extends Component {
                     <Column dataField="jenis_surat" />
                     <Column dataField="tujuan_surat" />
                     <Column caption="Hal" dataField="hal_surat" calculateDisplayValue={this.getSubjectMail} />
-                    <Column dataField="group_name" />
+                    <Column dataField="group_name" visible={false} />
                     <Column dataField="id" visible={false} />
                     <Column dataField="is_editable" visible={false} />
-                    <Column dataField="position_name" />
-                    <Column dataField="status" />
+                    <Column dataField="position_name" visible={false} />
+                    <Column dataField="status" visible={false} />
                     <Column type="buttons"
                       buttons={[{
                         hint: 'Edit',

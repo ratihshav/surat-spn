@@ -5,7 +5,8 @@ import {
   CREATE_OUTGOING_MAIL,
   SEARCH_USER,
   GET_OUTGOING_MAIL,
-  GET_DETAIL_OUTGOING_MAIL
+  GET_DETAIL_OUTGOING_MAIL,
+  CREATE_DISPOSE_OUTGOING_MAIL
 } from './actionTypes';
 
 import {
@@ -16,14 +17,17 @@ import {
   getOutgoingMailSuccess,
   getOutgoingMailFail,
   getDetailOutgoingMailSuccess,
-  getDetailOutgoingMailFail
+  getDetailOutgoingMailFail,
+  createDisposeOutgoingMailSuccess,
+  createDisposeOutgoingMailFail
 } from './actions';
 
 import {
   createOutgoingMailService,
   searchUserService,
   getOutgoingMailService,
-  getDetailOutgoingMailService
+  getDetailOutgoingMailService,
+  createDisposeOutgoingMailService
 } from '../../../helpers/master/mail';
 
 
@@ -65,6 +69,15 @@ function* getDetailOutgoingMailSaga({ payload: { request } }) {
   }
 }
 
+function* createDisposeOutgoingMailSaga({ payload: { request } }) {
+  try {
+    const response = yield call(createDisposeOutgoingMailService, request);
+    yield put(createDisposeOutgoingMailSuccess(response));
+  } catch (error) {
+    yield put(createDisposeOutgoingMailFail(error));
+  }
+}
+
 export function* watchCreateOutgoingMail() {
   yield takeEvery(CREATE_OUTGOING_MAIL, createOutgoingMailSaga)
 }
@@ -81,12 +94,17 @@ export function* watchGetDetailOutgoingMail() {
   yield takeLatest(GET_DETAIL_OUTGOING_MAIL, getDetailOutgoingMailSaga)
 }
 
+export function* watchCreateDisposeOutgoingMail() {
+  yield takeEvery(CREATE_DISPOSE_OUTGOING_MAIL, createDisposeOutgoingMailSaga)
+}
+
 function* OutgoingMailSaga() {
   yield all([
     fork(watchCreateOutgoingMail),
     fork(watchSearchUser),
     fork(watchGetOutgoingMail),
-    fork(watchGetDetailOutgoingMail)
+    fork(watchGetDetailOutgoingMail),
+    fork(watchCreateDisposeOutgoingMail)
   ]);
 }
 
