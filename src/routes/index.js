@@ -37,6 +37,7 @@ import GroupDetail from "../pages/Group/detail"
 
 import OutgoingMail from "../pages/OutgoingMail/index"
 import OutgoingMailCreate from "../pages/OutgoingMail/create"
+import OutgoingMailDetail from "../pages/OutgoingMail/detail"
 
 // UI Pages
 import UiSweetAlert from "../pages/UI/UiSweetAlert";
@@ -214,6 +215,7 @@ const authProtectedRoutes = [
   //Mail
   { path: "/outgoing-mail", component: OutgoingMail },
   { path: "/outgoing-mail-create", component: OutgoingMailCreate },
+  { path: "/outgoing-mail-detail", component: OutgoingMailDetail },
 
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> }
 ];

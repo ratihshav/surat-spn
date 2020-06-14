@@ -122,7 +122,7 @@ class Group extends Component {
                 <div className="card-body">
                   <DataGrid
                     dataSource={this.cLoad()}
-                    remoteOperations={true}
+                    // remoteOperations={true}
                     rowAlternationEnabled={true}
                     showColumnLines={false}
                     columnAutoWidth={true}

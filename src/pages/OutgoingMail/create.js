@@ -10,6 +10,7 @@ import {
   createOutgoingMail,
   createOutgoingMailSuccess
 } from "../../store/business/outgoing-mail/actions";
+import { searchUserService } from "../../helpers/master/mail"
 
 const type = [
   {
@@ -65,7 +66,11 @@ class OutgoingMailCreate extends Component {
   }
 
   getDataUser = () => {
-    this.props.searchUser()
+    searchUserService()
+      .then((data) => {
+        this.setState({ dataUser: data.data.data })
+      })
+      .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
   handleSelectGroup = selectedGroup => {
@@ -116,17 +121,17 @@ class OutgoingMailCreate extends Component {
       selectedUrgency,
       selectedFile,
       selectedSignature,
-      selectedSubmit } = this.state;
-    const dataUser = this.props.data.data
+      selectedSubmit,
+      dataUser } = this.state;
 
-    const optionsSignature = dataUser !== undefined ?
-      dataUser.data.map(function (data) {
+    const optionsSignature = dataUser.length !== 0 ?
+      dataUser.map(function (data) {
         return { value: data.id, label: data.text };
       })
       : null
 
-    const optionsSubmit = dataUser !== undefined ?
-      dataUser.data.map(function (data) {
+    const optionsSubmit = dataUser.length !== 0 ?
+      dataUser.map(function (data) {
         return { value: data.id, label: data.text };
       })
       : null
@@ -140,9 +145,11 @@ class OutgoingMailCreate extends Component {
                 <h4 className="font-size-18">Buat Surat Keluar</h4>
                 <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
-                    <Link to="#">User</Link>
+                    <Link to="#">Surat</Link>
                   </li>
-                  <li className="breadcrumb-item">Surat Keluar</li>
+                  <li className="breadcrumb-item">
+                    <Link to="/outgoing-mail">Surat</Link>
+                  </li>
                   <li className="breadcrumb-item active">Buat Surat Keluar</li>
                 </ol>
               </div>

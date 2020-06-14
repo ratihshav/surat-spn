@@ -19,7 +19,7 @@ import {
 //get 
 export const getOutgoingMail = (request) => ({
     type: GET_OUTGOING_MAIL,
-    payload: request
+    payload: { request }
 });
 
 export const getOutgoingMailSuccess = response => ({

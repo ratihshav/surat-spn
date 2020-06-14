@@ -42,7 +42,7 @@ class Layout extends Component {
     let currentage = this.capitalizeFirstLetter(this.props.location.pathname);
 
     document.title =
-      currentage + " | Kota Sungai Penuh";
+      currentage + " | e-Office Dinas Pendidikan Kabupaten Kerinci";
     if (this.props.leftSideBarTheme) {
       this.props.changeSidebarTheme(this.props.leftSideBarTheme);
     }

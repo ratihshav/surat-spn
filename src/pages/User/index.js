@@ -67,9 +67,14 @@ class User extends Component {
         params = params.slice(0, -1);
         return getMasterUserServices(params)
       },
-      insert: (values) => { this.props.saveMasterUser(values) },
       remove: (values) => { this.props.deleteMasterUser(values) }
     })
+  }
+
+  navigateToAdd = () => {
+    this.props.history.push({
+      pathname: '/user-add'
+    });
   }
 
   navigateToEdit = (val) => {
@@ -91,6 +96,19 @@ class User extends Component {
   onRowClick = (e) => {
     console.log('row', e)
   }
+
+  onToolbarPreparing = (e) => {
+    e.toolbarOptions.items.unshift({
+      location: 'after',
+      widget: 'dxButton',
+      options: {
+        icon: 'add',
+        text: 'Tambah Baru',
+        onClick: this.navigateToAdd
+      }
+    });
+  }
+
 
   render() {
     return (
@@ -124,24 +142,10 @@ class User extends Component {
                     showColumnLines={false}
                     columnAutoWidth={true}
                     onRowClick={this.onRowClick}
+                    onToolbarPreparing={this.onToolbarPreparing}
                   >
                     <FilterRow visible={true} />
-                    <Editing mode="popup" allowUpdating={true} allowAdding={true} allowDeleting={true} >
-                      <Popup title="Menu" showTitle={true} width={700} height={525}>
-                        <Position my="top" at="top" of={window} />
-                      </Popup>
-                      <Form>
-                        <Item itemType="group" colCount={1} colSpan={2}>
-                          <Item dataField="username" />
-                          <Item dataField="full_name" />
-                          <Item dataField="email" />
-                          <Item dataField="password" editorOptions={{ mode: 'password' }} />
-                          <Item dataField="confirm_password" editorOptions={{ mode: 'password' }} />
-                          <Item dataField="phone" />
-                          <Item dataField="address" />
-                        </Item>
-                      </Form>
-                    </Editing>
+                    
                     <Paging defaultPageSize={10} />
                     <Pager
                       showPageSizeSelector={true}

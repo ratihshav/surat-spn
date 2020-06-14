@@ -31,7 +31,7 @@ const SidebarContent = props => {
               <Link to="/email-read">Surat Masuk</Link>
             </li>
             <li>
-              <Link to="/outgoing-mail-create">Surat Keluar</Link>
+              <Link to="/outgoing-mail">Surat Keluar</Link>
             </li>
           </ul>
         </li>

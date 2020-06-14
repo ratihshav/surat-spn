@@ -1,13 +1,126 @@
 import React, { Component } from "react";
-import SettingMenu from "../Shared/SettingMenu";
-import { Link } from "react-router-dom";
-import { Row, Col, Card, CardBody } from "reactstrap";
+import {
+  Row,
+  Col,
+} from "reactstrap";
+import { connect } from "react-redux";
+import { Link, withRouter } from "react-router-dom";
+import "chartist/dist/scss/chartist.scss";
+import DataGrid, {
+  Column,
+  Paging,
+  FilterRow,
+  Pager,
+} from 'devextreme-react/data-grid';
+import DataStore from 'devextreme/data/data_source';
+import { isNotEmpty, dxGridFilter } from '../../helpers/gridFilter'
+import { getOutgoingMailService } from '../../helpers/master/mail'
 
+//Reducer
+import {
+  getOutgoingMail,
+  getOutgoingMailSuccess,
+  deleteOutgoingMail,
+  deleteOutgoingMailSuccess
+} from "../../store/business/outgoing-mail/actions";
+
+
+const subjectMail = (cellData) => {
+  return (
+    <div>
+      <p>{cellData.hal_surat}</p><br />
+      <p>{cellData.group_name}</p><br />
+      <p>{cellData.status - cellData.position_name}</p>
+    </div>
+  )
+}
 class OutgoingMail extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isModalVisible: false,
+      dataUser: [],
+      totalCount: 0
+    };
   }
+
+  componentDidMount() {
+    this.getDataMail()
+  }
+
+  getDataMail = () => {
+    this.props.getOutgoingMail()
+  }
+
+  cLoad = () => {
+    return new DataStore({
+      load: (loadOptions) => {
+        let params = '?';
+        [
+          'skip',
+          'sort',
+          'take',
+          'order',
+          'filter'
+        ].forEach(function (i) {
+
+          if (i in loadOptions && isNotEmpty(loadOptions[i]) && i == 'filter') {
+            let filterCol = dxGridFilter(loadOptions.filter);
+            params += `${i}=${JSON.stringify(filterCol)}&`;
+          }
+          else if (i in loadOptions && isNotEmpty(loadOptions[i])) { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
+        });
+        params = params.slice(0, -1);
+        return getOutgoingMailService(params)
+      },
+      remove: (values) => { this.props.deleteOutgoingMail(values) }
+    })
+  }
+
+  navigateToAdd = () => {
+    this.props.history.push({
+      pathname: '/outgoing-mail-create'
+    });
+  }
+
+  navigateToEdit = (val) => {
+    const data = val.row.data
+    this.props.history.push({
+      pathname: '/user-edit',
+      params: data,
+    });
+  }
+
+  navigateToDetail = (val) => {
+    const data = val.row.data
+    this.props.history.push({
+      pathname: '/outgoing-mail-detail',
+      params: data,
+    });
+  }
+
+  onRowClick = (e) => {
+    console.log('row', e)
+  }
+
+  onToolbarPreparing = (e) => {
+    e.toolbarOptions.items.unshift({
+      location: 'after',
+      widget: 'dxButton',
+      options: {
+        icon: 'add',
+        text: 'Tambah Baru',
+        onClick: this.navigateToAdd
+      }
+    });
+  }
+
+  getSubjectMail = (rowData) => {
+    return (
+      rowData.status + "\b" + rowData.position_name + ")"
+    )
+  }
+
 
   render() {
     return (
@@ -16,310 +129,84 @@ class OutgoingMail extends Component {
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">
-                <h4 className="font-size-18">Form Elements</h4>
+                <h4 className="font-size-18">Daftar Surat Keluar</h4>
                 <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
-                    <Link to="#">Veltrix</Link>
+                    <Link to="#">Surat Keluar</Link>
                   </li>
-                  <li className="breadcrumb-item">
-                    <Link to="#">Forms</Link>
-                  </li>
-                  <li className="breadcrumb-item active">Form Elements</li>
+                  <li className="breadcrumb-item active">Surat Keluar</li>
                 </ol>
               </div>
+              <br />
             </Col>
 
-            <Col sm="6">
-              <div className="float-right d-none d-md-block">
-                <SettingMenu />
-              </div>
-            </Col>
           </Row>
 
-          <Row>
+
+          <div className="row">
             <div className="col-12">
-              <Card>
-                <CardBody>
-                  <h4 className="card-title">Textual inputs</h4>
-                  <p className="card-title-desc">
-                    Here are examples of{" "}
-                    <code className="highlighter-rouge">.form-control</code>{" "}
-                    applied to each textual HTML5{" "}
-                    <code className="highlighter-rouge">&lt;input&gt;</code>{" "}
-                    <code className="highlighter-rouge">type</code>.
-                  </p>
+              <div className="card">
+                <div className="card-body">
+                  <DataGrid
+                    dataSource={this.cLoad()}
+                    remoteOperations={true}
+                    rowAlternationEnabled={true}
+                    showColumnLines={false}
+                    columnAutoWidth={true}
+                    onRowClick={this.onRowClick}
+                    onToolbarPreparing={this.onToolbarPreparing}
+                  >
+                    <FilterRow visible={true} />
+                    <Paging defaultPageSize={10} />
+                    <Pager
+                      showPageSizeSelector={true}
+                      allowedPageSizes={[5, 10, 20]}
+                      showInfo={true} />
 
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Text
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="text"
-                        defaultValue="Artisanal kale"
-                        id="example-text-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-search-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Search
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="search"
-                        defaultValue="How do I shoot web"
-                        id="example-search-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-email-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Email
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="email"
-                        defaultValue="bootstrap@example.com"
-                        id="example-email-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-url-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      URL
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="url"
-                        defaultValue="https://getbootstrap.com"
-                        id="example-url-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-tel-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Telephone
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="tel"
-                        defaultValue="1-(555)-555-5555"
-                        id="example-tel-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-password-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Password
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="password"
-                        defaultValue="hunter2"
-                        id="example-password-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-number-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Number
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="number"
-                        defaultValue="42"
-                        id="example-number-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-datetime-local-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Date and time
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="datetime-local"
-                        defaultValue="2011-08-19T13:45:00"
-                        id="example-datetime-local-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-date-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Date
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="date"
-                        defaultValue="2011-08-19"
-                        id="example-date-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-month-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Month
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="month"
-                        defaultValue="2011-08"
-                        id="example-month-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-week-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Week
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="week"
-                        defaultValue="2011-W33"
-                        id="example-week-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-time-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Time
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="time"
-                        defaultValue="13:45:00"
-                        id="example-time-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-color-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Color
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="color"
-                        defaultValue="#02a499"
-                        id="example-color-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label className="col-sm-2 col-form-label">Select</label>
-                    <Col sm={10}>
-                      <select className="form-control">
-                        <option>Select</option>
-                        <option>Large select</option>
-                        <option>Small select</option>
-                      </select>
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label className="col-sm-2 col-form-label">
-                      Custom Select
-                    </label>
-                    <Col sm={10}>
-                      <select className="custom-select">
-                        <option defaultValue>Open this select menu</option>
-                        <option defaultValue="1">One</option>
-                        <option defaultValue="2">Two</option>
-                        <option defaultValue="3">Three</option>
-                      </select>
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-text-input-lg"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Large
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control form-control-lg"
-                        type="text"
-                        placeholder=".form-control-lg"
-                        id="example-text-input-lg"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group mb-0">
-                    <label
-                      htmlFor="example-text-input-sm"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Small
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control form-control-sm"
-                        type="text"
-                        placeholder=".form-control-sm"
-                        id="example-text-input-sm"
-                      />
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
+                    <Column dataField="disposisi_id" visible={false} />
+                    <Column dataField="nomor_agenda" />
+                    <Column dataField="nomor_surat" />
+                    <Column dataField="tgl_surat" />
+                    <Column dataField="jenis_surat" />
+                    <Column dataField="tujuan_surat" />
+                    <Column caption="Hal" dataField="hal_surat" calculateDisplayValue={this.getSubjectMail} />
+                    <Column dataField="group_name" />
+                    <Column dataField="id" visible={false} />
+                    <Column dataField="is_editable" visible={false} />
+                    <Column dataField="position_name" />
+                    <Column dataField="status" />
+                    <Column type="buttons"
+                      buttons={[{
+                        hint: 'Edit',
+                        text: 'Edit',
+                        onClick: this.navigateToEdit
+                      }, {
+                        hint: 'Detail',
+                        text: 'Detail',
+                        onClick: this.navigateToDetail
+                      }, 'delete']}
+                    />
+
+                  </DataGrid>
+                </div>
+              </div>
             </div>
-          </Row>
+          </div>
+
         </div>
       </React.Fragment>
     );
   }
 }
 
-export default OutgoingMail;
+const mapStatetoProps = state => {
+  const { error, loading, data, totalCount } = state.OutgoingMail;
+  return { error, loading, data, totalCount };
+};
+
+export default withRouter(connect(mapStatetoProps, {
+  getOutgoingMail,
+  getOutgoingMailSuccess,
+  deleteOutgoingMail,
+  deleteOutgoingMailSuccess
+})(OutgoingMail));

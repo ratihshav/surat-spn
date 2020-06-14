@@ -19,6 +19,20 @@ const instance = axios.create({
   })
 });
 
+export const getOutgoingMailService = (request) => {
+  const req = request ? request : ''
+  const GET_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/list`;
+  return instance.get(GET_OUTGOING_MAIL_API + `${req}`)
+    .then((data) => {
+      return {
+        data: data.data.data.data,
+        totalCount: data.data.data.totalCount
+      };
+    })
+    .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
+}
+
+
 export const createOutgoingMailService = (request) => {
   const formData = new FormData();
   formData.append('jenis_surat', request.jenis_surat);
@@ -45,6 +59,19 @@ export const searchUserService = (request) => {
 
   const SEARCH_USER_API = config.api_endpoint + `/user/search`
   return instance.get(SEARCH_USER_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
+
+export const getDetailOutgoingMailService = (request) => {
+
+  const id = request
+  const GET_DETAIL_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/view/${id}`
+  return instance.get(GET_DETAIL_OUTGOING_MAIL_API)
     .then((data) => {
       return {
         data: data.data
