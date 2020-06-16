@@ -10,7 +10,7 @@ import { AvForm, AvField } from "availity-reactstrap-validation";
 
 import Loader from "../../components/Loader";
 // actions
-import { loginUserAction, loginSuccess } from "../../store/actions";
+import { loginUser, loginUserSuccess } from "../../store/actions";
 
 // import images
 import logoKabKerinci from "../../assets/images/logo-kab-kerinci.png"
@@ -26,17 +26,17 @@ class Login extends Component {
 
   // handleValidSubmit
   handleValidSubmit(event, values) {
-    this.props.loginUserAction(values, this.props.history);
+    this.props.loginUser(values, this.props.history);
   }
 
 
   render() {
     let token
 
-    if (this.props.response) {
-      token = this.props.response.payload.data.token
-      this.props.history.push('/dashboard');
-    }
+    // if (this.props.data) {
+    //   token = this.props.data.payload.data.token
+    //   this.props.history.push('/dashboard');
+    // }
     return (
       < React.Fragment >
         <div>
@@ -167,10 +167,10 @@ class Login extends Component {
 }
 
 const mapStatetoProps = state => {
-  const { error, loading, response } = state.Login;
-  return { error, loading, response };
+  const { error, loading, data } = state.Login;
+  return { error, loading, data };
 };
 
 // const mapStatetoProps = (response) => ({response});
 
-export default withRouter(connect(mapStatetoProps, { loginUserAction, loginSuccess })(Login));
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess })(Login));

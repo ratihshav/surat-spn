@@ -1,49 +1,58 @@
 import { takeEvery, fork, put, all, call, select } from 'redux-saga/effects';
 
 // Login Redux States
-import { LOGIN_USER, LOGOUT_USER } from './actionTypes';
-import { loginSuccess, logoutUserSuccess, apiError } from './actions';
-import { loginUserService, sanctumService } from '../../../helpers/auth';
+import {
+  LOGIN_USER,
+  LOGOUT_USER
+} from './actionTypes';
 
-//AUTH related methods
-import { getFirebaseBackend } from '../../../helpers/authUtils';
+import {
+  loginUserSuccess,
+  loginUserFail,
+  logoutUserSuccess,
+  logoutUserFail
+} from './actions';
 
-const fireBaseBackend = getFirebaseBackend();
+import {
+  sanctumService,
+  logoutUserService
+} from '../../../helpers/auth';
 
-function* loginUser({ payload: { user, history } }) {
-    try {
-        const response = yield call(sanctumService, user);
-        yield put(loginSuccess(response));
-        history.push('/dashboard');
-    } catch (error) {
-        yield put(apiError(error));
-    }
+
+function* loginUser({ payload: { request } }) {
+  try {
+    const response = yield call(sanctumService, request);
+    yield put(loginUserSuccess(response));
+    this.props.history.push('/dashboard');
+  } catch (error) {
+    yield put(loginUserFail(error));
+  }
 }
 
-function* logoutUser({ payload: { history } }) {
-    try {
-        const response = yield call(fireBaseBackend.logout);
-        yield put(logoutUserSuccess(response));
-        history.push('/login');
-    } catch (error) {
-        yield put(apiError(error));
-    }
+function* logoutUser({ payload: { request } }) {
+  try {
+    const response = yield call(logoutUserService, request);
+    yield put(logoutUserSuccess(response));
+    this.props.history.push('/login');
+  } catch (error) {
+    yield put(logoutUserFail(error));
+  }
 }
 
 
 export function* watchUserLogin() {
-    yield takeEvery(LOGIN_USER, loginUser)
+  yield takeEvery(LOGIN_USER, loginUser)
 }
 
 export function* watchUserLogout() {
-    yield takeEvery(LOGOUT_USER, logoutUser)
+  yield takeEvery(LOGOUT_USER, logoutUser)
 }
 
 function* authSaga() {
-    yield all([
-        fork(watchUserLogin),
-        fork(watchUserLogout),
-    ]);
+  yield all([
+    fork(watchUserLogin),
+    fork(watchUserLogout),
+  ]);
 }
 
 export default authSaga;

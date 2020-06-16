@@ -1,6 +1,31 @@
+import axios from 'axios'
 import config from './config'
 
-var token = window.localStorage.getItem('token');
+var token = window.localStorage.getItem('authUser');
+const CancelToken = axios.CancelToken;
+let cancel;
+
+const instance = axios.create({
+  baseURL: config.api_endpoint,
+  timeout: 20000,
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  },
+  cancelToken: new CancelToken(function executor(c) {
+    cancel = c;
+  })
+});
+
+/**
+ * Returns the authenticated user
+ */
+export const getAuthenticatedUser = () => {
+  if (!localStorage.getItem("authUser")) return null;
+  return JSON.parse(localStorage.getItem("authUser"));
+};
+
 
 export const registerUserService = (request) => {
   const REGISTER_API_ENDPOINT = config.api_endpoint;
@@ -24,31 +49,6 @@ export const registerUserService = (request) => {
     });
 };
 
-export const loginUserService = (request) => {
-  const LOGIN_API_ENDPOINT = config.api_endpoint + '/login';
-  const parameters = {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify(request)
-  };
-  return fetch(LOGIN_API_ENDPOINT, parameters)
-    .then(response => {
-      return response.json();
-    })
-    .then(json => {
-      const storedToken = json.data.token
-      localStorage.setItem('authUser', JSON.stringify(storedToken))
-      return json;
-    })
-    .catch(error => {
-      return this._handleError(error);
-    })
-};
-
 export const sanctumService = (request) => {
   const sanctum = config.endpoint + '/sanctum/csrf-cookie';
   const parameters = {
@@ -68,17 +68,39 @@ export const sanctumService = (request) => {
     })
 }
 
+export const loginUserService = (request) => {
+  const LOGIN_API_ENDPOINT = config.api_endpoint + '/login';
+  return instance.post(LOGIN_API_ENDPOINT, request)
+    .then((data) => {
+      const storedToken = data.data.data.token
+      const id = data.data.data.userid
+      localStorage.setItem('authUser', JSON.stringify(storedToken))
+      localStorage.setItem('id', JSON.stringify(id))
+
+      return {
+        data: data.data.data
+      }
+    })
+    .catch(() => { throw 'Gagal Login'; });
+};
+
+export const logoutUserService = (request) => {
+  const idUser = localStorage.getItem('id');
+  const LOGOUT_USER_API = config.api_endpoint + `/logout`
+  return instance.post(LOGOUT_USER_API, idUser)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
+
 export const setLoggeedInUser = user => {
   localStorage.setItem("authUser", JSON.stringify(user));
 };
 
-/**
- * Returns the authenticated user
- */
-export const getAuthenticatedUser = () => {
-  if (!localStorage.getItem("authUser")) return null;
-  return JSON.parse(localStorage.getItem("authUser"));
-};
+
 
 export async function _handleError(error) {
   // var errorCode = error.code;

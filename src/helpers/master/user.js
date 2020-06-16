@@ -75,25 +75,13 @@ export const updateMasterUserService = (request) => {
 export const deleteMasterUserService = (request) => {
   const id = request.id
   const DELETE_MASTER_USER_API_ENDPOINT = config.api_endpoint + `/user/delete/${id}`;
-  const parameters = {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify(request)
-  };
-  return fetch(DELETE_MASTER_USER_API_ENDPOINT, parameters)
-    .then(response => {
-      return response.json();
+  return instance.post(DELETE_MASTER_USER_API_ENDPOINT, id)
+    .then((data) => {
+      return {
+        data: data
+      };
     })
-    .then(json => {
-      return json;
-    })
-    .catch(error => {
-      return this._handleError(error);
-    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
 };
 
 //detail
