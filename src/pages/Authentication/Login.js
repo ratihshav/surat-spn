@@ -31,20 +31,10 @@ class Login extends Component {
 
 
   render() {
-    let token
 
-    // if (this.props.data) {
-    //   token = this.props.data.payload.data.token
-    //   this.props.history.push('/dashboard');
-    // }
     return (
       < React.Fragment >
         <div>
-          {/* <div className="home-btn d-none d-sm-block">
-              <Link to="/" className="text-dark">
-                <i className="fas fa-home h2"></i>
-              </Link>
-            </div> */}
           <div className="account-pages my-5 pt-5">
             <div className="container">
               <Row className="justify-content-center">

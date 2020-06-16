@@ -25,6 +25,9 @@ class ProfileMenu extends Component {
   logout = () => {
     logoutUserService()
       .then((data) => {
+        window.localStorage.removeItem("authUser");
+        window.localStorage.removeItem("id");
+
         this.props.history.push('/login')
       })
       .catch(() => { throw 'Gagal Mengubah Data'; });
@@ -47,11 +50,11 @@ class ProfileMenu extends Component {
               <span>Profile</span>
             </Link>
             <div className="dropdown-divider"></div>
-            <Label
+            <Link
               className="dropdown-item">
               <i className="mdi mdi-logout font-size-17 align-middle mr-1"></i>
               <span onClick={this.logout}>Logout</span>
-            </Label>
+            </Link>
           </DropdownMenu>
         </Dropdown>
       </React.Fragment>

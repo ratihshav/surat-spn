@@ -1,7 +1,7 @@
 import axios from 'axios'
 import config from './config'
 
-var token = window.localStorage.getItem('authUser');
+var token = JSON.parse(window.localStorage.getItem('authUser'));
 const CancelToken = axios.CancelToken;
 let cancel;
 
@@ -85,15 +85,14 @@ export const loginUserService = (request) => {
 };
 
 export const logoutUserService = (request) => {
-  const idUser = localStorage.getItem('id');
   const LOGOUT_USER_API = config.api_endpoint + `/logout`
-  return instance.post(LOGOUT_USER_API, idUser)
+  return instance.post(LOGOUT_USER_API)
     .then((data) => {
       return {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((error) => { console.log('error', error) });
 }
 
 export const setLoggeedInUser = user => {
