@@ -79,6 +79,7 @@ class User extends Component {
 
   navigateToEdit = (val) => {
     const data = val.row.data
+    localStorage.setItem('idUser', JSON.stringify(data.id))
     this.props.history.push({
       pathname: '/user-edit',
       params: data,
@@ -145,7 +146,7 @@ class User extends Component {
                     onToolbarPreparing={this.onToolbarPreparing}
                   >
                     <FilterRow visible={true} />
-                    
+
                     <Paging defaultPageSize={10} />
                     <Pager
                       showPageSizeSelector={true}

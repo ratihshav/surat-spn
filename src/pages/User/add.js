@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Row, Col, Card, CardBody, Button } from "reactstrap";
+import { Row, Col, Card, CardBody, Button, Label, Input } from "reactstrap";
 import Select from "react-select";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
 
 import {
   searchUser,
@@ -11,13 +12,17 @@ import {
   createOutgoingMailSuccess
 } from "../../store/business/outgoing-mail/actions";
 
+import { saveMasterUserService } from "../../helpers/master/user"
+import toast from '../UI/toast';
+
+
 const type = [
   {
-    label: "Pilih Tipe Surat",
+    label: "Pilih Jabatan",
     options: [
-      { label: "Surat Keterangan", value: "Surat Keterangan" },
-      { label: "Surat Biasa", value: "Surat Biasa" },
-      { label: "Surat Perintah", value: "Surat Perintah" }
+      { label: "Ketua Divisi", value: "1" },
+      { label: "Sekretaris Divisi", value: "2" },
+      { label: "Bendahara Divisi", value: "3" }
     ]
   },
 ];
@@ -69,6 +74,8 @@ class UserAdd extends Component {
       selectedSubmit: null,
       dataUser: []
     };
+
+    this.input = React.createRef();
   }
 
   componentDidMount() {
@@ -105,21 +112,41 @@ class UserAdd extends Component {
 
   saveOutgoingMail = (e) => {
     const params = {
-      jenis_surat: e.target.type.value,
-      klasifikasi_surat: e.target.classification.value,
-      sifat_surat: e.target.urgency.value,
-      tujuan_surat: e.target.destination.value,
-      hal_surat: e.target.subject.value,
-      lampiran_surat: e.target.attachment.value,
-      approval_user: e.target.approval.value,
-      to_user: e.target.sendto.value,
-      file: this.state.selectedFile
+      position_id: e.target.type.value,
+      username: e.target.username.value,
+      full_name: e.target.fullName.value,
+      nip: e.target.idEmployee.value,
+      email: e.target.email.value,
+      ttl: e.target.birthDate.value,
+      password: e.target.password.value,
+      phone: e.target.phone.value,
+      address: e.target.address.value,
+      jenis_kelamin: this.input.current.value
     }
-    this.props.createOutgoingMail(params)
+
+    saveMasterUserService(params)
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/user');
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
     e.preventDefault()
   }
 
-  
+  alertSuccess = () => {
+    toast.success('Sukses menyimpan data!')
+  };
+
+  alertError = () => {
+    toast.error('Gagal menyimpan data')
+  }
+
+
+
   render() {
     const {
       selectedGroup,
@@ -128,19 +155,6 @@ class UserAdd extends Component {
       selectedFile,
       selectedSignature,
       selectedSubmit } = this.state;
-    const dataUser = this.props.data.data
-
-    const optionsSignature = dataUser !== undefined ?
-      dataUser.data.map(function (data) {
-        return { value: data.id, label: data.text };
-      })
-      : null
-
-    const optionsSubmit = dataUser !== undefined ?
-      dataUser.data.map(function (data) {
-        return { value: data.id, label: data.text };
-      })
-      : null
 
     return (
       <React.Fragment>
@@ -148,13 +162,12 @@ class UserAdd extends Component {
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">
-                <h4 className="font-size-18">Buat Surat Keluar</h4>
+                <h4 className="font-size-18">Tambah User Baru</h4>
                 <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
-                    <Link to="#">User</Link>
+                    <Link to="/user">User</Link>
                   </li>
-                  <li className="breadcrumb-item">Surat Keluar</li>
-                  <li className="breadcrumb-item active">Buat Surat Keluar</li>
+                  <li className="breadcrumb-item active">Tambah User Baru</li>
                 </ol>
               </div>
             </Col>
@@ -168,7 +181,7 @@ class UserAdd extends Component {
 
                     <Row className="form-group">
                       <label className="col-sm-2 col-form-label">
-                        Tipe Surat
+                        Jabatan
                     </label>
                       <Col sm={10}>
                         <Select
@@ -184,53 +197,17 @@ class UserAdd extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        Klasifikasi Surat
-                    </label>
-                      <Col sm={10}>
-                        <Select
-                          value={selectedClass}
-                          onChange={this.handleSelectClass}
-                          options={classification}
-                          name="classification"
-                          ref={node => (this.inputNode = node)}
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row className="form-group">
-                      <label
-                        htmlFor="example-search-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        Sifat Surat
-                    </label>
-                      <Col sm={10}>
-                        <Select
-                          value={selectedUrgency}
-                          onChange={this.handleSelectUrgency}
-                          options={urgency}
-                          name="urgency"
-                          ref={node => (this.inputNode = node)}
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row className="form-group">
-                      <label
                         htmlFor="example-text-input"
                         className="col-sm-2 col-form-label"
                       >
-                        Tujuan Surat
+                        Username
                     </label>
                       <Col sm={10}>
                         <input
-                          name="destination"
+                          name="username"
                           className="form-control"
                           type="text"
-                          defaultValue="Ikhwan Komputer"
+                          defaultValue=""
                           id="example-text-input"
                           ref={node => (this.inputNode = node)}
                         />
@@ -242,7 +219,7 @@ class UserAdd extends Component {
                         htmlFor="example-text-input"
                         className="col-sm-2 col-form-label"
                       >
-                        Hal Surat
+                        Nama Lengkap
                     </label>
                       <Col sm={10}>
                         <input
@@ -250,7 +227,7 @@ class UserAdd extends Component {
                           type="text"
                           defaultValue="Izin Penggunaan Website"
                           id="example-text-input"
-                          name="subject"
+                          name="fullName"
                           ref={node => (this.inputNode = node)}
                         />
                       </Col>
@@ -261,15 +238,59 @@ class UserAdd extends Component {
                         htmlFor="example-text-input"
                         className="col-sm-2 col-form-label"
                       >
-                        Lampiran Surat
+                        Jenis Kelamin
+                    </label>
+                      <Col sm={10}>
+                        <div className="custom-control custom-radio custom-control-inline">
+                          <Input
+                            type="radio"
+                            id="customRadioInline1"
+                            name="customRadioInline1"
+                            className="custom-control-input"
+                            innerRef={this.input}
+                            value="laki-laki"
+                          />
+                          <Label
+                            className="custom-control-label"
+                            for="customRadioInline1"
+                          >
+                            Laki-laki
+                            </Label>
+                        </div>
+                          &nbsp;
+                          <div className="custom-control custom-radio custom-control-inline">
+                          <Input
+                            type="radio"
+                            id="customRadioInline2"
+                            name="customRadioInline1"
+                            className="custom-control-input"
+                            innerRef={this.input}
+                            value="perempuan"
+                          />
+                          <Label
+                            className="custom-control-label"
+                            for="customRadioInline2"
+                          >
+                            Perempuan
+                            </Label>
+                        </div>
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        NIP
                     </label>
                       <Col sm={10}>
                         <input
                           className="form-control"
-                          type="text"
+                          type="number"
                           defaultValue=""
                           id="example-text-input"
-                          name="attachment"
+                          name="idEmployee"
                           ref={node => (this.inputNode = node)}
                         />
                       </Col>
@@ -277,23 +298,99 @@ class UserAdd extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
+                        htmlFor="example-text-input"
                         className="col-sm-2 col-form-label"
                       >
-                        Penandatanganan Surat
+                        E-mail
                     </label>
                       <Col sm={10}>
-                        <Select
-                          value={selectedSignature}
-                          onChange={this.handleSelectSignature}
-                          options={optionsSignature}
-                          name="approval"
+                        <input
+                          className="form-control"
+                          type="email"
+                          defaultValue=""
+                          id="example-text-input"
+                          name="email"
                           ref={node => (this.inputNode = node)}
                         />
                       </Col>
                     </Row>
 
                     <Row className="form-group">
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Tanggal Lahir
+                    </label>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="date"
+                          defaultValue=""
+                          id="example-text-input"
+                          name="birthDate"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Password
+                    </label>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="password"
+                          defaultValue=""
+                          id="example-text-input"
+                          name="password"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        No. Handphone
+                    </label>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="text"
+                          defaultValue=""
+                          id="example-text-input"
+                          name="phone"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Alamat
+                    </label>
+                      <Col sm={10}>
+                        <textarea
+                          className="form-control"
+                          id="w3review"
+                          name="address"
+                          rows="4"
+                          cols="50"
+                          ref={node => (this.inputNode = node)} />
+                      </Col>
+                    </Row>
+
+                    {/* <Row className="form-group">
                       <label
                         htmlFor="example-search-input"
                         className="col-sm-2 col-form-label"
@@ -309,36 +406,8 @@ class UserAdd extends Component {
                           ref={node => (this.inputNode = node)}
                         />
                       </Col>
-                    </Row>
-                    <Row className="form-group">
-                      <label
-                        htmlFor="example-search-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        Dokumen
-                    </label>
-                      <Col sm={10} style={styles.height}>
-                        <form action="#">
-                          <div className="custom-file">
-                            <input
-                              type="file"
-                              className="form-control"
-                              id="validatedCustomFile"
-                              required
-                              onChange={this.onFileChange}
-                              accept=".doc, .docx, .pdf"
-                              name="file"
-                              ref={node => (this.inputNode = node)}
-                            />
-                            <label
-                              className="custom-file-label"
-                              for="validatedCustomFile">
-                              {selectedFile !== null && selectedFile !== undefined ? selectedFile.name : 'No file chosen'}
-                            </label>
-                          </div>
-                        </form>
-                      </Col>
-                    </Row>
+                    </Row> */}
+
 
                     <div className="text-center mt-4">
                       <Button

@@ -81,7 +81,6 @@ export const getDetailOutgoingMailService = (request) => {
 }
 
 export const createDisposeOutgoingMailService = (request) => {
-  console.log('reqq', request)
   const formData = new FormData();
   formData.append('surat_keluar_id', request.surat_keluar_id);
   formData.append('tujuan_user', request.tujuan_user);

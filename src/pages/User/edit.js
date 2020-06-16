@@ -21,6 +21,8 @@ import {
 import user2 from "../../assets/images/users/user-2.jpg";
 import "chartist/dist/scss/chartist.scss";
 
+const idUser = window.localStorage.getItem('idUser');
+
 class UserEdit extends Component {
   constructor(props) {
     super(props);

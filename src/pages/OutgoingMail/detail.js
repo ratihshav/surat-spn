@@ -12,7 +12,7 @@ import {
 import { getDetailOutgoingMailService, searchUserService } from "../../helpers/master/mail"
 import woman from "../../assets/images/woman.png";
 
-
+const idMail = window.localStorage.getItem('idMail');
 class OutgoingMailDetail extends Component {
   constructor(props) {
     super(props);
@@ -33,9 +33,7 @@ class OutgoingMailDetail extends Component {
   }
 
   getDetailList = () => {
-    const id = this.props.location.params.id
-
-    getDetailOutgoingMailService(id)
+    getDetailOutgoingMailService(idMail)
       .then((data) => {
         this.setState({ detailList: data.data.data })
       })
@@ -72,7 +70,7 @@ class OutgoingMailDetail extends Component {
 
   doDisposition = (e) => {
     const params = {
-      surat_keluar_id: this.props.location.params.id,
+      surat_keluar_id: idMail,
       tujuan_user: e.target.sendTo.value,
       file: this.state.selectedFile,
       keterangan: e.target.description.value
@@ -191,7 +189,6 @@ class OutgoingMailDetail extends Component {
       })
       : null
 
-    console.log('dataLis', detailList, detailList.disposisi ? detailList.disposisi.length : null)
 
     return (
       <React.Fragment>
@@ -268,7 +265,7 @@ class OutgoingMailDetail extends Component {
                               Status
                            </label>
                             <Col sm={10}>
-                              <input type="radio" id="accept" name="status" value="accept" />
+                              <input type="radio" id="accept" name="status" value="accept" className="custom-control-input" />
                               <label for="accept"> Disetujui</label>
                               <input type="radio" id="reject" name="status" value="reject" />
                               <label for="reject"> Dikembalikan</label>

@@ -31,62 +31,34 @@ export const getMasterUserServices = (request) => {
     .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
 }
 
-//get user for Saga
-export const getMasterUserService = (request) => {
-  const GET_MASTER_USER_API = config.api_endpoint + `/user/list`;
-  const parameters = {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify(request)
-  };
-  return fetch(GET_MASTER_USER_API, parameters)
-    .then(response => {
-      return response.json();
-    })
-    .then(json => {
+
+export const saveMasterUserService = (request) => {
+  const formData = new FormData();
+  formData.append('position_id', request.position_id);
+  formData.append('username', request.username);
+  formData.append('full_name', request.full_name);
+  formData.append('nip', request.nip);
+  formData.append('email', request.email);
+  formData.append('ttl', request.ttl);
+  formData.append('password', request.password);
+  formData.append('phone', request.phone);
+  formData.append('address', request.address);
+  formData.append('jenis_kelamin', request.jenis_kelamin)
+
+  const SAVE_MASTER_USER_API = config.api_endpoint + `/user/save`
+  return instance.post(SAVE_MASTER_USER_API, formData)
+    .then((data) => {
       return {
-        data: json.data.data,
-        totalCount: json.data.totalCount
+        data: data.data
       };
     })
-    .catch(error => {
-      return error.message
-    })
-};
-
-
-//create
-export const saveMasterUserService = (request) => {
-  const SAVE_MASTER_USER_API = config.api_endpoint + '/user/save';
-  const parameters = {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify(request)
-  };
-  return fetch(SAVE_MASTER_USER_API, parameters)
-    .then(response => {
-      return response.json();
-    })
-    .then(json => {
-      return json;
-    })
-    .catch(error => {
-      return this._handleError(error);
-    })
-};
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
 
 //update
 export const updateMasterUserService = (request) => {
   const id = request.id
-  const UPDATE_MASTER_USER_API = config.api_endpoint + `/user/save/${id}`;
+  const UPDATE_MASTER_USER_API = config.api_endpoint + `/user/save/x`;
   const formData = new FormData();
   formData.append('id', id);
 

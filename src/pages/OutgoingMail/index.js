@@ -93,6 +93,7 @@ class OutgoingMail extends Component {
 
   navigateToDetail = (val) => {
     const data = val.row.data
+    localStorage.setItem('idMail', JSON.stringify(data.id))
     this.props.history.push({
       pathname: '/outgoing-mail-detail',
       params: data,

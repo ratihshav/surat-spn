@@ -1,16 +1,15 @@
 import React, { Component } from "react";
-import { Row, Col, Card, CardBody, Button } from "reactstrap";
+import { Row, Col, Card, CardBody, Button, Toast } from "reactstrap";
 import Select from "react-select";
 import { connect } from "react-redux";
-import { withRouter, Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
 
 import {
-  searchUser,
-  searchUserSuccess,
-  createOutgoingMail,
-  createOutgoingMailSuccess
+  searchUser
 } from "../../store/business/outgoing-mail/actions";
-import { searchUserService } from "../../helpers/master/mail"
+import { searchUserService, createOutgoingMailService } from "../../helpers/master/mail"
+import toast from '../UI/toast';
 
 const type = [
   {
@@ -44,7 +43,6 @@ const urgency = [
     ]
   }
 ]
-
 
 
 class OutgoingMailCreate extends Component {
@@ -109,8 +107,26 @@ class OutgoingMailCreate extends Component {
       to_user: e.target.sendto.value,
       file: this.state.selectedFile
     }
-    this.props.createOutgoingMail(params)
+
+    createOutgoingMailService(params)
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/outgoing-mail');
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
     e.preventDefault();
+  }
+
+  alertSuccess = () => {
+    toast.success('Sukses menyimpan data!')
+  };
+
+  alertError = () => {
+    toast.error('Gagal menyimpan data')
   }
 
   render() {
@@ -191,6 +207,7 @@ class OutgoingMailCreate extends Component {
                           options={classification}
                           name="classification"
                           ref={node => (this.inputNode = node)}
+                          required
                         />
                       </Col>
                     </Row>
@@ -209,6 +226,7 @@ class OutgoingMailCreate extends Component {
                           options={urgency}
                           name="urgency"
                           ref={node => (this.inputNode = node)}
+                          required
                         />
                       </Col>
                     </Row>
@@ -228,6 +246,7 @@ class OutgoingMailCreate extends Component {
                           defaultValue="Ikhwan Komputer"
                           id="example-text-input"
                           ref={node => (this.inputNode = node)}
+                          required
                         />
                       </Col>
                     </Row>
@@ -247,6 +266,7 @@ class OutgoingMailCreate extends Component {
                           id="example-text-input"
                           name="subject"
                           ref={node => (this.inputNode = node)}
+                          required
                         />
                       </Col>
                     </Row>
@@ -266,6 +286,7 @@ class OutgoingMailCreate extends Component {
                           id="example-text-input"
                           name="attachment"
                           ref={node => (this.inputNode = node)}
+                          required
                         />
                       </Col>
                     </Row>
@@ -284,6 +305,7 @@ class OutgoingMailCreate extends Component {
                           options={optionsSignature}
                           name="approval"
                           ref={node => (this.inputNode = node)}
+                          required
                         />
                       </Col>
                     </Row>
@@ -302,6 +324,7 @@ class OutgoingMailCreate extends Component {
                           options={optionsSubmit}
                           name="sendto"
                           ref={node => (this.inputNode = node)}
+                          required
                         />
                       </Col>
                     </Row>
@@ -312,7 +335,7 @@ class OutgoingMailCreate extends Component {
                       >
                         Dokumen
                     </label>
-                      <Col sm={10} style={styles.height}>
+                      <Col sm={10}>
                         <form action="#">
                           <div className="custom-file">
                             <input
@@ -339,7 +362,7 @@ class OutgoingMailCreate extends Component {
                       <Button
                         color="success"
                         className="mt-1"
-                      // onClick={this.saveOutgoingMail}
+                      // onClick={this.notify}
                       >
                         <i className="typcn typcn-input-checked" />Simpan
                     </Button>
@@ -355,20 +378,11 @@ class OutgoingMailCreate extends Component {
   }
 }
 
-const styles = {
-  col: {
-    height: '100vh'
-  }
-}
-
 const mapStatetoProps = state => {
   const { error, loading, data } = state.OutgoingMail;
   return { error, loading, data };
 };
 
 export default connect(mapStatetoProps, {
-  searchUser,
-  searchUserSuccess,
-  createOutgoingMail,
-  createOutgoingMailSuccess
+  searchUser
 })(OutgoingMailCreate);
