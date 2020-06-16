@@ -35,9 +35,11 @@ import GroupAdd from "../pages/Group/add"
 import GroupEdit from "../pages/Group/edit"
 import GroupDetail from "../pages/Group/detail"
 
-import OutgoingMail from "../pages/OutgoingMail/index"
+import OutgoingMail from "../pages/OutgoingMail"
 import OutgoingMailCreate from "../pages/OutgoingMail/create"
 import OutgoingMailDetail from "../pages/OutgoingMail/detail"
+
+import Position from "../pages/Position"
 
 // UI Pages
 import UiSweetAlert from "../pages/UI/UiSweetAlert";
@@ -216,6 +218,11 @@ const authProtectedRoutes = [
   { path: "/outgoing-mail", component: OutgoingMail },
   { path: "/outgoing-mail-create", component: OutgoingMailCreate },
   { path: "/outgoing-mail-detail", component: OutgoingMailDetail },
+
+  //Position
+  { path: "/position", component: Position },
+  // { path: "/position-create", component: PositionCreate },
+  // { path: "/position-edit", component: PositionEdit },
 
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> }
 ];

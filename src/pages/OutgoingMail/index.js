@@ -44,13 +44,13 @@ class OutgoingMail extends Component {
     };
   }
 
-  componentDidMount() {
-    this.getDataMail()
-  }
+  // componentDidMount() {
+  //   this.getDataMail()
+  // }
 
-  getDataMail = () => {
-    this.props.getOutgoingMail()
-  }
+  // getDataMail = () => {
+  //   this.props.getOutgoingMail()
+  // }
 
   cLoad = () => {
     return new DataStore({
@@ -93,6 +93,7 @@ class OutgoingMail extends Component {
 
   navigateToDetail = (val) => {
     const data = val.row.data
+    console.log(val.row.data)
     localStorage.setItem('idMail', JSON.stringify(data.id))
     this.props.history.push({
       pathname: '/outgoing-mail-detail',

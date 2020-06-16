@@ -21,7 +21,7 @@ const instance = axios.create({
 
 //get list group directly
 export const getMasterGroupServices = () => {
-  const GET_MASTER_GROUP_API = config.api_endpoint + `/jabatan/list`;
+  const GET_MASTER_GROUP_API = config.api_endpoint + `/unit/list`;
   return instance.get(GET_MASTER_GROUP_API)
     .then((data) => {
       return {
@@ -31,131 +31,65 @@ export const getMasterGroupServices = () => {
     .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
 }
 
-//get group for Saga
-export const getMasterGroupService = () => {
-  const GET_MASTER_GROUP_API = config.api_endpoint + `/jabatan/list`;
-  const parameters = {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    // body: JSON.stringify(request)
-  };
-  return fetch(GET_MASTER_GROUP_API, parameters)
-    .then(response => {
-      return response.json();
-    })
-    .then(json => {
-      return {
-        data: json.data,
-        // totalCount: json.data.totalCount
-      };
-    })
-    .catch(error => {
-      return error.message
-    })
-};
 
 
 //create
 export const saveMasterGroupService = (request) => {
-  const SAVE_MASTER_GROUP_API = config.api_endpoint + '/jabatan/save';
-  const parameters = {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify(request)
-  };
-  return fetch(SAVE_MASTER_GROUP_API, parameters)
-    .then(response => {
-      return response.json();
+  const formData = new FormData();
+  formData.append('group_code', request.group_code);
+  formData.append('group_name', request.group_name);
+
+  const SAVE_MASTER_GROUP_API = config.api_endpoint + '/unit/save';
+  return instance.post(SAVE_MASTER_GROUP_API, formData)
+    .then((data) => {
+      return {
+        data: data.data
+      };
     })
-    .then(json => {
-      return json;
-    })
-    .catch(error => {
-      return this._handleError(error);
-    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
 };
+
 
 //update
 export const updateMasterGroupService = (request) => {
+
   const id = request.id
-  const UPDATE_MASTER_GROUP_API = config.api_endpoint + `/jabatan/save/${id}`;
-  const parameters = {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify(request)
-  };
-  return fetch(UPDATE_MASTER_GROUP_API, parameters)
-    .then(response => {
-      return response.json();
+  const UPDATE_MASTER_GROUP_API = config.api_endpoint + `/unit/save/${id}`;
+  const formData = new FormData();
+  formData.append('id', id);
+
+  return instance.post(UPDATE_MASTER_GROUP_API, formData)
+    .then((data) => {
+      return {
+        data: data
+      };
     })
-    .then(json => {
-      return json;
-    })
-    .catch(error => {
-      return this._handleError(error);
-    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
 };
 
 //delete
 export const deleteMasterGroupService = (request) => {
   const id = request.id
-  const DELETE_MASTER_GROUP_API_ENDPOINT = config.api_endpoint + `/jabatan/delete/${id}`;
-  const parameters = {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify(request)
-  };
-  return fetch(DELETE_MASTER_GROUP_API_ENDPOINT, parameters)
-    .then(response => {
-      return response.json();
+  const DELETE_MASTER_GROUP_API_ENDPOINT = config.api_endpoint + `/unit/delete/${id}`;
+  return instance.post(DELETE_MASTER_GROUP_API_ENDPOINT, id)
+    .then((data) => {
+      return {
+        data: data
+      };
     })
-    .then(json => {
-      return json;
-    })
-    .catch(error => {
-      return this._handleError(error);
-    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
 };
 
 //detail
 export const getDetailGroupService = (request) => {
-  // const id = request.id
-  const GET_DETAIL_GROUP_API = config.api_endpoint + `/jabatan/view/${request}`;
-  const parameters = {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    // body: JSON.stringify(request)
-  };
-  return fetch(GET_DETAIL_GROUP_API, parameters)
-    .then(response => {
-      return response.json();
+  const GET_DETAIL_GROUP_API = config.api_endpoint + `/unit/view/${request}`;
+  return instance.get(GET_DETAIL_GROUP_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
     })
-    .then(json => {
-      return json;
-    })
-    .catch(error => {
-      return error.message
-    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
 };
 
 

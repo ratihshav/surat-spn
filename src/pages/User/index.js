@@ -79,13 +79,14 @@ class User extends Component {
     });
   }
 
-  navigateToDetail = (val) => {
-    const data = val.row.data
-    this.props.history.push({
-      pathname: '/user-detail',
-      params: data,
-    });
-  }
+  /* navigate to detail user */
+  // navigateToDetail = (val) => {
+  //   const data = val.row.data
+  //   this.props.history.push({
+  //     pathname: '/user-detail',
+  //     params: data,
+  //   });
+  // }
 
   onRowClick = (e) => {
     console.log('row', e)
@@ -132,7 +133,7 @@ class User extends Component {
                 <h4 className="font-size-18">Daftar User</h4>
                 <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
-                    <Link to="#">User</Link>
+                    <Link to="/user">User</Link>
                   </li>
                   <li className="breadcrumb-item active">Daftar User</li>
                 </ol>
@@ -186,10 +187,6 @@ class User extends Component {
                         hint: 'Edit',
                         text: 'Edit',
                         onClick: this.navigateToEdit
-                      }, {
-                        hint: 'Detail',
-                        text: 'Detail',
-                        onClick: this.navigateToDetail
                       }, 'delete']}
                     />
 

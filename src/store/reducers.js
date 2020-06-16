@@ -12,6 +12,7 @@ import ForgetPassword from "./auth/forgetpwd/reducer";
 import MasterUser from "./business/master-user/reducer";
 import MasterGroup from "./business/master-group/reducer";
 import OutgoingMail from "./business/outgoing-mail/reducer"
+import MasterPosition from './business/master-position/reducer';
 
 const rootReducer = combineReducers({
   // public
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
   ForgetPassword,
   MasterUser,
   MasterGroup,
-  OutgoingMail
+  OutgoingMail,
+  MasterPosition
 });
 
 export default rootReducer;

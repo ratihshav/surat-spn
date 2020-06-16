@@ -25,9 +25,7 @@ class ProfileMenu extends Component {
   logout = () => {
     logoutUserService()
       .then((data) => {
-        window.localStorage.removeItem("authUser");
-        window.localStorage.removeItem("id");
-
+        window.localStorage.clear();
         this.props.history.push('/login')
       })
       .catch(() => { throw 'Gagal Mengubah Data'; });

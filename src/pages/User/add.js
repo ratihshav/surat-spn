@@ -110,7 +110,7 @@ class UserAdd extends Component {
     this.setState({ selectedFile: event.target.files[0] });
   };
 
-  saveOutgoingMail = (e) => {
+  saveNewUser = (e) => {
     const params = {
       position_id: e.target.type.value,
       username: e.target.username.value,
@@ -173,7 +173,7 @@ class UserAdd extends Component {
             </Col>
           </Row>
 
-          <form action="#" onSubmit={this.saveOutgoingMail}>
+          <form action="#" onSubmit={this.saveNewUser}>
             <Row>
               <div className="col-12">
                 <Card>

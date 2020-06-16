@@ -12,27 +12,29 @@ import {
 import { getDetailOutgoingMailService, searchUserService } from "../../helpers/master/mail"
 import woman from "../../assets/images/woman.png";
 
-const idMail = window.localStorage.getItem('idMail');
 class OutgoingMailDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      detailList: '',
+      detailList: [],
       visible: false,
       modal_center: false,
       selectedSignature: null,
       dataUser: [],
       status: '',
-      selectedFile: null
+      selectedFile: null,
+      stateIdMail: ''
     };
   }
 
   componentDidMount() {
-    this.getDetailList()
+    const idMail = window.localStorage.getItem('idMail');
+    this.setState({ stateIdMail: idMail })
+    this.getDetailList(idMail)
     this.getDataUser()
   }
 
-  getDetailList = () => {
+  getDetailList = (idMail) => {
     getDetailOutgoingMailService(idMail)
       .then((data) => {
         this.setState({ detailList: data.data.data })
@@ -69,8 +71,9 @@ class OutgoingMailDetail extends Component {
 
 
   doDisposition = (e) => {
+    const { stateIdMail } = this.state
     const params = {
-      surat_keluar_id: idMail,
+      surat_keluar_id: stateIdMail,
       tujuan_user: e.target.sendTo.value,
       file: this.state.selectedFile,
       keterangan: e.target.description.value

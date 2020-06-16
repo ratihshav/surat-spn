@@ -57,10 +57,19 @@ export const saveMasterUserService = (request) => {
 
 //update
 export const updateMasterUserService = (request) => {
-  const id = request.id
-  const UPDATE_MASTER_USER_API = config.api_endpoint + `/user/save/x`;
+  const id = window.localStorage.getItem('idUser');
   const formData = new FormData();
-  formData.append('id', id);
+  formData.append('position_id', request.position_id);
+  formData.append('username', request.username);
+  formData.append('full_name', request.full_name);
+  formData.append('nip', request.nip);
+  formData.append('email', request.email);
+  formData.append('ttl', request.ttl);
+  formData.append('phone', request.phone);
+  formData.append('address', request.address);
+  formData.append('jenis_kelamin', request.jenis_kelamin)
+
+  const UPDATE_MASTER_USER_API = config.api_endpoint + `/user/save/${id}`;
 
   return instance.post(UPDATE_MASTER_USER_API, formData)
     .then((data) => {
@@ -86,27 +95,14 @@ export const deleteMasterUserService = (request) => {
 
 //detail
 export const getDetailUserService = (request) => {
-  // const id = request.id
   const GET_DETAIL_USER_API = config.api_endpoint + `/user/view/${request}`;
-  const parameters = {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    // body: JSON.stringify(request)
-  };
-  return fetch(GET_DETAIL_USER_API, parameters)
-    .then(response => {
-      return response.json();
+  return instance.get(GET_DETAIL_USER_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
     })
-    .then(json => {
-      return json;
-    })
-    .catch(error => {
-      return error.message
-    })
+    .catch(() => { throw 'Gagal Mengubah Data'; })
 };
 
 export const changePasswordUserService = (request) => {
@@ -141,8 +137,6 @@ export const changePhotoUserService = (request) => {
     })
     .catch(() => { throw 'Gagal Mengubah Data'; });
 }
-
-
 
 export async function _handleError(error) {
   // var errorCode = error.code;

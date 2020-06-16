@@ -15,10 +15,11 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import DataStore from 'devextreme/data/data_source';
 import { isNotEmpty, dxGridFilter } from '../../helpers/gridFilter'
-import { getMasterGroupServices, deleteMasterGroupService } from '../../helpers/master/group'
+import { getMasterPositionServices, deleteMasterPositionService } from '../../helpers/master/position'
+
 import toast from '../UI/toast';
 
-class Group extends Component {
+class Position extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,17 +48,17 @@ class Group extends Component {
           else if (i in loadOptions && isNotEmpty(loadOptions[i])) { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
         });
         params = params.slice(0, -1);
-        return getMasterGroupServices()
+        return getMasterPositionServices()
       },
-      remove: (values) => { this.onDeleteGroup(values) }
+      remove: (values) => { this.onDeletePosition(values) }
     })
   }
 
-  onDeleteGroup = (values) => {
-    deleteMasterGroupService(values)
+  onDeletePosition = (values) => {
+    deleteMasterPositionService(values)
       .then((data) => {
         this.alertSuccess()
-        this.props.history.push('/group');
+        this.props.history.push('/position');
       })
       .catch(() => {
         this.alertError()
@@ -75,8 +76,9 @@ class Group extends Component {
   navigateToEdit = (val) => {
     const data = val.row.data
     localStorage.setItem('idDivisi', JSON.stringify(data.id))
+    console.log(JSON.stringify(data.id))
     this.props.history.push({
-      pathname: '/group-edit',
+      pathname: '/position-edit',
       params: data,
     });
   }
@@ -99,7 +101,7 @@ class Group extends Component {
 
   navigateToAdd = () => {
     this.props.history.push({
-      pathname: '/group-add'
+      pathname: '/position-add'
     });
   }
 
@@ -110,15 +112,12 @@ class Group extends Component {
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">
-                <h4 className="font-size-18">Daftar Unit</h4>
+                <h4 className="font-size-18">Daftar Jabatan</h4>
                 <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
-                    <Link to="#">Home</Link>
+                    <Link to="/position">Jabatan</Link>
                   </li>
-                  <li className="breadcrumb-item">
-                    <Link to="#">Divisi</Link>
-                  </li>
-                  <li className="breadcrumb-item active">Daftar Divisi</li>
+                  <li className="breadcrumb-item active">Daftar Jabatan</li>
                 </ol>
               </div>
               <br />
@@ -149,8 +148,9 @@ class Group extends Component {
                       showInfo={true} />
 
                     <Column dataField="id" visible={false} />
-                    <Column dataField="group_code" />
-                    <Column dataField="group_name" />
+                    <Column caption="Nama Jabatan" dataField="position_name" />
+                    <Column caption="Tipe" dataField="position_type" />
+                    <Column caption="Unit" dataField="group_name" />
                     <Column type="buttons"
                       buttons={[{
                         hint: 'Edit',
@@ -171,4 +171,4 @@ class Group extends Component {
   }
 }
 
-export default withRouter(connect()(Group));
+export default withRouter(connect()(Position));

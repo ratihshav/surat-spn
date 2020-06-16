@@ -10,6 +10,7 @@ import LayoutSaga from './layout/saga';
 import MasterUserSaga from './business/master-user/saga';
 import MasterGroupSaga from './business/master-group/saga';
 import OutgoingMailSaga from './business/outgoing-mail/saga'
+import MasterPosition from './business/master-position/saga'
 
 export default function* rootSaga() {
     yield all([
@@ -20,6 +21,7 @@ export default function* rootSaga() {
         LayoutSaga(),
         MasterUserSaga(),
         MasterGroupSaga(),
-        OutgoingMailSaga()
+        OutgoingMailSaga(),
+        MasterPosition()
     ])
 }

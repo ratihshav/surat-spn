@@ -1,69 +1,110 @@
 import React, { Component } from "react";
 import {
+  TabContent,
+  TabPane,
+  Nav,
+  NavItem,
+  NavLink,
+  Card,
+  CardText,
   Row,
   Col,
-  Card,
   CardBody,
-  Button,
+  Button
 } from "reactstrap";
-import Form, {
-  Item,
-  ButtonItem,
-} from 'devextreme-react/form';
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
+import classnames from "classnames";
+import Select from "react-select";
+
 import {
   updateMasterUser,
   updateMasterUserSuccess
 } from "../../store/business/master-user/actions";
+import {
+  getDetailUserService,
+  updateMasterUserService
+} from '../../helpers/master/user';
+import { getMasterPositionServices } from '../../helpers/master/position'
+import toast from '../UI/toast';
 
 // import images
 import user2 from "../../assets/images/users/user-2.jpg";
 import "chartist/dist/scss/chartist.scss";
 
-const idUser = window.localStorage.getItem('idUser');
 
 class UserEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataUser: '',
+      dataUser: [],
+      activeTabJustify: "1",
+      dataPosition: [],
+      selectedPosition: null,
+      selectedGender: null
     };
-    this.groupedItems = {
-      contactInformation: [{
-        itemType: 'tabbed',
-        tabPanelOptions: {
-          deferRendering: false
-        },
-        tabs: [{
-          title: 'Basic Information',
-          items: ['id', 'full_name', 'username', 'email']
-        }, {
-          title: 'Personal Data',
-          items: ['full_name', 'date_of_birth', 'address', 'phone']
-        }, {
-          title: 'Divisi',
-          items: ['group_name']
-        }]
-      }
-      ]
-    };
-    this.buttonOptions = {
-      text: 'Submit',
-      type: 'success',
-      // useSubmitBehavior: true,
-      onClick: (e) => this.submitUpdatedData(e)
-    };
+
   }
 
   componentDidMount() {
-    this.setState({
-      dataUser: this.props.location.params
-    })
+    const idUser = window.localStorage.getItem('idUser');
+
+    this.getDetailUser(idUser)
+    this.getDataPosition()
   }
 
-  submitUpdatedData = (value) => {
-    this.props.updateMasterUser(this.props.location.params)
+  getDetailUser = (idUser) => {
+    getDetailUserService(idUser)
+      .then((data) => {
+        this.setState({
+          dataUser: data.data.data
+        })
+      })
+      .catch(() => { throw 'Gagal Mengubah Data'; })
+  }
+
+  getDataPosition = () => {
+    getMasterPositionServices()
+      .then((data) => {
+        this.setState({
+          dataPosition: data.data
+        })
+      })
+      .catch(() => { throw 'Gagal Mengubah Data'; })
+  }
+
+  submitUpdatedData = (e) => {
+    const params = {
+      position_id: e.target.type.value,
+      username: e.target.username.value,
+      full_name: e.target.fullName.value,
+      nip: e.target.idEmployee.value,
+      email: e.target.email.value,
+      ttl: e.target.birthDate.value,
+      phone: e.target.phone.value,
+      address: e.target.address.value,
+      jenis_kelamin: e.target.gender.value
+    }
+
+    updateMasterUserService(params)
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/user');
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
+    e.preventDefault()
+  }
+
+  alertSuccess = () => {
+    toast.success('Sukses menyimpan data!')
+  };
+
+  alertError = () => {
+    toast.error('Gagal menyimpan data')
   }
 
   goToChangePassword = () => {
@@ -82,8 +123,41 @@ class UserEdit extends Component {
     });
   }
 
+  toggleCustomJustified = (tab) => {
+    if (this.state.activeTabJustify !== tab) {
+      this.setState({
+        activeTabJustify: tab
+      });
+    }
+  }
+
+  handleSelectPosition = selectedPosition => {
+    this.setState({ selectedPosition })
+  }
+
+  handleSelectGroup = selectedGroup => {
+    this.setState({ selectedGroup })
+  }
+
+  handleChangeGender = selectedGender => {
+    this.setState({ selectedGender })
+  }
+
   render() {
-    const { animationEnabled, loop, selectedIndex, swipeEnabled, dataUser } = this.state;
+    const {
+      dataUser,
+      dataPosition,
+      selectedPosition,
+      selectedGender
+    } = this.state;
+
+    const optionsPosition = dataPosition.length !== 0 ?
+      dataPosition.map(function (data) {
+        return { value: data.id, label: data.position_name };
+      })
+      : null
+
+
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -132,19 +206,305 @@ class UserEdit extends Component {
                       </div>
                     </Col>
                     <Col md={8}>
-                      <form action="your-action" onSubmit={this.handleSubmit}>
-                        <Form
-                          formData={dataUser}
-                          readOnly={false}
-                          showColonAfterLabel={true}
-                        >
-                          <Item itemType="group" items={this.groupedItems.contactInformation} />
-                          <ButtonItem horizontalAlignment="right"
-                            buttonOptions={this.buttonOptions}
-                          />
-                        </Form>
+                      <form action="#" onSubmit={this.submitUpdatedData}>
+                        <Nav tabs className="nav-tabs-custom nav-justified">
+                          <NavItem>
+                            <NavLink
+                              className={classnames({
+                                active: this.state.activeTabJustify === "1"
+                              })}
+                              onClick={() => {
+                                this.toggleCustomJustified("1");
+                              }}
+                            >
+                              <span class="d-none d-sm-block">Data Pribadi</span>
+                            </NavLink>
+                          </NavItem>
+                          <NavItem>
+                            <NavLink
+                              className={classnames({
+                                active: this.state.activeTabJustify === "6"
+                              })}
+                              onClick={() => {
+                                this.toggleCustomJustified("6");
+                              }}
+                            >
+                              <span class="d-none d-sm-block">Data Jabatan</span>
+                            </NavLink>
+                          </NavItem>
+                          <NavItem>
+                            <NavLink
+                              className={classnames({
+                                active: this.state.activeTabJustify === "7"
+                              })}
+                              onClick={() => {
+                                this.toggleCustomJustified("7");
+                              }}
+                            >
+                              <span class="d-none d-sm-block">Data Divisi</span>
+                            </NavLink>
+                          </NavItem>
+                        </Nav>
+
+                        <TabContent activeTab={this.state.activeTabJustify}>
+                          <TabPane tabId="1" className="p-3">
+                            <Row>
+                              <Col sm="12">
+                                <CardText>
+                                  <Row className="form-group">
+                                    <label
+                                      htmlFor="example-text-input"
+                                      className="col-sm-2 col-form-label">
+                                      NIP
+                                    </label>
+                                    <Col sm={10}>
+                                      <input
+                                        className="form-control"
+                                        type="text"
+                                        defaultValue={dataUser.nip}
+                                        id="example-text-input"
+                                        name="idEmployee"
+                                        ref={node => (this.inputNode = node)}
+                                        required
+                                        disabled
+                                      />
+                                    </Col>
+                                  </Row>
+                                </CardText>
+                              </Col>
+                            </Row>
+
+                            <Row>
+                              <Col sm="12">
+                                <CardText>
+                                  <Row className="form-group">
+                                    <label
+                                      htmlFor="example-text-input"
+                                      className="col-sm-2 col-form-label">
+                                      Nama Lengkap
+                                     </label>
+                                    <Col sm={10}>
+                                      <input
+                                        className="form-control"
+                                        type="text"
+                                        defaultValue={dataUser.full_name}
+                                        id="example-text-input"
+                                        name="fullName"
+                                        ref={node => (this.inputNode = node)}
+                                        required
+                                      />
+                                    </Col>
+                                  </Row>
+                                </CardText>
+                              </Col>
+                            </Row>
+
+                            <Row>
+                              <Col sm="12">
+                                <CardText>
+                                  <Row className="form-group">
+                                    <label
+                                      htmlFor="example-text-input"
+                                      className="col-sm-2 col-form-label">
+                                      Username
+                                    </label>
+                                    <Col sm={10}>
+                                      <input
+                                        className="form-control"
+                                        type="text"
+                                        defaultValue={dataUser.username}
+                                        id="example-text-input"
+                                        name="username"
+                                        ref={node => (this.inputNode = node)}
+                                        required
+                                        disabled
+                                      />
+                                    </Col>
+                                  </Row>
+
+                                  <Row>
+                                    <Col sm="12">
+                                      <CardText>
+                                        <Row className="form-group">
+                                          <label
+                                            htmlFor="example-text-input"
+                                            className="col-sm-2 col-form-label">
+                                            E-mail
+                                          </label>
+                                          <Col sm={10}>
+                                            <input
+                                              className="form-control"
+                                              type="email"
+                                              defaultValue={dataUser.email}
+                                              id="example-text-input"
+                                              name="email"
+                                              ref={node => (this.inputNode = node)}
+                                              required
+                                              disabled
+                                            />
+                                          </Col>
+                                        </Row>
+                                      </CardText>
+                                    </Col>
+                                  </Row>
+
+                                  <Row className="form-group">
+                                    <label
+                                      htmlFor="example-text-input"
+                                      className="col-sm-2 col-form-label">
+                                      Tanggal Lahir
+                                    </label>
+                                    <Col sm={10}>
+                                      <input
+                                        className="form-control"
+                                        type="date"
+                                        defaultValue={dataUser.ttl}
+                                        id="example-text-input"
+                                        name="birthDate"
+                                        ref={node => (this.inputNode = node)}
+                                      />
+                                    </Col>
+                                  </Row>
+
+                                  <Row>
+                                    <Col sm="12">
+                                      <Row className="form-group">
+                                        <label
+                                          htmlFor="example-text-input"
+                                          className="col-sm-2 col-form-label">
+                                          Jenis Kelamin
+                                           </label>
+                                        <Col sm={10}>
+                                          <input
+                                            type="radio"
+                                            id="male"
+                                            name="gender"
+                                            value="Laki-laki"
+                                            checked={dataUser.jenis_kelamin === 'Laki-laki'}
+                                            onChange={this.handleChangeGender}
+                                            ref={node => (this.inputNode = node)} />&nbsp;
+                                            <label for="accept"> Laki-laki</label>
+
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                            <input
+                                            type="radio"
+                                            id="female"
+                                            name="gender"
+                                            value="Perempuan"
+                                            checked={dataUser.jenis_kelamin === 'Perempuan'}
+                                            onChange={this.handleChangeGender}
+                                            ref={node => (this.inputNode = node)} />&nbsp;
+                                            <label for="reject"> Perempuan</label>
+                                        </Col>
+                                      </Row>
+                                    </Col>
+                                  </Row>
+
+                                  <Row className="form-group">
+                                    <label
+                                      htmlFor="example-text-input"
+                                      className="col-sm-2 col-form-label">
+                                      No. Handphone
+                                    </label>
+                                    <Col sm={10}>
+                                      <input
+                                        className="form-control"
+                                        type="text"
+                                        defaultValue={dataUser.phone}
+                                        id="example-text-input"
+                                        name="phone"
+                                        ref={node => (this.inputNode = node)}
+                                      />
+                                    </Col>
+                                  </Row>
+
+                                  <Row className="form-group">
+                                    <label
+                                      htmlFor="example-text-input"
+                                      className="col-sm-2 col-form-label">
+                                      Alamat
+                                    </label>
+                                    <Col sm={10}>
+                                      <textarea
+                                        className="form-control"
+                                        id="w3review"
+                                        name="address"
+                                        rows="4"
+                                        cols="50"
+                                        defaultValue={dataUser.address}
+                                        ref={node => (this.inputNode = node)} />
+                                    </Col>
+                                  </Row>
+
+                                </CardText>
+                              </Col>
+                            </Row>
+                          </TabPane>
+
+                          <TabPane tabId="6" className="p-3">
+                            <Row>
+                              <Col sm="12">
+                                <Row className="form-group">
+                                  <label
+                                    htmlFor="example-search-input"
+                                    className="col-sm-2 col-form-label">
+                                    Nama Jabatan
+                                  </label>
+                                  <Col sm={10}>
+                                    <Select
+                                      value={selectedPosition}
+                                      defaultValue={dataUser.position_id}
+                                      onChange={this.handleSelectPosition}
+                                      options={optionsPosition}
+                                      name="type"
+                                      ref={node => (this.inputNode = node)}
+                                    />
+                                  </Col>
+                                </Row>
+                              </Col>
+                            </Row>
+                          </TabPane>
+
+                          <TabPane tabId="7" className="p-3">
+                            <Row>
+                              <Col sm="12">
+                                <CardText>
+                                  <Row className="form-group">
+                                    <label
+                                      htmlFor="example-text-input"
+                                      className="col-sm-2 col-form-label">
+                                      Nama Divisi
+                                          </label>
+                                    <Col sm={10}>
+                                      <input
+                                        className="form-control"
+                                        type="email"
+                                        defaultValue={dataUser.group_name}
+                                        id="example-text-input"
+                                        name="group"
+                                        ref={node => (this.inputNode = node)}
+                                        required
+                                        disabled
+                                      />
+                                    </Col>
+                                  </Row>
+                                </CardText>
+                              </Col>
+                            </Row>
+
+                          </TabPane>
+                        </TabContent>
+                        <div className="text-right mt-4">
+                          <Button
+                            color="success"
+                            className="mt-1">
+                            <i className="typcn typcn-input-checked" />Simpan
+                          </Button>
+                        </div>
                       </form>
                     </Col>
+
                   </Row>
                 </CardBody>
               </Card>
