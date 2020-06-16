@@ -50,7 +50,7 @@ const SidebarContent = props => {
               <Link to="/group">Data Divisi</Link>
             </li>
             <li>
-              <Link to="/email-compose">Data Jabatan</Link>
+              <Link to="/position">Data Jabatan</Link>
             </li>
           </ul>
         </li>

@@ -2,29 +2,31 @@ import React, { Component } from "react";
 import {
   Row,
   Col,
-  Button,
-  Modal,
 } from "reactstrap";
 import { connect } from "react-redux";
 import { Link, withRouter, Redirect } from "react-router-dom";
 import "chartist/dist/scss/chartist.scss";
 import DataGrid, {
   Column,
-  Editing,
-  Popup,
   Paging,
   FilterRow,
-  Lookup,
   Pager,
-  Position,
-  Form
 } from 'devextreme-react/data-grid';
 import DataStore from 'devextreme/data/data_source';
 import { isNotEmpty, dxGridFilter } from '../../helpers/gridFilter'
-import { getMasterGroupServices, deleteMasterGroupService } from '../../helpers/master/group'
-import toast from '../UI/toast';
+import { getMasterPositionServices } from '../../helpers/master/position'
 
-class Group extends Component {
+//Reducer
+import {
+  getMasterPosition,
+  getMasterPositionSuccess,
+  saveMasterPosition,
+  saveMasterPositionSuccess,
+  deleteMasterPosition,
+  deleteMasterPositionSuccess
+} from "../../store/business/master-position/actions";
+
+class PositionIndex extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,37 +55,25 @@ class Group extends Component {
           else if (i in loadOptions && isNotEmpty(loadOptions[i])) { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
         });
         params = params.slice(0, -1);
-        return getMasterGroupServices()
+        return getMasterPositionServices()
       },
-      remove: (values) => { this.onDeleteGroup(values) }
+      insert: (values) => { this.props.saveMasterPosition(values) },
+      remove: (values) => { this.props.deleteMasterPosition(values) }
     })
-  }
-
-  onDeleteGroup = (values) => {
-    deleteMasterGroupService(values)
-      .then((data) => {
-        this.alertSuccess()
-        this.props.history.push('/group');
-      })
-      .catch(() => {
-        this.alertError()
-      });
-  }
-
-  alertSuccess = () => {
-    toast.success('Sukses Menghapus data!')
-  };
-
-  alertError = () => {
-    toast.error('Gagal Menghapus data')
   }
 
   navigateToEdit = (val) => {
     const data = val.row.data
-    localStorage.setItem('idDivisi', JSON.stringify(data.id))
-    console.log(JSON.stringify(data.id))
     this.props.history.push({
-      pathname: '/group-edit',
+      pathname: '/position-edit',
+      params: data,
+    });
+  }
+
+  navigateToDetail = (val) => {
+    const data = val.row.data
+    this.props.history.push({
+      pathname: '/position-detail',
       params: data,
     });
   }
@@ -91,7 +81,7 @@ class Group extends Component {
   onRowClick = (e) => {
     console.log('row', e)
   }
-  
+
   onToolbarPreparing = (e) => {
     e.toolbarOptions.items.unshift({
       location: 'after',
@@ -106,7 +96,7 @@ class Group extends Component {
 
   navigateToAdd = () => {
     this.props.history.push({
-      pathname: '/group-add'
+      pathname: '/position-add'
     });
   }
 
@@ -123,15 +113,15 @@ class Group extends Component {
                     <Link to="#">Home</Link>
                   </li>
                   <li className="breadcrumb-item">
-                    <Link to="#">Divisi</Link>
+                    <Link to="#">Unit</Link>
                   </li>
-                  <li className="breadcrumb-item active">Daftar Divisi</li>
+                  <li className="breadcrumb-item active">Daftar Unit</li>
                 </ol>
               </div>
               <br />
             </Col>
           </Row>
-          
+
           <div className="row">
             <div className="col-12">
               <div className="card">
@@ -145,9 +135,6 @@ class Group extends Component {
                     onRowClick={this.onRowClick}
                     onToolbarPreparing={this.onToolbarPreparing}
                   >
-                    <Editing
-                    mode="row"
-                    allowDeleting={true} />
                     <FilterRow visible={true} />
                     <Paging defaultPageSize={10} />
                     <Pager
@@ -156,17 +143,18 @@ class Group extends Component {
                       showInfo={true} />
 
                     <Column dataField="id" visible={false} />
-                    <Column dataField="group_code" />
-                    <Column dataField="group_name" />
-                    {/* <Column dataField="created_at" visible={false} />
-                    <Column dataField="created_by" visible={false} />
-                    <Column dataField="modified_at" visible={false} />
-                    <Column dataField="modified_by" visible={false} /> */}
+                    <Column caption="Nama Jabatan" dataField="position_name" />
+                    <Column caption="Tipe" dataField="position_type" />
+                    <Column caption="Unit" dataField="position_name" />
                     <Column type="buttons"
                       buttons={[{
                         hint: 'Edit',
                         text: 'Edit',
                         onClick: this.navigateToEdit
+                      }, {
+                        hint: 'Detail',
+                        text: 'Detail',
+                        onClick: this.navigateToDetail
                       }, 'delete']}
                     />
 
@@ -182,4 +170,16 @@ class Group extends Component {
   }
 }
 
-export default withRouter(connect()(Group));
+const mapStatetoProps = state => {
+  const { error, loading, data, totalCount } = state.MasterPosition;
+  return { error, loading, data, totalCount };
+};
+
+export default withRouter(connect(mapStatetoProps, {
+  getMasterPosition,
+  getMasterPositionSuccess,
+  saveMasterPosition,
+  saveMasterPositionSuccess,
+  deleteMasterPosition,
+  deleteMasterPositionSuccess
+})(PositionIndex));

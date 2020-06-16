@@ -19,9 +19,9 @@ const instance = axios.create({
   })
 });
 
-//get list group directly
-export const getMasterGroupServices = () => {
-  const GET_MASTER_GROUP_API = config.api_endpoint + `/unit/list`;
+//get list position directly
+export const getMasterPositionServices = () => {
+  const GET_MASTER_GROUP_API = config.api_endpoint + `/jabatan/list`;
   return instance.get(GET_MASTER_GROUP_API)
     .then((data) => {
       return {
@@ -31,9 +31,9 @@ export const getMasterGroupServices = () => {
     .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
 }
 
-//get group for Saga
-export const getMasterGroupService = () => {
-  const GET_MASTER_GROUP_API = config.api_endpoint + `/unit/list`;
+//get position for Saga
+export const getMasterPositionService = () => {
+  const GET_MASTER_GROUP_API = config.api_endpoint + `/jabatan/list`;
   const parameters = {
     method: 'GET',
     headers: {
@@ -60,48 +60,33 @@ export const getMasterGroupService = () => {
 
 
 //create
-export const saveMasterGroupService = (request) => {
-  const formData = new FormData();
-  formData.append('group_code', request.group_code);
-  formData.append('group_name', request.group_name);
-
-  const SAVE_MASTER_GROUP_API = config.api_endpoint + '/unit/save';
-  return instance.post(SAVE_MASTER_GROUP_API, formData)
-    .then((data) => {
-      return {
-        data: data.data
-      };
+export const saveMasterPositionService = (request) => {
+  const SAVE_MASTER_GROUP_API = config.api_endpoint + '/jabatan/save';
+  const parameters = {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(request)
+  };
+  return fetch(SAVE_MASTER_GROUP_API, parameters)
+    .then(response => {
+      return response.json();
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .then(json => {
+      return json;
+    })
+    .catch(error => {
+      return this._handleError(error);
+    })
 };
 
-export const saveMasterUserService = (request) => {
-  const formData = new FormData();
-  formData.append('position_id', request.position_id);
-  formData.append('username', request.username);
-  formData.append('full_name', request.full_name);
-  formData.append('nip', request.nip);
-  formData.append('email', request.email);
-  formData.append('ttl', request.ttl);
-  formData.append('password', request.password);
-  formData.append('phone', request.phone);
-  formData.append('address', request.address);
-  formData.append('jenis_kelamin', request.jenis_kelamin)
-
-  const SAVE_MASTER_USER_API = config.api_endpoint + `/user/save`
-  return instance.post(SAVE_MASTER_USER_API, formData)
-    .then((data) => {
-      return {
-        data: data.data
-      };
-    })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
-}
-
 //update
-export const updateMasterGroupService = (request) => {
+export const updateMasterPositionService = (request) => {
   const id = request.id
-  const UPDATE_MASTER_GROUP_API = config.api_endpoint + `/unit/save/${id}`;
+  const UPDATE_MASTER_GROUP_API = config.api_endpoint + `/jabatan/save/${id}`;
   const parameters = {
     method: 'POST',
     headers: {
@@ -124,9 +109,9 @@ export const updateMasterGroupService = (request) => {
 };
 
 //delete
-export const deleteMasterGroupService = (request) => {
+export const deleteMasterPositionService = (request) => {
   const id = request.id
-  const DELETE_MASTER_GROUP_API_ENDPOINT = config.api_endpoint + `/unit/delete/${id}`;
+  const DELETE_MASTER_GROUP_API_ENDPOINT = config.api_endpoint + `/jabatan/delete/${id}`;
   const parameters = {
     method: 'POST',
     headers: {
@@ -149,9 +134,9 @@ export const deleteMasterGroupService = (request) => {
 };
 
 //detail
-export const getDetailGroupService = (request) => {
+export const getDetailPositionService = (request) => {
   // const id = request.id
-  const GET_DETAIL_GROUP_API = config.api_endpoint + `/unit/view/${request}`;
+  const GET_DETAIL_GROUP_API = config.api_endpoint + `/jabatan/view/${request}`;
   const parameters = {
     method: 'GET',
     headers: {

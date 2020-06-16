@@ -85,9 +85,10 @@ export const loginUserService = (request) => {
 };
 
 export const logoutUserService = (request) => {
-  const idUser = localStorage.getItem('id');
-  const LOGOUT_USER_API = config.api_endpoint + `/logout`
-  return instance.post(LOGOUT_USER_API, idUser)
+  //const idUser = localStorage.getItem('id');
+  const LOGOUT_USER_API = config.api_endpoint + `/cabut`
+  console.log(LOGOUT_USER_API)
+  return instance.post(LOGOUT_USER_API)
     .then((data) => {
       return {
         data: data.data

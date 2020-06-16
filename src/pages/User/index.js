@@ -1,22 +1,30 @@
 import React, { Component } from "react";
 import {
   Row,
-  Col
+  Col,
+  Button,
+  Modal,
 } from "reactstrap";
 import { connect } from "react-redux";
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, Redirect } from "react-router-dom";
 import "chartist/dist/scss/chartist.scss";
 import DataGrid, {
   Column,
   Editing,
+  Popup,
   Paging,
   FilterRow,
+  Lookup,
   Pager,
+  Position,
+  Form
 } from 'devextreme-react/data-grid';
+import { Item } from 'devextreme-react/form';
+import { Template } from 'devextreme-react/core/template';
+import CustomStore from 'devextreme/data/custom_store';
 import DataStore from 'devextreme/data/data_source';
 import { isNotEmpty, dxGridFilter } from '../../helpers/gridFilter'
-import { getMasterUserServices, deleteMasterUserService } from '../../helpers/master/user'
-import 'react-toastify/dist/ReactToastify.css';
+import { getMasterUserServices } from '../../helpers/master/user'
 
 //Reducer
 import {
@@ -27,7 +35,6 @@ import {
   deleteMasterUser,
   deleteMasterUserSuccess
 } from "../../store/business/master-user/actions";
-import toast from '../UI/toast';
 
 class User extends Component {
   constructor(props) {
@@ -60,7 +67,7 @@ class User extends Component {
         params = params.slice(0, -1);
         return getMasterUserServices(params)
       },
-      remove: (values) => { this.onDeleteUser(values) }
+      remove: (values) => { this.props.deleteMasterUser(values) }
     })
   }
 
@@ -103,24 +110,6 @@ class User extends Component {
     });
   }
 
-  onDeleteUser = (values) => {
-    deleteMasterUserService(values)
-      .then((data) => {
-        this.alertSuccess()
-        this.props.history.push('/user');
-      })
-      .catch(() => {
-        this.alertError()
-      });
-  }
-
-  alertSuccess = () => {
-    toast.success('Sukses Menghapus data!')
-  };
-
-  alertError = () => {
-    toast.error('Gagal Menghapus data')
-  }
 
   render() {
     return (
@@ -156,9 +145,6 @@ class User extends Component {
                     onRowClick={this.onRowClick}
                     onToolbarPreparing={this.onToolbarPreparing}
                   >
-                    <Editing
-                      mode="row"
-                      allowDeleting={true} />
                     <FilterRow visible={true} />
 
                     <Paging defaultPageSize={10} />
