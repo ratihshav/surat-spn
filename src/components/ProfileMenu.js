@@ -49,6 +49,7 @@ class ProfileMenu extends Component {
             </Link>
             <div className="dropdown-divider"></div>
             <Link
+              to='#'
               className="dropdown-item">
               <i className="mdi mdi-logout font-size-17 align-middle mr-1"></i>
               <span onClick={this.logout}>Logout</span>

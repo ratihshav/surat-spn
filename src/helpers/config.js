@@ -3,6 +3,6 @@ module.exports = {
   base_routing: '/',
   endpoint: 'http://localhost/spnbackend/public',
   api_endpoint: 'http://localhost/spnbackend/public/api'
-  // endpoint: 'https://apisurat.ratafd.xyz/public',
-  // api_endpoint: 'https://apisurat.ratafd.xyz/public/api',
+//   endpoint: 'https://apisurat.ratafd.xyz/public',
+//   api_endpoint: 'https://apisurat.ratafd.xyz/public/api'
 }

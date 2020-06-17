@@ -84,6 +84,7 @@ class Login extends Component {
                                 name="email"
                                 label="Email"
                                 className="form-control"
+                                defaultValue="admin@ratafd.xyz"
                                 value=""
                                 placeholder="Enter email"
                                 required
@@ -94,6 +95,7 @@ class Login extends Component {
                                 name="password"
                                 label="Password"
                                 type="password"
+                                defaultValue="admin"
                                 required
                                 value=""
                                 placeholder="Enter Password"
@@ -142,7 +144,7 @@ class Login extends Component {
                         </Link>{" "}
                       </p> */}
                     <p className="mb-0">
-                      © {new Date().getFullYear()} RAFDAL. All Rights Reserved
+                      © {new Date().getFullYear()} Ikhwan Komputer. All Rights Reserved
                   </p>
                   </div>
                 </Col>
