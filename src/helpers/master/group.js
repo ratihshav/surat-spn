@@ -53,10 +53,11 @@ export const saveMasterGroupService = (request) => {
 //update
 export const updateMasterGroupService = (request) => {
 
-  const id = request.id
+  const id = window.localStorage.getItem('idDivisi');
   const UPDATE_MASTER_GROUP_API = config.api_endpoint + `/unit/save/${id}`;
   const formData = new FormData();
-  formData.append('id', id);
+  formData.append('group_code', request.group_code);
+  formData.append('group_name', request.group_name)
 
   return instance.post(UPDATE_MASTER_GROUP_API, formData)
     .then((data) => {
@@ -70,8 +71,8 @@ export const updateMasterGroupService = (request) => {
 //delete
 export const deleteMasterGroupService = (request) => {
   const id = request.id
-  const DELETE_MASTER_GROUP_API_ENDPOINT = config.api_endpoint + `/unit/delete/${id}`;
-  return instance.post(DELETE_MASTER_GROUP_API_ENDPOINT, id)
+  const DELETE_MASTER_GROUP_API = config.api_endpoint + `/unit/delete/${id}`;
+  return instance.post(DELETE_MASTER_GROUP_API, id)
     .then((data) => {
       return {
         data: data
@@ -82,7 +83,9 @@ export const deleteMasterGroupService = (request) => {
 
 //detail
 export const getDetailGroupService = (request) => {
-  const GET_DETAIL_GROUP_API = config.api_endpoint + `/unit/view/${request}`;
+  const id = window.localStorage.getItem('idDivisi');
+
+  const GET_DETAIL_GROUP_API = config.api_endpoint + `/unit/view/${id}`;
   return instance.get(GET_DETAIL_GROUP_API)
     .then((data) => {
       return {

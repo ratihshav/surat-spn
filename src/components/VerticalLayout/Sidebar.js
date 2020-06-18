@@ -28,7 +28,7 @@ const SidebarContent = props => {
           </Link>
           <ul className="sub-menu" aria-expanded="false">
             <li>
-              <Link to="/email-read">Surat Masuk</Link>
+              <Link to="/incoming-mail">Surat Masuk</Link>
             </li>
             <li>
               <Link to="/outgoing-mail">Surat Keluar</Link>
@@ -51,6 +51,9 @@ const SidebarContent = props => {
             </li>
             <li>
               <Link to="/position">Data Jabatan</Link>
+            </li>
+            <li>
+              <Link to="/template-mail">Template Surat</Link>
             </li>
           </ul>
         </li>

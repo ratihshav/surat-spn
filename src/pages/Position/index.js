@@ -55,6 +55,7 @@ class Position extends Component {
   }
 
   onDeletePosition = (values) => {
+    console.log('values', values)
     deleteMasterPositionService(values)
       .then((data) => {
         this.alertSuccess()
@@ -75,8 +76,7 @@ class Position extends Component {
 
   navigateToEdit = (val) => {
     const data = val.row.data
-    localStorage.setItem('idDivisi', JSON.stringify(data.id))
-    console.log(JSON.stringify(data.id))
+    localStorage.setItem('idPosition', JSON.stringify(data.id))
     this.props.history.push({
       pathname: '/position-edit',
       params: data,
@@ -150,7 +150,7 @@ class Position extends Component {
                     <Column dataField="id" visible={false} />
                     <Column caption="Nama Jabatan" dataField="position_name" />
                     <Column caption="Tipe" dataField="position_type" />
-                    <Column caption="Unit" dataField="group_name" />
+                    <Column caption="Divisi" dataField="group_name" />
                     <Column type="buttons"
                       buttons={[{
                         hint: 'Edit',

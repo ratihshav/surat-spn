@@ -22,7 +22,7 @@ const instance = axios.create({
 export const getOutgoingMailService = (request) => {
   const req = request ? request : ''
   const GET_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/list`;
-  return instance.get(GET_OUTGOING_MAIL_API + `${req}`)
+  return instance.get(GET_OUTGOING_MAIL_API + `${request}`)
     .then((data) => {
       return {
         data: data.data.data.data,
@@ -55,6 +55,31 @@ export const createOutgoingMailService = (request) => {
     .catch(() => { throw 'Gagal Mengubah Data'; });
 }
 
+
+export const updateOutgoingMailService = (request) => {
+  const id = window.localStorage.getItem('idOutMail');
+
+  const formData = new FormData();
+  formData.append('jenis_surat', request.jenis_surat);
+  formData.append('klasifikasi_surat', request.klasifikasi_surat);
+  formData.append('sifat_surat', request.sifat_surat);
+  formData.append('tujuan_surat', request.tujuan_surat);
+  formData.append('hal_surat', request.hal_surat);
+  formData.append('lampiran_surat', request.lampiran_surat);
+  formData.append('approval_user', request.approval_user);
+  formData.append('to_user', request.to_user);
+  formData.append('file', request.file);
+
+  const UPDATE_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/save/${id}`
+  return instance.post(UPDATE_OUTGOING_MAIL_API, formData)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
+
 export const searchUserService = (request) => {
 
   const SEARCH_USER_API = config.api_endpoint + `/user/search`
@@ -69,7 +94,8 @@ export const searchUserService = (request) => {
 
 export const getDetailOutgoingMailService = (request) => {
 
-  const id = request
+  const id = window.localStorage.getItem('idOutMail');
+
   const GET_DETAIL_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/view/${id}`
   return instance.get(GET_DETAIL_OUTGOING_MAIL_API)
     .then((data) => {
@@ -96,6 +122,18 @@ export const createDisposeOutgoingMailService = (request) => {
     })
     .catch(() => { throw 'Gagal Mengubah Data'; });
 }
+
+export const deleteOutgoingMailService = (request) => {
+  const id = request.id
+  const DELETE_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/delete/${id}`;
+  return instance.post(DELETE_OUTGOING_MAIL_API)
+    .then((data) => {
+      return {
+        data: data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+};
 
 export async function _handleError(error) {
   // var errorCode = error.code;

@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
   searchUser
 } from "../../store/business/outgoing-mail/actions";
-import { searchUserService, createOutgoingMailService } from "../../helpers/master/mail"
+import { searchUserService, createOutgoingMailService } from "../../helpers/master/outgoingMail"
 import toast from '../UI/toast';
 
 const type = [

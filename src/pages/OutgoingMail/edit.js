@@ -4,22 +4,15 @@ import Select from "react-select";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
-
-import {
-  searchUser
-} from "../../store/business/outgoing-mail/actions";
-import { createIncomingMailService } from "../../helpers/master/incomingMail"
+import { searchUserService, updateOutgoingMailService, getDetailOutgoingMailService } from "../../helpers/master/outgoingMail"
 import toast from '../UI/toast';
 
 const type = [
-  {
-    label: "Pilih Tipe Surat",
-    options: [
-      { label: "Surat Keterangan", value: "Surat Keterangan" },
-      { label: "Surat Biasa", value: "Surat Biasa" },
-      { label: "Surat Perintah", value: "Surat Perintah" }
-    ]
-  },
+
+  { label: "Surat Keterangan", value: "Surat Keterangan" },
+  { label: "Surat Biasa", value: "Surat Biasa" },
+  { label: "Surat Perintah", value: "Surat Perintah" }
+
 ];
 
 const classification = [
@@ -45,7 +38,7 @@ const urgency = [
 ]
 
 
-class IncomingMailCreate extends Component {
+class OutgoingMailEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -55,10 +48,46 @@ class IncomingMailCreate extends Component {
       selectedFile: null,
       selectedSignature: null,
       selectedSubmit: null,
-      dataUser: []
+      dataUser: [],
+      detailList: [],
+      optionsValues: []
     };
   }
 
+  componentDidMount() {
+    const idMail = window.localStorage.getItem('idOutMail');
+    this.setState({ stateIdMail: idMail })
+    this.getDetailList(idMail)
+
+    this.getDataUser()
+  }
+
+  getDetailList = (idMail) => {
+
+    getDetailOutgoingMailService(idMail)
+      .then((data) => {
+        const detailOutgoingMail = data.data.data
+
+
+        const optionsValue = detailOutgoingMail.length !== 0 ?
+          [{ label: detailOutgoingMail.approval_name, value: detailOutgoingMail.approval_user }]
+          : null
+
+        this.setState({
+          detailList: detailOutgoingMail,
+          optionsValues: optionsValue
+        })
+      })
+      .catch(() => { throw 'Gagal Mengubah Data'; });
+  }
+
+  getDataUser = () => {
+    searchUserService()
+      .then((data) => {
+        this.setState({ dataUser: data.data.data })
+      })
+      .catch(() => { throw 'Gagal Mengubah Data'; });
+  }
 
   handleSelectGroup = selectedGroup => {
     this.setState({ selectedGroup });
@@ -73,6 +102,13 @@ class IncomingMailCreate extends Component {
   }
 
   handleSelectSignature = selectedSignature => {
+    // const { detailList } = this.state
+    // const options = detailList.length !== 0 ?
+    //   { value: detailList.approval_user, data: detailList.approval_name }
+    //   : null
+
+
+
     this.setState({ selectedSignature })
   }
 
@@ -84,24 +120,23 @@ class IncomingMailCreate extends Component {
     this.setState({ selectedFile: event.target.files[0] });
   };
 
-  saveIncomingMail = (e) => {
+  updateOutgoingMail = (e) => {
     const params = {
-      asal_surat: e.target.origin.value,
-      perihal: e.target.subject.value,
-      nomor_surat: e.target.numMail.value,
-      tgl_surat: e.target.date.value,
-      sifat_surat: e.target.type.value,
-      lampiran: e.target.attachment.value,
-      prioritas: e.target.urgency.value,
-      klasifikasi: e.target.classification.value,
-      keterangan: e.target.description.value,
+      jenis_surat: e.target.type.value,
+      klasifikasi_surat: e.target.classification.value,
+      sifat_surat: e.target.urgency.value,
+      tujuan_surat: e.target.destination.value,
+      hal_surat: e.target.subject.value,
+      lampiran_surat: e.target.attachment.value,
+      approval_user: e.target.approval.value,
+      to_user: e.target.sendto.value,
       file: this.state.selectedFile
     }
 
-    createIncomingMailService(params)
+    updateOutgoingMailService(params)
       .then((data) => {
         this.alertSuccess()
-        this.props.history.push('/incoming-mail');
+        this.props.history.push('/outgoing-mail');
       })
       .catch(() => {
         return (
@@ -125,8 +160,30 @@ class IncomingMailCreate extends Component {
       selectedClass,
       selectedUrgency,
       selectedFile,
-    } = this.state;
+      selectedSignature,
+      selectedSubmit,
+      dataUser,
+      detailList,
+      optionsValues } = this.state;
 
+    console.log('detailList', detailList)
+    const optionsSignature = dataUser.length !== 0 ?
+      dataUser.map(function (data) {
+        return { label: data.text, value: data.id };
+      })
+      : null
+
+    const optionsSubmit = dataUser.length !== 0 ?
+      dataUser.map(function (data) {
+        return { value: data.id, label: data.text };
+      })
+      : null
+
+    // const optionsValue = detailList.length !== 0 ?
+    //   [{ label: detailList.approval_name, value: detailList.approval_user }]
+    //   : null
+    console.log('optionsValue', optionsValues)
+    console.log('optionsSignature', optionsSignature)
 
     return (
       <React.Fragment>
@@ -134,152 +191,39 @@ class IncomingMailCreate extends Component {
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">
-                <h4 className="font-size-18">Buat Surat Masuk</h4>
+                <h4 className="font-size-18">Buat Surat Keluar</h4>
                 <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
                     <Link to="#">Surat</Link>
                   </li>
                   <li className="breadcrumb-item">
-                    <Link to="/incoming-mail">Surat Masuk</Link>
+                    <Link to="/outgoing-mail">Surat</Link>
                   </li>
-                  <li className="breadcrumb-item active">Buat Surat Masuk</li>
+                  <li className="breadcrumb-item active">Buat Surat Keluar</li>
                 </ol>
               </div>
             </Col>
           </Row>
 
-          <form action="#" onSubmit={this.saveIncomingMail}>
+          <form action="#" onSubmit={this.updateOutgoingMail}>
             <Row>
               <div className="col-12">
                 <Card>
                   <CardBody>
 
                     <Row className="form-group">
-                      <label
-                        htmlFor="example-text-input"
-                        className="col-sm-2 col-form-label">
-                        Asal Surat
-                      </label>
-                      <Col sm={10}>
-                        <input
-                          name="origin"
-                          className="form-control"
-                          type="text"
-                          defaultValue="Ikhwan Komputer"
-                          id="example-text-input"
-                          ref={node => (this.inputNode = node)}
-                          required
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row className="form-group">
-                      <label
-                        htmlFor="example-text-input"
-                        className="col-sm-2 col-form-label">
-                        Perihal
-                      </label>
-                      <Col sm={10}>
-                        <input
-                          className="form-control"
-                          type="text"
-                          defaultValue="Izin Penggunaan Website"
-                          id="example-text-input"
-                          name="subject"
-                          ref={node => (this.inputNode = node)}
-                          required
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row className="form-group">
-                      <label
-                        htmlFor="example-text-input"
-                        className="col-sm-2 col-form-label">
-                        Nomor Surat
-                      </label>
-                      <Col sm={10}>
-                        <input
-                          className="form-control"
-                          type="text"
-                          defaultValue="1/A/2020"
-                          id="example-text-input"
-                          name="numMail"
-                          ref={node => (this.inputNode = node)}
-                          required
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row className="form-group">
-                      <label
-                        htmlFor="example-text-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        Tanggal Surat
-                    </label>
-                      <Col sm={10}>
-                        <input
-                          className="form-control"
-                          type="date"
-                          id="example-text-input"
-                          name="date"
-                          ref={node => (this.inputNode = node)}
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row className="form-group">
                       <label className="col-sm-2 col-form-label">
-                        Sifat Surat
+                        Tipe Surat
                     </label>
                       <Col sm={10}>
                         <Select
-                          value={selectedGroup}
+                          // value={selectedGroup}
                           onChange={this.handleSelectGroup}
                           options={type}
                           name="type"
                           ref={node => (this.inputNode = node)}
                           required
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row className="form-group">
-                      <label
-                        htmlFor="example-text-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        Lampiran Surat
-                    </label>
-                      <Col sm={10}>
-                        <input
-                          className="form-control"
-                          type="text"
-                          defaultValue=""
-                          id="example-text-input"
-                          name="attachment"
-                          ref={node => (this.inputNode = node)}
-                          required
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row className="form-group">
-                      <label
-                        htmlFor="example-search-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        Prioritas
-                    </label>
-                      <Col sm={10}>
-                        <Select
-                          value={selectedUrgency}
-                          onChange={this.handleSelectUrgency}
-                          options={urgency}
-                          name="urgency"
-                          ref={node => (this.inputNode = node)}
-                          required
+                          defaultValue={type[0]}
                         />
                       </Col>
                     </Row>
@@ -305,22 +249,122 @@ class IncomingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
-                        className="col-sm-2 col-form-label">
-                        Keterangan
-                      </label>
+                        htmlFor="example-search-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Sifat Surat
+                    </label>
                       <Col sm={10}>
-                        <input
-                          name="description"
-                          className="form-control"
-                          type="text"
-                          id="example-text-input"
+                        <Select
+                          value={selectedUrgency}
+                          onChange={this.handleSelectUrgency}
+                          options={urgency}
+                          name="urgency"
                           ref={node => (this.inputNode = node)}
                           required
                         />
                       </Col>
                     </Row>
 
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Tujuan Surat
+                    </label>
+                      <Col sm={10}>
+                        <input
+                          name="destination"
+                          className="form-control"
+                          type="text"
+                          id="example-text-input"
+                          ref={node => (this.inputNode = node)}
+                          required
+                          defaultValue={detailList.tujuan_surat}
+
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Hal Surat
+                    </label>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="text"
+                          defaultValue={detailList.hal_surat}
+                          id="example-text-input"
+                          name="subject"
+                          ref={node => (this.inputNode = node)}
+                          required
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Lampiran Surat
+                    </label>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="text"
+                          defaultValue={detailList.lampiran_surat}
+                          id="example-text-input"
+                          name="attachment"
+                          ref={node => (this.inputNode = node)}
+                          required
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-search-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Penandatanganan Surat
+                    </label>
+                      <Col sm={10}>
+                        <Select
+                          defaultValue={optionsSignature !== null ? optionsSignature[0] : null}
+                          onChange={this.handleSelectSignature}
+                          options={optionsSignature}
+                          name="approval"
+                          ref={node => (this.inputNode = node)}
+                          required
+                        // defaultValue={optionsValue}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-search-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Diajukan Kepada
+                    </label>
+                      <Col sm={10}>
+                        <Select
+                          value={selectedSubmit}
+                          onChange={this.handleSelectSubmit}
+                          options={optionsSubmit}
+                          name="sendto"
+                          ref={node => (this.inputNode = node)}
+                          required
+                        />
+                      </Col>
+                    </Row>
                     <Row className="form-group">
                       <label
                         htmlFor="example-search-input"
@@ -355,6 +399,7 @@ class IncomingMailCreate extends Component {
                       <Button
                         color="success"
                         className="mt-1"
+                      // onClick={this.notify}
                       >
                         <i className="typcn typcn-input-checked" />Simpan
                     </Button>
@@ -370,11 +415,4 @@ class IncomingMailCreate extends Component {
   }
 }
 
-const mapStatetoProps = state => {
-  const { error, loading, data } = state.OutgoingMail;
-  return { error, loading, data };
-};
-
-export default connect(mapStatetoProps, {
-  searchUser
-})(IncomingMailCreate);
+export default connect()(OutgoingMailEdit);

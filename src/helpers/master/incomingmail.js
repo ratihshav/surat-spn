@@ -32,7 +32,8 @@ export const getIncomingMailService = (request) => {
     .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
 }
 
-export const createOutgoingMailService = (request) => {
+export const createIncomingMailService = (request) => {
+  console.log('reque', request)
   const formData = new FormData();
   formData.append('asal_surat', request.asal_surat);
   formData.append('perihal', request.perihal);
@@ -69,7 +70,7 @@ export const searchUserService = (request) => {
 
 export const getDetailIncomingMailService = (request) => {
 
-  const id = request
+  const id = window.localStorage.getItem('idInMail');
   const GET_DETAIL_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/view/${id}`
   return instance.get(GET_DETAIL_INCOMING_MAIL_API)
     .then((data) => {
@@ -99,6 +100,18 @@ export const createDisposeIncomingMailService = (request) => {
     })
     .catch(() => { throw 'Gagal Mengubah Data'; });
 }
+
+export const deleteIncomingMailService = (request) => {
+  const id = request.id
+  const DELETE_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/delete/${id}`;
+  return instance.post(DELETE_INCOMING_MAIL_API)
+    .then((data) => {
+      return {
+        data: data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+};
 
 export async function _handleError(error) {
   // var errorCode = error.code;

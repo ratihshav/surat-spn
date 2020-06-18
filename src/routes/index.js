@@ -16,23 +16,33 @@ import Profile from "../pages/Profile"
 import User from "../pages/User"
 import UserAdd from "../pages/User/add"
 import UserEdit from "../pages/User/edit"
-import UserDetail from "../pages/User/detail"
 import UserChangePassword from "../pages/User/change-password"
 import UserChangePhoto from "../pages/User/change-photo"
 
 import Group from "../pages/Group"
 import GroupAdd from "../pages/Group/add"
 import GroupEdit from "../pages/Group/edit"
-import GroupDetail from "../pages/Group/detail"
+
+import Position from "../pages/Position"
+import PositionAdd from "../pages/Position/add"
+import PositionEdit from "../pages/Position/edit"
 
 import OutgoingMail from "../pages/OutgoingMail"
 import OutgoingMailCreate from "../pages/OutgoingMail/create"
 import OutgoingMailDetail from "../pages/OutgoingMail/detail"
+import OutgoingMailEdit from "../pages/OutgoingMail/edit"
 
-import Position from "../pages/Position"
+import IncomingMail from "../pages/IncomingMail"
+import IncomingMaillCreate from "../pages/IncomingMail/create"
+import IncomingMailDetail from "../pages/IncomingMail/detail"
+import IncomingMailEdit from "../pages/IncomingMail/edit"
+
+import TemplateMail from "../pages/TemplateMail"
+import TemplateMailCreate from "../pages/TemplateMail/create"
+import TemplateMailEdit from "../pages/TemplateMail/edit"
+
 
 const authProtectedRoutes = [
-  
 
   { path: "/dashboard", component: Dashboard },
   { path: "/profile", component: Profile },
@@ -41,7 +51,6 @@ const authProtectedRoutes = [
   { path: "/user", component: User },
   { path: "/user-add", component: UserAdd },
   { path: "/user-edit", component: UserEdit },
-  { path: "/user-detail", component: UserDetail },
   { path: "/user-change-password", component: UserChangePassword },
   { path: "/user-change-photo", component: UserChangePhoto },
 
@@ -49,17 +58,28 @@ const authProtectedRoutes = [
   { path: "/group", component: Group },
   { path: "/group-add", component: GroupAdd },
   { path: "/group-edit", component: GroupEdit },
-  { path: "/group-detail", component: GroupDetail },
 
-  //Mail
+  //OutgoingMail
   { path: "/outgoing-mail", component: OutgoingMail },
   { path: "/outgoing-mail-create", component: OutgoingMailCreate },
   { path: "/outgoing-mail-detail", component: OutgoingMailDetail },
+  { path: "/outgoing-mail-edit", component: OutgoingMailEdit },
+
+  //IncomingMail
+  { path: "/incoming-mail", component: IncomingMail },
+  { path: "/incoming-mail-create", component: IncomingMaillCreate },
+  { path: "/incoming-mail-detail", component: IncomingMailDetail },
+  { path: "/incoming-mail-edit", component: IncomingMailEdit },
 
   //Position
   { path: "/position", component: Position },
-  // { path: "/position-create", component: PositionCreate },
-  // { path: "/position-edit", component: PositionEdit },
+  { path: "/position-add", component: PositionAdd },
+  { path: "/position-edit", component: PositionEdit },
+
+  //Template
+  { path: "/template-mail", component: TemplateMail },
+  { path: "/template-mail-create", component: TemplateMailCreate },
+  { path: "/template-mail-edit", component: TemplateMailEdit },
 
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> }
 ];

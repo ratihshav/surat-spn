@@ -11,22 +11,13 @@ import DataGrid, {
   Paging,
   FilterRow,
   Pager,
+  Editing
 } from 'devextreme-react/data-grid';
 import DataStore from 'devextreme/data/data_source';
 import { isNotEmpty, dxGridFilter } from '../../helpers/gridFilter'
-import { getIncomingMailService } from '../../helpers/master/mail'
+import { getIncomingMailService, deleteIncomingMailService } from '../../helpers/master/incomingMail'
+import toast from '../UI/toast';
 
-
-
-const subjectMail = (cellData) => {
-  return (
-    <div>
-      <p>{cellData.hal_surat}</p><br />
-      <p>{cellData.group_name}</p><br />
-      <p>{cellData.status - cellData.position_name}</p>
-    </div>
-  )
-}
 class IncomingMail extends Component {
   constructor(props) {
     super(props);
@@ -37,13 +28,13 @@ class IncomingMail extends Component {
     };
   }
 
-  componentDidMount() {
-    this.getDataMail()
-  }
+  // componentDidMount() {
+  //   this.getDataMail()
+  // }
 
-  getDataMail = () => {
-    this.props.getOutgoingMail()
-  }
+  // getDataMail = () => {
+  //   this.props.getOutgoingMail()
+  // }
 
   cLoad = () => {
     return new DataStore({
@@ -64,9 +55,9 @@ class IncomingMail extends Component {
           else if (i in loadOptions && isNotEmpty(loadOptions[i])) { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
         });
         params = params.slice(0, -1);
-        return getOutgoingMailService(params)
+        return getIncomingMailService(params)
       },
-      remove: (values) => { this.props.deleteOutgoingMail(values) }
+      remove: (values) => { this.onDeleteIncomingMail(values) }
     })
   }
 
@@ -109,12 +100,30 @@ class IncomingMail extends Component {
     });
   }
 
+  onDeleteIncomingMail = (values) => {
+    deleteIncomingMailService(values)
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/incoming-mail');
+      })
+      .catch(() => {
+        this.alertError()
+      });
+  }
+
   getSubjectMail = (rowData) => {
     return (
       rowData.status + "-" + rowData.position_name + "-" + rowData.group_name
     )
   }
 
+  alertSuccess = () => {
+    toast.success('Sukses Menghapus data!')
+  };
+
+  alertError = () => {
+    toast.error('Gagal Menghapus data')
+  }
 
   render() {
     return (
@@ -123,12 +132,12 @@ class IncomingMail extends Component {
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">
-                <h4 className="font-size-18">Daftar Surat Keluar</h4>
+                <h4 className="font-size-18">Daftar Surat Masuk</h4>
                 <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
-                    <Link to="#">Surat Keluar</Link>
+                    <Link to="#">Surat</Link>
                   </li>
-                  <li className="breadcrumb-item active">Surat Keluar</li>
+                  <li className="breadcrumb-item active">Surat Masuk</li>
                 </ol>
               </div>
               <br />
@@ -150,6 +159,9 @@ class IncomingMail extends Component {
                     onRowClick={this.onRowClick}
                     onToolbarPreparing={this.onToolbarPreparing}
                   >
+                    <Editing
+                      mode="row"
+                      allowDeleting={true} />
                     <FilterRow visible={true} />
                     <Paging defaultPageSize={10} />
                     <Pager
@@ -158,9 +170,11 @@ class IncomingMail extends Component {
                       showInfo={true} />
 
                     <Column dataField="disposisi_id" visible={false} />
-                    <Column dataField="nomor_agenda" />
+                    <Column dataField="asal_surat" />
                     <Column dataField="nomor_surat" />
+                    <Column dataField="perihal" />
                     <Column dataField="tgl_surat" />
+                    <Column dataField="tgl_diterima" />
                     <Column dataField="jenis_surat" />
                     <Column dataField="tujuan_surat" />
                     <Column caption="Hal" dataField="hal_surat" calculateDisplayValue={this.getSubjectMail} />
@@ -193,14 +207,6 @@ class IncomingMail extends Component {
   }
 }
 
-const mapStatetoProps = state => {
-  const { error, loading, data, totalCount } = state.OutgoingMail;
-  return { error, loading, data, totalCount };
-};
 
-export default withRouter(connect(mapStatetoProps, {
-  getOutgoingMail,
-  getOutgoingMailSuccess,
-  deleteOutgoingMail,
-  deleteOutgoingMailSuccess
-})(OutgoingMail));
+export default withRouter(connect()(IncomingMail));
+

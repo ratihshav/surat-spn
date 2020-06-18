@@ -4,10 +4,6 @@ import Select from "react-select";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import {
-  saveMasterGroup,
-  saveMasterGroupSuccess
-} from "../../store/business/master-group/actions";
 import { saveMasterGroupService } from "../../helpers/master/group"
 import toast from '../UI/toast';
 
@@ -23,15 +19,15 @@ class GroupAdd extends Component {
       group_name: e.target.group_name.value
     }
     saveMasterGroupService(params)
-    .then((data) => {
-      this.alertSuccess()
-      this.props.history.push('/group');
-    })
-    .catch(() => {
-      return (
-        this.alertError()
-      )
-    });
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/group');
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
     e.preventDefault()
   }
 
@@ -131,12 +127,4 @@ const styles = {
   }
 }
 
-const mapStatetoProps = state => {
-  const { error, loading, data } = state.MasterGroup;
-  return { error, loading, data };
-};
-
-export default connect(mapStatetoProps, {
-  saveMasterGroup,
-  saveMasterGroupSuccess
-})(GroupAdd);
+export default connect()(GroupAdd);

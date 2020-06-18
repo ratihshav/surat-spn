@@ -8,26 +8,18 @@ import { Link, withRouter } from "react-router-dom";
 import "chartist/dist/scss/chartist.scss";
 import DataGrid, {
   Column,
+  Editing,
   Paging,
   FilterRow,
   Pager,
-  Editing
 } from 'devextreme-react/data-grid';
 import DataStore from 'devextreme/data/data_source';
 import { isNotEmpty, dxGridFilter } from '../../helpers/gridFilter'
-import { getOutgoingMailService, deleteOutgoingMailService } from '../../helpers/master/outgoingMail'
+import { getTemplateMailService, deleteTemplateMailService } from '../../helpers/master/templateMail';
+
 import toast from '../UI/toast';
 
-// const subjectMail = (cellData) => {
-//   return (
-//     <div>
-//       <p>{cellData.hal_surat}</p><br />
-//       <p>{cellData.group_name}</p><br />
-//       <p>{cellData.status - cellData.position_name}</p>
-//     </div>
-//   )
-// }
-class OutgoingMail extends Component {
+class TemplateMail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,14 +28,6 @@ class OutgoingMail extends Component {
       totalCount: 0
     };
   }
-
-  // componentDidMount() {
-  //   this.getDataMail()
-  // }
-
-  // getDataMail = () => {
-  //   this.props.getOutgoingMail()
-  // }
 
   cLoad = () => {
     return new DataStore({
@@ -64,32 +48,37 @@ class OutgoingMail extends Component {
           else if (i in loadOptions && isNotEmpty(loadOptions[i])) { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
         });
         params = params.slice(0, -1);
-        return getOutgoingMailService(params)
+        return getTemplateMailService()
       },
-      remove: (values) => { this.onDeleteOutgoingMail(values) }
+      remove: (values) => { this.onDeleteTemplate(values) }
     })
   }
 
-  navigateToAdd = () => {
-    this.props.history.push({
-      pathname: '/outgoing-mail-create'
-    });
+  onDeleteTemplate = (values) => {
+    console.log('values', values)
+    deleteTemplateMailService(values)
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/template-mail');
+      })
+      .catch(() => {
+        this.alertError()
+      });
+  }
+
+  alertSuccess = () => {
+    toast.success('Sukses Menghapus data!')
+  };
+
+  alertError = () => {
+    toast.error('Gagal Menghapus data')
   }
 
   navigateToEdit = (val) => {
     const data = val.row.data
-    localStorage.setItem('idOutMail', JSON.stringify(data.id))
+    localStorage.setItem('idTemp', JSON.stringify(data.id))
     this.props.history.push({
-      pathname: '/outgoing-mail-edit',
-      params: data,
-    });
-  }
-
-  navigateToDetail = (val) => {
-    const data = val.row.data
-    localStorage.setItem('idOutMail', JSON.stringify(data.id))
-    this.props.history.push({
-      pathname: '/outgoing-mail-detail',
+      pathname: '/template-mail-edit',
       params: data,
     });
   }
@@ -110,29 +99,10 @@ class OutgoingMail extends Component {
     });
   }
 
-  getSubjectMail = (rowData) => {
-    return (
-      rowData.status + "-" + rowData.position_name + "-" + rowData.group_name
-    )
-  }
-
-  onDeleteOutgoingMail = (values) => {
-    deleteOutgoingMailService(values)
-      .then((data) => {
-        this.alertSuccess()
-        this.props.history.push('/outgoing-mail');
-      })
-      .catch(() => {
-        this.alertError()
-      });
-  }
-
-  alertSuccess = () => {
-    toast.success('Sukses Menghapus data!')
-  };
-
-  alertError = () => {
-    toast.error('Gagal Menghapus data')
+  navigateToAdd = () => {
+    this.props.history.push({
+      pathname: '/template-mail-create'
+    });
   }
 
   render() {
@@ -142,19 +112,17 @@ class OutgoingMail extends Component {
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">
-                <h4 className="font-size-18">Daftar Surat Keluar</h4>
+                <h4 className="font-size-18">Daftar Template Surat</h4>
                 <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
-                    <Link to="#">Surat Keluar</Link>
+                    <Link to="/template-mail">Template Surat</Link>
                   </li>
-                  <li className="breadcrumb-item active">Surat Keluar</li>
+                  <li className="breadcrumb-item active">Daftar Template Surat</li>
                 </ol>
               </div>
               <br />
             </Col>
-
           </Row>
-
 
           <div className="row">
             <div className="col-12">
@@ -162,7 +130,7 @@ class OutgoingMail extends Component {
                 <div className="card-body">
                   <DataGrid
                     dataSource={this.cLoad()}
-                    remoteOperations={true}
+                    // remoteOperations={true}
                     rowAlternationEnabled={true}
                     showColumnLines={false}
                     columnAutoWidth={true}
@@ -179,27 +147,15 @@ class OutgoingMail extends Component {
                       allowedPageSizes={[5, 10, 20]}
                       showInfo={true} />
 
-                    <Column dataField="disposisi_id" visible={false} />
-                    <Column dataField="nomor_agenda" />
-                    <Column dataField="nomor_surat" />
-                    <Column dataField="tgl_surat" />
-                    <Column dataField="jenis_surat" />
-                    <Column dataField="tujuan_surat" />
-                    <Column caption="Hal" dataField="hal_surat" calculateDisplayValue={this.getSubjectMail} />
-                    <Column dataField="group_name" visible={false} />
                     <Column dataField="id" visible={false} />
-                    <Column dataField="is_editable" visible={false} />
-                    <Column dataField="position_name" visible={false} />
-                    <Column dataField="status" visible={false} />
+                    <Column caption="Tipe Template Surat" dataField="template_type" />
+                    <Column caption="Nama Template Surat" dataField="template_name" />
+                    <Column caption="Dokumen" dataField="file" />
                     <Column type="buttons"
                       buttons={[{
                         hint: 'Edit',
                         text: 'Edit',
                         onClick: this.navigateToEdit
-                      }, {
-                        hint: 'Detail',
-                        text: 'Detail',
-                        onClick: this.navigateToDetail
                       }, 'delete']}
                     />
 
@@ -215,4 +171,4 @@ class OutgoingMail extends Component {
   }
 }
 
-export default withRouter(connect()(OutgoingMail));
+export default withRouter(connect()(TemplateMail));

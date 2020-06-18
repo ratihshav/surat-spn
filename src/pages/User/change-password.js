@@ -11,18 +11,11 @@ import {
   RequiredRule,
   CompareRule
 } from 'devextreme-react/validator';
-import { TextBox, ValidationSummary, } from 'devextreme-react';
+import { TextBox } from 'devextreme-react';
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
-import {
-  changePasswordUser,
-  changePasswordUserSuccess,
-  updateMasterUser,
-  updateMasterUserSuccess
-} from "../../store/business/master-user/actions";
-
-// import images
-import user2 from "../../assets/images/users/user-2.jpg";
+import { changePasswordUserService } from '../../helpers/master/user';
+import toast from '../UI/toast';
 
 class UserChangePassword extends Component {
   constructor(props) {
@@ -30,23 +23,38 @@ class UserChangePassword extends Component {
     this.state = {
       password: '',
     };
-    this.buttonOptions = {
-      text: 'Submit',
-      type: 'success',
-      // useSubmitBehavior: true,
-      onClick: (e) => this.changePassword(e)
-    };
     this.passwordOptions = {
       mode: 'password'
     };
   }
 
-  changePassword = (value) => {
+  changePassword = (e) => {
+    const idUser = window.localStorage.getItem('idUser');
+
     const params = {
       password: this.state.password,
-      id: this.props.location.params.id
+      id: idUser
     }
-    this.props.changePasswordUser(params)
+
+    changePasswordUserService(params)
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/user-edit');
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
+    e.preventDefault()
+  }
+
+  alertSuccess = () => {
+    toast.success('Sukses menyimpan data!')
+  };
+
+  alertError = () => {
+    toast.error('Gagal menyimpan data')
   }
 
   passwordComparison = () => {
@@ -69,9 +77,11 @@ class UserChangePassword extends Component {
                 <h4 className="font-size-18">Ganti Password</h4>
                 <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
-                    <Link to="#">User</Link>
+                    <Link to="/user">User</Link>
                   </li>
-                  <li className="breadcrumb-item">Edit Profil</li>
+                  <li className="breadcrumb-item">
+                    <Link to="/user-edit">Edit User</Link>
+                  </li>
                   <li className="breadcrumb-item active">Ganti Password</li>
                 </ol>
               </div>
@@ -79,13 +89,13 @@ class UserChangePassword extends Component {
           </Row>
 
 
-          <Row>
-            <Col xl={12}>
-              <Card>
-                <CardBody>
-                  <Row>
-                    <Col md={8}>
-                      <form action="your-action" onSubmit={this.handleSubmit}>
+          <form action="your-action" onSubmit={this.changePassword}>
+            <Row>
+              <div className="col-12">
+                <Card>
+                  <CardBody>
+                    <Row className="form-group">
+                      <Col md={8}>
                         <div className="dx-fieldset">
                           <div className="dx-field">
                             <div className="dx-field-label">Password</div>
@@ -112,38 +122,24 @@ class UserChangePassword extends Component {
                             </div>
                           </div>
                         </div>
-
-                        <div className="dx-fieldset">
-                          <ValidationSummary id="summary"></ValidationSummary>
+                        <div className="text-right">
                           <Button
                             color="success"
-                            className="btn btn-primary btn-block waves-effect waves-light"
-                            onClick={this.changePassword}
-                          >
-                            Submit
-                    </Button>
+                            className="mt-1">
+                            <i className="typcn typcn-input-checked" />Submit
+                          </Button>
                         </div>
-                      </form>
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
+                      </Col>
+                    </Row>
+                  </CardBody>
+                </Card>
+              </div>
+            </Row>
+          </form>
         </div>
       </React.Fragment>
     );
   }
 }
 
-const mapStatetoProps = state => {
-  const { error, loading, response } = state.MasterUser;
-  return { error, loading, response };
-};
-
-export default withRouter(connect(mapStatetoProps, {
-  changePasswordUser,
-  changePasswordUserSuccess,
-  updateMasterUser,
-  updateMasterUserSuccess
-})(UserChangePassword));
+export default withRouter(connect()(UserChangePassword));

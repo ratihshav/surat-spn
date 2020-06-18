@@ -10,19 +10,16 @@ import {
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import Dropzone from "react-dropzone";
+import toast from '../UI/toast';
+import { changePhotoUserService } from '../../helpers/master/user';
 
-import {
-  changePhotoUser,
-  changePhotoUserSuccess,
-} from "../../store/business/master-user/actions";
-
-
-class UserChangePassword extends Component {
+class UserChangePhoto extends Component {
   constructor(props) {
     super(props);
     this.handleAcceptedFiles = this.handleAcceptedFiles.bind(this);
     this.state = { selectedFiles: [] };
   }
+
   handleAcceptedFiles = files => {
     files.map(file =>
       Object.assign(file, {
@@ -47,12 +44,34 @@ class UserChangePassword extends Component {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   };
 
-  uploadImage = () => {
+  uploadImage = (e) => {
+    const idUser = window.localStorage.getItem('idUser');
+
     const params = {
       image: this.state.selectedFiles,
-      id: this.props.location.params.id
+      id: idUser
     }
-    this.props.changePhotoUser(params)
+
+    changePhotoUserService(params)
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/user-edit');
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
+    e.preventDefault()
+  }
+
+
+  alertSuccess = () => {
+    toast.success('Sukses menyimpan data!')
+  };
+
+  alertError = () => {
+    toast.error('Gagal menyimpan data')
   }
 
   render() {
@@ -65,9 +84,11 @@ class UserChangePassword extends Component {
                 <h4 className="font-size-18">Ganti Foto</h4>
                 <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
-                    <Link to="#">User</Link>
+                    <Link to="/user">User</Link>
                   </li>
-                  <li className="breadcrumb-item">Edit Profil</li>
+                  <li className="breadcrumb-item">
+                    <Link to="/user-edit">Edit User</Link>
+                  </li>
                   <li className="breadcrumb-item active">Ganti Foto</li>
                 </ol>
               </div>
@@ -82,6 +103,7 @@ class UserChangePassword extends Component {
                   <div className="mb-5">
                     <Form>
                       <Dropzone
+                        multiple={true}
                         onDrop={acceptedFiles =>
                           this.handleAcceptedFiles(acceptedFiles)
                         }
@@ -158,12 +180,4 @@ class UserChangePassword extends Component {
   }
 }
 
-const mapStatetoProps = state => {
-  const { error, loading, response } = state.MasterUser;
-  return { error, loading, response };
-};
-
-export default withRouter(connect(mapStatetoProps, {
-  changePhotoUser,
-  changePhotoUserSuccess
-})(UserChangePassword));
+export default withRouter(connect()(UserChangePhoto));

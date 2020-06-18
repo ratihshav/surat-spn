@@ -9,7 +9,7 @@ import {
   getDetailOutgoingMail,
   createDisposeOutgoingMail
 } from "../../store/business/outgoing-mail/actions";
-import { getDetailOutgoingMailService, searchUserService } from "../../helpers/master/mail"
+import { getDetailOutgoingMailService, searchUserService } from "../../helpers/master/outgoingMail"
 import woman from "../../assets/images/woman.png";
 
 class OutgoingMailDetail extends Component {
@@ -28,7 +28,7 @@ class OutgoingMailDetail extends Component {
   }
 
   componentDidMount() {
-    const idMail = window.localStorage.getItem('idMail');
+    const idMail = window.localStorage.getItem('idOutMail');
     this.setState({ stateIdMail: idMail })
     this.getDetailList(idMail)
     this.getDataUser()

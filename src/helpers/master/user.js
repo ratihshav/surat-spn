@@ -106,7 +106,7 @@ export const getDetailUserService = (request) => {
 };
 
 export const changePasswordUserService = (request) => {
-  const id = request.id
+  const id = window.localStorage.getItem('idUser');
   const password = request.password
   const formData = new FormData();
   formData.append('password', password);
@@ -123,7 +123,7 @@ export const changePasswordUserService = (request) => {
 
 
 export const changePhotoUserService = (request) => {
-  const id = request.id
+  const id = window.localStorage.getItem('idUser');
   const file = request.image[0]
   const formData = new FormData();
   formData.append('file', file);

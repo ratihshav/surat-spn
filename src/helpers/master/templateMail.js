@@ -20,12 +20,12 @@ const instance = axios.create({
 });
 
 //get list position directly
-export const getMasterPositionServices = () => {
-  const GET_MASTER_POSITION_API = config.api_endpoint + `/jabatan/list`;
-  return instance.get(GET_MASTER_POSITION_API)
+export const getTemplateMailService = () => {
+  const GET_TEMPLATE_MAIL_API = config.api_endpoint + `/templateSurat/list`;
+  return instance.get(GET_TEMPLATE_MAIL_API)
     .then((data) => {
       return {
-        data: data.data.data.data,
+        data: data.data.data,
       };
     })
     .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
@@ -33,15 +33,15 @@ export const getMasterPositionServices = () => {
 
 
 //create
-export const saveMasterPositionService = (request) => {
+export const createTemplateMailService = (request) => {
   const formData = new FormData();
-  formData.append('position_name', request.position_name);
-  formData.append('position_type', request.position_type);
-  formData.append('group_name', request.group_name);
-  formData.append('group_id', request.group_id);
+  formData.append('template_type', request.template_type);
+  formData.append('template_name', request.template_name);
+  formData.append('file', request.file);
 
-  const SAVE_MASTER_POSITION_API = config.api_endpoint + '/jabatan/save';
-  return instance.post(SAVE_MASTER_POSITION_API, formData)
+  console.log('request', request)
+  const SAVE_TEMPLATE_MAIL_API = config.api_endpoint + '/templateSurat/save';
+  return instance.post(SAVE_TEMPLATE_MAIL_API, formData)
     .then((data) => {
       return {
         data: data.data
@@ -51,16 +51,16 @@ export const saveMasterPositionService = (request) => {
 };
 
 //update
-export const updateMasterPositionService = (request) => {
-  const id = window.localStorage.getItem('idPosition');
+export const updateTemplateMailService = (request) => {
+  const id = window.localStorage.getItem('idTemp');
   const formData = new FormData();
   formData.append('position_name', request.position_name);
   formData.append('position_type', request.position_type);
   formData.append('group_name', request.group_name);
   formData.append('group_id', request.group_id);
 
-  const UPDATE_MASTER_POSITION_API = config.api_endpoint + `/jabatan/save/${id}`;
-  return instance.post(UPDATE_MASTER_POSITION_API, formData)
+  const UPDATE_TEMPLATE_MAIL_API = config.api_endpoint + `/templateSurat/save/${id}`;
+  return instance.post(UPDATE_TEMPLATE_MAIL_API, formData)
     .then((data) => {
       return {
         data: data
@@ -70,10 +70,10 @@ export const updateMasterPositionService = (request) => {
 };
 
 //delete
-export const deleteMasterPositionService = (request) => {
+export const deleteTemplateMailService = (request) => {
   const id = request.id
-  const DELETE_MASTER_POSITION_API = config.api_endpoint + `/jabatan/delete/${id}`;
-  return instance.post(DELETE_MASTER_POSITION_API)
+  const DELETE_TEMPLATE_MAIL_API = config.api_endpoint + `/templateSurat/delete/${id}`;
+  return instance.post(DELETE_TEMPLATE_MAIL_API)
     .then((data) => {
       return {
         data: data
@@ -83,11 +83,11 @@ export const deleteMasterPositionService = (request) => {
 };
 
 //detail
-export const getDetailPositionService = (request) => {
-  const id = window.localStorage.getItem('idPosition');
+export const getDetailTemplateMailService = (request) => {
+  const id = window.localStorage.getItem('idTemp');
 
-  const GET_DETAIL_POSITION_API = config.api_endpoint + `/jabatan/view/${id}`;
-  return instance.get(GET_DETAIL_POSITION_API)
+  const GET_DETAIL_TEMPLATE_MAIL_API = config.api_endpoint + `/templateSurat/view/${id}`;
+  return instance.get(GET_DETAIL_TEMPLATE_MAIL_API)
     .then((data) => {
       return {
         data: data.data

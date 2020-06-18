@@ -28,7 +28,7 @@ import {
   getOutgoingMailService,
   getDetailOutgoingMailService,
   createDisposeOutgoingMailService
-} from '../../../helpers/master/mail';
+} from '../../../helpers/master/outgoingMail';
 
 
 function* createOutgoingMailSaga({ payload: { request } }) {

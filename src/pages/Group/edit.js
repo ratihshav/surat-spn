@@ -1,38 +1,54 @@
 import React, { Component } from "react";
 import { Row, Col, Card, CardBody, Button } from "reactstrap";
-import Select from "react-select";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import {
-  saveMasterGroup,
-  saveMasterGroupSuccess
-} from "../../store/business/master-group/actions";
-import { saveMasterGroupService } from "../../helpers/master/group"
+  updateMasterGroupService,
+  getDetailGroupService
+} from "../../helpers/master/group"
 import toast from '../UI/toast';
 
 const idDivisi = window.localStorage.getItem('idDivisi');
 class GroupEdit extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      dataDivisi: []
+    }
   }
 
+  componentDidMount() {
+    const idDivisi = window.localStorage.getItem('idDivisi')
 
-  saveGroup = (e) => {
+    this.getDetailDivisi(idDivisi)
+  }
+
+  getDetailDivisi = (idDivisi) => {
+    getDetailGroupService(idDivisi)
+      .then((data) => {
+        this.setState({
+          dataDivisi: data.data.data
+        })
+      })
+      .catch(() => { throw 'Gagal Mengambil Data' })
+  }
+
+  updateGroup = (e) => {
     const params = {
       group_code: e.target.group_code.value,
       group_name: e.target.group_name.value
     }
-    saveMasterGroupService(params)
-    .then((data) => {
-      this.alertSuccess()
-      this.props.history.push('/group');
-    })
-    .catch(() => {
-      return (
-        this.alertError()
-      )
-    });
+    updateMasterGroupService(params)
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/group');
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
     e.preventDefault()
   }
 
@@ -45,6 +61,7 @@ class GroupEdit extends Component {
   }
 
   render() {
+    const { dataDivisi } = this.state
 
     return (
       <React.Fragment>
@@ -66,7 +83,7 @@ class GroupEdit extends Component {
             </Col>
           </Row>
 
-          <form action="#" onSubmit={this.saveGroup}>
+          <form action="#" onSubmit={this.updateGroup}>
             <Row>
               <div className="col-12">
                 <Card>
@@ -84,6 +101,7 @@ class GroupEdit extends Component {
                           className="form-control"
                           type="text"
                           id="group_code"
+                          defaultValue={dataDivisi.group_code}
                           ref={node => (this.inputNode = node)}
                         />
                       </Col>
@@ -102,6 +120,7 @@ class GroupEdit extends Component {
                           type="text"
                           id="group_name"
                           name="group_name"
+                          defaultValue={dataDivisi.group_name}
                           ref={node => (this.inputNode = node)}
                         />
                       </Col>
@@ -110,7 +129,6 @@ class GroupEdit extends Component {
                       <Button
                         color="success"
                         className="mt-1"
-                      // onClick={this.saveOutgoingMail}
                       >
                         <i className="typcn typcn-input-checked" />Simpan
                     </Button>
@@ -126,18 +144,4 @@ class GroupEdit extends Component {
   }
 }
 
-const styles = {
-  col: {
-    height: '100vh'
-  }
-}
-
-const mapStatetoProps = state => {
-  const { error, loading, data } = state.MasterGroup;
-  return { error, loading, data };
-};
-
-export default connect(mapStatetoProps, {
-  saveMasterGroup,
-  saveMasterGroupSuccess
-})(GroupEdit);
+export default connect()(GroupEdit);
