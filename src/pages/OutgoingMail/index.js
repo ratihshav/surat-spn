@@ -49,6 +49,19 @@ class OutgoingMail extends Component {
   //   this.props.getOutgoingMail()
   // }
 
+  renderCol = (data) => {
+    
+  }
+
+  allowDeleting = (e) => {
+    return e.row.data.can_delete
+    //return !this.isChief(e.row.data.Position);
+  }
+
+  allowEditing = (e) => {
+    return e.row.data.can_edit
+  }
+
   cLoad = () => {
     return new DataStore({
       load: (loadOptions) => {
@@ -188,7 +201,7 @@ class OutgoingMail extends Component {
                   >
                     <Editing
                       mode="row"
-                      allowDeleting={true} />
+                      allowDeleting={this.allowDeleting} />
                     <FilterRow visible={true} />
                     <Paging defaultPageSize={10} />
                     <Pager
@@ -197,7 +210,7 @@ class OutgoingMail extends Component {
                       showInfo={true} />
 
                     <Column dataField="disposisi_id" visible={false} />
-                    <Column dataField="nomor_agenda" />
+                    <Column dataField="nomor_agenda" fixed={true} />
                     <Column dataField="nomor_surat" />
                     <Column dataField="tgl_surat" />
                     <Column dataField="jenis_surat" />
@@ -212,6 +225,7 @@ class OutgoingMail extends Component {
                       buttons={[{
                         hint: 'Edit',
                         text: 'Edit',
+                        visible: this.allowEditing,
                         onClick: this.navigateToEdit
                       }, {
                         hint: 'Detail',

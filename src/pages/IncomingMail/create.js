@@ -388,7 +388,7 @@ class IncomingMailCreate extends Component {
                       </Col>
                     </Row>
 
-                    <div className="text-center mt-4">
+                    <div className="text-right mt-4">
                       <Button
                         color="success"
                         className="mt-1"
