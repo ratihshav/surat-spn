@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-// import images
-import logodarkImg from "../../assets/images/logo-dark.png";
-import logosmImg from "../../assets/images/logo-sm.png";
-import logolightImg from "../../assets/images/logo-light.png";
 
 // Import other Dropdown
 import NotificationDropdown from "../../components/NotificationDropdown";
@@ -19,17 +15,7 @@ class TopBar extends Component {
       isSearchOpen: false
     };
 
-    this.toggleRightbar = this.toggleRightbar.bind(this);
-    this.toggleFullscreen = this.toggleFullscreen.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
-    this.toggleSearch = this.toggleSearch.bind(this);
-  }
-
-  /**
-   * Toggle Search
-   */
-  toggleSearch() {
-    this.setState({ isSearchOpen: !this.state.isSearchOpen });
   }
 
   /**
@@ -37,43 +23,6 @@ class TopBar extends Component {
    */
   toggleMenu() {
     this.props.toggleMenuCallback();
-  }
-
-  /**
-   * Toggles the sidebar
-   */
-  toggleRightbar() {
-    this.props.toggleRightSidebar();
-  }
-
-  /**
-   * Toggle full screen
-   */
-  toggleFullscreen() {
-    if (
-      !document.fullscreenElement &&
-      /* alternative standard method */ !document.mozFullScreenElement &&
-      !document.webkitFullscreenElement
-    ) {
-      // current working methods
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen();
-      } else if (document.documentElement.mozRequestFullScreen) {
-        document.documentElement.mozRequestFullScreen();
-      } else if (document.documentElement.webkitRequestFullscreen) {
-        document.documentElement.webkitRequestFullscreen(
-          Element.ALLOW_KEYBOARD_INPUT
-        );
-      }
-    } else {
-      if (document.cancelFullScreen) {
-        document.cancelFullScreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.webkitCancelFullScreen) {
-        document.webkitCancelFullScreen();
-      }
-    }
   }
 
   render() {
@@ -105,31 +54,14 @@ class TopBar extends Component {
                 type="button"
                 onClick={this.toggleMenu}
                 className="btn btn-sm px-3 font-size-24 header-item waves-effect"
-                id="vertical-menu-btn"
-              >
+                id="vertical-menu-btn">
                 <i className="mdi mdi-menu"></i>
               </button>
-
-
             </div>
 
             <div className="d-flex">
-
-
-
               <NotificationDropdown />
-
               <ProfileMenu />
-
-              <div className="dropdown d-inline-block">
-                <button
-                  type="button"
-                  onClick={this.toggleRightbar}
-                  className="btn header-item noti-icon right-bar-toggle waves-effect"
-                >
-                  <i className="mdi mdi-settings-outline"></i>
-                </button>
-              </div>
             </div>
           </div>
         </header>
