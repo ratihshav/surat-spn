@@ -83,6 +83,15 @@ class Position extends Component {
     });
   }
 
+  navigateToPermissions = (val) => {
+    const data = val.row.data
+    localStorage.setItem('idPosition', JSON.stringify(data.id))
+    this.props.history.push({
+      pathname: '/position-permissions',
+      params: data,
+    });
+  }
+
   onRowClick = (e) => {
     console.log('row', e)
   }
@@ -156,6 +165,11 @@ class Position extends Component {
                         hint: 'Edit',
                         text: 'Edit',
                         onClick: this.navigateToEdit
+                      },
+                      {
+                        hint: 'Hak Akses',
+                        text: 'Hak Akses',
+                        onClick: this.navigateToPermissions
                       }, 'delete']}
                     />
 
