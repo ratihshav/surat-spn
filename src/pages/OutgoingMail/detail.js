@@ -6,11 +6,14 @@ import { connect } from "react-redux";
 import moment from 'moment'
 
 import {
-  getDetailOutgoingMail,
-  createDisposeOutgoingMail
-} from "../../store/business/outgoing-mail/actions";
-import { getDetailOutgoingMailService, searchUserService } from "../../helpers/master/outgoingMail"
+  getDetailOutgoingMailService,
+  searchUserService,
+  createDisposeOutgoingMailService,
+  createAgendaOutgoingMailService,
+  approveOutgoingMailService
+} from "../../helpers/master/outgoingMail"
 import woman from "../../assets/images/woman.png";
+import toast from '../UI/toast';
 
 class OutgoingMailDetail extends Component {
   constructor(props) {
@@ -18,12 +21,14 @@ class OutgoingMailDetail extends Component {
     this.state = {
       detailList: [],
       visible: false,
-      modal_center: false,
       selectedSignature: null,
       dataUser: [],
       status: '',
       selectedFile: null,
-      stateIdMail: ''
+      stateIdMail: '',
+      isShowModalDispose: false,
+      isShowModalAgenda: false,
+      selectedStatusMail: null
     };
   }
 
@@ -54,9 +59,16 @@ class OutgoingMailDetail extends Component {
     document.body.classList.add("no_padding");
   }
 
-  tog_center = () => {
+  showModalDispose = () => {
     this.setState(prevState => ({
-      modal_center: !prevState.modal_center
+      isShowModalDispose: !prevState.isShowModalDispose
+    }));
+    this.removeBodyCss();
+  }
+
+  showModalAgenda = () => {
+    this.setState(prevState => ({
+      isShowModalAgenda: !prevState.isShowModalAgenda
     }));
     this.removeBodyCss();
   }
@@ -69,19 +81,75 @@ class OutgoingMailDetail extends Component {
     this.setState({ selectedFile: event.target.files[0] });
   };
 
-
   doDisposition = (e) => {
     const { stateIdMail } = this.state
     const params = {
       surat_keluar_id: stateIdMail,
       tujuan_user: e.target.sendTo.value,
       file: this.state.selectedFile,
-      keterangan: e.target.description.value
+      keterangan: e.target.description.value,
+      is_approved: e.target.status.value
     }
-    this.props.createDisposeOutgoingMail(params)
+    createDisposeOutgoingMailService(params)
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/outgoing-mail');
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
     e.preventDefault();
   }
 
+  createAgendaMail = (e) => {
+    const params = {
+      nomor_surat: e.target.noMail.value,
+      nomor_agenda: e.target.noAgenda.value,
+      tgl_surat: e.target.dateMail.value,
+      file: this.state.selectedFile,
+    }
+    createAgendaOutgoingMailService(params)
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/outgoing-mail');
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
+    e.preventDefault();
+  }
+
+  doApproveMail = (e) => {
+
+    approveOutgoingMailService()
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/incoming-mail');
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
+    e.preventDefault();
+
+  }
+
+  alertSuccess = () => {
+    toast.success('Sukses menyelesaikan surat!')
+  };
+
+  alertError = () => {
+    toast.error('Gagal menyelesaikan surat')
+  }
+
+  handleStatusMail = selectedStatusMail => {
+    this.setState({ selectedStatusMail })
+  }
 
   getTableContent = (data) => {
     const disposisi = data.disposisi
@@ -184,6 +252,8 @@ class OutgoingMailDetail extends Component {
       detailList,
       selectedSignature,
       selectedFile,
+      isShowModalDispose,
+      isShowModalAgenda,
       dataUser } = this.state;
 
     const optionsSignature = dataUser.length !== 0 ?
@@ -192,7 +262,7 @@ class OutgoingMailDetail extends Component {
       })
       : null
 
-
+    console.log('detailList', detailList)
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -233,23 +303,23 @@ class OutgoingMailDetail extends Component {
                   </Row>
                   <div className="text-right mt-8">
                     <Button
-                      color="success"
+                      color="primary"
                       className="mt-1"
-                      onClick={this.tog_center}
+                      onClick={this.showModalDispose}
                       data-toggle="modal"
                       data-target=".bs-example-modal-center">
                       <i className="typcn typcn-input-checked" />Teruskan
                     </Button>
 
                     <Modal
-                      isOpen={this.state.modal_center}
-                      toggle={this.tog_center} >
+                      isOpen={isShowModalDispose}
+                      toggle={this.showModalDispose} >
                       <div className="modal-header  text-white bg-info">
                         <h5 className="modal-title mt-0">Proses Surat Keluar</h5>
                         <button
                           type="button"
                           onClick={() =>
-                            this.setState({ modal_center: false })
+                            this.setState({ isShowModalDispose: false })
                           }
                           className="close"
                           data-dismiss="modal"
@@ -261,17 +331,33 @@ class OutgoingMailDetail extends Component {
 
                       <div className="modal-body">
                         <form action="#" onSubmit={this.doDisposition}>
+
                           <Row className="form-group">
                             <label
-                              htmlFor="example-search-input"
+                              htmlFor="example-text-input"
                               className="col-sm-2 col-form-label">
                               Status
-                           </label>
+                                           </label>
                             <Col sm={10}>
-                              <input type="radio" id="accept" name="status" value="accept" className="custom-control-input" />
-                              <label for="accept"> Disetujui</label>
-                              <input type="radio" id="reject" name="status" value="reject" />
-                              <label for="reject"> Dikembalikan</label>
+                              <input
+                                type="radio"
+                                id="accept"
+                                name="status"
+                                value="1"
+                                onChange={this.handleStatusMail}
+                                ref={node => (this.inputNode = node)} />&nbsp;
+                                            <label for="accept">Disetujui</label>
+
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                            <input
+                                type="radio"
+                                id="reject"
+                                name="status"
+                                value="0"
+                                onChange={this.handleStatusMail}
+                                ref={node => (this.inputNode = node)} />&nbsp;
+                                            <label for="reject"> Dikembalikan</label>
                             </Col>
                           </Row>
 
@@ -364,6 +450,144 @@ class OutgoingMailDetail extends Component {
                         </form>
                       </div>
                     </Modal>
+
+                    &nbsp;&nbsp;
+
+                      <Button
+                      color="warning"
+                      className="mt-1"
+                      onClick={this.showModalAgenda}
+                      data-target=".bs-example-modal-center">
+                      <i className="typcn typcn-input-checked" />Agenda
+                      </Button>
+
+                    <Modal
+                      isOpen={isShowModalAgenda}
+                      toggle={this.showModalAgenda} >
+                      <div className="modal-header  text-white bg-info">
+                        <h5 className="modal-title mt-0">Agenda Surat Keluar</h5>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            this.setState({ isShowModalAgenda: false })
+                          }
+                          className="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div className="modal-body">
+                        <form action="#" onSubmit={this.createAgendaMail}>
+
+                          <Row className="form-group">
+                            <label
+                              htmlFor="example-search-input"
+                              className="col-sm-2 col-form-label">
+                              No. Surat
+                          </label>
+                            <Col sm={10}>
+                              <input
+                                name="noMail"
+                                className="form-control"
+                                type="text"
+                                defaultValue={detailList.nomor_surat}
+                                id="example-text-input"
+                                ref={node => (this.inputNode = node)}
+                              />
+                            </Col>
+                          </Row>
+
+                          <Row className="form-group">
+                            <label
+                              htmlFor="example-search-input"
+                              className="col-sm-2 col-form-label">
+                              No. Agenda
+                          </label>
+                            <Col sm={10}>
+                              <input
+                                name="noAgenda"
+                                className="form-control"
+                                type="text"
+                                defaultValue={detailList.nomor_agenda}
+                                id="example-text-input"
+                                ref={node => (this.inputNode = node)}
+                              />
+                            </Col>
+                          </Row>
+
+                          <Row className="form-group">
+                            <label
+                              htmlFor="example-text-input"
+                              className="col-sm-2 col-form-label" >
+                              Tanggal Surat
+                            </label>
+                            <Col sm={10}>
+                              <input
+                                className="form-control"
+                                type="date"
+                                id="example-text-input"
+                                name="dateMail"
+                                defaultValue={detailList.tgl_surat}
+                                ref={node => (this.inputNode = node)}
+                              />
+                            </Col>
+                          </Row>
+
+                          <Row className="form-group">
+                            <label
+                              htmlFor="example-search-input"
+                              className="col-sm-2 col-form-label">
+                              Dokumen
+                            </label>
+                            <Col sm={10}>
+                              <form action="#">
+                                <div className="custom-file">
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    id="validatedCustomFile"
+                                    required
+                                    onChange={this.onFileChange}
+                                    accept=".doc, .docx, .pdf"
+                                    name="file"
+                                    ref={node => (this.inputNode = node)}
+                                  />
+                                  <label
+                                    className="custom-file-label"
+                                    for="validatedCustomFile">
+                                    {selectedFile !== null && selectedFile !== undefined ? selectedFile.name : 'Belum ada file yang dipilih'}
+                                  </label>
+                                </div>
+                              </form>
+                            </Col>
+                          </Row>
+
+                          <div className="text-right mt-8">
+                            <Button
+                              color="success"
+                              className="mt-1"
+                              data-toggle="modal"
+                              data-target=".bs-example-modal-center">
+                              <i className="typcn typcn-input-checked" />Submit
+                         </Button>
+                          </div>
+                        </form>
+                      </div>
+                    </Modal>
+
+                    &nbsp;&nbsp;
+
+                    <Button
+                      color="success"
+                      className="mt-1"
+                      onClick={this.doApproveMail}>
+                      {/* data-target=".bs-example-modal-center"> */}
+                      <i className="typcn typcn-input-checked" />Setujui
+                    </Button>
+
                   </div>
                 </CardBody>
               </Card>
@@ -375,12 +599,4 @@ class OutgoingMailDetail extends Component {
   }
 }
 
-const mapStatetoProps = state => {
-  const { error, loading, data } = state.OutgoingMail;
-  return { error, loading, data };
-};
-
-export default withRouter(connect(mapStatetoProps, {
-  getDetailOutgoingMail,
-  createDisposeOutgoingMail
-})(OutgoingMailDetail));
+export default withRouter(connect()(OutgoingMailDetail));

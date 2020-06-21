@@ -15,7 +15,11 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import DataStore from 'devextreme/data/data_source';
 import { isNotEmpty, dxGridFilter } from '../../helpers/gridFilter'
-import { getIncomingMailService, deleteIncomingMailService } from '../../helpers/master/incomingMail'
+import {
+  getIncomingMailService,
+  deleteIncomingMailService,
+  readIncomingMailService
+} from '../../helpers/master/incomingMail'
 import toast from '../UI/toast';
 
 class IncomingMail extends Component {
@@ -69,6 +73,7 @@ class IncomingMail extends Component {
 
   navigateToEdit = (val) => {
     const data = val.row.data
+    localStorage.setItem('idInMail', JSON.stringify(data.id))
     this.props.history.push({
       pathname: '/incoming-mail-edit',
       params: data,
@@ -77,7 +82,10 @@ class IncomingMail extends Component {
 
   navigateToDetail = (val) => {
     const data = val.row.data
+    const idDisposisi = data.disposisi_id
     localStorage.setItem('idInMail', JSON.stringify(data.id))
+
+    this.hasReadMail(idDisposisi)
     this.props.history.push({
       pathname: '/incoming-mail-detail',
       params: data,
@@ -86,6 +94,16 @@ class IncomingMail extends Component {
 
   onRowClick = (e) => {
     console.log('row', e)
+  }
+
+  hasReadMail = (params) => {
+    readIncomingMailService(params)
+      .then((data) => {
+        return {
+          data: data
+        };
+      })
+      .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
   onToolbarPreparing = (e) => {
@@ -175,14 +193,7 @@ class IncomingMail extends Component {
                     <Column dataField="perihal" />
                     <Column dataField="tgl_surat" />
                     <Column dataField="tgl_diterima" />
-                    <Column dataField="jenis_surat" />
-                    <Column dataField="tujuan_surat" />
-                    <Column caption="Hal" dataField="hal_surat" calculateDisplayValue={this.getSubjectMail} />
-                    <Column dataField="group_name" visible={false} />
                     <Column dataField="id" visible={false} />
-                    <Column dataField="is_editable" visible={false} />
-                    <Column dataField="position_name" visible={false} />
-                    <Column dataField="status" visible={false} />
                     <Column type="buttons"
                       buttons={[{
                         hint: 'Edit',

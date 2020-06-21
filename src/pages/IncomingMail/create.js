@@ -4,11 +4,9 @@ import Select from "react-select";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
-
-import {
-  searchUser
-} from "../../store/business/outgoing-mail/actions";
 import { createIncomingMailService } from "../../helpers/master/incomingMail"
+import { searchUserService } from "../../helpers/master/outgoingMail"
+
 import toast from '../UI/toast';
 
 const type = [
@@ -59,6 +57,18 @@ class IncomingMailCreate extends Component {
     };
   }
 
+  componentDidMount() {
+    this.getDataUser()
+  }
+
+  getDataUser = () => {
+    searchUserService()
+      .then((data) => {
+        this.setState({ dataUser: data.data.data })
+      })
+      .catch(() => { throw 'Gagal Mengubah Data'; });
+  }
+
 
   handleSelectGroup = selectedGroup => {
     this.setState({ selectedGroup });
@@ -90,6 +100,7 @@ class IncomingMailCreate extends Component {
       perihal: e.target.subject.value,
       nomor_surat: e.target.numMail.value,
       tgl_surat: e.target.date.value,
+      to_user_id: e.target.sendto.value,
       sifat_surat: e.target.type.value,
       lampiran: e.target.attachment.value,
       prioritas: e.target.urgency.value,
@@ -125,8 +136,15 @@ class IncomingMailCreate extends Component {
       selectedClass,
       selectedUrgency,
       selectedFile,
+      dataUser,
+      selectedSubmit
     } = this.state;
 
+    const optionsSubmit = dataUser.length !== 0 ?
+      dataUser.map(function (data) {
+        return { value: data.id, label: data.text };
+      })
+      : null
 
     return (
       <React.Fragment>
@@ -225,6 +243,25 @@ class IncomingMailCreate extends Component {
                           id="example-text-input"
                           name="date"
                           ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-search-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Diajukan Kepada
+                    </label>
+                      <Col sm={10}>
+                        <Select
+                          value={selectedSubmit}
+                          onChange={this.handleSelectSubmit}
+                          options={optionsSubmit}
+                          name="sendto"
+                          ref={node => (this.inputNode = node)}
+                          required
                         />
                       </Col>
                     </Row>
@@ -370,11 +407,4 @@ class IncomingMailCreate extends Component {
   }
 }
 
-const mapStatetoProps = state => {
-  const { error, loading, data } = state.OutgoingMail;
-  return { error, loading, data };
-};
-
-export default connect(mapStatetoProps, {
-  searchUser
-})(IncomingMailCreate);
+export default connect()(IncomingMailCreate);

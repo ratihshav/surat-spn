@@ -112,6 +112,7 @@ export const createDisposeOutgoingMailService = (request) => {
   formData.append('tujuan_user', request.tujuan_user);
   formData.append('file', request.file);
   formData.append('keterangan', request.keterangan);
+  formData.append('is_approved', request.is_approved);
 
   const CREATE_DISPOSE_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/disposisi`
   return instance.post(CREATE_DISPOSE_OUTGOING_MAIL_API, formData)
@@ -133,6 +134,52 @@ export const deleteOutgoingMailService = (request) => {
       };
     })
     .catch(() => { throw 'Gagal Mengubah Data'; });
+};
+
+export const readOutgoingMailService = (request) => {
+  const READ_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/read/${request}`;
+  return instance.post(READ_OUTGOING_MAIL_API)
+    .then((data) => {
+      return {
+        data: data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+};
+
+export const createAgendaOutgoingMailService = (request) => {
+  const id = window.localStorage.getItem('idOutMail');
+
+  const formData = new FormData();
+  formData.append('nomor_surat', request.nomor_surat);
+  formData.append('nomor_agenda', request.nomor_agenda);
+  formData.append('tgl_surat', request.tgl_surat);
+  formData.append('file', request.file);
+
+  const CREATE_AGENDA_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/agenda/${id}`
+  return instance.post(CREATE_AGENDA_OUTGOING_MAIL_API, formData)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
+
+export const approveOutgoingMailService = (request) => {
+  const id = window.localStorage.getItem('idOutMail');
+  console.log('masuk')
+  const APPROVE_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/approve/${id}`;
+  return instance.post(APPROVE_OUTGOING_MAIL_API)
+    .then((data) => {
+      return {
+        data: data
+      };
+    })
+    .catch((error) => {
+      console.log('error', error)
+      throw 'Gagal Mengubah Data';
+    });
 };
 
 export async function _handleError(error) {

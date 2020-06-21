@@ -40,6 +40,7 @@ export const createIncomingMailService = (request) => {
   formData.append('nomor_surat', request.nomor_surat);
   formData.append('tgl_surat', request.tgl_surat);
   formData.append('lampiran', request.lampiran);
+  formData.append('to_user_id', request.to_user_id);
   formData.append('sifat_surat', request.sifat_surat);
   formData.append('klasifikasi', request.klasifikasi);
   formData.append('prioritas', request.prioritas);
@@ -47,6 +48,32 @@ export const createIncomingMailService = (request) => {
   formData.append('file', request.file);
 
   const CREATE_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/save`
+  return instance.post(CREATE_INCOMING_MAIL_API, formData)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
+
+export const updateIncomingMailService = (request) => {
+  const id = window.localStorage.getItem('idInMail');
+
+  const formData = new FormData();
+  formData.append('asal_surat', request.asal_surat);
+  formData.append('perihal', request.perihal);
+  formData.append('nomor_surat', request.nomor_surat);
+  formData.append('tgl_surat', request.tgl_surat);
+  formData.append('lampiran', request.lampiran);
+  formData.append('to_user_id', request.to_user_id);
+  formData.append('sifat_surat', request.sifat_surat);
+  formData.append('klasifikasi', request.klasifikasi);
+  formData.append('prioritas', request.prioritas);
+  formData.append('keterangan', request.keterangan);
+  formData.append('file', request.file);
+
+  const CREATE_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/save/${id}`
   return instance.post(CREATE_INCOMING_MAIL_API, formData)
     .then((data) => {
       return {
@@ -83,13 +110,9 @@ export const getDetailIncomingMailService = (request) => {
 
 export const createDisposeIncomingMailService = (request) => {
   const formData = new FormData();
-  formData.append('surat_masuk_id', request.surat_keluar_id);
+  formData.append('surat_masuk_id', request.surat_masuk_id);
   formData.append('to_user_id', request.to_user_id);
   formData.append('arahan', request.arahan);
-  // formData.append('is_tembusan', request.is_tembusan);
-  // formData.append('is_private', request.is_private);
-  formData.append('file', request.file);
-  formData.append('keterangan', request.keterangan);
 
   const CREATE_DISPOSE_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/disposisi`
   return instance.post(CREATE_DISPOSE_INCOMING_MAIL_API, formData)
@@ -112,6 +135,30 @@ export const deleteIncomingMailService = (request) => {
     })
     .catch(() => { throw 'Gagal Mengubah Data'; });
 };
+
+export const readIncomingMailService = (request) => {
+  const READ_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/read/${request}`;
+  return instance.post(READ_INCOMING_MAIL_API)
+    .then((data) => {
+      return {
+        data: data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+};
+
+export const closeIncomingMailService = (request) => {
+  const id = window.localStorage.getItem('idInMail');
+  const CLOSE_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/close/${id}`;
+  return instance.post(CLOSE_INCOMING_MAIL_API)
+    .then((data) => {
+      return {
+        data: data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+};
+
 
 export async function _handleError(error) {
   // var errorCode = error.code;

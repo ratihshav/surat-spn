@@ -15,7 +15,11 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import DataStore from 'devextreme/data/data_source';
 import { isNotEmpty, dxGridFilter } from '../../helpers/gridFilter'
-import { getOutgoingMailService, deleteOutgoingMailService } from '../../helpers/master/outgoingMail'
+import {
+  getOutgoingMailService,
+  deleteOutgoingMailService,
+  readOutgoingMailService
+} from '../../helpers/master/outgoingMail'
 import toast from '../UI/toast';
 
 // const subjectMail = (cellData) => {
@@ -87,7 +91,10 @@ class OutgoingMail extends Component {
 
   navigateToDetail = (val) => {
     const data = val.row.data
+    const idDisposisi = data.disposisi_id
     localStorage.setItem('idOutMail', JSON.stringify(data.id))
+
+    this.hasReadMail(idDisposisi)
     this.props.history.push({
       pathname: '/outgoing-mail-detail',
       params: data,
@@ -96,6 +103,16 @@ class OutgoingMail extends Component {
 
   onRowClick = (e) => {
     console.log('row', e)
+  }
+
+  hasReadMail = (params) => {
+    readOutgoingMailService(params)
+      .then((data) => {
+        return {
+          data: data
+        };
+      })
+      .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
   onToolbarPreparing = (e) => {

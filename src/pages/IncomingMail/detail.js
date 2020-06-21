@@ -4,13 +4,14 @@ import { Link, withRouter } from "react-router-dom";
 import Select from "react-select";
 import { connect } from "react-redux";
 import moment from 'moment'
-
+import { searchUserService } from "../../helpers/master/outgoingMail"
 import {
-  getDetailOutgoingMail,
-  createDisposeOutgoingMail
-} from "../../store/business/outgoing-mail/actions";
-import { getDetailOutgoingMailService, searchUserService } from "../../helpers/master/outgoingMail"
+  getDetailIncomingMailService,
+  createDisposeIncomingMailService,
+  closeIncomingMailService
+} from "../../helpers/master/incomingMail"
 import woman from "../../assets/images/woman.png";
+import toast from '../UI/toast';
 
 class IncomingMailDetail extends Component {
   constructor(props) {
@@ -28,14 +29,14 @@ class IncomingMailDetail extends Component {
   }
 
   componentDidMount() {
-    const idMail = window.localStorage.getItem('idOutMail');
+    const idMail = window.localStorage.getItem('idInMail');
     this.setState({ stateIdMail: idMail })
     this.getDetailList(idMail)
     this.getDataUser()
   }
 
   getDetailList = (idMail) => {
-    getDetailOutgoingMailService(idMail)
+    getDetailIncomingMailService(idMail)
       .then((data) => {
         this.setState({ detailList: data.data.data })
       })
@@ -73,15 +74,44 @@ class IncomingMailDetail extends Component {
   doDisposition = (e) => {
     const { stateIdMail } = this.state
     const params = {
-      surat_keluar_id: stateIdMail,
-      tujuan_user: e.target.sendTo.value,
-      file: this.state.selectedFile,
-      keterangan: e.target.description.value
+      surat_masuk_id: stateIdMail,
+      to_user_id: e.target.sendTo.value,
+      arahan: e.target.instruction.value
     }
-    this.props.createDisposeOutgoingMail(params)
+    createDisposeIncomingMailService(params)
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/incoming-mail');
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
     e.preventDefault();
   }
 
+  closeIncomingMail = () => {
+
+    closeIncomingMailService()
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/incoming-mail');
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
+  }
+
+  alertSuccess = () => {
+    toast.success('Sukses menyelesaikan surat!')
+  };
+
+  alertError = () => {
+    toast.error('Gagal menyelesaikan surat')
+  }
 
   getTableContent = (data) => {
     const disposisi = data.disposisi
@@ -95,60 +125,48 @@ class IncomingMailDetail extends Component {
             </tr>
             <tr>
               <th>
-                {disposisi ? data.disposisi.map(function (nextItem, j) {
-                  return (
-                    <tr key={nextItem.id}>
-                      <a href={`http://localhost/spnbackend/` + nextItem.file_path} target="_blank" download>{nextItem.file_name}</a><br />
-                    </tr>
-                  );
-                }) : null}
+                <tr>
+                  <a href={`http://localhost/spnbackend/` + data.file_path} target="_blank" download>{data.file_name}</a><br />
+                </tr>
               </th>
             </tr>
           </th>
           <th>
             <tr>
-              <th>Dikonsep Oleh:</th>
-              <td id="combo-1610-inputCell">{data.created_by}</td>
+              <th>Asal Surat:</th>
+              <td id="combo-1610-inputCell">{data.asal_surat}</td>
             </tr>
             <tr>
               <th>Perihal:</th>
-              <td>{data.hal_surat}</td>
-            </tr>
-            <tr>
-              <th>Kepada:</th>
-              <td>{data.to_username}</td>
-            </tr>
-            <tr>
-              <th>Jenis Surat:</th>
-              <td>{data.jenis_surat}</td>
-            </tr>
-            <tr>
-              <th>Klasifikasi Surat:</th>
-              <td>{data.klasifikasi_surat}</td>
-            </tr>
-            <tr>
-              <th>Sifat Surat:</th>
-              <td>{data.sifat_surat}</td>
-            </tr>
-            <tr>
-              <th>Nomor Agenda:</th>
-              <td>{data.nomor_agenda}</td>
+              <td>{data.perihal}</td>
             </tr>
             <tr>
               <th>Nomor Surat:</th>
               <td>{data.nomor_surat}</td>
             </tr>
             <tr>
-              <th>Tanggal Surat:</th>
-              <td>{data.tgl_surat}</td>
+              <th>Prioritas Surat:</th>
+              <td>{data.prioritas}</td>
+            </tr>
+            <tr>
+              <th>Klasifikasi Surat:</th>
+              <td>{data.klasifikasi}</td>
             </tr>
             <tr>
               <th>Lampiran:</th>
               <td>{data.lampiran}</td>
             </tr>
             <tr>
-              <th>Tujuan Surat:</th>
-              <td>{data.tujuan_surat}</td>
+              <th>Sifat Surat:</th>
+              <td>{data.sifat_surat}</td>
+            </tr>
+            <tr>
+              <th>Tanggal Surat:</th>
+              <td>{data.tgl_surat}</td>
+            </tr>
+            <tr>
+              <th>Tanggal Diterima:</th>
+              <td>{data.tgl_diterima}</td>
             </tr>
           </th>
           <th>
@@ -199,15 +217,15 @@ class IncomingMailDetail extends Component {
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">
-                <h4 className="font-size-18">Detail Surat Keluar</h4>
+                <h4 className="font-size-18">Detail Surat Masuk</h4>
                 <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
                     <Link to="/#">Surat</Link>
                   </li>
                   <li className="breadcrumb-item">
-                    <Link to="/outgoing-mail">Surat Keluar</Link>
+                    <Link to="/incoming-mail">Surat Masuk</Link>
                   </li>
-                  <li className="breadcrumb-item active">Detail Surat Keluar</li>
+                  <li className="breadcrumb-item active">Detail Surat Masuk</li>
                 </ol>
               </div>
             </Col>
@@ -221,7 +239,7 @@ class IncomingMailDetail extends Component {
                     <div className="card-body">
                       <blockquote className="card-blockquote mb-0">
                         <h2>
-                          Rincian Surat Keluar
+                          Rincian Surat Masuk
                         </h2>
                       </blockquote>
                     </div>
@@ -245,7 +263,7 @@ class IncomingMailDetail extends Component {
                       isOpen={this.state.modal_center}
                       toggle={this.tog_center} >
                       <div className="modal-header  text-white bg-info">
-                        <h5 className="modal-title mt-0">Proses Surat Keluar</h5>
+                        <h5 className="modal-title mt-0">Proses Surat Masuk</h5>
                         <button
                           type="button"
                           onClick={() =>
@@ -261,20 +279,6 @@ class IncomingMailDetail extends Component {
 
                       <div className="modal-body">
                         <form action="#" onSubmit={this.doDisposition}>
-                          <Row className="form-group">
-                            <label
-                              htmlFor="example-search-input"
-                              className="col-sm-2 col-form-label">
-                              Status
-                           </label>
-                            <Col sm={10}>
-                              <input type="radio" id="accept" name="status" value="accept" className="custom-control-input" />
-                              <label for="accept"> Disetujui</label>
-                              <input type="radio" id="reject" name="status" value="reject" />
-                              <label for="reject"> Dikembalikan</label>
-                            </Col>
-                          </Row>
-
                           <Row className="form-group">
                             <label
                               htmlFor="example-search-input"
@@ -296,11 +300,11 @@ class IncomingMailDetail extends Component {
                             <label
                               htmlFor="example-search-input"
                               className="col-sm-2 col-form-label">
-                              Keterangan
+                              Arahan
                           </label>
                             <Col sm={10}>
                               <input
-                                name="description"
+                                name="instruction"
                                 className="form-control"
                                 type="text"
                                 defaultValue=""
@@ -310,48 +314,8 @@ class IncomingMailDetail extends Component {
                             </Col>
                           </Row>
 
-                          <Row className="form-group">
-                            <label
-                              htmlFor="example-search-input"
-                              className="col-sm-2 col-form-label">
-                              File
-                           </label>
-                            <Col sm={10}>
-                              <input
-                                name="existingFile"
-                                className="form-control"
-                                type="text"
-                                value={detailList.disposisi ? detailList.disposisi[detailList.disposisi.length - 1].file_name : null}
-                                id="example-text-input"
-                                ref={node => (this.inputNode = node)}
-                                disabled
-                              />
-                            </Col>
-                          </Row>
 
-                          <Row className="form-group">
-                            <label
-                              htmlFor="example-search-input"
-                              className="col-sm-2 col-form-label">
-                              Ganti File (Jika ada perubahan)
-                           </label>
-                            <Col sm={10}>
-                              <form action="#">
-                                <div className="custom-file">
-                                  <input
-                                    type="file"
-                                    className="form-control"
-                                    id="validatedCustomFile"
-                                    required
-                                    onChange={this.onFileChange}
-                                    accept=".doc, .docx, .pdf"
-                                    name="file"
-                                    ref={node => (this.inputNode = node)}
-                                  />
-                                </div>
-                              </form>
-                            </Col>
-                          </Row>
+
                           <div className="text-right mt-8">
                             <Button
                               color="success"
@@ -364,6 +328,19 @@ class IncomingMailDetail extends Component {
                         </form>
                       </div>
                     </Modal>
+
+                    &nbsp;&nbsp;
+
+                    <Button
+                      color="danger"
+                      className="mt-1"
+                      onClick={this.closeIncomingMail}
+                      data-target=".bs-example-modal-center">
+                      <i className="typcn typcn-input-checked" />Close
+                    </Button>
+                  </div>
+                  <div className="text-right mt-8">
+
                   </div>
                 </CardBody>
               </Card>
@@ -375,12 +352,4 @@ class IncomingMailDetail extends Component {
   }
 }
 
-const mapStatetoProps = state => {
-  const { error, loading, data } = state.OutgoingMail;
-  return { error, loading, data };
-};
-
-export default withRouter(connect(mapStatetoProps, {
-  getDetailOutgoingMail,
-  createDisposeOutgoingMail
-})(IncomingMailDetail));
+export default withRouter(connect()(IncomingMailDetail));
