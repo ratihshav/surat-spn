@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import "chartist/dist/scss/chartist.scss";
 import DataGrid, {
+  Scrolling,
   Column,
   Paging,
   FilterRow,
@@ -39,6 +40,19 @@ class IncomingMail extends Component {
   // getDataMail = () => {
   //   this.props.getOutgoingMail()
   // }
+
+  renderCol = (data) => {
+
+  }
+
+  allowDeleting = (e) => {
+    return e.row.data.can_delete
+    //return !this.isChief(e.row.data.Position);
+  }
+
+  allowEditing = (e) => {
+    return e.row.data.can_edit
+  }
 
   cLoad = () => {
     return new DataStore({
@@ -179,8 +193,9 @@ class IncomingMail extends Component {
                   >
                     <Editing
                       mode="row"
-                      allowDeleting={true} />
+                      allowDeleting={this.allowDeleting} />
                     <FilterRow visible={true} />
+                    <Scrolling mode="standard" useNative={true} />
                     <Paging defaultPageSize={10} />
                     <Pager
                       showPageSizeSelector={true}
@@ -188,16 +203,17 @@ class IncomingMail extends Component {
                       showInfo={true} />
 
                     <Column dataField="disposisi_id" visible={false} />
-                    <Column dataField="asal_surat" />
+                    <Column dataField="asal_surat" fixed={true} />
                     <Column dataField="nomor_surat" />
                     <Column dataField="perihal" />
-                    <Column dataField="tgl_surat" />
-                    <Column dataField="tgl_diterima" />
+                    <Column dataField="tgl_surat" dataType="date" />
+                    <Column dataField="tgl_diterima" dataType="date" />
                     <Column dataField="id" visible={false} />
                     <Column type="buttons"
                       buttons={[{
                         hint: 'Edit',
                         text: 'Edit',
+                        visible: this.allowEditing,
                         onClick: this.navigateToEdit
                       }, {
                         hint: 'Detail',
@@ -217,7 +233,6 @@ class IncomingMail extends Component {
     );
   }
 }
-
 
 export default withRouter(connect()(IncomingMail));
 
