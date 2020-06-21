@@ -203,11 +203,11 @@ class IncomingMail extends Component {
                       showInfo={true} />
 
                     <Column dataField="disposisi_id" visible={false} />
-                    <Column dataField="asal_surat" fixed={true} />
+                    <Column dataField="asal_surat" />
                     <Column dataField="nomor_surat" />
                     <Column dataField="perihal" />
-                    <Column dataField="tgl_surat" dataType="date" />
-                    <Column dataField="tgl_diterima" dataType="date" />
+                    <Column dataField="tgl_surat" dataType="date" format='dd/MM/yyyy' />
+                    <Column dataField="tgl_diterima" dataType="date" format='dd/MM/yyyy' />
                     <Column dataField="id" visible={false} />
                     <Column type="buttons"
                       buttons={[{

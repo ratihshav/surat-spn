@@ -210,7 +210,7 @@ class OutgoingMail extends Component {
                       showInfo={true} />
 
                     <Column dataField="disposisi_id" visible={false} />
-                    <Column dataField="nomor_agenda" fixed={true} />
+                    <Column dataField="nomor_agenda" />
                     <Column dataField="nomor_surat" />
                     <Column dataField="tgl_surat" />
                     <Column dataField="jenis_surat" />
