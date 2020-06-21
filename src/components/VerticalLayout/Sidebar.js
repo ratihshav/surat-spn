@@ -8,8 +8,8 @@ const SidebarContent = props => {
   return (
     <div id="sidebar-menu">
       <ul className="metismenu list-unstyled" id="side-menu">
-        <li className="menu-title">Main</li>
-
+        <li className="menu-title"> </li>
+        <br></br>
         <li>
           <Link to="/dashboard" className="waves-effect">
             <i className="ti-home"></i>

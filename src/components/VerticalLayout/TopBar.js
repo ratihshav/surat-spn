@@ -1,25 +1,16 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-import {
-  DropdownItem,
-  DropdownMenu,
-  Dropdown,
-  DropdownToggle
-} from "reactstrap";
-
 // import images
 import logodarkImg from "../../assets/images/logo-dark.png";
 import logosmImg from "../../assets/images/logo-sm.png";
 import logolightImg from "../../assets/images/logo-light.png";
 
 // Import other Dropdown
-import LanguageDropdown from "../../components/LanguageDropdown";
 import NotificationDropdown from "../../components/NotificationDropdown";
 import ProfileMenu from "../../components/ProfileMenu";
 
 import logoKabKerinci from "../../assets/images/logo-kab-kerinci.png"
-
 
 class TopBar extends Component {
   constructor(props) {
@@ -94,29 +85,51 @@ class TopBar extends Component {
               <div className="navbar-brand-box">
                 <Link to="/dashboard" className="logo logo-dark">
                   <span className="logo-sm">
-                    <img src={logosmImg} alt="" height="22" />
+                    <img src={logoKabKerinci} alt="" height="22" />
                   </span>
                   <span className="logo-lg">
-                    <img src={logodarkImg} alt="" height="17" />
+                    <img src={logoKabKerinci} alt="" height="17" />
                   </span>
                 </Link>
 
                 <Link to="/dashboard" className="logo logo-light">
                   <span className="logo-sm">
-                    <img src={logosmImg} alt="" height="22" />
+                    <img src={logoKabKerinci} alt="" height="22" />
                   </span>
                   <span className="logo-lg">
-                    <img src={logoKabKerinci} height="100" alt="" style={{ marginTop: 50 }} />
+                    <img src={logoKabKerinci} alt="" height="100" style={{ marginBottom: -50 }} />
                   </span>
                 </Link>
               </div>
+              <button
+                type="button"
+                onClick={this.toggleMenu}
+                className="btn btn-sm px-3 font-size-24 header-item waves-effect"
+                id="vertical-menu-btn"
+              >
+                <i className="mdi mdi-menu"></i>
+              </button>
+
+
             </div>
 
             <div className="d-flex">
 
+
+
               <NotificationDropdown />
 
               <ProfileMenu />
+
+              <div className="dropdown d-inline-block">
+                <button
+                  type="button"
+                  onClick={this.toggleRightbar}
+                  className="btn header-item noti-icon right-bar-toggle waves-effect"
+                >
+                  <i className="mdi mdi-settings-outline"></i>
+                </button>
+              </div>
             </div>
           </div>
         </header>
