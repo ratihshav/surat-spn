@@ -87,7 +87,7 @@ class PositionPermission extends Component {
     } else {
       selectedPermission = this.state.selectedPermission.filter(el => el !== value);
     }
-    this.setState({ selectedPermission });
+    this.setState({ selectedPermission }, () => console.log(this.state.selectedPermission));
   }
 
   saveUpdatedGranted = (e) => {
@@ -187,6 +187,7 @@ class PositionPermission extends Component {
                       <Col sm={10}>
                         <Card style={{ borderWidth: 1, padding: 5 }}>
                           <table className="table table-bordered mb-0">
+                            <tbody>
                             <tr>
                               <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Jabatan</h5></td>
                             </tr>
@@ -194,7 +195,7 @@ class PositionPermission extends Component {
                             {allPermission.length !== 0 ? allPermission[0].jabatan.actions.map((item, index) => {
                               const value = string !== null ? string.includes(item.value) : false
                               return (
-                                <tr>
+                                <tr key={index}>
                                   <td>{item.text}</td>
                                   <td>
                                     <SwitchComponent
@@ -211,13 +212,13 @@ class PositionPermission extends Component {
                               : null}
 
                             <tr>
-                              <td colspan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Surat Keluar</h5></td>
+                              <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Surat Keluar</h5></td>
                             </tr>
                             {allPermission.length !== 0 ? allPermission[0].suratKeluar.actions.map((item, index) => {
                               const string = grantedPermission.length !== 0 ? grantedPermission[0].toString() : null
                               const value = string !== null ? string.includes(item.value) : false
                               return (
-                                <tr>
+                                <tr key={index}>
                                   <td>{item.text}</td>
                                   <td>
                                     <SwitchComponent
@@ -235,12 +236,12 @@ class PositionPermission extends Component {
                               : null}
 
                             <tr>
-                              <td colspan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Surat Masuk</h5></td>
+                              <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Surat Masuk</h5></td>
                             </tr>
                             {allPermission.length !== 0 ? allPermission[0].suratMasuk.actions.map((item, index) => {
                               const value = string !== null ? string.includes(item.value) : false
                               return (
-                                <tr>
+                                <tr key={index}>
                                   <td>{item.text}</td>
                                   <td>
                                     <SwitchComponent
@@ -257,12 +258,12 @@ class PositionPermission extends Component {
                               : null}
 
                             <tr>
-                              <td colspan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Template Surat</h5></td>
+                              <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Template Surat</h5></td>
                             </tr>
                             {allPermission.length !== 0 ? allPermission[0].templateSurat.actions.map((item, index) => {
                               const value = string !== null ? string.includes(item.value) : false
                               return (
-                                <tr>
+                                <tr key={index}>
                                   <td>{item.text}</td>
                                   <td>
                                     <SwitchComponent
@@ -279,13 +280,13 @@ class PositionPermission extends Component {
                               : null}
 
                             <tr>
-                              <td colspan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>User</h5></td>
+                              <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>User</h5></td>
                             </tr>
                             {allPermission.length !== 0 ? allPermission[0].user.actions.map((item, index) => {
                               const value = string !== null ? string.includes(item.value) : false
                               return (
-                                <tr>
-                                  <td>{item.text}</td>
+                                <tr key={index}>
+                                  <td >{item.text}</td>
                                   <td>
                                     <SwitchComponent
                                       onColor="#EF476F"
@@ -299,7 +300,7 @@ class PositionPermission extends Component {
                               )
                             })
                               : null}
-
+</tbody>
                           </table>
                         </Card>
                       </Col>

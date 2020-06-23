@@ -2,15 +2,15 @@ import React from 'react';
 
 const SwitchComponent = ({ onChange, value, defaultChecked }) => {
   return (
-    <>
-      <label className="switch">
+    < >
         <input
+          className="custom-switch"
           type="checkbox"
           value={value}
           defaultChecked={defaultChecked}
+          id={value}
           onChange={onChange} />
-        <div className="slider"></div>
-      </label>
+        <label className="custom-switch-label" htmlFor={value}>Toggle</label>
     </>
   );
 };
