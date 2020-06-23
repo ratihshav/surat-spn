@@ -89,7 +89,7 @@ class PositionEdit extends Component {
     const { dataGroup, dataPosition, selectedGroup } = this.state
 
     const optionsGroup = dataGroup.length !== 0 ?
-      dataGroup.map(function (data) {
+      dataGroup.map((data) => {
         return { value: data.group_id, label: data.group_name };
       })
       : null

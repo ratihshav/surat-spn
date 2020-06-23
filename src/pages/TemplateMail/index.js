@@ -55,7 +55,6 @@ class TemplateMail extends Component {
   }
 
   onDeleteTemplate = (values) => {
-    console.log('values', values)
     deleteTemplateMailService(values)
       .then((data) => {
         this.alertSuccess()

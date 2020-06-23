@@ -26,6 +26,7 @@ import GroupEdit from "../pages/Group/edit"
 import Position from "../pages/Position"
 import PositionAdd from "../pages/Position/add"
 import PositionEdit from "../pages/Position/edit"
+import PositionPermission from "../pages/Position/permission"
 
 import OutgoingMail from "../pages/OutgoingMail"
 import OutgoingMailCreate from "../pages/OutgoingMail/create"
@@ -75,6 +76,7 @@ const authProtectedRoutes = [
   { path: "/position", component: Position },
   { path: "/position-add", component: PositionAdd },
   { path: "/position-edit", component: PositionEdit },
+  { path: "/position-permission", component: PositionPermission },
 
   //Template
   { path: "/template-mail", component: TemplateMail },

@@ -55,7 +55,6 @@ class TemplateMailCreate extends Component {
       file: this.state.selectedFiles
     }
 
-    console.log('params', params)
     createTemplateMailService(params)
       .then((data) => {
         this.alertSuccess()
@@ -80,7 +79,6 @@ class TemplateMailCreate extends Component {
   render() {
     const { selectedFiles } = this.state;
 
-    console.log('selectedFile', selectedFiles)
     return (
       <React.Fragment>
         <div className="container-fluid">

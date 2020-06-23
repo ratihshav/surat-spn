@@ -159,7 +159,6 @@ class IncomingMailEdit extends Component {
       detailList,
 
     } = this.state;
-    console.log('detailList', detailList)
     const optionsSubmit = dataUser.length !== 0 ?
       dataUser.map(function (data) {
         return { value: data.id, label: data.text };

@@ -168,7 +168,6 @@ export const createAgendaOutgoingMailService = (request) => {
 
 export const approveOutgoingMailService = (request) => {
   const id = window.localStorage.getItem('idOutMail');
-  console.log('masuk')
   const APPROVE_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/approve/${id}`;
   return instance.post(APPROVE_OUTGOING_MAIL_API)
     .then((data) => {
@@ -177,7 +176,6 @@ export const approveOutgoingMailService = (request) => {
       };
     })
     .catch((error) => {
-      console.log('error', error)
       throw 'Gagal Mengubah Data';
     });
 };

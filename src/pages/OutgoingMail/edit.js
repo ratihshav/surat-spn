@@ -166,7 +166,6 @@ class OutgoingMailEdit extends Component {
       detailList,
       optionsValues } = this.state;
 
-    console.log('detailList', detailList)
     const optionsSignature = dataUser.length !== 0 ?
       dataUser.map(function (data) {
         return { label: data.text, value: data.id };
@@ -182,8 +181,6 @@ class OutgoingMailEdit extends Component {
     // const optionsValue = detailList.length !== 0 ?
     //   [{ label: detailList.approval_name, value: detailList.approval_user }]
     //   : null
-    console.log('optionsValue', optionsValues)
-    console.log('optionsSignature', optionsSignature)
 
     return (
       <React.Fragment>

@@ -87,7 +87,7 @@ class Position extends Component {
     const data = val.row.data
     localStorage.setItem('idPosition', JSON.stringify(data.id))
     this.props.history.push({
-      pathname: '/position-permissions',
+      pathname: '/position-permission',
       params: data,
     });
   }

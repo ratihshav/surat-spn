@@ -33,7 +33,6 @@ export const getIncomingMailService = (request) => {
 }
 
 export const createIncomingMailService = (request) => {
-  console.log('reque', request)
   const formData = new FormData();
   formData.append('asal_surat', request.asal_surat);
   formData.append('perihal', request.perihal);

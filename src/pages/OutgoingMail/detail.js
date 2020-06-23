@@ -262,7 +262,6 @@ class OutgoingMailDetail extends Component {
       })
       : null
 
-    console.log('detailList', detailList)
     return (
       <React.Fragment>
         <div className="container-fluid">

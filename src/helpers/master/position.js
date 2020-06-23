@@ -96,6 +96,49 @@ export const getDetailPositionService = (request) => {
     .catch(() => { throw 'Gagal Mengubah Data'; });
 };
 
+//get all permissions
+export const getAllPermissionService = (request) => {
+  const id = window.localStorage.getItem('idPosition');
+
+  const GET_ALL_PERMISSION_API = config.api_endpoint + `/jabatan/permission/all`;
+  return instance.get(GET_ALL_PERMISSION_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+};
+
+//get granted permissions
+export const getGrantedPermissionService = (request) => {
+  const id = window.localStorage.getItem('idPosition');
+
+  const GET_GRANTED_PERMISSION_API = config.api_endpoint + `/jabatan/permission/granted/${id}`;
+  return instance.get(GET_GRANTED_PERMISSION_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+};
+
+//get granted permissions
+export const saveGrantedPermissionService = (request) => {
+  const id = window.localStorage.getItem('idPosition');
+  const formData = new FormData();
+  formData.append('permissions', request);
+
+  const SAVE_GRANTED_PERMISSION_API = config.api_endpoint + `/jabatan/permission/save/${id}`;
+  return instance.post(SAVE_GRANTED_PERMISSION_API, formData)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+};
 
 export async function _handleError(error) {
   // var errorCode = error.code;
