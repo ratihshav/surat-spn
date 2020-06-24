@@ -19,12 +19,13 @@ class IncomingMailDetail extends Component {
     this.state = {
       detailList: [],
       visible: false,
-      modal_center: false,
+      modalCenter: false,
       selectedSignature: null,
       dataUser: [],
       status: '',
       selectedFile: null,
-      stateIdMail: ''
+      stateIdMail: '',
+      modalConfirm: false
     };
   }
 
@@ -55,9 +56,16 @@ class IncomingMailDetail extends Component {
     document.body.classList.add("no_padding");
   }
 
-  tog_center = () => {
+  showModalDispose = () => {
     this.setState(prevState => ({
-      modal_center: !prevState.modal_center
+      modalCenter: !prevState.modalCenter
+    }));
+    this.removeBodyCss();
+  }
+
+  showModalConfirm = () => {
+    this.setState(prevState => ({
+      modalConfirm: !prevState.modalConfirm
     }));
     this.removeBodyCss();
   }
@@ -202,7 +210,9 @@ class IncomingMailDetail extends Component {
       detailList,
       selectedSignature,
       selectedFile,
-      dataUser } = this.state;
+      dataUser,
+      modalCenter,
+      modalConfirm } = this.state;
 
     const optionsSignature = dataUser.length !== 0 ?
       dataUser.map(function (data) {
@@ -253,21 +263,21 @@ class IncomingMailDetail extends Component {
                     <Button
                       color="success"
                       className="mt-1"
-                      onClick={this.tog_center}
+                      onClick={this.showModalDispose}
                       data-toggle="modal"
                       data-target=".bs-example-modal-center">
                       <i className="typcn typcn-input-checked" />Teruskan
                     </Button>
 
                     <Modal
-                      isOpen={this.state.modal_center}
-                      toggle={this.tog_center} >
+                      isOpen={modalCenter}
+                      toggle={this.showModalDispose} >
                       <div className="modal-header  text-white bg-info">
                         <h5 className="modal-title mt-0">Proses Surat Masuk</h5>
                         <button
                           type="button"
                           onClick={() =>
-                            this.setState({ modal_center: false })
+                            this.setState({ modalCenter: false })
                           }
                           className="close"
                           data-dismiss="modal"
@@ -334,13 +344,49 @@ class IncomingMailDetail extends Component {
                     <Button
                       color="danger"
                       className="mt-1"
-                      onClick={this.closeIncomingMail}
+                      onClick={this.showModalConfirm}
                       data-target=".bs-example-modal-center">
                       <i className="typcn typcn-input-checked" />Close
                     </Button>
-                  </div>
-                  <div className="text-right mt-8">
 
+                    <Modal
+                      isOpen={modalConfirm}
+                      toggle={this.showModalConfirm} >
+                      <div className="modal-header  text-white bg-info">
+                        <h5 className="modal-title mt-0">Konfirmasi</h5>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            this.setState({ modalConfirm: false })
+                          }
+                          className="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+
+                      <div className="modal-body">
+                        <h5>Apakah Anda yakin ingin menyelesaikan surat ini?</h5>
+                      </div>
+                      <div className="modal-footer">
+                        <Button
+                          color="success"
+                          className="mt-1"
+                          onClick={this.closeIncomingMail}
+                          data-target=".bs-example-modal-center">
+                          Ya
+                            </Button>
+                        <Button
+                          className="btn btn-secondary"
+                          onClick={() => this.setState({ modalConfirm: false })}
+                          data-target=".bs-example-modal-center">
+                          Batal
+                            </Button>
+                      </div>
+                    </Modal>
                   </div>
                 </CardBody>
               </Card>

@@ -28,7 +28,8 @@ class OutgoingMailDetail extends Component {
       stateIdMail: '',
       isShowModalDispose: false,
       isShowModalAgenda: false,
-      selectedStatusMail: null
+      selectedStatusMail: null,
+      isShowModalConfirm: false
     };
   }
 
@@ -128,7 +129,7 @@ class OutgoingMailDetail extends Component {
     approveOutgoingMailService()
       .then((data) => {
         this.alertSuccess()
-        this.props.history.push('/incoming-mail');
+        this.props.history.push('/outgoing-mail');
       })
       .catch(() => {
         return (
@@ -137,6 +138,13 @@ class OutgoingMailDetail extends Component {
       });
     e.preventDefault();
 
+  }
+
+  showModalConfirm = () => {
+    this.setState(prevState => ({
+      isShowModalConfirm: !prevState.isShowModalConfirm
+    }));
+    this.removeBodyCss();
   }
 
   alertSuccess = () => {
@@ -254,6 +262,7 @@ class OutgoingMailDetail extends Component {
       selectedFile,
       isShowModalDispose,
       isShowModalAgenda,
+      isShowModalConfirm,
       dataUser } = this.state;
 
     const optionsSignature = dataUser.length !== 0 ?
@@ -583,10 +592,48 @@ class OutgoingMailDetail extends Component {
                     <Button
                       color="success"
                       className="mt-1"
-                      onClick={this.doApproveMail}>
-                      {/* data-target=".bs-example-modal-center"> */}
+                      onClick={this.showModalConfirm}>
                       <i className="typcn typcn-input-checked" />Setujui
                     </Button>
+
+                    <Modal
+                      isOpen={isShowModalConfirm}
+                      toggle={this.showModalConfirm} >
+                      <div className="modal-header  text-white bg-info">
+                        <h5 className="modal-title mt-0">Konfirmasi</h5>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            this.setState({ isShowModalConfirm: false })
+                          }
+                          className="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+
+                      <div className="modal-body">
+                        <h5>Apakah Anda yakin ingin menyetujui surat ini?</h5>
+                      </div>
+                      <div className="modal-footer">
+                        <Button
+                          color="success"
+                          className="mt-1"
+                          onClick={this.doApproveMail}
+                          data-target=".bs-example-modal-center">
+                          Ya
+                            </Button>
+                        <Button
+                          className="btn btn-secondary"
+                          onClick={() => this.setState({ isShowModalConfirm: false })}
+                          data-target=".bs-example-modal-center">
+                          Batal
+                            </Button>
+                      </div>
+                    </Modal>
 
                   </div>
                 </CardBody>
