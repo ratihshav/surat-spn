@@ -4,110 +4,28 @@ import Select from "react-select";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
-
-import {
-  searchUser,
-  searchUserSuccess,
-  createOutgoingMail,
-  createOutgoingMailSuccess
-} from "../../store/business/outgoing-mail/actions";
-
+import { getMasterPositionServices } from "../../helpers/master/position"
 import { saveMasterUserService } from "../../helpers/master/user"
 import toast from '../UI/toast';
-
-
-const type = [
-  {
-    label: "Pilih Jabatan",
-    options: [
-      { label: "Ketua Divisi", value: "1" },
-      { label: "Sekretaris Divisi", value: "2" },
-      { label: "Bendahara Divisi", value: "3" }
-    ]
-  },
-];
-
-const classification = [
-  {
-    label: "Pilih Klasifikasi Surat",
-    options: [
-      { label: "IT", value: "IT" },
-      { label: "Keuangan", value: "Keuangan" },
-      { label: "Operasional", value: "Operasional" }
-    ]
-  },
-]
-
-const urgency = [
-  {
-    label: "Pilih Sifat Surat",
-    options: [
-      { label: "Biasa", value: "Biasa" },
-      { label: "Segera", value: "Segera" },
-      { label: "Penting", value: "Penting" }
-    ]
-  }
-]
-
-{/* <Form>
-<Item itemType="group" colCount={1} colSpan={2}>
-  <Item dataField="username" />
-  <Item dataField="full_name" />
-  <Item dataField="email" />
-  <Item dataField="password" editorOptions={{ mode: 'password' }} />
-  <Item dataField="confirm_password" editorOptions={{ mode: 'password' }} />
-  <Item dataField="phone" />
-  <Item dataField="address" />
-</Item>
-</Form> */}
-
 
 class UserAdd extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedGroup: null,
-      selectedClass: null,
-      selectedUrgency: null,
-      selectedFile: null,
-      selectedSignature: null,
-      selectedSubmit: null,
-      dataUser: []
+      selectedPosition: null,
+      dataUser: [],
+      dataPosition: []
     };
 
     this.input = React.createRef();
   }
 
   componentDidMount() {
-    this.getDataUser()
+    this.getDataPosition()
   }
 
-  getDataUser = () => {
-    this.props.searchUser()
-  }
-
-  handleSelectGroup = selectedGroup => {
-    this.setState({ selectedGroup });
-  };
-
-  handleSelectClass = selectedClass => {
-    this.setState({ selectedClass })
-  }
-
-  handleSelectUrgency = selectedUrgency => {
-    this.setState({ selectedUrgency })
-  }
-
-  handleSelectSignature = selectedSignature => {
-    this.setState({ selectedSignature })
-  }
-
-  handleSelectSubmit = selectedSubmit => {
-    this.setState({ selectedSubmit })
-  }
-
-  onFileChange = event => {
-    this.setState({ selectedFile: event.target.files[0] });
+  handleSelectPosition = selectedPosition => {
+    this.setState({ selectedPosition });
   };
 
   saveNewUser = (e) => {
@@ -137,6 +55,16 @@ class UserAdd extends Component {
     e.preventDefault()
   }
 
+  getDataPosition = () => {
+    getMasterPositionServices()
+      .then((data) => {
+        this.setState({
+          dataPosition: data.data
+        })
+      })
+      .catch(() => { throw 'Gagal Mengambil Data' })
+  }
+
   alertSuccess = () => {
     toast.success('Sukses menyimpan data!')
   };
@@ -149,12 +77,16 @@ class UserAdd extends Component {
 
   render() {
     const {
-      selectedGroup,
-      selectedClass,
-      selectedUrgency,
-      selectedFile,
-      selectedSignature,
-      selectedSubmit } = this.state;
+      selectedPosition,
+      dataPosition } = this.state;
+
+
+    const optionsPosition = dataPosition.length !== 0 ?
+      dataPosition.map((data) => {
+        return { value: data.id, label: data.position_name };
+      })
+      : null
+
 
     return (
       <React.Fragment>
@@ -185,9 +117,9 @@ class UserAdd extends Component {
                     </label>
                       <Col sm={10}>
                         <Select
-                          value={selectedGroup}
-                          onChange={this.handleSelectGroup}
-                          options={type}
+                          value={selectedPosition}
+                          onChange={this.handleSelectPosition}
+                          options={optionsPosition}
                           name="type"
                           ref={node => (this.inputNode = node)}
                           required
@@ -429,20 +361,4 @@ class UserAdd extends Component {
   }
 }
 
-const styles = {
-  col: {
-    height: '100vh'
-  }
-}
-
-const mapStatetoProps = state => {
-  const { error, loading, data } = state.OutgoingMail;
-  return { error, loading, data };
-};
-
-export default connect(mapStatetoProps, {
-  searchUser,
-  searchUserSuccess,
-  createOutgoingMail,
-  createOutgoingMailSuccess
-})(UserAdd);
+export default connect()(UserAdd);

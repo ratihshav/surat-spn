@@ -6,6 +6,7 @@ import { Redirect, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { createIncomingMailService } from "../../helpers/master/incomingMail"
 import { searchUserService } from "../../helpers/master/outgoingMail"
+import { getMasterGroupServices } from "../../helpers/master/group"
 
 import toast from '../UI/toast';
 
@@ -19,17 +20,6 @@ const type = [
     ]
   },
 ];
-
-const classification = [
-  {
-    label: "Pilih Klasifikasi Surat",
-    options: [
-      { label: "IT", value: "IT" },
-      { label: "Keuangan", value: "Keuangan" },
-      { label: "Operasional", value: "Operasional" }
-    ]
-  },
-]
 
 const urgency = [
   {
@@ -48,17 +38,19 @@ class IncomingMailCreate extends Component {
     super(props);
     this.state = {
       selectedGroup: null,
-      selectedClass: null,
       selectedUrgency: null,
       selectedFile: null,
       selectedSignature: null,
       selectedSubmit: null,
+      selectedType: null,
+      dataGroup: [],
       dataUser: []
     };
   }
 
   componentDidMount() {
     this.getDataUser()
+    this.getDataGroup()
   }
 
   getDataUser = () => {
@@ -69,14 +61,23 @@ class IncomingMailCreate extends Component {
       .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
+  getDataGroup = () => {
+    getMasterGroupServices()
+      .then((data) => {
+        this.setState({
+          dataGroup: data.data
+        })
+      })
+      .catch(() => { throw 'Gagal Mengambil Data' })
+  }
+
+  handleSelectType = selectedType => {
+    this.setState({ selectedType });
+  };
 
   handleSelectGroup = selectedGroup => {
     this.setState({ selectedGroup });
   };
-
-  handleSelectClass = selectedClass => {
-    this.setState({ selectedClass })
-  }
 
   handleSelectUrgency = selectedUrgency => {
     this.setState({ selectedUrgency })
@@ -133,16 +134,23 @@ class IncomingMailCreate extends Component {
   render() {
     const {
       selectedGroup,
-      selectedClass,
       selectedUrgency,
       selectedFile,
       dataUser,
-      selectedSubmit
+      selectedSubmit,
+      selectedType,
+      dataGroup
     } = this.state;
 
     const optionsSubmit = dataUser.length !== 0 ?
       dataUser.map(function (data) {
         return { value: data.id, label: data.text };
+      })
+      : null
+
+    const optionsGroup = dataGroup.length !== 0 ?
+      dataGroup.map(function (data) {
+        return { value: data.id, label: data.group_name };
       })
       : null
 
@@ -272,8 +280,8 @@ class IncomingMailCreate extends Component {
                     </label>
                       <Col sm={10}>
                         <Select
-                          value={selectedGroup}
-                          onChange={this.handleSelectGroup}
+                          value={selectedType}
+                          onChange={this.handleSelectType}
                           options={type}
                           name="type"
                           ref={node => (this.inputNode = node)}
@@ -330,9 +338,9 @@ class IncomingMailCreate extends Component {
                     </label>
                       <Col sm={10}>
                         <Select
-                          value={selectedClass}
-                          onChange={this.handleSelectClass}
-                          options={classification}
+                          value={selectedGroup}
+                          onChange={this.handleSelectGroup}
+                          options={optionsGroup}
                           name="classification"
                           ref={node => (this.inputNode = node)}
                           required

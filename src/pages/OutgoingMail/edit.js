@@ -4,6 +4,7 @@ import Select from "react-select";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
+import { getMasterGroupServices } from "../../helpers/master/group"
 import { searchUserService, updateOutgoingMailService, getDetailOutgoingMailService } from "../../helpers/master/outgoingMail"
 import toast from '../UI/toast';
 
@@ -14,17 +15,6 @@ const type = [
   { label: "Surat Perintah", value: "Surat Perintah" }
 
 ];
-
-const classification = [
-  {
-    label: "Pilih Klasifikasi Surat",
-    options: [
-      { label: "IT", value: "IT" },
-      { label: "Keuangan", value: "Keuangan" },
-      { label: "Operasional", value: "Operasional" }
-    ]
-  },
-]
 
 const urgency = [
   {
@@ -37,17 +27,17 @@ const urgency = [
   }
 ]
 
-
 class OutgoingMailEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedGroup: null,
-      selectedClass: null,
       selectedUrgency: null,
       selectedFile: null,
       selectedSignature: null,
       selectedSubmit: null,
+      selectedType: null,
+      dataGroup: [],
       dataUser: [],
       detailList: [],
       optionsValues: []
@@ -58,7 +48,7 @@ class OutgoingMailEdit extends Component {
     const idMail = window.localStorage.getItem('idOutMail');
     this.setState({ stateIdMail: idMail })
     this.getDetailList(idMail)
-
+    this.getDataGroup()
     this.getDataUser()
   }
 
@@ -89,26 +79,29 @@ class OutgoingMailEdit extends Component {
       .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
+  getDataGroup = () => {
+    getMasterGroupServices()
+      .then((data) => {
+        this.setState({
+          dataGroup: data.data
+        })
+      })
+      .catch(() => { throw 'Gagal Mengambil Data' })
+  }
+
   handleSelectGroup = selectedGroup => {
     this.setState({ selectedGroup });
   };
 
-  handleSelectClass = selectedClass => {
-    this.setState({ selectedClass })
-  }
+  handleSelectType = selectedType => {
+    this.setState({ selectedType });
+  };
 
   handleSelectUrgency = selectedUrgency => {
     this.setState({ selectedUrgency })
   }
 
   handleSelectSignature = selectedSignature => {
-    // const { detailList } = this.state
-    // const options = detailList.length !== 0 ?
-    //   { value: detailList.approval_user, data: detailList.approval_name }
-    //   : null
-
-
-
     this.setState({ selectedSignature })
   }
 
@@ -157,7 +150,8 @@ class OutgoingMailEdit extends Component {
   render() {
     const {
       selectedGroup,
-      selectedClass,
+      dataGroup,
+      selectedType,
       selectedUrgency,
       selectedFile,
       selectedSignature,
@@ -178,9 +172,11 @@ class OutgoingMailEdit extends Component {
       })
       : null
 
-    // const optionsValue = detailList.length !== 0 ?
-    //   [{ label: detailList.approval_name, value: detailList.approval_user }]
-    //   : null
+    const optionsGroup = dataGroup.length !== 0 ?
+      dataGroup.map(function (data) {
+        return { value: data.id, label: data.group_name };
+      })
+      : null
 
     return (
       <React.Fragment>
@@ -214,8 +210,8 @@ class OutgoingMailEdit extends Component {
                     </label>
                       <Col sm={10}>
                         <Select
-                          // value={selectedGroup}
-                          onChange={this.handleSelectGroup}
+                          value={selectedType}
+                          onChange={this.handleSelectType}
                           options={type}
                           name="type"
                           ref={node => (this.inputNode = node)}
@@ -234,9 +230,9 @@ class OutgoingMailEdit extends Component {
                     </label>
                       <Col sm={10}>
                         <Select
-                          value={selectedClass}
-                          onChange={this.handleSelectClass}
-                          options={classification}
+                          value={selectedGroup}
+                          onChange={this.handleSelectGroup}
+                          options={optionsGroup}
                           name="classification"
                           ref={node => (this.inputNode = node)}
                           required
