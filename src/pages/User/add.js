@@ -73,7 +73,9 @@ class UserAdd extends Component {
     toast.error('Gagal menyimpan data')
   }
 
-
+  goBack = () => {
+    this.props.history.push('/user')
+  }
 
   render() {
     const {
@@ -344,11 +346,18 @@ class UserAdd extends Component {
                     <div className="text-center mt-4">
                       <Button
                         color="success"
-                        className="mt-1"
-                      // onClick={this.saveOutgoingMail}
-                      >
+                        className="mt-1" >
                         <i className="typcn typcn-input-checked" />Simpan
                     </Button>
+
+                    &nbsp; &nbsp;
+                    <Button
+                        color="grayMed"
+                        className="mt-1"
+                        onClick={this.goBack}>
+                        <i className="ion ion-md-arrow-round-back" /> Kembali
+                      </Button>
+
                     </div>
                   </CardBody>
                 </Card>

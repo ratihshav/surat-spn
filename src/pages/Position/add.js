@@ -63,6 +63,10 @@ class PositionAdd extends Component {
     this.setState({ selectedGroup });
   };
 
+  goBack = () => {
+    this.props.history.push('/position')
+  }
+
   render() {
     const { dataGroup, selectedGroup } = this.state
 
@@ -153,6 +157,14 @@ class PositionAdd extends Component {
                         className="mt-1" >
                         <i className="typcn typcn-input-checked" />Simpan
                     </Button>
+
+                    &nbsp; &nbsp;
+                    <Button
+                        color="grayMed"
+                        className="mt-1"
+                        onClick={this.goBack}>
+                        <i className="ion ion-md-arrow-round-back" /> Kembali
+                      </Button>
                     </div>
                   </CardBody>
                 </Card>

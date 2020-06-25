@@ -113,7 +113,9 @@ class PositionPermission extends Component {
     toast.error('Gagal menyimpan data')
   }
 
-
+  goBack = () => {
+    this.props.history.push('/position')
+  }
 
   render() {
     const {
@@ -188,119 +190,119 @@ class PositionPermission extends Component {
                         <Card style={{ borderWidth: 1, padding: 5 }}>
                           <table className="table table-bordered mb-0">
                             <tbody>
-                            <tr>
-                              <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Jabatan</h5></td>
-                            </tr>
+                              <tr>
+                                <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Jabatan</h5></td>
+                              </tr>
 
-                            {allPermission.length !== 0 ? allPermission[0].jabatan.actions.map((item, index) => {
-                              const value = string !== null ? string.includes(item.value) : false
-                              return (
-                                <tr key={index}>
-                                  <td>{item.text}</td>
-                                  <td>
-                                    <SwitchComponent
-                                      onColor="#EF476F"
-                                      onChange={this.handleToogle}
-                                      value={item.value}
-                                      defaultChecked={value}
-                                    />
-                                  </td>
+                              {allPermission.length !== 0 ? allPermission[0].jabatan.actions.map((item, index) => {
+                                const value = string !== null ? string.includes(item.value) : false
+                                return (
+                                  <tr key={index}>
+                                    <td>{item.text}</td>
+                                    <td>
+                                      <SwitchComponent
+                                        onColor="#EF476F"
+                                        onChange={this.handleToogle}
+                                        value={item.value}
+                                        defaultChecked={value}
+                                      />
+                                    </td>
 
-                                </tr>
-                              )
-                            })
-                              : null}
+                                  </tr>
+                                )
+                              })
+                                : null}
 
-                            <tr>
-                              <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Surat Keluar</h5></td>
-                            </tr>
-                            {allPermission.length !== 0 ? allPermission[0].suratKeluar.actions.map((item, index) => {
-                              const string = grantedPermission.length !== 0 ? grantedPermission[0].toString() : null
-                              const value = string !== null ? string.includes(item.value) : false
-                              return (
-                                <tr key={index}>
-                                  <td>{item.text}</td>
-                                  <td>
-                                    <SwitchComponent
-                                      onColor="#EF476F"
-                                      onChange={this.handleToogle}
-                                      value={item.value}
-                                      defaultChecked={value}
+                              <tr>
+                                <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Surat Keluar</h5></td>
+                              </tr>
+                              {allPermission.length !== 0 ? allPermission[0].suratKeluar.actions.map((item, index) => {
+                                const string = grantedPermission.length !== 0 ? grantedPermission[0].toString() : null
+                                const value = string !== null ? string.includes(item.value) : false
+                                return (
+                                  <tr key={index}>
+                                    <td>{item.text}</td>
+                                    <td>
+                                      <SwitchComponent
+                                        onColor="#EF476F"
+                                        onChange={this.handleToogle}
+                                        value={item.value}
+                                        defaultChecked={value}
 
-                                    />
-                                  </td>
+                                      />
+                                    </td>
 
-                                </tr>
-                              )
-                            })
-                              : null}
+                                  </tr>
+                                )
+                              })
+                                : null}
 
-                            <tr>
-                              <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Surat Masuk</h5></td>
-                            </tr>
-                            {allPermission.length !== 0 ? allPermission[0].suratMasuk.actions.map((item, index) => {
-                              const value = string !== null ? string.includes(item.value) : false
-                              return (
-                                <tr key={index}>
-                                  <td>{item.text}</td>
-                                  <td>
-                                    <SwitchComponent
-                                      onColor="#EF476F"
-                                      onChange={this.handleToogle}
-                                      defaultChecked={value}
-                                      value={item.value}
-                                    />
-                                  </td>
+                              <tr>
+                                <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Surat Masuk</h5></td>
+                              </tr>
+                              {allPermission.length !== 0 ? allPermission[0].suratMasuk.actions.map((item, index) => {
+                                const value = string !== null ? string.includes(item.value) : false
+                                return (
+                                  <tr key={index}>
+                                    <td>{item.text}</td>
+                                    <td>
+                                      <SwitchComponent
+                                        onColor="#EF476F"
+                                        onChange={this.handleToogle}
+                                        defaultChecked={value}
+                                        value={item.value}
+                                      />
+                                    </td>
 
-                                </tr>
-                              )
-                            })
-                              : null}
+                                  </tr>
+                                )
+                              })
+                                : null}
 
-                            <tr>
-                              <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Template Surat</h5></td>
-                            </tr>
-                            {allPermission.length !== 0 ? allPermission[0].templateSurat.actions.map((item, index) => {
-                              const value = string !== null ? string.includes(item.value) : false
-                              return (
-                                <tr key={index}>
-                                  <td>{item.text}</td>
-                                  <td>
-                                    <SwitchComponent
-                                      onColor="#EF476F"
-                                      onChange={this.handleToogle}
-                                      defaultChecked={value}
-                                      value={item.value}
-                                    />
-                                  </td>
+                              <tr>
+                                <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Template Surat</h5></td>
+                              </tr>
+                              {allPermission.length !== 0 ? allPermission[0].templateSurat.actions.map((item, index) => {
+                                const value = string !== null ? string.includes(item.value) : false
+                                return (
+                                  <tr key={index}>
+                                    <td>{item.text}</td>
+                                    <td>
+                                      <SwitchComponent
+                                        onColor="#EF476F"
+                                        onChange={this.handleToogle}
+                                        defaultChecked={value}
+                                        value={item.value}
+                                      />
+                                    </td>
 
-                                </tr>
-                              )
-                            })
-                              : null}
+                                  </tr>
+                                )
+                              })
+                                : null}
 
-                            <tr>
-                              <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>User</h5></td>
-                            </tr>
-                            {allPermission.length !== 0 ? allPermission[0].user.actions.map((item, index) => {
-                              const value = string !== null ? string.includes(item.value) : false
-                              return (
-                                <tr key={index}>
-                                  <td >{item.text}</td>
-                                  <td>
-                                    <SwitchComponent
-                                      onColor="#EF476F"
-                                      onChange={this.handleToogle}
-                                      defaultChecked={value}
-                                      value={item.value}
-                                    />
-                                  </td>
+                              <tr>
+                                <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>User</h5></td>
+                              </tr>
+                              {allPermission.length !== 0 ? allPermission[0].user.actions.map((item, index) => {
+                                const value = string !== null ? string.includes(item.value) : false
+                                return (
+                                  <tr key={index}>
+                                    <td >{item.text}</td>
+                                    <td>
+                                      <SwitchComponent
+                                        onColor="#EF476F"
+                                        onChange={this.handleToogle}
+                                        defaultChecked={value}
+                                        value={item.value}
+                                      />
+                                    </td>
 
-                                </tr>
-                              )
-                            })
-                              : null}
-</tbody>
+                                  </tr>
+                                )
+                              })
+                                : null}
+                            </tbody>
                           </table>
                         </Card>
                       </Col>
@@ -315,6 +317,14 @@ class PositionPermission extends Component {
                       >
                         <i className="typcn typcn-input-checked" />Simpan
                     </Button>
+
+                    &nbsp; &nbsp;
+                    <Button
+                        color="grayMed"
+                        className="mt-1"
+                        onClick={this.goBack}>
+                        <i className="ion ion-md-arrow-round-back" /> Kembali
+                      </Button>
                     </div>
                   </CardBody>
                 </Card>

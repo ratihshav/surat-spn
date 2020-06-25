@@ -145,6 +145,7 @@ $info:          $cyan;
 $warning:       $yellow;
 $danger:        $red;
 $light:         $gray-100;
+$grayMed:       $gray-700;
 $dark:          $gray-800;
 
 $theme-colors: ();
@@ -159,7 +160,8 @@ $theme-colors: map-merge(
     "danger":     $danger,
     "pink":       $pink,
     "light":      $light,
-    "dark":       $dark
+    "dark":       $dark,
+    "grayMed":    $grayMed
   ),
   $theme-colors
 );

@@ -147,6 +147,10 @@ class IncomingMailEdit extends Component {
     toast.error('Gagal menyimpan data')
   }
 
+  goBack = () => {
+    this.props.history.push('/incoming-mail')
+  }
+
   render() {
     const {
       selectedGroup,
@@ -423,6 +427,14 @@ class IncomingMailEdit extends Component {
                         className="mt-1"
                       >
                         <i className="typcn typcn-input-checked" />Simpan
+                      </Button>
+
+                      &nbsp; &nbsp;
+                    <Button
+                        color="grayMed"
+                        className="mt-1"
+                        onClick={this.goBack}>
+                        <i className="ion ion-md-arrow-round-back" /> Kembali
                       </Button>
                     </div>
                   </CardBody>
