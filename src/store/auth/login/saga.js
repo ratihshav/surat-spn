@@ -14,14 +14,14 @@ import {
 } from './actions';
 
 import {
-  sanctumService,
+  loginUserService,
   logoutUserService
 } from '../../../helpers/auth';
 
 
 function* loginUser({ payload: { request } }) {
   try {
-    const response = yield call(sanctumService, request);
+    const response = yield call(loginUserService, request);
     yield put(loginUserSuccess(response));
     this.props.history.push('/dashboard');
   } catch (error) {

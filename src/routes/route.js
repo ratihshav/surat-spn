@@ -17,8 +17,7 @@ const AppRoute = ({
       render={props => {
         if (isAuthProtected && !getAuthenticatedUser()) {
           return (
-            <Redirect
-              to={{ pathname: "/login", state: { from: props.location } }}
+            <Redirect to="/login"
             />
           );
         }

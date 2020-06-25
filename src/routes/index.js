@@ -6,8 +6,8 @@ import { Redirect } from "react-router-dom";
 // Authentication related pages
 import Login from "../pages/Authentication/Login";
 import Logout from "../pages/Authentication/Logout";
-import Register from "../pages/Authentication/Register";
-import ForgetPwd from "../pages/Authentication/FogetPassword";
+import ResetPwd from "../pages/Authentication/ResetPassword";
+import ForgetPwd from "../pages/Authentication/ForgetPassword";
 
 import Dashboard from "../pages/Dashboard";
 
@@ -83,15 +83,15 @@ const authProtectedRoutes = [
   { path: "/template-mail-create", component: TemplateMailCreate },
   { path: "/template-mail-edit", component: TemplateMailEdit },
 
-  { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> }
+  { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
 ];
 
 const publicRoutes = [
   { path: "/login", component: Login },
-  { path: "/", exact: true, component: () => <Redirect to="/login" /> },
   { path: "/logout", component: Logout },
   { path: "/forget-password", component: ForgetPwd },
-  { path: "/pages-register", component: Register },
+  { path: "/reset-password/:params?", component: ResetPwd },
+  { path: "/", exact: true, component: () => <Redirect to="/login" /> },
 
 ];
 

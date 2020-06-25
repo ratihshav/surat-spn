@@ -354,7 +354,7 @@ class OutgoingMailDetail extends Component {
                                 value="1"
                                 onChange={this.handleStatusMail}
                                 ref={node => (this.inputNode = node)} />&nbsp;
-                                            <label for="accept">Disetujui</label>
+                                            <label htmlFor="accept">Disetujui</label>
 
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -365,7 +365,7 @@ class OutgoingMailDetail extends Component {
                                 value="0"
                                 onChange={this.handleStatusMail}
                                 ref={node => (this.inputNode = node)} />&nbsp;
-                                            <label for="reject"> Dikembalikan</label>
+                                            <label htmlFor="reject"> Dikembalikan</label>
                             </Col>
                           </Row>
 
@@ -565,7 +565,7 @@ class OutgoingMailDetail extends Component {
                                   />
                                   <label
                                     className="custom-file-label"
-                                    for="validatedCustomFile"
+                                    htmlFor="validatedCustomFile"
                                     style={{ zIndex: 0 }}>
                                     {selectedFile !== null && selectedFile !== undefined ? selectedFile.name : 'Belum ada file yang dipilih'}
                                   </label>

@@ -359,7 +359,7 @@ class OutgoingMailCreate extends Component {
                             />
                             <label
                               className="custom-file-label"
-                              for="validatedCustomFile"
+                              htmlFor="validatedCustomFile"
                               style={{ zIndex: 0 }}>
                               {selectedFile !== null && selectedFile !== undefined ? selectedFile.name : 'No file chosen'}
                             </label>

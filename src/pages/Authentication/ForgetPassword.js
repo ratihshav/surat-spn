@@ -1,18 +1,12 @@
 import React, { Component } from "react";
-import { Row, Col, Card, CardBody, Alert } from "reactstrap";
-
-// Redux
+import { Row, Col, Card, CardBody, Alert, Button } from "reactstrap";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
-
-// availity-reactstrap-validation
 import { AvForm, AvField } from "availity-reactstrap-validation";
-
-// action
 import { userForgetPassword } from "../../store/actions";
-
-// import images
-import logoSm from "../../assets/images/logo-sm.png";
+import logoKabKerinci from "../../assets/images/logo-kab-kerinci.png"
+import { forgetPasswordService } from "../../helpers/auth"
+import toast from '../UI/toast';
 
 class ForgetPasswordPage extends Component {
   constructor(props) {
@@ -20,40 +14,59 @@ class ForgetPasswordPage extends Component {
     this.state = {};
 
     // handleValidSubmit
-    this.handleValidSubmit = this.handleValidSubmit.bind(this);
+    // this.handleValidSubmit = this.handleValidSubmit.bind(this);
   }
 
   // handleValidSubmit
-  handleValidSubmit(event, values) {
-    this.props.userForgetPassword(values, this.props.history);
+  handleValidSubmit = (e, values) => {
+    console.log('values', values)
+    forgetPasswordService(values)
+      .then((data) => {
+        this.alertSuccess()
+      })
+      .catch(() => {
+        this.alertError()
+      });
+    e.preventDefault();
+  }
+
+  alertSuccess = () => {
+    toast.success('Sukses! Silahkan cek e-mail Anda')
+  };
+
+  alertError = () => {
+    toast.error('Gagal')
   }
 
   render() {
     return (
       <React.Fragment>
-        <div className="home-btn d-none d-sm-block">
-          <Link to="/" className="text-dark">
-            <i className="fas fa-home h2"></i>
-          </Link>
-        </div>
         <div className="account-pages my-5 pt-5">
           <div className="container">
             <Row className="justify-content-center">
               <Col md={8} lg={6} xl={5}>
                 <div className="position-relative">
+
+                  <div className="text-primary text-center p-4">
+                    <Link to="/" className="logo logo-admin">
+                      <img src={logoKabKerinci} height="150" alt="" />
+                      <h1 className="text-blue">
+                        e-Office Dinas Pendidikan
+                            <br />
+                          Kabupaten Kerinci
+                        </h1>
+                    </Link>
+                  </div>
+
                   <Card className="overflow-hidden">
                     <div className="bg-primary">
                       <div className="text-primary text-center p-4">
-                        <h5 className="text-white font-size-20">
-                          Forget Password
+                        <h5 className="text-white font-size-24">
+                          Lupa Password
                         </h5>
-                        <p className="text-white-50">
-                          Enter your email below and we would send a link to
-                          reset your password.
+                        <p className="text-white">
+                          Masukkan e-mail Anda yang terdaftar. Kami akan mengirimkan kode verifikasi untuk atur ulang password ke e-mail Anda.
                         </p>
-                        <Link to="/" className="logo logo-admin">
-                          <img src={logoSm} height="24" alt="logo" />
-                        </Link>
                       </div>
                     </div>
 
@@ -72,35 +85,32 @@ class ForgetPasswordPage extends Component {
 
                         <AvForm
                           className="form-horizontal mt-4"
-                          onValidSubmit={this.handleValidSubmit}
-                        >
+                          onValidSubmit={this.handleValidSubmit}>
                           <div className="form-group">
                             <AvField
                               name="email"
-                              label="Email"
                               className="form-control"
-                              placeholder="Enter email"
+                              placeholder="Masukkan e-mail Anda"
                               type="email"
                               required
                             />
                           </div>
-                          <Row className="form-group">
-                            <Col className="text-right">
-                              <button
-                                className="btn btn-primary w-md waves-effect waves-light"
-                                type="submit"
-                              >
-                                Reset
-                              </button>
-                            </Col>
-                          </Row>
+                          <br /><br />
+                          <div className="button-items">
+                            <Button
+                              color="primary"
+                              className="btn btn-primary btn-block waves-effect waves-light">
+                              Kirim
+                                </Button>
+
+                          </div>
                         </AvForm>
                       </div>
                     </CardBody>
                   </Card>
                   <div className="mt-5 text-center">
                     <p>
-                      Go back to{" "}
+                      Kembali ke{" "}
                       <Link
                         to="pages-login"
                         className="font-weight-medium text-primary"
@@ -109,10 +119,8 @@ class ForgetPasswordPage extends Component {
                       </Link>{" "}
                     </p>
                     <p className="mb-0">
-                      © {new Date().getFullYear()} Veltrix. Crafted with{" "}
-                      <i className="mdi mdi-heart text-danger"></i> by
-                      Themesbrand
-                    </p>
+                      © {new Date().getFullYear()} Ikhwan Komputer. All Rights Reserved
+                  </p>
                   </div>
                 </div>
               </Col>

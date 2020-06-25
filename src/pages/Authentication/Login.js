@@ -1,33 +1,22 @@
 import React, { Component } from "react";
 import { Row, Col, Card, CardBody, Alert, Button } from "reactstrap";
-
-// Redux
 import { connect } from "react-redux";
-import { withRouter, Link, Redirect } from "react-router-dom";
-
-// availity-reactstrap-validation
+import { withRouter, Link } from "react-router-dom";
 import { AvForm, AvField } from "availity-reactstrap-validation";
-
 import Loader from "../../components/Loader";
-// actions
 import { loginUser, loginUserSuccess } from "../../store/actions";
-
-// import images
 import logoKabKerinci from "../../assets/images/logo-kab-kerinci.png"
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-
-    // handleValidSubmit
-    this.handleValidSubmit = this.handleValidSubmit.bind(this);
   }
 
-  // handleValidSubmit
-  handleValidSubmit(event, values) {
-    this.props.loginUser(values, this.props.history);
+  handleValidSubmit = (event, values) => {
+    this.props.loginUser(values);
   }
+
 
 
   render() {
@@ -165,4 +154,4 @@ const mapStatetoProps = state => {
 
 // const mapStatetoProps = (response) => ({response});
 
-export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess })(Login));
+export default (connect(mapStatetoProps, { loginUser, loginUserSuccess })(Login));

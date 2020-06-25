@@ -1,11 +1,12 @@
 
 import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, Label } from 'reactstrap';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link, Redirect } from 'react-router-dom';
 
 // users
 import user4 from '../assets/images/users/user-4.jpg';
 import { logoutUserService } from '../helpers/auth'
+
 class ProfileMenu extends Component {
 
   constructor(props) {
@@ -25,17 +26,16 @@ class ProfileMenu extends Component {
   logout = () => {
     logoutUserService()
       .then((data) => {
-        window.localStorage.clear();
+        window.localStorage.clear()
         this.props.history.push('/login')
       })
       .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
-
   render() {
 
     return (
-      <React.Fragment>
+      <React.Fragment >
         <Dropdown isOpen={this.state.menu} toggle={this.toggle} className="d-inline-block" >
           <DropdownToggle className="btn header-item waves-effect" id="page-header-user-dropdown" tag="button">
             <img className="rounded-circle header-profile-user" src={user4} alt="Header Avatar" />
@@ -49,14 +49,14 @@ class ProfileMenu extends Component {
             </Link>
             <div className="dropdown-divider"></div>
             <Link
-              to='#'
+              to='/'
               className="dropdown-item">
               <i className="mdi mdi-logout font-size-17 align-middle mr-1"></i>
               <span onClick={this.logout}>Logout</span>
             </Link>
           </DropdownMenu>
         </Dropdown>
-      </React.Fragment>
+      </React.Fragment >
     );
   }
 }

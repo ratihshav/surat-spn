@@ -387,7 +387,7 @@ class UserEdit extends Component {
                                             checked={dataUser.jenis_kelamin === 'Laki-laki'}
                                             onChange={this.handleChangeGender}
                                             ref={node => (this.inputNode = node)} />&nbsp;
-                                            <label for="accept"> Laki-laki</label>
+                                            <label htmlFor="accept"> Laki-laki</label>
 
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -399,7 +399,7 @@ class UserEdit extends Component {
                                             checked={dataUser.jenis_kelamin === 'Perempuan'}
                                             onChange={this.handleChangeGender}
                                             ref={node => (this.inputNode = node)} />&nbsp;
-                                            <label for="reject"> Perempuan</label>
+                                            <label htmlFor="reject"> Perempuan</label>
                                         </Col>
                                       </Row>
                                     </Col>
