@@ -42,7 +42,7 @@ export const createIncomingMailService = (request) => {
   formData.append('to_user_id', request.to_user_id);
   formData.append('sifat_surat', request.sifat_surat);
   formData.append('klasifikasi', request.klasifikasi);
-  formData.append('prioritas', request.prioritas);
+  // formData.append('prioritas', request.prioritas);
   formData.append('keterangan', request.keterangan);
   formData.append('file', request.file);
 
@@ -68,7 +68,7 @@ export const updateIncomingMailService = (request) => {
   formData.append('to_user_id', request.to_user_id);
   formData.append('sifat_surat', request.sifat_surat);
   formData.append('klasifikasi', request.klasifikasi);
-  formData.append('prioritas', request.prioritas);
+  // formData.append('prioritas', request.prioritas);
   formData.append('keterangan', request.keterangan);
   formData.append('file', request.file);
 
@@ -80,18 +80,6 @@ export const updateIncomingMailService = (request) => {
       };
     })
     .catch(() => { throw 'Gagal Mengubah Data'; });
-}
-
-export const searchUserService = (request) => {
-
-  const SEARCH_USER_API = config.api_endpoint + `/user/search`
-  return instance.get(SEARCH_USER_API)
-    .then((data) => {
-      return {
-        data: data.data
-      };
-    })
-    .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
 }
 
 export const getDetailIncomingMailService = (request) => {

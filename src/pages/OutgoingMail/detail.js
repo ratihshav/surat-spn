@@ -7,11 +7,11 @@ import moment from 'moment'
 
 import {
   getDetailOutgoingMailService,
-  searchUserService,
   createDisposeOutgoingMailService,
   createAgendaOutgoingMailService,
   approveOutgoingMailService
 } from "../../helpers/master/outgoingMail"
+import { searchUserService } from "../../helpers/master/user"
 import woman from "../../assets/images/woman.png";
 import toast from '../UI/toast';
 

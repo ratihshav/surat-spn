@@ -1,60 +1,72 @@
 import React, { Component } from "react";
-import { Row, Col, Card, CardBody, Button, Toast } from "reactstrap";
+import { Row, Col, Card, CardBody, Button, Toast } from "reactstrap"
 import Select from "react-select";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { createIncomingMailService } from "../../helpers/master/incomingMail"
-import { searchUserService } from "../../helpers/master/outgoingMail"
+import { searchUserSMService } from "../../helpers/master/user"
 import { getMasterGroupServices } from "../../helpers/master/group"
-
+import { searchMasterClassService } from '../../helpers/master/classification'
 import toast from '../UI/toast';
 
-const type = [
-  {
-    label: "Pilih Tipe Surat",
-    options: [
-      { label: "Surat Keterangan", value: "Surat Keterangan" },
-      { label: "Surat Biasa", value: "Surat Biasa" },
-      { label: "Surat Perintah", value: "Surat Perintah" }
-    ]
-  },
-];
+// const type = [
+//   {
+//     label: "Pilih Tipe Surat",
+//     options: [
+//       { label: "Surat Keterangan", value: "Surat Keterangan" },
+//       { label: "Surat Biasa", value: "Surat Biasa" },
+//       { label: "Surat Perintah", value: "Surat Perintah" }
+//     ]
+//   },
+// ];
 
-const urgency = [
-  {
-    label: "Pilih Sifat Surat",
-    options: [
-      { label: "Biasa", value: "Biasa" },
-      { label: "Segera", value: "Segera" },
-      { label: "Penting", value: "Penting" }
-    ]
-  }
-]
+//  for later
+// const urgency = [
+//   {
+//     label: "Pilih Sifat Surat",
+//     options: [
+//       { label: "Biasa", value: "Biasa" },
+//       { label: "Segera", value: "Segera" },
+//       { label: "Penting", value: "Penting" }
+//     ]
+//   }
+// ]
 
 
 class IncomingMailCreate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedGroup: null,
       selectedUrgency: null,
       selectedFile: null,
       selectedSignature: null,
       selectedSubmit: null,
       selectedType: null,
+      selectedClass: null,
       dataGroup: [],
-      dataUser: []
+      dataUser: [],
+      dataClass: []
     };
   }
 
   componentDidMount() {
     this.getDataUser()
-    this.getDataGroup()
+    this.getDataClass()
+  }
+
+  getDataClass = () => {
+    searchMasterClassService()
+      .then((data) => {
+        this.setState({
+          dataClass: data.data.data
+        })
+      })
+      .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
   getDataUser = () => {
-    searchUserService()
+    searchUserSMService()
       .then((data) => {
         this.setState({ dataUser: data.data.data })
       })
@@ -75,8 +87,8 @@ class IncomingMailCreate extends Component {
     this.setState({ selectedType });
   };
 
-  handleSelectGroup = selectedGroup => {
-    this.setState({ selectedGroup });
+  handleSelectClass = selectedClass => {
+    this.setState({ selectedClass });
   };
 
   handleSelectUrgency = selectedUrgency => {
@@ -104,7 +116,7 @@ class IncomingMailCreate extends Component {
       to_user_id: e.target.sendto.value,
       sifat_surat: e.target.type.value,
       lampiran: e.target.attachment.value,
-      prioritas: e.target.urgency.value,
+      // prioritas: e.target.urgency.value,
       klasifikasi: e.target.classification.value,
       keterangan: e.target.description.value,
       file: this.state.selectedFile
@@ -137,13 +149,13 @@ class IncomingMailCreate extends Component {
 
   render() {
     const {
-      selectedGroup,
       selectedUrgency,
       selectedFile,
       dataUser,
       selectedSubmit,
       selectedType,
-      dataGroup
+      selectedClass,
+      dataClass
     } = this.state;
 
     const optionsSubmit = dataUser.length !== 0 ?
@@ -152,9 +164,9 @@ class IncomingMailCreate extends Component {
       })
       : null
 
-    const optionsGroup = dataGroup.length !== 0 ?
-      dataGroup.map(function (data) {
-        return { value: data.id, label: data.group_name };
+    const optionsClass = dataClass.length !== 0 ?
+      dataClass.map(function (data) {
+        return { value: data.id, label: data.text };
       })
       : null
 
@@ -283,10 +295,10 @@ class IncomingMailCreate extends Component {
                         Sifat Surat
                     </label>
                       <Col sm={10}>
-                        <Select
-                          value={selectedType}
-                          onChange={this.handleSelectType}
-                          options={type}
+                        <input
+                          className="form-control"
+                          type="text"
+                          id="example-text-input"
                           name="type"
                           ref={node => (this.inputNode = node)}
                           required
@@ -314,7 +326,8 @@ class IncomingMailCreate extends Component {
                       </Col>
                     </Row>
 
-                    <Row className="form-group">
+                    {/* for later */}
+                    {/* <Row className="form-group">
                       <label
                         htmlFor="example-search-input"
                         className="col-sm-2 col-form-label"
@@ -331,7 +344,7 @@ class IncomingMailCreate extends Component {
                           required
                         />
                       </Col>
-                    </Row>
+                    </Row> */}
 
                     <Row className="form-group">
                       <label
@@ -342,9 +355,9 @@ class IncomingMailCreate extends Component {
                     </label>
                       <Col sm={10}>
                         <Select
-                          value={selectedGroup}
-                          onChange={this.handleSelectGroup}
-                          options={optionsGroup}
+                          value={selectedClass}
+                          onChange={this.handleSelectClass}
+                          options={optionsClass}
                           name="classification"
                           ref={node => (this.inputNode = node)}
                           required

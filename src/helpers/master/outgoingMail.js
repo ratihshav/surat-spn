@@ -80,18 +80,6 @@ export const updateOutgoingMailService = (request) => {
     .catch(() => { throw 'Gagal Mengubah Data'; });
 }
 
-export const searchUserService = (request) => {
-
-  const SEARCH_USER_API = config.api_endpoint + `/user/search`
-  return instance.get(SEARCH_USER_API)
-    .then((data) => {
-      return {
-        data: data.data
-      };
-    })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
-}
-
 export const getDetailOutgoingMailService = (request) => {
 
   const id = window.localStorage.getItem('idOutMail');

@@ -26,6 +26,8 @@ export const getAuthenticatedUser = () => {
   return JSON.parse(localStorage.getItem("authUser"));
 };
 
+setTimeout(getAuthenticatedUser, 50);
+
 export const loginUserService = (request) => {
   const sanctum = config.endpoint + '/sanctum/csrf-cookie';
   const LOGIN_API_ENDPOINT = config.api_endpoint + '/login';
@@ -51,43 +53,6 @@ export const loginUserService = (request) => {
 }
 
 
-export const logoutUserService = (request) => {
-  const LOGOUT_USER_API = config.api_endpoint + `/logout`
-  return instance.post(LOGOUT_USER_API)
-    .then((data) => {
-      return {
-        data: data.data
-      };
-    })
-    .catch((error) => { console.log('error', error) });
-}
-
-export const forgetPasswordService = (request) => {
-  const FORGET_PASSWORD_API = config.api_endpoint + '/forgotPassword'
-  return instance.post(FORGET_PASSWORD_API, request)
-    .then((data) => {
-      return {
-        data: data
-      };
-    })
-    .catch((error) => { throw 'Gagal'; });
-}
-
-export const resetPasswordService = (request) => {
-  const formData = new FormData();
-  formData.append('email', request.email);
-  formData.append('konci_pas', request.konci_pas);
-  formData.append('new_password', request.password);
-
-  const RESET_PASSWORD_API = config.api_endpoint + '/resetPassword'
-  return instance.post(RESET_PASSWORD_API, formData)
-    .then((data) => {
-      return {
-        data: data.data
-      };
-    })
-    .catch((error) => { throw 'Gagal'; });
-}
 
 export const setLoggeedInUser = user => {
   localStorage.setItem("authUser", JSON.stringify(user));

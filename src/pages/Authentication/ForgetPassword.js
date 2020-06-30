@@ -5,7 +5,7 @@ import { withRouter, Link } from "react-router-dom";
 import { AvForm, AvField } from "availity-reactstrap-validation";
 import { userForgetPassword } from "../../store/actions";
 import logoKabKerinci from "../../assets/images/logo-kab-kerinci.png"
-import { forgetPasswordService } from "../../helpers/auth"
+import { forgetPasswordService } from "../../helpers/master/user"
 import toast from '../UI/toast';
 
 class ForgetPasswordPage extends Component {

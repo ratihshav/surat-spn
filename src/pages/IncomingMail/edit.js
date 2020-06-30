@@ -5,31 +5,31 @@ import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { updateIncomingMailService, getDetailIncomingMailService } from "../../helpers/master/incomingMail"
-import { searchUserService } from "../../helpers/master/outgoingMail"
+import { searchUserSMService } from "../../helpers/master/user"
 import { getMasterGroupServices } from "../../helpers/master/group"
 import toast from '../UI/toast';
 
-const type = [
-  {
-    label: "Pilih Tipe Surat",
-    options: [
-      { label: "Surat Keterangan", value: "Surat Keterangan" },
-      { label: "Surat Biasa", value: "Surat Biasa" },
-      { label: "Surat Perintah", value: "Surat Perintah" }
-    ]
-  },
-];
+// const type = [
+//   {
+//     label: "Pilih Tipe Surat",
+//     options: [
+//       { label: "Surat Keterangan", value: "Surat Keterangan" },
+//       { label: "Surat Biasa", value: "Surat Biasa" },
+//       { label: "Surat Perintah", value: "Surat Perintah" }
+//     ]
+//   },
+// ];
 
-const urgency = [
-  {
-    label: "Pilih Sifat Surat",
-    options: [
-      { label: "Biasa", value: "Biasa" },
-      { label: "Segera", value: "Segera" },
-      { label: "Penting", value: "Penting" }
-    ]
-  }
-]
+// const urgency = [
+//   {
+//     label: "Pilih Sifat Surat",
+//     options: [
+//       { label: "Biasa", value: "Biasa" },
+//       { label: "Segera", value: "Segera" },
+//       { label: "Penting", value: "Penting" }
+//     ]
+//   }
+// ]
 
 class IncomingMailEdit extends Component {
   constructor(props) {
@@ -56,7 +56,7 @@ class IncomingMailEdit extends Component {
   }
 
   getDataUser = () => {
-    searchUserService()
+    searchUserSMService()
       .then((data) => {
         this.setState({ dataUser: data.data.data })
       })
@@ -112,6 +112,7 @@ class IncomingMailEdit extends Component {
   };
 
   updateIncomingMail = (e) => {
+    console.log('aaaaaa', e.target.sendto.value)
     const params = {
       asal_surat: e.target.origin.value,
       perihal: e.target.subject.value,
@@ -120,7 +121,7 @@ class IncomingMailEdit extends Component {
       to_user_id: e.target.sendto.value,
       sifat_surat: e.target.type.value,
       lampiran: e.target.attachment.value,
-      prioritas: e.target.urgency.value,
+      // prioritas: e.target.urgency.value,
       klasifikasi: e.target.classification.value,
       keterangan: e.target.description.value,
       file: this.state.selectedFile
@@ -164,16 +165,22 @@ class IncomingMailEdit extends Component {
     } = this.state;
 
     const optionsSubmit = dataUser.length !== 0 ?
-      dataUser.map(function (data) {
+      dataUser.map((data) => {
         return { value: data.id, label: data.text };
       })
       : null
 
     const optionsGroup = dataGroup.length !== 0 ?
-      dataGroup.map(function (data) {
+      dataGroup.map((data) => {
         return { value: data.id, label: data.group_name };
       })
       : null
+
+    // const dataSubmit = detailList.length !== 0 ?
+    //   detailList.map((data) => {
+    //     return { value: data.to_user_id, label: data.to_user_name}
+    //   })
+    //   :null
 
     return (
       <React.Fragment>
@@ -287,6 +294,8 @@ class IncomingMailEdit extends Component {
                       <Col sm={10}>
                         <Select
                           value={selectedSubmit}
+                          placeholder={[detailList.to_user_name]}
+                          defaultValue={[detailList.to_user_id]}
                           onChange={this.handleSelectSubmit}
                           options={optionsSubmit}
                           name="sendto"
@@ -301,10 +310,10 @@ class IncomingMailEdit extends Component {
                         Sifat Surat
                       </label>
                       <Col sm={10}>
-                        <Select
-                          value={selectedType}
-                          onChange={this.handleSelectType}
-                          options={type}
+                        <input
+                          className="form-control"
+                          type="text"
+                          id="example-text-input"
                           name="type"
                           ref={node => (this.inputNode = node)}
                           required
@@ -332,7 +341,7 @@ class IncomingMailEdit extends Component {
                       </Col>
                     </Row>
 
-                    <Row className="form-group">
+                    {/* <Row className="form-group">
                       <label
                         htmlFor="example-search-input"
                         className="col-sm-2 col-form-label"
@@ -349,7 +358,7 @@ class IncomingMailEdit extends Component {
                           required
                         />
                       </Col>
-                    </Row>
+                    </Row> */}
 
                     <Row className="form-group">
                       <label

@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { getMasterGroupServices } from "../../helpers/master/group"
-import { searchUserService, createOutgoingMailService } from "../../helpers/master/outgoingMail"
+import { createOutgoingMailService } from "../../helpers/master/outgoingMail"
+import { searchUserService } from "../../helpers/master/user"
 import toast from '../UI/toast';
 
 const type = [

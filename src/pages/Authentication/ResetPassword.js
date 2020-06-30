@@ -10,7 +10,7 @@ import { withRouter, Link } from "react-router-dom";
 import { TextBox } from 'devextreme-react';
 import { AvForm, AvField } from "availity-reactstrap-validation";
 import { userForgetPassword } from "../../store/actions";
-import { resetPasswordService } from "../../helpers/auth"
+import { resetPasswordService } from "../../helpers/master/user"
 import logoKabKerinci from "../../assets/images/logo-kab-kerinci.png"
 import queryString from 'query-string';
 import toast from '../UI/toast';

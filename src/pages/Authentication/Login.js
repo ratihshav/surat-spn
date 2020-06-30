@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import { AvForm, AvField } from "availity-reactstrap-validation";
 import Loader from "../../components/Loader";
-import { loginUser, loginUserSuccess } from "../../store/actions";
+import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import logoKabKerinci from "../../assets/images/logo-kab-kerinci.png"
 
 class Login extends Component {
@@ -64,9 +64,7 @@ class Login extends Component {
                             className="form-horizontal mt-4"
                             onValidSubmit={this.handleValidSubmit}
                           >
-                            {this.props.error ? (
-                              <Alert color="danger">{this.props.error}</Alert>
-                            ) : null}
+
 
                             <div className="form-group">
                               <AvField
@@ -148,10 +146,11 @@ class Login extends Component {
 }
 
 const mapStatetoProps = state => {
+  console.log('state', state.Login)
   const { error, loading, data } = state.Login;
   return { error, loading, data };
 };
 
 // const mapStatetoProps = (response) => ({response});
 
-export default (connect(mapStatetoProps, { loginUser, loginUserSuccess })(Login));
+export default (connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(Login));

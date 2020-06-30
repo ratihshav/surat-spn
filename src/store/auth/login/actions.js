@@ -15,10 +15,12 @@ export const loginUser = (request) => {
   }
 };
 
-export const loginUserSuccess = response => ({
-  type: LOGIN_USER_SUCCESS,
-  payload: response
-});
+export const loginUserSuccess = response => {
+  return {
+    type: LOGIN_USER_SUCCESS,
+    payload: response
+  }
+};
 
 export const loginUserFail = error => {
   return {

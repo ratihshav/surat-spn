@@ -24,7 +24,6 @@ import {
 
 import {
   createOutgoingMailService,
-  searchUserService,
   getOutgoingMailService,
   getDetailOutgoingMailService,
   createDisposeOutgoingMailService
@@ -37,15 +36,6 @@ function* createOutgoingMailSaga({ payload: { request } }) {
     yield put(createOutgoingMailSuccess(response));
   } catch (error) {
     yield put(createOutgoingMailFail(error));
-  }
-}
-
-function* searchUserSaga({ payload: { request } }) {
-  try {
-    const response = yield call(searchUserService, request);
-    yield put(searchUserSuccess(response));
-  } catch (error) {
-    yield put(searchUserFail(error));
   }
 }
 
@@ -82,10 +72,6 @@ export function* watchCreateOutgoingMail() {
   yield takeEvery(CREATE_OUTGOING_MAIL, createOutgoingMailSaga)
 }
 
-export function* watchSearchUser() {
-  yield takeEvery(SEARCH_USER, searchUserSaga)
-}
-
 export function* watchGetOutgoingMail() {
   yield takeLatest(GET_OUTGOING_MAIL, getOutgoingMailSaga)
 }
@@ -101,7 +87,6 @@ export function* watchCreateDisposeOutgoingMail() {
 function* OutgoingMailSaga() {
   yield all([
     fork(watchCreateOutgoingMail),
-    fork(watchSearchUser),
     fork(watchGetOutgoingMail),
     fork(watchGetDetailOutgoingMail),
     fork(watchCreateDisposeOutgoingMail)

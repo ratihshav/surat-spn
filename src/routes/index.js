@@ -42,6 +42,9 @@ import TemplateMail from "../pages/TemplateMail"
 import TemplateMailCreate from "../pages/TemplateMail/create"
 import TemplateMailEdit from "../pages/TemplateMail/edit"
 
+import Classification from "../pages/Classification"
+import ClassificationAdd from '../pages/Classification/add'
+import ClassificationEdit from '../pages/Classification/edit'
 
 const authProtectedRoutes = [
 
@@ -82,6 +85,11 @@ const authProtectedRoutes = [
   { path: "/template-mail", component: TemplateMail },
   { path: "/template-mail-create", component: TemplateMailCreate },
   { path: "/template-mail-edit", component: TemplateMailEdit },
+
+  //Klasifikasi
+  { path: "/classification", component: Classification },
+  { path: "/classification-add", component: ClassificationAdd },
+  { path: "/classification-edit", component: ClassificationEdit },
 
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
 ];

@@ -138,6 +138,81 @@ export const changePhotoUserService = (request) => {
     .catch(() => { throw 'Gagal Mengubah Data'; });
 }
 
+export const searchUserService = (request) => {
+
+  const SEARCH_USER_API = config.api_endpoint + `/user/search`
+  return instance.get(SEARCH_USER_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
+
+export const searchUserSKService = (request) => {
+
+  const SEARCH_USER_SK_API = config.api_endpoint + `/user/searchSK`
+  return instance.get(SEARCH_USER_SK_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
+
+export const searchUserSMService = (request) => {
+
+  const SEARCH_USER_SM_API = config.api_endpoint + `/user/searchSM`
+  return instance.get(SEARCH_USER_SM_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
+
+
+export const logoutUserService = (request) => {
+  const LOGOUT_USER_API = config.api_endpoint + `/logout`
+  return instance.post(LOGOUT_USER_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch((error) => { console.log('error', error) });
+}
+
+export const forgetPasswordService = (request) => {
+  const FORGET_PASSWORD_API = config.api_endpoint + '/forgotPassword'
+  return instance.post(FORGET_PASSWORD_API, request)
+    .then((data) => {
+      return {
+        data: data
+      };
+    })
+    .catch((error) => { throw 'Gagal'; });
+}
+
+export const resetPasswordService = (request) => {
+  const formData = new FormData();
+  formData.append('email', request.email);
+  formData.append('konci_pas', request.konci_pas);
+  formData.append('new_password', request.password);
+
+  const RESET_PASSWORD_API = config.api_endpoint + '/resetPassword'
+  return instance.post(RESET_PASSWORD_API, formData)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch((error) => { throw 'Gagal'; });
+}
+
 export async function _handleError(error) {
   // var errorCode = error.code;
   var errorMessage = error.message;

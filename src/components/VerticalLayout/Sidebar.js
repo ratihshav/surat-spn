@@ -53,6 +53,9 @@ const SidebarContent = props => {
               <Link to="/position">Data Jabatan</Link>
             </li>
             <li>
+              <Link to="/classification">Data Klasifikasi Surat</Link>
+            </li>
+            <li>
               <Link to="/template-mail">Template Surat</Link>
             </li>
           </ul>

@@ -53,10 +53,9 @@ const login = (state = initialState, action) => {
       }
 
     default:
-      state = { ...state };
-      break;
+      return state;
   }
-  return state;
+
 }
 
 export default login;

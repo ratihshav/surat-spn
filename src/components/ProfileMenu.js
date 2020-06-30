@@ -5,7 +5,7 @@ import { withRouter, Link, Redirect } from 'react-router-dom';
 
 // users
 import user4 from '../assets/images/users/user-4.jpg';
-import { logoutUserService } from '../helpers/auth'
+import { logoutUserService } from '../helpers/master/user'
 
 class ProfileMenu extends Component {
 
@@ -27,7 +27,7 @@ class ProfileMenu extends Component {
     logoutUserService()
       .then((data) => {
         window.localStorage.clear()
-        this.props.history.push('/login')
+        window.location = '/'
       })
       .catch(() => { throw 'Gagal Mengubah Data'; });
   }
