@@ -32,22 +32,6 @@ class Position extends Component {
   cLoad = () => {
     return new DataStore({
       load: (loadOptions) => {
-        let params = '?';
-        [
-          'skip',
-          'sort',
-          'take',
-          'order',
-          'filter'
-        ].forEach(function (i) {
-
-          if (i in loadOptions && isNotEmpty(loadOptions[i]) && i == 'filter') {
-            let filterCol = dxGridFilter(loadOptions.filter);
-            params += `${i}=${JSON.stringify(filterCol)}&`;
-          }
-          else if (i in loadOptions && isNotEmpty(loadOptions[i])) { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
-        });
-        params = params.slice(0, -1);
         return getMasterPositionServices()
       },
       remove: (values) => { this.onDeletePosition(values) }
@@ -139,7 +123,6 @@ class Position extends Component {
                 <div className="card-body">
                   <DataGrid
                     dataSource={this.cLoad()}
-                    // remoteOperations={true}
                     rowAlternationEnabled={true}
                     showColumnLines={false}
                     columnAutoWidth={true}

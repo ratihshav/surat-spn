@@ -25,7 +25,7 @@ export const getMasterPositionServices = () => {
   return instance.get(GET_MASTER_POSITION_API)
     .then((data) => {
       return {
-        data: data.data.data.data,
+        data: data.data.data,
       };
     })
     .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });

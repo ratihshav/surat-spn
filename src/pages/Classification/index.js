@@ -31,22 +31,6 @@ class Classification extends Component {
   cLoad = () => {
     return new DataStore({
       load: (loadOptions) => {
-        let params = '?';
-        [
-          'skip',
-          'sort',
-          'take',
-          'order',
-          'filter'
-        ].forEach(function (i) {
-
-          if (i in loadOptions && isNotEmpty(loadOptions[i]) && i == 'filter') {
-            let filterCol = dxGridFilter(loadOptions.filter);
-            params += `${i}=${JSON.stringify(filterCol)}&`;
-          }
-          else if (i in loadOptions && isNotEmpty(loadOptions[i])) { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
-        });
-        params = params.slice(0, -1);
         return getMasterClassService()
       },
       remove: (values) => { this.onDeleteClass(values) }

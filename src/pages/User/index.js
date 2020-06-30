@@ -168,7 +168,7 @@ class User extends Component {
                       allowedPageSizes={[5, 10, 20]}
                       showInfo={true} />
 
-                    <Column dataField="id" />
+                    <Column dataField="id" visible={false} />
                     <Column dataField="password" visible={false} />
                     <Column dataField="confirm_password" visible={false} />
                     <Column dataField="full_name" />
