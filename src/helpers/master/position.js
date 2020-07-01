@@ -37,8 +37,10 @@ export const saveMasterPositionService = (request) => {
   const formData = new FormData();
   formData.append('position_name', request.position_name);
   formData.append('position_type', request.position_type);
-  formData.append('group_name', request.group_name);
   formData.append('group_id', request.group_id);
+  formData.append('detail', request.detail);
+  formData.append('is_parent', request.is_parent);
+  formData.append('parent_id', request.parent_id);
 
   const SAVE_MASTER_POSITION_API = config.api_endpoint + '/jabatan/save';
   return instance.post(SAVE_MASTER_POSITION_API, formData)
@@ -56,8 +58,10 @@ export const updateMasterPositionService = (request) => {
   const formData = new FormData();
   formData.append('position_name', request.position_name);
   formData.append('position_type', request.position_type);
-  formData.append('group_name', request.group_name);
   formData.append('group_id', request.group_id);
+  formData.append('detail', request.detail);
+  formData.append('is_parent', request.is_parent);
+  formData.append('parent_id', request.parent_id);
 
   const UPDATE_MASTER_POSITION_API = config.api_endpoint + `/jabatan/save/${id}`;
   return instance.post(UPDATE_MASTER_POSITION_API, formData)
@@ -139,6 +143,18 @@ export const saveGrantedPermissionService = (request) => {
     })
     .catch(() => { throw 'Gagal Mengubah Data'; });
 };
+
+export const searchParentPositionService = (request) => {
+
+  const SEARCH_PAR_POSITION_API = config.api_endpoint + `/jabatan/searchParent`
+  return instance.get(SEARCH_PAR_POSITION_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
 
 export async function _handleError(error) {
   // var errorCode = error.code;

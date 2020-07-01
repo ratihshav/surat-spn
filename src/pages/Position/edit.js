@@ -6,10 +6,11 @@ import Select from "react-select";
 
 import {
   updateMasterPositionService,
-  getDetailPositionService
+  getDetailPositionService,
+  searchParentPositionService
 } from "../../helpers/master/position"
-import { getMasterGroupServices } from '../../helpers/master/group';
-
+import { searchGroupService } from '../../helpers/master/group';
+import SwitchComponent from "../UI/Switch"
 import toast from '../UI/toast';
 
 const idDivisi = window.localStorage.getItem('idDivisi');
@@ -19,8 +20,10 @@ class PositionEdit extends Component {
     this.state = {
       dataPosition: [],
       dataGroup: [],
-      selectedGroup: null,
-
+      dataParent: [],
+      selectedGroup: '',
+      selectedParent: '',
+      isParent: false,
     }
   }
 
@@ -29,6 +32,7 @@ class PositionEdit extends Component {
 
     this.getDetailPosition(idPosition)
     this.getDataGroup()
+    this.getPositionParent()
   }
 
   getDetailPosition = (idPosition) => {
@@ -42,28 +46,54 @@ class PositionEdit extends Component {
   }
 
   getDataGroup = () => {
-    getMasterGroupServices()
+    searchGroupService()
       .then((data) => {
         this.setState({
-          dataGroup: data.data
+          dataGroup: data.data.data
         })
       })
       .catch(() => { throw 'Gagal Mengambil Data' })
   }
 
-  updatePosition = (e) => {
-    const { selectedGroup } = this.state
+  getPositionParent = () => {
+    searchParentPositionService()
+      .then((data) => {
+        this.setState({
+          dataParent: data.data.data
+        })
+      })
+      .catch(() => { throw 'Gagal Mengambil Data' })
+  }
 
+
+  handleCheckboxParent = (e) => {
+    console.log('e', e.target.checked)
+    this.setState({ isParent: e.target.checked })
+  }
+
+  handleSelectParent = selectedParent => {
+    this.setState({ selectedParent });
+  };
+
+  updatePosition = (e) => {
+
+    const { selectedGroup, selectedParent, dataPosition } = this.state
     const params = {
-      group_code: e.target.group_code.value,
-      group_name: e.target.group_name.value,
-      group_name: selectedGroup.label,
-      group_id: selectedGroup.value
+      position_name: e.target.position_name.value,
+      position_type: e.target.position_type.value,
+      detail: e.target.detail.value,
+      group_id: selectedGroup.value ? selectedGroup.value : dataPosition.group_id,
+      is_parent: e.target.is_parent.value,
+      parent_id: dataPosition.parent_id === null ? ''
+        : selectedParent.value ? selectedParent.value
+          : dataPosition.parent_id
     }
+    console.log('params', params)
+
     updateMasterPositionService(params)
       .then((data) => {
         this.alertSuccess()
-        this.props.history.push('/group');
+        this.props.history.push('/position');
       })
       .catch(() => {
         return (
@@ -90,13 +120,35 @@ class PositionEdit extends Component {
   }
 
   render() {
-    const { dataGroup, dataPosition, selectedGroup } = this.state
+    const {
+      dataGroup,
+      dataPosition,
+      selectedGroup,
+      selectedParent,
+      dataParent,
+      isParent,
+    } = this.state
 
     const optionsGroup = dataGroup.length !== 0 ?
       dataGroup.map((data) => {
-        return { value: data.group_id, label: data.group_name };
+        return { value: data.id, label: data.text };
       })
       : null
+
+    const optionsParent = dataParent.length !== 0 ?
+      dataParent.map((data) => {
+        return { value: data.id, label: data.text };
+      })
+      : null
+
+    const defaValGroup = {
+      value: dataPosition.group_id,
+      label: dataPosition.group_name
+    }
+    const defaValParent = {
+      value: dataPosition.parent_id ? dataPosition.parent_id : '',
+      label: dataPosition.parent_name ? dataPosition.parent_name : ''
+    }
 
     return (
       <React.Fragment>
@@ -115,24 +167,24 @@ class PositionEdit extends Component {
             </Col>
           </Row>
 
-          <form action="#" onSubmit={this.saveGroup}>
+          <form action="#" onSubmit={this.updatePosition}>
             <Row>
               <div className="col-12">
                 <Card>
                   <CardBody>
                     <Row className="form-group">
                       <label
-                        htmlFor="group_code"
+                        htmlFor="position_name"
                         className="col-sm-2 col-form-label"
                       >
                         Nama Jabatan
                     </label>
                       <Col sm={10}>
                         <input
-                          name="group_code"
+                          name="position_name"
                           className="form-control"
                           type="text"
-                          id="group_code"
+                          id="position_name"
                           defaultValue={dataPosition.position_name}
                           ref={node => (this.inputNode = node)}
                         />
@@ -141,7 +193,7 @@ class PositionEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="group_name"
+                        htmlFor="position_type"
                         className="col-sm-2 col-form-label" >
                         Tipe
                       </label>
@@ -149,8 +201,8 @@ class PositionEdit extends Component {
                         <input
                           className="form-control"
                           type="text"
-                          id="group_name"
-                          name="group_name"
+                          id="position_type"
+                          name="position_type"
                           defaultValue={dataPosition.position_type}
                           ref={node => (this.inputNode = node)}
                         />
@@ -165,12 +217,71 @@ class PositionEdit extends Component {
                                   </label>
                       <Col sm={10}>
                         <Select
-                          value={selectedGroup}
-                          defaultValue={dataGroup.group_name}
+                          value={selectedGroup === null ? dataPosition.group_id : selectedGroup}
+                          placeholder={[dataPosition.group_name]}
                           onChange={this.handleSelectGroup}
                           options={optionsGroup}
-                          name="type"
+                          name="group_name"
                           ref={node => (this.inputNode = node)}
+                          defaultValue={defaValGroup}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="detail"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Detail
+                    </label>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="text"
+                          id="detail"
+                          name="detail"
+                          defaultValue={dataPosition.detail}
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group" style={{ alignItems: 'center' }}>
+                      <label
+                        htmlFor="example-search-input"
+                        className="col-sm-2 col-form-label">
+                        Is Parent
+                      </label>
+                      <Col sm={10}>
+                        <SwitchComponent
+                          name="is_parent"
+                          onColor="#EF476F"
+                          onChange={this.handleCheckboxParent}
+                          value={isParent === false ? 0 : 1}
+                          checked={dataPosition.is_parent ? dataPosition.is_parent : isParent}
+                          // defaultChecked={}
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-search-input"
+                        className="col-sm-2 col-form-label">
+                        Parent Id
+                                  </label>
+                      <Col sm={10}>
+                        <Select
+                          value={isParent ? null : selectedParent}
+                          onChange={this.handleSelectParent}
+                          options={optionsParent}
+                          name="parent_id"
+                          ref={node => (this.inputNode = node)}
+                          isDisabled={dataPosition.is_parent ? dataPosition.is_parent : isParent}
+                          defaultValue={defaValParent}
+                          placeholder={[dataPosition.parent_name]}
                         />
                       </Col>
                     </Row>

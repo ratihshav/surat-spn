@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import { Row, Col, Card, CardBody, Button, Toast } from "reactstrap";
 import Select from "react-select";
 import { connect } from "react-redux";
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { updateIncomingMailService, getDetailIncomingMailService } from "../../helpers/master/incomingMail"
 import { searchUserSMService } from "../../helpers/master/user"
-import { getMasterGroupServices } from "../../helpers/master/group"
+import { searchMasterClassService } from '../../helpers/master/classification'
 import toast from '../UI/toast';
+import moment from 'moment';
 
 // const type = [
 //   {
@@ -35,13 +36,11 @@ class IncomingMailEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedGroup: null,
-      selectedUrgency: null,
       selectedFile: null,
       selectedSignature: null,
       selectedSubmit: null,
-      selectedType: null,
-      dataGroup: [],
+      selectedClass: null,
+      dataClass: [],
       dataUser: [],
       detailList: []
     };
@@ -51,8 +50,18 @@ class IncomingMailEdit extends Component {
     const idMail = window.localStorage.getItem('idInMail');
     this.setState({ stateIdMail: idMail })
     this.getDetailList(idMail)
-    this.getDataGroup()
     this.getDataUser()
+    this.getDataClass()
+  }
+
+  getDataClass = () => {
+    searchMasterClassService()
+      .then((data) => {
+        this.setState({
+          dataClass: data.data.data
+        })
+      })
+      .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
   getDataUser = () => {
@@ -76,28 +85,10 @@ class IncomingMailEdit extends Component {
       .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
-  getDataGroup = () => {
-    getMasterGroupServices()
-      .then((data) => {
-        this.setState({
-          dataGroup: data.data
-        })
-      })
-      .catch(() => { throw 'Gagal Mengambil Data' })
-  }
 
-
-  handleSelectGroup = selectedGroup => {
-    this.setState({ selectedGroup });
+  handleSelectClass = selectedClass => {
+    this.setState({ selectedClass });
   };
-
-  handleSelectType = selectedType => {
-    this.setState({ selectedType });
-  };
-
-  handleSelectUrgency = selectedUrgency => {
-    this.setState({ selectedUrgency })
-  }
 
   handleSelectSignature = selectedSignature => {
     this.setState({ selectedSignature })
@@ -112,20 +103,27 @@ class IncomingMailEdit extends Component {
   };
 
   updateIncomingMail = (e) => {
-    console.log('aaaaaa', e.target.sendto.value)
+    const {
+      detailList,
+      selectedClass,
+      selectedSubmit
+    } = this.state
+
     const params = {
       asal_surat: e.target.origin.value,
       perihal: e.target.subject.value,
       nomor_surat: e.target.numMail.value,
       tgl_surat: e.target.date.value,
-      to_user_id: e.target.sendto.value,
+      to_user_id: detailList.to_user_id ? detailList.to_user_id : selectedSubmit,
       sifat_surat: e.target.type.value,
       lampiran: e.target.attachment.value,
       // prioritas: e.target.urgency.value,
-      klasifikasi: e.target.classification.value,
+      klasifikasi_id: detailList.klasifikasi_id ? detailList.klasifikasi_id : selectedClass,
       keterangan: e.target.description.value,
       file: this.state.selectedFile
     }
+
+    console.log('params', params)
 
     updateIncomingMailService(params)
       .then((data) => {
@@ -154,14 +152,12 @@ class IncomingMailEdit extends Component {
 
   render() {
     const {
-      selectedGroup,
-      selectedUrgency,
       selectedFile,
       dataUser,
       selectedSubmit,
       detailList,
-      dataGroup,
-      selectedType
+      selectedClass,
+      dataClass
     } = this.state;
 
     const optionsSubmit = dataUser.length !== 0 ?
@@ -170,17 +166,25 @@ class IncomingMailEdit extends Component {
       })
       : null
 
-    const optionsGroup = dataGroup.length !== 0 ?
-      dataGroup.map((data) => {
-        return { value: data.id, label: data.group_name };
+    const optionsClass = dataClass.length !== 0 ?
+      dataClass.map(function (data) {
+        return { value: data.id, label: data.text };
       })
       : null
 
-    // const dataSubmit = detailList.length !== 0 ?
-    //   detailList.map((data) => {
-    //     return { value: data.to_user_id, label: data.to_user_name}
-    //   })
-    //   :null
+    const defValPosition = {
+      value: detailList.to_user_id,
+      label: detailList.to_user_name
+    }
+
+    const defValClass = {
+      value: detailList.klasifikasi_id,
+      label: detailList.klasifikasi_name
+    }
+
+    const date = detailList.tgl_surat
+    const curr = moment(date).format('DD-MM-YYYY')
+    console.log('curr', curr)
 
     return (
       <React.Fragment>
@@ -278,7 +282,7 @@ class IncomingMailEdit extends Component {
                           type="date"
                           id="example-text-input"
                           name="date"
-                          defaultValue={detailList.tgl_surat}
+                          // value={curr}
                           ref={node => (this.inputNode = node)}
                         />
                       </Col>
@@ -295,7 +299,7 @@ class IncomingMailEdit extends Component {
                         <Select
                           value={selectedSubmit}
                           placeholder={[detailList.to_user_name]}
-                          defaultValue={[detailList.to_user_id]}
+                          defaultValue={defValPosition}
                           onChange={this.handleSelectSubmit}
                           options={optionsSubmit}
                           name="sendto"
@@ -317,6 +321,7 @@ class IncomingMailEdit extends Component {
                           name="type"
                           ref={node => (this.inputNode = node)}
                           required
+                          defaultValue={detailList.sifat_surat}
                         />
                       </Col>
                     </Row>
@@ -369,9 +374,11 @@ class IncomingMailEdit extends Component {
                       </label>
                       <Col sm={10}>
                         <Select
-                          value={selectedGroup}
-                          onChange={this.handleSelectGroup}
-                          options={optionsGroup}
+                          value={selectedClass}
+                          placeholder={[detailList.klasifikasi_name]}
+                          onChange={this.handleSelectClass}
+                          options={optionsClass}
+                          defaultValue={defValClass}
                           name="classification"
                           ref={node => (this.inputNode = node)}
                           required

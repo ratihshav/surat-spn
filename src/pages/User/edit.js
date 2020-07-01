@@ -161,6 +161,10 @@ class UserEdit extends Component {
       })
       : null
 
+    const defaValPosition = {
+      value: dataUser.position_id,
+      label: dataUser.position_name
+    }
 
     return (
       <React.Fragment>
@@ -457,8 +461,10 @@ class UserEdit extends Component {
                                   </label>
                                   <Col sm={10}>
                                     <Select
-                                      value={selectedPosition}
-                                      defaultValue={dataUser.position_id}
+                                      value={selectedPosition === null ? dataUser.position_id : selectedPosition}
+                                      placeholder={[dataUser.position_name]}
+
+                                      defaultValue={defaValPosition}
                                       onChange={this.handleSelectPosition}
                                       options={optionsPosition}
                                       name="type"

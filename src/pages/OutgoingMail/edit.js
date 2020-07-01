@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Row, Col, Card, CardBody, Button, Toast } from "reactstrap";
 import Select from "react-select";
 import { connect } from "react-redux";
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { getMasterGroupServices } from "../../helpers/master/group"
 import {
@@ -10,6 +10,7 @@ import {
   getDetailOutgoingMailService
 } from "../../helpers/master/outgoingMail"
 import { searchUserService } from "../../helpers/master/user"
+import { searchMasterClassService } from '../../helpers/master/classification'
 import toast from '../UI/toast';
 
 const type = [
@@ -35,13 +36,13 @@ class OutgoingMailEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedGroup: null,
       selectedUrgency: null,
       selectedFile: null,
       selectedSignature: null,
       selectedSubmit: null,
       selectedType: null,
-      dataGroup: [],
+      selectedClass: null,
+      dataClass: [],
       dataUser: [],
       detailList: [],
       optionsValues: []
@@ -54,6 +55,17 @@ class OutgoingMailEdit extends Component {
     this.getDetailList(idMail)
     this.getDataGroup()
     this.getDataUser()
+    this.getDataClass()
+  }
+
+  getDataClass = () => {
+    searchMasterClassService()
+      .then((data) => {
+        this.setState({
+          dataClass: data.data.data
+        })
+      })
+      .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
   getDetailList = (idMail) => {
@@ -93,8 +105,8 @@ class OutgoingMailEdit extends Component {
       .catch(() => { throw 'Gagal Mengambil Data' })
   }
 
-  handleSelectGroup = selectedGroup => {
-    this.setState({ selectedGroup });
+  handleSelectClass = selectedClass => {
+    this.setState({ selectedClass });
   };
 
   handleSelectType = selectedType => {
@@ -118,17 +130,27 @@ class OutgoingMailEdit extends Component {
   };
 
   updateOutgoingMail = (e) => {
+    const {
+      detailList,
+      selectedClass,
+      selectedSubmit,
+      selectedType,
+      selectedUrgency,
+      selectedSignature
+    } = this.state
+
     const params = {
-      jenis_surat: e.target.type.value,
-      klasifikasi_surat: e.target.classification.value,
-      sifat_surat: e.target.urgency.value,
+      jenis_surat: detailList.jenis_surat ? detailList.jenis_surat : selectedType,
+      klasifikasi_id: detailList.klasifikasi_id ? detailList.klasifikasi_id : selectedClass,
+      sifat_surat: detailList.sifat_surat ? detailList.sifat_surat : selectedUrgency,
       tujuan_surat: e.target.destination.value,
       hal_surat: e.target.subject.value,
       lampiran_surat: e.target.attachment.value,
-      approval_user: e.target.approval.value,
-      to_user: e.target.sendto.value,
+      approval_user: detailList.approval_user ? detailList.approval_user : selectedSignature,
+      to_user: detailList.to_user ? detailList.to_user : selectedSubmit,
       file: this.state.selectedFile
     }
+    console.log('params', params)
 
     updateOutgoingMailService(params)
       .then((data) => {
@@ -157,8 +179,6 @@ class OutgoingMailEdit extends Component {
 
   render() {
     const {
-      selectedGroup,
-      dataGroup,
       selectedType,
       selectedUrgency,
       selectedFile,
@@ -166,25 +186,52 @@ class OutgoingMailEdit extends Component {
       selectedSubmit,
       dataUser,
       detailList,
-      optionsValues } = this.state;
+      optionsValues,
+      selectedClass,
+      dataClass } = this.state;
 
     const optionsSignature = dataUser.length !== 0 ?
-      dataUser.map(function (data) {
+      dataUser.map((data) => {
         return { label: data.text, value: data.id };
       })
       : null
 
     const optionsSubmit = dataUser.length !== 0 ?
-      dataUser.map(function (data) {
+      dataUser.map((data) => {
         return { value: data.id, label: data.text };
       })
       : null
 
-    const optionsGroup = dataGroup.length !== 0 ?
-      dataGroup.map(function (data) {
-        return { value: data.id, label: data.group_name };
+    const optionsClass = dataClass.length !== 0 ?
+      dataClass.map((data) => {
+        return { value: data.id, label: data.text };
       })
       : null
+
+    const defValClass = {
+      value: detailList.klasifikasi_id,
+      label: detailList.klasifikasi_name
+    }
+
+    const defValSubmit = {
+      value: detailList.to_user,
+      label: detailList.to_username
+    }
+
+    const defValSignature = {
+      value: detailList.approval_user,
+      label: detailList.approval_name
+    }
+
+    const defValType = {
+      value: detailList.jenis_surat,
+      label: detailList.jenis_surat
+    }
+
+    const defValUrge = {
+      value: detailList.sifat_surat,
+      label: detailList.sifat_surat
+    }
 
     return (
       <React.Fragment>
@@ -224,7 +271,8 @@ class OutgoingMailEdit extends Component {
                           name="type"
                           ref={node => (this.inputNode = node)}
                           required
-                          defaultValue={type[0]}
+                          placeholder={[detailList.jenis_surat]}
+                          defaultValue={defValType}
                         />
                       </Col>
                     </Row>
@@ -238,9 +286,11 @@ class OutgoingMailEdit extends Component {
                     </label>
                       <Col sm={10}>
                         <Select
-                          value={selectedGroup}
-                          onChange={this.handleSelectGroup}
-                          options={optionsGroup}
+                          value={selectedClass}
+                          onChange={this.handleSelectClass}
+                          placeholder={[detailList.klasifikasi_name]}
+                          options={optionsClass}
+                          defaultValue={defValClass}
                           name="classification"
                           ref={node => (this.inputNode = node)}
                           required
@@ -263,6 +313,8 @@ class OutgoingMailEdit extends Component {
                           name="urgency"
                           ref={node => (this.inputNode = node)}
                           required
+                          placeholder={[detailList.sifat_surat]}
+                          defaultValue={defValUrge}
                         />
                       </Col>
                     </Row>
@@ -337,13 +389,14 @@ class OutgoingMailEdit extends Component {
                     </label>
                       <Col sm={10}>
                         <Select
-                          defaultValue={optionsSignature !== null ? optionsSignature[0] : null}
+                          value={selectedSignature}
                           onChange={this.handleSelectSignature}
                           options={optionsSignature}
                           name="approval"
                           ref={node => (this.inputNode = node)}
                           required
-                        // defaultValue={optionsValue}
+                          placeholder={[detailList.approval_name]}
+                          defaultValue={defValSignature}
                         />
                       </Col>
                     </Row>
@@ -360,6 +413,8 @@ class OutgoingMailEdit extends Component {
                           value={selectedSubmit}
                           onChange={this.handleSelectSubmit}
                           options={optionsSubmit}
+                          placeholder={[detailList.to_username]}
+                          defaultValue={defValSubmit}
                           name="sendto"
                           ref={node => (this.inputNode = node)}
                           required

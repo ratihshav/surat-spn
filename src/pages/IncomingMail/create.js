@@ -117,7 +117,7 @@ class IncomingMailCreate extends Component {
       sifat_surat: e.target.type.value,
       lampiran: e.target.attachment.value,
       // prioritas: e.target.urgency.value,
-      klasifikasi: e.target.classification.value,
+      klasifikasi_id: e.target.classification.value,
       keterangan: e.target.description.value,
       file: this.state.selectedFile
     }

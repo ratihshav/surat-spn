@@ -41,7 +41,7 @@ export const createIncomingMailService = (request) => {
   formData.append('lampiran', request.lampiran);
   formData.append('to_user_id', request.to_user_id);
   formData.append('sifat_surat', request.sifat_surat);
-  formData.append('klasifikasi', request.klasifikasi);
+  formData.append('klasifikasi_id', request.klasifikasi_id);
   // formData.append('prioritas', request.prioritas);
   formData.append('keterangan', request.keterangan);
   formData.append('file', request.file);
@@ -67,7 +67,7 @@ export const updateIncomingMailService = (request) => {
   formData.append('lampiran', request.lampiran);
   formData.append('to_user_id', request.to_user_id);
   formData.append('sifat_surat', request.sifat_surat);
-  formData.append('klasifikasi', request.klasifikasi);
+  formData.append('klasifikasi_id', request.klasifikasi_id);
   // formData.append('prioritas', request.prioritas);
   formData.append('keterangan', request.keterangan);
   formData.append('file', request.file);

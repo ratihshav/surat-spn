@@ -36,7 +36,7 @@ export const getOutgoingMailService = (request) => {
 export const createOutgoingMailService = (request) => {
   const formData = new FormData();
   formData.append('jenis_surat', request.jenis_surat);
-  formData.append('klasifikasi_surat', request.klasifikasi_surat);
+  formData.append('klasifikasi_id', request.klasifikasi_id);
   formData.append('sifat_surat', request.sifat_surat);
   formData.append('tujuan_surat', request.tujuan_surat);
   formData.append('hal_surat', request.hal_surat);
@@ -58,10 +58,10 @@ export const createOutgoingMailService = (request) => {
 
 export const updateOutgoingMailService = (request) => {
   const id = window.localStorage.getItem('idOutMail');
-
+  console.log('requ', request)
   const formData = new FormData();
   formData.append('jenis_surat', request.jenis_surat);
-  formData.append('klasifikasi_surat', request.klasifikasi_surat);
+  formData.append('klasifikasi_id', request.klasifikasi_id);
   formData.append('sifat_surat', request.sifat_surat);
   formData.append('tujuan_surat', request.tujuan_surat);
   formData.append('hal_surat', request.hal_surat);

@@ -95,6 +95,18 @@ export const getDetailGroupService = (request) => {
     .catch(() => { throw 'Gagal Mengubah Data'; });
 };
 
+export const searchGroupService = (request) => {
+
+  const SEARCH_GROUP_API = config.api_endpoint + `/unit/search`
+  return instance.get(SEARCH_GROUP_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
+
 
 export async function _handleError(error) {
   // var errorCode = error.code;

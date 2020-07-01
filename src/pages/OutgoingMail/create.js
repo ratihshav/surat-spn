@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getMasterGroupServices } from "../../helpers/master/group"
 import { createOutgoingMailService } from "../../helpers/master/outgoingMail"
 import { searchUserService } from "../../helpers/master/user"
+import { searchMasterClassService } from '../../helpers/master/classification'
 import toast from '../UI/toast';
 
 const type = [
@@ -36,20 +37,20 @@ class OutgoingMailCreate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedGroup: null,
       selectedUrgency: null,
       selectedFile: null,
       selectedSignature: null,
       selectedSubmit: null,
       selectedType: null,
-      dataGroup: [],
+      selectedClass: null,
+      dataClass: [],
       dataUser: []
     };
   }
 
   componentDidMount() {
     this.getDataUser()
-    this.getDataGroup()
+    this.getDataClass()
   }
 
   getDataUser = () => {
@@ -60,18 +61,18 @@ class OutgoingMailCreate extends Component {
       .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
-  getDataGroup = () => {
-    getMasterGroupServices()
+  getDataClass = () => {
+    searchMasterClassService()
       .then((data) => {
         this.setState({
-          dataGroup: data.data
+          dataClass: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
-  handleSelectGroup = selectedGroup => {
-    this.setState({ selectedGroup });
+  handleSelectClass = selectedClass => {
+    this.setState({ selectedClass });
   };
 
   handleSelectType = selectedType => {
@@ -97,7 +98,7 @@ class OutgoingMailCreate extends Component {
   saveOutgoingMail = (e) => {
     const params = {
       jenis_surat: e.target.type.value,
-      klasifikasi_surat: e.target.classification.value,
+      klasifikasi_id: e.target.classification.value,
       sifat_surat: e.target.urgency.value,
       tujuan_surat: e.target.destination.value,
       hal_surat: e.target.subject.value,
@@ -134,14 +135,14 @@ class OutgoingMailCreate extends Component {
 
   render() {
     const {
-      selectedGroup,
       selectedUrgency,
       selectedFile,
       selectedSignature,
       selectedSubmit,
       dataUser,
-      dataGroup,
-      selectedType } = this.state;
+      selectedType,
+      selectedClass,
+      dataClass } = this.state;
 
     const optionsSignature = dataUser.length !== 0 ?
       dataUser.map(function (data) {
@@ -155,9 +156,9 @@ class OutgoingMailCreate extends Component {
       })
       : null
 
-    const optionsGroup = dataGroup.length !== 0 ?
-      dataGroup.map(function (data) {
-        return { value: data.id, label: data.group_name };
+    const optionsClass = dataClass.length !== 0 ?
+      dataClass.map(function (data) {
+        return { value: data.id, label: data.text };
       })
       : null
 
@@ -212,9 +213,9 @@ class OutgoingMailCreate extends Component {
                     </label>
                       <Col sm={10}>
                         <Select
-                          value={selectedGroup}
-                          onChange={this.handleSelectGroup}
-                          options={optionsGroup}
+                          value={selectedClass}
+                          onChange={this.handleSelectClass}
+                          options={optionsClass}
                           name="classification"
                           ref={node => (this.inputNode = node)}
                           required
@@ -354,7 +355,7 @@ class OutgoingMailCreate extends Component {
                               id="validatedCustomFile"
                               required
                               onChange={this.onFileChange}
-                              accept=".doc, .docx, .pdf"
+                              accept=".doc, .docx"
                               name="file"
                               ref={node => (this.inputNode = node)}
                             />

@@ -28,10 +28,16 @@ const SidebarContent = props => {
           </Link>
           <ul className="sub-menu" aria-expanded="false">
             <li>
-              <Link to="/incoming-mail">Surat Masuk</Link>
+              <Link to="/incoming-mail">
+                <i className="mdi mdi-email-receive"></i>
+                <span>Surat Masuk</span>
+              </Link>
             </li>
             <li>
-              <Link to="/outgoing-mail">Surat Keluar</Link>
+              <Link to="/outgoing-mail">
+                <i className="mdi mdi-email-send"></i>
+                <span>Surat Keluar</span>
+              </Link>
             </li>
           </ul>
         </li>
@@ -39,12 +45,15 @@ const SidebarContent = props => {
 
         <li>
           <Link to="/#" className="has-arrow waves-effect">
-            <i className="ti-email"></i>
+            <i className="fas fa-database"></i>
             <span>Master Data</span>
           </Link>
           <ul className="sub-menu" aria-expanded="false">
             <li>
-              <Link to="/user">Data User</Link>
+              <Link to="/user">
+                <i className="fas fa-user-alt"></i>
+                <span>Data User</span>
+              </Link>
             </li>
             <li>
               <Link to="/group">Data Divisi</Link>
