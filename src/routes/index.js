@@ -12,6 +12,10 @@ import ForgetPwd from "../pages/Authentication/ForgetPassword";
 import Dashboard from "../pages/Dashboard";
 
 import Profile from "../pages/Profile"
+import ProfileChangePassword from "../pages/Profile/change-password"
+import ProfileChangePhoto from "../pages/Profile/change-photo"
+import ProfileSignature from "../pages/Profile/signature"
+
 
 import User from "../pages/User"
 import UserAdd from "../pages/User/add"
@@ -49,7 +53,12 @@ import ClassificationEdit from '../pages/Classification/edit'
 const authProtectedRoutes = [
 
   { path: "/dashboard", component: Dashboard },
+
+  //Profile
   { path: "/profile", component: Profile },
+  { path: "/profile-change-password", component: ProfileChangePassword },
+  { path: "/profile-change-photo", component: ProfileChangePhoto },
+  { path: "/profile-signature", component: ProfileSignature },
 
   //User
   { path: "/user", component: User },
