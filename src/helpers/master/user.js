@@ -217,7 +217,7 @@ export const resetPasswordService = (request) => {
 export const saveSignatureUserService = (request) => {
   const id = request.id;
   const formData = new FormData();
-  formData.append('ttd', request.ttd);
+  formData.append('file', request.file, 'signature.png');
 
   const SAVE_SIGNATURE_API = config.api_endpoint + `/user/savettd/${id}`
   return instance.post(SAVE_SIGNATURE_API, formData)

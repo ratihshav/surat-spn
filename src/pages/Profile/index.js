@@ -453,7 +453,7 @@ class Profile extends Component {
                                         className="img-fluid"
                                         width="200"
                                         height="200"
-                                        src={dataUser.ttd}
+                                        src={dataUser.ttd ? config.url_img + dataUser.ttd : null}
                                         name="ttd" />
                                     </Col>
                                   </Row>

@@ -10,7 +10,7 @@ import toast from '../UI/toast';
 import styles from './styles.module.css'
 import { saveSignatureUserService } from '../../helpers/master/user';
 import SignaturePad from 'react-signature-canvas'
-
+import dataURLtoBlob from 'blueimp-canvas-to-blob'
 class ProfileSignature extends Component {
   state = {
     trimmedDataURL: null
@@ -32,9 +32,11 @@ class ProfileSignature extends Component {
 
   saveSignature = () => {
     const id = window.localStorage.getItem('id')
-    const { trimmedDataURL } = this.state
+    const canvas = this.sigPad.getCanvas()
+    const blob = dataURLtoBlob(canvas.toDataURL('image/png'))
+
     const params = {
-      ttd: trimmedDataURL,
+      file: blob,
       id: id
     }
     saveSignatureUserService(params)
