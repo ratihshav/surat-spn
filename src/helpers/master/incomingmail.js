@@ -19,17 +19,36 @@ const instance = axios.create({
   })
 });
 
+async function handleError({
+  error = {},
+}) {
+  if (error.response) {
+    // Check unauthorized request by detecting header status 401
+    const responseStatus = error.response.status;
+    const responseMessage = error.response.message
+
+    if (responseStatus === 401) {
+      return Promise.all([window.localStorage.clear()]).then(() => {
+        setTimeout(() => {
+          window.location = '/'
+        }, 350);
+      })
+    }
+  }
+}
+
 export const getIncomingMailService = (request) => {
   const req = request ? request : ''
   const GET_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/list`;
   return instance.get(GET_INCOMING_MAIL_API + `${req}`)
     .then((data) => {
+      console.log('asasa')
       return {
         data: data.data.data.data,
-        totalCount: data.data.data.totalCount
+        totalCount: data.data.data ? data.data.data.totalCount : null
       };
     })
-    .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
+    .catch((error) => { return handleError(error) });
 }
 
 export const createIncomingMailService = (request) => {
@@ -147,11 +166,7 @@ export const closeIncomingMailService = (request) => {
 };
 
 
-export async function _handleError(error) {
-  // var errorCode = error.code;
-  var errorMessage = error.message;
-  return errorMessage;
-};
+
 
 export default {
   fetch: instance,

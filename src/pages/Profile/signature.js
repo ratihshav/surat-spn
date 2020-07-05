@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import toast from '../UI/toast';
 import styles from './styles.module.css'
+import { saveSignatureUserService } from '../../helpers/master/user';
 import SignaturePad from 'react-signature-canvas'
 
 class ProfileSignature extends Component {
@@ -26,6 +27,26 @@ class ProfileSignature extends Component {
       trimmedDataURL: this.sigPad.getTrimmedCanvas()
         .toDataURL('image/png')
     })
+  }
+
+
+  saveSignature = () => {
+    const id = window.localStorage.getItem('id')
+    const { trimmedDataURL } = this.state
+    const params = {
+      ttd: trimmedDataURL,
+      id: id
+    }
+    saveSignatureUserService(params)
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/profile');
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
   }
 
   alertSuccess = () => {
@@ -97,7 +118,7 @@ class ProfileSignature extends Component {
                           <Button
                             color="success"
                             className="waves-effect waves-light"
-                            onClick={this.uploadImage}>
+                            onClick={this.saveSignature}>
                             Simpan
                           </Button>
                         </div>

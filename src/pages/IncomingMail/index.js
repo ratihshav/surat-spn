@@ -29,7 +29,7 @@ class IncomingMail extends Component {
     this.state = {
       isModalVisible: false,
       dataUser: [],
-      totalCount: 0
+      // totalCount: 0
     };
   }
 
@@ -74,6 +74,9 @@ class IncomingMail extends Component {
         });
         params = params.slice(0, -1);
         return getIncomingMailService(params)
+      },
+      onLoadError: (error) => {
+        console.log(error.message);
       },
       remove: (values) => { this.onDeleteIncomingMail(values) }
     })

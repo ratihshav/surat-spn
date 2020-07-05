@@ -106,7 +106,7 @@ export const getDetailUserService = (request) => {
 };
 
 export const changePasswordUserService = (request) => {
-  const id = window.localStorage.getItem('idUser');
+  const id = request.id;
   const password = request.password
   const formData = new FormData();
   formData.append('password', password);
@@ -123,7 +123,7 @@ export const changePasswordUserService = (request) => {
 
 
 export const changePhotoUserService = (request) => {
-  const id = window.localStorage.getItem('idUser');
+  const id = request.id;
   const file = request.image[0]
   const formData = new FormData();
   formData.append('file', file);
@@ -198,6 +198,7 @@ export const forgetPasswordService = (request) => {
 }
 
 export const resetPasswordService = (request) => {
+  const id = window.localStorage.getItem('idUser');
   const formData = new FormData();
   formData.append('email', request.email);
   formData.append('konci_pas', request.konci_pas);
@@ -205,6 +206,21 @@ export const resetPasswordService = (request) => {
 
   const RESET_PASSWORD_API = config.api_endpoint + '/resetPassword'
   return instance.post(RESET_PASSWORD_API, formData)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch((error) => { throw 'Gagal'; });
+}
+
+export const saveSignatureUserService = (request) => {
+  const id = request.id;
+  const formData = new FormData();
+  formData.append('ttd', request.ttd);
+
+  const SAVE_SIGNATURE_API = config.api_endpoint + `/user/savettd/${id}`
+  return instance.post(SAVE_SIGNATURE_API, formData)
     .then((data) => {
       return {
         data: data.data

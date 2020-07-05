@@ -25,7 +25,7 @@ import { getMasterPositionServices } from '../../helpers/master/position'
 import toast from '../UI/toast';
 
 // import images
-import user2 from "../../assets/images/users/user-2.jpg";
+import config from '../../helpers/config'
 import "chartist/dist/scss/chartist.scss";
 
 
@@ -184,8 +184,8 @@ class Profile extends Component {
                       <div>
                         <img
                           className="rounded-circle center"
-                          src={user2}
-                          alt="veltrix"
+                          src={config.url_img + dataUser.path_foto}
+                          alt="foto_user"
                           width="150"
                           data-holder-rendered="true"
                         />
@@ -442,6 +442,21 @@ class Profile extends Component {
                                     </Col>
                                   </Row>
 
+                                  <Row className="form-group">
+                                    <label
+                                      htmlFor="example-text-input"
+                                      className="col-sm-2 col-form-label">
+                                      Tanda Tangan
+                                    </label>
+                                    <Col sm={10}>
+                                      <img
+                                        className="img-fluid"
+                                        width="200"
+                                        height="200"
+                                        src={dataUser.ttd}
+                                        name="ttd" />
+                                    </Col>
+                                  </Row>
                                 </CardText>
                               </Col>
                             </Row>
