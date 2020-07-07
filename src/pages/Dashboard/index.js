@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import SettingMenu from "../Shared/SettingMenu";
 import { Row, Col, Button, Input, Card, CardBody } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
 // import images
 import servicesIcon1 from "../../assets/images/services-icon/01.png";
 import servicesIcon2 from "../../assets/images/services-icon/02.png";
 import servicesIcon3 from "../../assets/images/services-icon/03.png";
 import servicesIcon4 from "../../assets/images/services-icon/04.png";
+import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 
 import "chartist/dist/scss/chartist.scss";
 
@@ -15,6 +17,17 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount() {
+    console.log('fromaman', this.props)
+  }
+
+  componentDidUpdate(prevProps) {
+    // will be true
+    // const locationChanged = this.props.location !== prevProps.location;
+
+    console.log('locationChanged', prevProps)
   }
 
   render() {
@@ -152,10 +165,18 @@ class Dashboard extends Component {
               </Card>
             </Col>
           </Row>
-      </div>
+        </div>
       </React.Fragment>
     );
   }
 }
 
-export default Dashboard;
+const mapStatetoProps = state => {
+  console.log('dashboard', state.Login)
+  const { error, loading, data } = state.Login;
+  return { error, loading, data };
+};
+
+// const mapStatetoProps = (response) => ({response});
+
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(Dashboard));

@@ -64,7 +64,9 @@ class Login extends Component {
                             className="form-horizontal mt-4"
                             onValidSubmit={this.handleValidSubmit}
                           >
-
+                            {this.props.error ? (
+                              <Alert color="danger">{this.props.error}</Alert>
+                            ) : null}
 
                             <div className="form-group">
                               <AvField
@@ -146,11 +148,11 @@ class Login extends Component {
 }
 
 const mapStatetoProps = state => {
-  console.log('state', state.Login)
+  console.log('login', state.Login)
   const { error, loading, data } = state.Login;
   return { error, loading, data };
 };
 
 // const mapStatetoProps = (response) => ({response});
 
-export default (connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(Login));
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(Login));

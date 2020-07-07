@@ -36,20 +36,16 @@ export const loginUserService = (request) => {
     .then((data) => {
       return instance.post(LOGIN_API_ENDPOINT, request)
         .then((data) => {
+          console.log('data', data.data.data)
           const storedToken = data.data.data.token
           const id = data.data.data.userid
           localStorage.setItem('authUser', JSON.stringify(storedToken))
           localStorage.setItem('id', JSON.stringify(id))
-
-          return {
-            data: data.data.data
-          }
+          return data.data.data
         })
-        .catch(() => { throw 'Gagal Login'; });
+        .catch((error) => { throw error.response.data.messages[0] });
     })
-    .catch(error => {
-      return this._handleError(error);
-    })
+    .catch((error) => { throw error });
 }
 
 

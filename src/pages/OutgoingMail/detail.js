@@ -12,9 +12,12 @@ import {
   approveOutgoingMailService
 } from "../../helpers/master/outgoingMail"
 import { searchUserService } from "../../helpers/master/user"
-import woman from "../../assets/images/woman.png";
+import logoPdf from "../../assets/images/logo-pdf.png";
 import toast from '../UI/toast';
 
+const logDokumen = [
+
+]
 class OutgoingMailDetail extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +32,8 @@ class OutgoingMailDetail extends Component {
       isShowModalDispose: false,
       isShowModalAgenda: false,
       selectedStatusMail: null,
-      isShowModalConfirm: false
+      isShowModalConfirm: false,
+      isShowModalHistory: false
     };
   }
 
@@ -165,16 +169,33 @@ class OutgoingMailDetail extends Component {
     return (
       <table className="table table-borderless">
         <tr>
-          <th style={{ width: '200px' }}>
+          <th>
             <tr>
-              <th>Dokumen:</th>
+              <th>Dokumen: </th>
             </tr>
             <tr>
               <th>
                 {disposisi ? data.disposisi.map(function (nextItem, j) {
                   return (
                     <tr key={nextItem.id}>
-                      <a href={`http://localhost/spnbackend/` + nextItem.file_path} target="_blank" download>{nextItem.file_name}</a><br />
+                      <a href={`http://localhost/spnbackend/` + nextItem.file_path} target="_blank" download>
+                        <img src={logoPdf} alt="" height="55" />
+                      </a>
+                    </tr>
+                  );
+                }) : null}
+              </th>
+            </tr>
+
+            <tr>
+              <th>Log Dokumen: </th>
+            </tr>
+            <tr>
+              <th>
+                {disposisi ? data.disposisi.map(function (nextItem, j) {
+                  return (
+                    <tr key={nextItem.id}>
+                      <a href={`http://localhost/spnbackend/` + nextItem.file_path} target="_blank" download>{nextItem.file_name}</a><br /><br />
                     </tr>
                   );
                 }) : null}
@@ -227,32 +248,47 @@ class OutgoingMailDetail extends Component {
               <td>{data.tujuan_surat}</td>
             </tr>
           </th>
-          <th>
-            <tr>
-              {disposisi ? data.disposisi.map(function (nextItem, j) {
-                return (
-                  <tr key={nextItem.id}>
-                    <tr>
-                      <th rowspan="3">  <img src={woman} alt="" height="35" /></th>
-                      <td>{nextItem.label_disposisi}:</td>
-                    </tr>
-                    <tr>
-                      <td> {nextItem.position_name}</td>
-                    </tr>
-                    <tr>
-                      <td> Pada {moment(nextItem.created_at).format('LLLL')}</td>
-                    </tr>
-                  </tr>
-                );
-              }) : null}
-            </tr>
-          </th>
+
         </tr>
       </table>
     )
   }
 
+  showModalHistory = () => {
+    this.setState(prevState => ({
+      isShowModalHistory: !prevState.isShowModalHistory
+    }));
+    this.removeBodyCss();
+  }
 
+  historyModalContent = (data) => {
+    const disposisi = data.disposisi
+    return (
+      <Card>
+        <CardBody>
+          <h4 className="card-title mb-4">Activity</h4>
+          <ol className="activity-feed">
+            {disposisi ? data.disposisi.map(function (nextItem, j) {
+              return (
+                <li className="feed-item">
+                  <div className="feed-item-list">
+                    <span className="date">{nextItem.created_at}</span>
+                    <span className="activity-text">
+                      {nextItem.label_disposisi}
+                    </span>
+                    <span className="activity-text">
+                      <b>{nextItem.position_name} </b>
+                    </span>
+                  </div>
+                </li>
+              )
+            }) : null}
+          </ol>
+
+        </CardBody>
+      </Card>
+    )
+  }
 
   render() {
 
@@ -263,6 +299,7 @@ class OutgoingMailDetail extends Component {
       isShowModalDispose,
       isShowModalAgenda,
       isShowModalConfirm,
+      isShowModalHistory,
       dataUser } = this.state;
 
     const optionsSignature = dataUser.length !== 0 ?
@@ -632,6 +669,37 @@ class OutgoingMailDetail extends Component {
                           data-target=".bs-example-modal-center">
                           Batal
                             </Button>
+                      </div>
+                    </Modal>
+
+                    &nbsp;&nbsp;
+
+                    <Button
+                      color="dark"
+                      className="mt-1"
+                      onClick={this.showModalHistory}>
+                      <i className="typcn typcn-input-checked" />Histori Surat
+                    </Button>
+
+                    <Modal
+                      isOpen={isShowModalHistory}
+                      toggle={this.showModalHistory} >
+                      <div className="modal-header  text-white bg-info">
+                        <h5 className="modal-title mt-0">Histori Surat</h5>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            this.setState({ isShowModalHistory: false })
+                          }
+                          className="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div className="modal-body">
+                        {this.historyModalContent(detailList)}
                       </div>
                     </Modal>
 

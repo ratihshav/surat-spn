@@ -58,7 +58,6 @@ export const createOutgoingMailService = (request) => {
 
 export const updateOutgoingMailService = (request) => {
   const id = window.localStorage.getItem('idOutMail');
-  console.log('requ', request)
   const formData = new FormData();
   formData.append('jenis_surat', request.jenis_surat);
   formData.append('klasifikasi_id', request.klasifikasi_id);

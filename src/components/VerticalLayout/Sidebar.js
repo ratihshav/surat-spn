@@ -82,6 +82,8 @@ class Sidebar extends Component {
   }
 
   componentDidMount() {
+    console.log('siderbar', this.props.location);
+
     this.initMenu();
   }
 

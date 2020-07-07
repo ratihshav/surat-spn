@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, BrowserRouter as Router } from "react-router-dom";
+import { Switch, BrowserRouter as Router, withRouter, Route } from "react-router-dom";
 import { connect } from "react-redux";
 
 // Import Routes
@@ -82,4 +82,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(App);
+export default withRouter(connect(mapStateToProps, null)(App));

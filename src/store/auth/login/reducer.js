@@ -1,3 +1,4 @@
+import { REHYDRATE } from 'redux-persist/lib/constants';
 import {
   LOGIN_USER,
   LOGIN_USER_SUCCESS,
@@ -10,12 +11,13 @@ import {
 const initialState = {
   error: null,
   loading: false,
-  data: []
+  data: null
 }
 
 const login = (state = initialState, action) => {
   switch (action.type) {
-
+    case REHYDRATE:
+      return { ...state, persistedState: action.payload };
     case LOGIN_USER:
       return {
         ...state,

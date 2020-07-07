@@ -23,6 +23,7 @@ import {
 } from '../../helpers/master/user';
 import { getMasterPositionServices } from '../../helpers/master/position'
 import toast from '../UI/toast';
+import SignaturePad from 'react-signature-canvas'
 
 // import images
 import config from '../../helpers/config'

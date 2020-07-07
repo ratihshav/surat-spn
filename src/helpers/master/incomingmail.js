@@ -42,7 +42,6 @@ export const getIncomingMailService = (request) => {
   const GET_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/list`;
   return instance.get(GET_INCOMING_MAIL_API + `${req}`)
     .then((data) => {
-      console.log('asasa')
       return {
         data: data.data.data.data,
         totalCount: data.data.data ? data.data.data.totalCount : null

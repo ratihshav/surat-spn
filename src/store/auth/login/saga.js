@@ -19,7 +19,13 @@ function* loginUserSaga({ payload: { request } }) {
   try {
     const response = yield call(loginUserService, request);
     yield put(loginUserSuccess(response));
+    console.log('ressaga', response, request)
     window.location = '/dashboard';
+    // this.props.history.push('/dashboard', 'fromLogin')
+    // this.props.history.push({
+    //   pathname: '/dashboard',
+    //   state: { fromLogin: true }
+    // });
   } catch (error) {
     yield put(loginUserFail(error));
   }

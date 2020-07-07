@@ -73,7 +73,6 @@ export const updateMasterClassService = (request) => {
 
 //delete
 export const deleteMasterClassService = (request) => {
-  console.log('request', request)
   const id = request.id
   const DELETE_MASTER_CLASS_API = config.api_endpoint + `/klasifikasi/delete/${id}`;
   return instance.post(DELETE_MASTER_CLASS_API, id)

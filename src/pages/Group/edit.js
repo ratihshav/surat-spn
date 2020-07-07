@@ -19,6 +19,7 @@ class GroupEdit extends Component {
   }
 
   componentDidMount() {
+    console.log('this', this.props.location)
     const idDivisi = window.localStorage.getItem('idDivisi')
 
     this.getDetailDivisi(idDivisi)
