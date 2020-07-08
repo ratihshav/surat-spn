@@ -141,9 +141,11 @@ class OutgoingMail extends Component {
   }
 
   getSubjectMail = (rowData) => {
-    return (
-      rowData.status + "-" + rowData.position_name + "-" + rowData.group_name
-    )
+    console.log(rowData)
+    return <div >{rowData.data.hal_surat} <br></br> 
+    <i>{rowData.data.group_name}</i> <br></br>
+    <div style={{color: 'blue'}}>{rowData.data.status} - {rowData.data.position_name}</div>
+    </div>;
   }
 
   onDeleteOutgoingMail = (values) => {
@@ -215,7 +217,7 @@ class OutgoingMail extends Component {
                     <Column dataField="tgl_surat" />
                     <Column dataField="jenis_surat" />
                     <Column dataField="tujuan_surat" />
-                    <Column caption="Hal" dataField="hal_surat" calculateDisplayValue={this.getSubjectMail} />
+                    <Column caption="Hal" dataField="hal_surat" cellRender={this.getSubjectMail} />
                     <Column dataField="group_name" visible={false} />
                     <Column dataField="id" visible={false} />
                     <Column dataField="is_editable" visible={false} />
