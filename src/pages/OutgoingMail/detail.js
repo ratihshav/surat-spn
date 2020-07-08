@@ -167,7 +167,7 @@ class OutgoingMailDetail extends Component {
     const disposisi = data.disposisi
 
     return (
-      <table className="table table-borderless">
+      <table className="table table-borderless mb-0">
         <tr>
           <th>
             <tr>
@@ -175,15 +175,13 @@ class OutgoingMailDetail extends Component {
             </tr>
             <tr>
               <th>
-                {disposisi ? data.disposisi.map(function (nextItem, j) {
-                  return (
-                    <tr key={nextItem.id}>
-                      <a href={`http://localhost/spnbackend/` + nextItem.file_path} target="_blank" download>
-                        <img src={logoPdf} alt="" height="55" />
-                      </a>
-                    </tr>
-                  );
-                }) : null}
+                <tr>
+                  {data.signed_file_path ?
+                    <a href={`http://localhost/spnbackend/` + data.signed_file_path} target="_blank" download>
+                      <img src={logoPdf} alt="" height="55" />
+                    </a>
+                    : 'Belum ada dokumen yang ditandatangani'}
+                </tr>
               </th>
             </tr>
 
@@ -194,8 +192,11 @@ class OutgoingMailDetail extends Component {
               <th>
                 {disposisi ? data.disposisi.map(function (nextItem, j) {
                   return (
-                    <tr key={nextItem.id}>
-                      <a href={`http://localhost/spnbackend/` + nextItem.file_path} target="_blank" download>{nextItem.file_name}</a><br /><br />
+                    <tr key={nextItem.id} >
+                      <Col style={{ backgroundColor: '#E9EBEE', borderRadius: 5, textAlign: 'center', justifyContent: 'center', margin: 5 }}>
+                        <Row>{nextItem.created_by} - {nextItem.position_name}</Row>
+                        <Row> <a href={`http://localhost/spnbackend/` + nextItem.file_path} target="_blank" download>{nextItem.file_name}</a></Row>
+                      </Col>
                     </tr>
                   );
                 }) : null}
