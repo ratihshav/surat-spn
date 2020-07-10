@@ -25,7 +25,7 @@ import {
   getDetailUserService,
   updateMasterUserService
 } from '../../helpers/master/user';
-import { getMasterPositionServices } from '../../helpers/master/position'
+import { searchPositionService } from '../../helpers/master/position'
 import toast from '../UI/toast';
 
 // import images
@@ -64,10 +64,10 @@ class UserEdit extends Component {
   }
 
   getDataPosition = () => {
-    getMasterPositionServices()
+    searchPositionService()
       .then((data) => {
         this.setState({
-          dataPosition: data.data
+          dataPosition: data.data.data
         })
       })
       .catch(() => { throw 'Gagal Mengubah Data'; })
@@ -157,7 +157,7 @@ class UserEdit extends Component {
 
     const optionsPosition = dataPosition.length !== 0 ?
       dataPosition.map(function (data) {
-        return { value: data.id, label: data.position_name };
+        return { value: data.id, label: data.text };
       })
       : null
 

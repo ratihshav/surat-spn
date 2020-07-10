@@ -155,8 +155,11 @@ export const createAgendaOutgoingMailService = (request) => {
 
 export const approveOutgoingMailService = (request) => {
   const id = window.localStorage.getItem('idOutMail');
-  const APPROVE_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/approve/${id}`;
-  return instance.post(APPROVE_OUTGOING_MAIL_API)
+  const formData = new FormData();
+  formData.append('keterangan', request.keterangan);
+
+  const APPROVE_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/sign/${id}`;
+  return instance.post(APPROVE_OUTGOING_MAIL_API, formData)
     .then((data) => {
       return {
         data: data

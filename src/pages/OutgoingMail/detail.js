@@ -129,8 +129,12 @@ class OutgoingMailDetail extends Component {
   }
 
   doApproveMail = (e) => {
+    const params = {
+      keterangan: e.target.description.value,
+    }
 
-    approveOutgoingMailService()
+    console.log('params', params)
+    approveOutgoingMailService(params)
       .then((data) => {
         this.alertSuccess()
         this.props.history.push('/outgoing-mail');
@@ -163,95 +167,118 @@ class OutgoingMailDetail extends Component {
     this.setState({ selectedStatusMail })
   }
 
-  getTableContent = (data) => {
+  content = (data) => {
     const disposisi = data.disposisi
-
     return (
-      <table className="table table-borderless mb-0">
-        <tr>
-          <th>
-            <tr>
-              <th>Dokumen: </th>
-            </tr>
-            <tr>
-              <th>
+      <Row style={{ fontWeight: 'bold' }}>
+        <Col xl={6}>
+          <Card>
+            <CardBody style={{ padding: 0 }}>
+              <table className="table table-hover table-centered table-borderless mb-0">
                 <tr>
-                  {data.signed_file_path ?
-                    <a href={`http://localhost/spnbackend/` + data.signed_file_path} target="_blank" download>
-                      <img src={logoPdf} alt="" height="55" />
-                    </a>
-                    : 'Belum ada dokumen yang ditandatangani'}
+                  <th>Dokumen: </th>
                 </tr>
-              </th>
-            </tr>
-
-            <tr>
-              <th>Log Dokumen: </th>
-            </tr>
-            <tr>
-              <th>
-                {disposisi ? data.disposisi.map(function (nextItem, j) {
-                  return (
-                    <tr key={nextItem.id} >
-                      <Col style={{ backgroundColor: '#E9EBEE', borderRadius: 5, textAlign: 'center', justifyContent: 'center', margin: 5 }}>
-                        <Row>{nextItem.created_by} - {nextItem.position_name}</Row>
-                        <Row> <a href={`http://localhost/spnbackend/` + nextItem.file_path} target="_blank" download>{nextItem.file_name}</a></Row>
-                      </Col>
+                <tr>
+                  <th>
+                    <tr>
+                      {data.signed_file_path ?
+                        <a href={`http://localhost/spnbackend/` + data.signed_file_path} target="_blank" download>
+                          <img src={logoPdf} alt="" height="55" />
+                        </a>
+                        : 'Belum ada dokumen yang ditandatangani'}
                     </tr>
-                  );
-                }) : null}
-              </th>
-            </tr>
-          </th>
-          <th>
-            <tr>
-              <th>Dikonsep Oleh:</th>
-              <td id="combo-1610-inputCell">{data.created_by}</td>
-            </tr>
-            <tr>
-              <th>Perihal:</th>
-              <td>{data.hal_surat}</td>
-            </tr>
-            <tr>
-              <th>Kepada:</th>
-              <td>{data.to_username}</td>
-            </tr>
-            <tr>
-              <th>Jenis Surat:</th>
-              <td>{data.jenis_surat}</td>
-            </tr>
-            <tr>
-              <th>Klasifikasi Surat:</th>
-              <td>{data.klasifikasi_surat}</td>
-            </tr>
-            <tr>
-              <th>Sifat Surat:</th>
-              <td>{data.sifat_surat}</td>
-            </tr>
-            <tr>
-              <th>Nomor Agenda:</th>
-              <td>{data.nomor_agenda}</td>
-            </tr>
-            <tr>
-              <th>Nomor Surat:</th>
-              <td>{data.nomor_surat}</td>
-            </tr>
-            <tr>
-              <th>Tanggal Surat:</th>
-              <td>{data.tgl_surat}</td>
-            </tr>
-            <tr>
-              <th>Lampiran:</th>
-              <td>{data.lampiran}</td>
-            </tr>
-            <tr>
-              <th>Tujuan Surat:</th>
-              <td>{data.tujuan_surat}</td>
-            </tr>
-          </th>
+                  </th>
+                </tr>
 
-        </tr>
-      </table>
+                <tr>
+                  <th>Log Dokumen: </th>
+                </tr>
+                <tr>
+                  <th>
+                    {disposisi ? data.disposisi.map(function (nextItem, j) {
+                      return (
+                        <tr key={nextItem.id} >
+                          <Col style={{ backgroundColor: '#E9EBEE', borderRadius: 5, textAlign: 'center', justifyContent: 'center', margin: 5 }}>
+                            <Row>{nextItem.created_by} - {nextItem.position_name}</Row>
+                            <Row> <a href={`http://localhost/spnbackend/` + nextItem.file_path} target="_blank" download>{nextItem.file_name}</a></Row>
+                          </Col>
+                        </tr>
+                      );
+                    }) : null}
+                  </th>
+                </tr>
+              </table>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col xl={6}>
+          <Row>
+            <Col md={12}>
+              <Card>
+                <CardBody style={{ padding: 0, paddingRight: 7 }}>
+                  <table className="table table-bordered mb-0">
+                    <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                      <th style={{ width: 250 }}>Dikonsep Oleh:</th>
+                      <td id="combo-1610-inputCell">{data.created_by}</td>
+                    </tr>
+                    <tr>
+                      <th>Jenis Surat:</th>
+                      <td>{data.jenis_surat}</td>
+                    </tr>
+                    <tr>
+                      <th>Klasifikasi Surat:</th>
+                      <td>{data.klasifikasi_name}</td>
+                    </tr>
+                    <tr>
+                      <th>Nomor Agenda:</th>
+                      <td>{data.nomor_agenda}</td>
+                    </tr>
+                    <tr>
+                      <th>Nomor Surat:</th>
+                      <td>{data.nomor_surat}</td>
+                    </tr>
+                    <tr>
+                      <th>Tanggal Surat:</th>
+                      <td>{data.tgl_surat}</td>
+                    </tr>
+                  </table>
+                </CardBody>
+              </Card>
+            </Col>
+
+          </Row>
+          <Row>
+            <Col md={12}>
+              <Card>
+                <CardBody style={{ padding: 0, paddingRight: 7 }}>
+                  <table className="table table-bordered mb-0">
+                    <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                      <th style={{ width: 250 }}>Penandatangan:</th>
+                      <td id="combo-1610-inputCell">{data.approval_name}</td>
+                    </tr>
+                    <tr>
+                      <th>Perihal:</th>
+                      <td>{data.hal_surat}</td>
+                    </tr>
+                    <tr>
+                      <th>Sifat Surat:</th>
+                      <td>{data.sifat_surat}</td>
+                    </tr>
+                    <tr>
+                      <th>Lampiran:</th>
+                      <td>{data.lampiran}</td>
+                    </tr>
+                    <tr>
+                      <th>Ditujukan Kepada:</th>
+                      <td>{data.tujuan_surat}</td>
+                    </tr>
+                  </table>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
     )
   }
 
@@ -265,29 +292,25 @@ class OutgoingMailDetail extends Component {
   historyModalContent = (data) => {
     const disposisi = data.disposisi
     return (
-      <Card>
-        <CardBody>
-          <h4 className="card-title mb-4">Activity</h4>
-          <ol className="activity-feed">
-            {disposisi ? data.disposisi.map(function (nextItem, j) {
-              return (
-                <li className="feed-item">
-                  <div className="feed-item-list">
-                    <span className="date">{nextItem.created_at}</span>
-                    <span className="activity-text">
-                      {nextItem.label_disposisi}
-                    </span>
-                    <span className="activity-text">
-                      <b>{nextItem.position_name} </b>
-                    </span>
-                  </div>
-                </li>
-              )
-            }) : null}
-          </ol>
-
-        </CardBody>
-      </Card>
+      <div>
+        <ol className="activity-feed">
+          {disposisi ? data.disposisi.map(function (nextItem, j) {
+            return (
+              <li className="feed-item">
+                <div className="feed-item-list">
+                  <span className="date">{nextItem.created_at}</span>
+                  <span className="activity-text">
+                    {nextItem.label_disposisi}
+                  </span>
+                  <span className="activity-text">
+                    <b>{nextItem.position_name} </b>
+                  </span>
+                </div>
+              </li>
+            )
+          }) : null}
+        </ol>
+      </div>
     )
   }
 
@@ -330,7 +353,7 @@ class OutgoingMailDetail extends Component {
           </Row>
 
           <Row>
-            <Col xl={12}>
+            <Col>
               <Card>
                 <CardBody>
                   <div className="card text-white bg-info">
@@ -344,367 +367,389 @@ class OutgoingMailDetail extends Component {
                   </div>
                   <Row>
                     <div className="table-responsive">
-                      {this.getTableContent(detailList)}
+                      {this.content(detailList)}
                     </div>
                   </Row>
-                  <div className="text-right mt-8">
-                    <Button
-                      color="primary"
-                      className="mt-1"
-                      onClick={this.showModalDispose}
-                      data-toggle="modal"
-                      data-target=".bs-example-modal-center">
-                      <i className="typcn typcn-input-checked" />Teruskan
-                    </Button>
 
-                    <Modal
-                      isOpen={isShowModalDispose}
-                      toggle={this.showModalDispose} >
-                      <div className="modal-header  text-white bg-info">
-                        <h5 className="modal-title mt-0">Proses Surat Keluar</h5>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            this.setState({ isShowModalDispose: false })
-                          }
-                          className="close"
-                          data-dismiss="modal"
-                          aria-label="Close"
-                        >
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
+                  <Row>
+                    <Col style={{ justifyContent: 'flex-start' }}>
+                      <Button
+                        color="dark"
+                        className="mt-1"
+                        onClick={this.showModalHistory}>
+                        <i className="typcn typcn-input-checked" />Histori Surat
+                      </Button>
 
-                      <div className="modal-body">
-                        <form action="#" onSubmit={this.doDisposition}>
+                      <Modal
+                        isOpen={isShowModalHistory}
+                        toggle={this.showModalHistory} >
+                        <div className="modal-header  text-white bg-info">
+                          <h5 className="modal-title mt-0">Histori Surat</h5>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              this.setState({ isShowModalHistory: false })
+                            }
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div className="modal-body">
+                          {this.historyModalContent(detailList)}
+                        </div>
+                      </Modal>
+                    </Col>
 
-                          <Row className="form-group">
-                            <label
-                              htmlFor="example-text-input"
-                              className="col-sm-2 col-form-label">
-                              Status
+
+                    <Col style={{ justifyContent: 'flex-end' }}>
+                      {detailList.can_disposition === 1 ?
+                        <Button
+                          color="primary"
+                          className="mt-1"
+                          onClick={this.showModalDispose}
+                          data-toggle="modal"
+                          data-target=".bs-example-modal-center">
+                          <i className="typcn typcn-input-checked" />Teruskan
+                      </Button>
+                        : null}
+                      <Modal
+                        isOpen={isShowModalDispose}
+                        toggle={this.showModalDispose} >
+                        <div className="modal-header  text-white bg-info">
+                          <h5 className="modal-title mt-0">Proses Surat Keluar</h5>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              this.setState({ isShowModalDispose: false })
+                            }
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+
+                        <div className="modal-body">
+                          <form action="#" onSubmit={this.doDisposition}>
+
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-text-input"
+                                className="col-sm-2 col-form-label">
+                                Status
                                            </label>
-                            <Col sm={10}>
-                              <input
-                                type="radio"
-                                id="accept"
-                                name="status"
-                                value="1"
-                                onChange={this.handleStatusMail}
-                                ref={node => (this.inputNode = node)} />&nbsp;
+                              <Col sm={10}>
+                                <input
+                                  type="radio"
+                                  id="accept"
+                                  name="status"
+                                  value="1"
+                                  onChange={this.handleStatusMail}
+                                  ref={node => (this.inputNode = node)} />&nbsp;
                                             <label htmlFor="accept">Disetujui</label>
 
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                                             <input
-                                type="radio"
-                                id="reject"
-                                name="status"
-                                value="0"
-                                onChange={this.handleStatusMail}
-                                ref={node => (this.inputNode = node)} />&nbsp;
+                                  type="radio"
+                                  id="reject"
+                                  name="status"
+                                  value="0"
+                                  onChange={this.handleStatusMail}
+                                  ref={node => (this.inputNode = node)} />&nbsp;
                                             <label htmlFor="reject"> Dikembalikan</label>
-                            </Col>
-                          </Row>
+                              </Col>
+                            </Row>
 
-                          <Row className="form-group">
-                            <label
-                              htmlFor="example-search-input"
-                              className="col-sm-2 col-form-label">
-                              Diteruskan kepada
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-search-input"
+                                className="col-sm-2 col-form-label">
+                                Diteruskan kepada
                          </label>
-                            <Col sm={10}>
-                              <Select
-                                value={selectedSignature}
-                                onChange={this.handleSelectSignature}
-                                options={optionsSignature}
-                                name="sendTo"
-                                ref={node => (this.inputNode = node)}
-                              />
-                            </Col>
-                          </Row>
+                              <Col sm={10}>
+                                <Select
+                                  value={selectedSignature}
+                                  onChange={this.handleSelectSignature}
+                                  options={optionsSignature}
+                                  name="sendTo"
+                                  ref={node => (this.inputNode = node)}
+                                />
+                              </Col>
+                            </Row>
 
-                          <Row className="form-group">
-                            <label
-                              htmlFor="example-search-input"
-                              className="col-sm-2 col-form-label">
-                              Keterangan
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-search-input"
+                                className="col-sm-2 col-form-label">
+                                Keterangan
                           </label>
-                            <Col sm={10}>
-                              <input
-                                name="description"
-                                className="form-control"
-                                type="text"
-                                defaultValue=""
-                                id="example-text-input"
-                                ref={node => (this.inputNode = node)}
-                              />
-                            </Col>
-                          </Row>
+                              <Col sm={10}>
+                                <input
+                                  name="description"
+                                  className="form-control"
+                                  type="text"
+                                  defaultValue=""
+                                  id="example-text-input"
+                                  ref={node => (this.inputNode = node)}
+                                />
+                              </Col>
+                            </Row>
 
-                          <Row className="form-group">
-                            <label
-                              htmlFor="example-search-input"
-                              className="col-sm-2 col-form-label">
-                              File
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-search-input"
+                                className="col-sm-2 col-form-label">
+                                File
                            </label>
-                            <Col sm={10}>
-                              <input
-                                name="existingFile"
-                                className="form-control"
-                                type="text"
-                                value={detailList.disposisi ? detailList.disposisi[detailList.disposisi.length - 1].file_name : null}
-                                id="example-text-input"
-                                ref={node => (this.inputNode = node)}
-                                disabled
-                              />
-                            </Col>
-                          </Row>
+                              <Col sm={10}>
+                                <input
+                                  name="existingFile"
+                                  className="form-control"
+                                  type="text"
+                                  value={detailList.disposisi ? detailList.disposisi[detailList.disposisi.length - 1].file_name : null}
+                                  id="example-text-input"
+                                  ref={node => (this.inputNode = node)}
+                                  disabled
+                                />
+                              </Col>
+                            </Row>
 
-                          <Row className="form-group">
-                            <label
-                              htmlFor="example-search-input"
-                              className="col-sm-2 col-form-label">
-                              Ganti File (Jika ada perubahan)
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-search-input"
+                                className="col-sm-2 col-form-label">
+                                Ganti File (Jika ada perubahan)
                            </label>
-                            <Col sm={10}>
-                              <form action="#">
-                                <div className="custom-file">
-                                  <input
-                                    type="file"
-                                    className="form-control"
-                                    id="validatedCustomFile"
-                                    required
-                                    onChange={this.onFileChange}
-                                    accept=".doc, .docx, .pdf"
-                                    name="file"
-                                    ref={node => (this.inputNode = node)}
-                                  />
-                                </div>
-                              </form>
-                            </Col>
-                          </Row>
-                          <div className="text-right mt-8">
-                            <Button
-                              color="success"
-                              className="mt-1"
-                              data-toggle="modal"
-                              data-target=".bs-example-modal-center">
-                              <i className="typcn typcn-input-checked" />Submit
+                              <Col sm={10}>
+                                <form action="#">
+                                  <div className="custom-file">
+                                    <input
+                                      type="file"
+                                      className="form-control"
+                                      id="validatedCustomFile"
+                                      required
+                                      onChange={this.onFileChange}
+                                      accept=".doc, .docx, .pdf"
+                                      name="file"
+                                      ref={node => (this.inputNode = node)}
+                                    />
+                                  </div>
+                                </form>
+                              </Col>
+                            </Row>
+                            <div className="text-right mt-8">
+                              <Button
+                                color="success"
+                                className="mt-1"
+                                data-toggle="modal"
+                                data-target=".bs-example-modal-center">
+                                <i className="typcn typcn-input-checked" />Submit
                          </Button>
-                          </div>
-                        </form>
-                      </div>
-                    </Modal>
+                            </div>
+                          </form>
+                        </div>
+                      </Modal>
 
                     &nbsp;&nbsp;
 
-                      <Button
-                      color="warning"
-                      className="mt-1"
-                      onClick={this.showModalAgenda}
-                      data-target=".bs-example-modal-center">
-                      <i className="typcn typcn-input-checked" />Agenda
+                    {detailList.can_agenda === 1 ?
+                        <Button
+                          color="warning"
+                          className="mt-1"
+                          onClick={this.showModalAgenda}
+                          data-target=".bs-example-modal-center">
+                          <i className="typcn typcn-input-checked" />Agenda
                       </Button>
+                        : null}
 
-                    <Modal
-                      isOpen={isShowModalAgenda}
-                      toggle={this.showModalAgenda} >
-                      <div className="modal-header  text-white bg-info">
-                        <h5 className="modal-title mt-0">Agenda Surat Keluar</h5>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            this.setState({ isShowModalAgenda: false })
-                          }
-                          className="close"
-                          data-dismiss="modal"
-                          aria-label="Close"
-                        >
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
+                      <Modal
+                        isOpen={isShowModalAgenda}
+                        toggle={this.showModalAgenda} >
+                        <div className="modal-header  text-white bg-info">
+                          <h5 className="modal-title mt-0">Agenda Surat Keluar</h5>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              this.setState({ isShowModalAgenda: false })
+                            }
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
 
-                      <div className="modal-body">
-                        <form action="#" onSubmit={this.createAgendaMail}>
+                        <div className="modal-body">
+                          <form action="#" onSubmit={this.createAgendaMail}>
 
-                          <Row className="form-group">
-                            <label
-                              htmlFor="example-search-input"
-                              className="col-sm-2 col-form-label">
-                              No. Surat
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-search-input"
+                                className="col-sm-2 col-form-label">
+                                No. Surat
                           </label>
-                            <Col sm={10}>
-                              <input
-                                name="noMail"
-                                className="form-control"
-                                type="text"
-                                defaultValue={detailList.nomor_surat}
-                                id="example-text-input"
-                                ref={node => (this.inputNode = node)}
-                              />
-                            </Col>
-                          </Row>
+                              <Col sm={10}>
+                                <input
+                                  name="noMail"
+                                  className="form-control"
+                                  type="text"
+                                  defaultValue={detailList.nomor_surat}
+                                  id="example-text-input"
+                                  ref={node => (this.inputNode = node)}
+                                />
+                              </Col>
+                            </Row>
 
-                          <Row className="form-group">
-                            <label
-                              htmlFor="example-search-input"
-                              className="col-sm-2 col-form-label">
-                              No. Agenda
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-search-input"
+                                className="col-sm-2 col-form-label">
+                                No. Agenda
                           </label>
-                            <Col sm={10}>
-                              <input
-                                name="noAgenda"
-                                className="form-control"
-                                type="text"
-                                defaultValue={detailList.nomor_agenda}
-                                id="example-text-input"
-                                ref={node => (this.inputNode = node)}
-                              />
-                            </Col>
-                          </Row>
+                              <Col sm={10}>
+                                <input
+                                  name="noAgenda"
+                                  className="form-control"
+                                  type="text"
+                                  defaultValue={detailList.nomor_agenda}
+                                  id="example-text-input"
+                                  ref={node => (this.inputNode = node)}
+                                />
+                              </Col>
+                            </Row>
 
-                          <Row className="form-group">
-                            <label
-                              htmlFor="example-text-input"
-                              className="col-sm-2 col-form-label" >
-                              Tanggal Surat
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-text-input"
+                                className="col-sm-2 col-form-label" >
+                                Tanggal Surat
                             </label>
-                            <Col sm={10}>
-                              <input
-                                className="form-control"
-                                type="date"
-                                id="example-text-input"
-                                name="dateMail"
-                                defaultValue={detailList.tgl_surat}
-                                ref={node => (this.inputNode = node)}
-                              />
-                            </Col>
-                          </Row>
+                              <Col sm={10}>
+                                <input
+                                  className="form-control"
+                                  type="date"
+                                  id="example-text-input"
+                                  name="dateMail"
+                                  defaultValue={detailList.tgl_surat}
+                                  ref={node => (this.inputNode = node)}
+                                />
+                              </Col>
+                            </Row>
 
-                          <Row className="form-group">
-                            <label
-                              htmlFor="example-search-input"
-                              className="col-sm-2 col-form-label">
-                              Dokumen
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-search-input"
+                                className="col-sm-2 col-form-label">
+                                Dokumen
                             </label>
-                            <Col sm={10}>
-                              <form action="#">
-                                <div className="custom-file">
-                                  <input
-                                    type="file"
-                                    className="form-control"
-                                    id="validatedCustomFile"
-                                    required
-                                    onChange={this.onFileChange}
-                                    accept=".doc, .docx, .pdf"
-                                    name="file"
-                                    ref={node => (this.inputNode = node)}
-                                  />
-                                  <label
-                                    className="custom-file-label"
-                                    htmlFor="validatedCustomFile"
-                                    style={{ zIndex: 0 }}>
-                                    {selectedFile !== null && selectedFile !== undefined ? selectedFile.name : 'Belum ada file yang dipilih'}
-                                  </label>
-                                </div>
-                              </form>
-                            </Col>
-                          </Row>
+                              <Col sm={10}>
+                                <form action="#">
+                                  <div className="custom-file">
+                                    <input
+                                      type="file"
+                                      className="form-control"
+                                      id="validatedCustomFile"
+                                      required
+                                      onChange={this.onFileChange}
+                                      accept=".doc, .docx, .pdf"
+                                      name="file"
+                                      ref={node => (this.inputNode = node)}
+                                    />
+                                    <label
+                                      className="custom-file-label"
+                                      htmlFor="validatedCustomFile"
+                                      style={{ zIndex: 0 }}>
+                                      {selectedFile !== null && selectedFile !== undefined ? selectedFile.name : 'Belum ada file yang dipilih'}
+                                    </label>
+                                  </div>
+                                </form>
+                              </Col>
+                            </Row>
 
-                          <div className="text-right mt-8">
-                            <Button
-                              color="success"
-                              className="mt-1"
-                              data-toggle="modal"
-                              data-target=".bs-example-modal-center">
-                              <i className="typcn typcn-input-checked" />Submit
+                            <div className="text-right mt-8">
+                              <Button
+                                color="success"
+                                className="mt-1"
+                                data-toggle="modal"
+                                data-target=".bs-example-modal-center">
+                                <i className="typcn typcn-input-checked" />Submit
                          </Button>
-                          </div>
-                        </form>
-                      </div>
-                    </Modal>
+                            </div>
+                          </form>
+                        </div>
+                      </Modal>
 
                     &nbsp;&nbsp;
 
-                    <Button
-                      color="success"
-                      className="mt-1"
-                      onClick={this.showModalConfirm}>
-                      <i className="typcn typcn-input-checked" />Setujui
-                    </Button>
-
-                    <Modal
-                      isOpen={isShowModalConfirm}
-                      toggle={this.showModalConfirm} >
-                      <div className="modal-header  text-white bg-info">
-                        <h5 className="modal-title mt-0">Konfirmasi</h5>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            this.setState({ isShowModalConfirm: false })
-                          }
-                          className="close"
-                          data-dismiss="modal"
-                          aria-label="Close"
-                        >
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-
-
-                      <div className="modal-body">
-                        <h5>Apakah Anda yakin ingin menyetujui surat ini?</h5>
-                      </div>
-                      <div className="modal-footer">
+                    {detailList.can_approve === 1 ?
                         <Button
                           color="success"
                           className="mt-1"
-                          onClick={this.doApproveMail}
-                          data-target=".bs-example-modal-center">
-                          Ya
-                            </Button>
-                        <Button
-                          className="btn btn-secondary"
-                          onClick={() => this.setState({ isShowModalConfirm: false })}
-                          data-target=".bs-example-modal-center">
-                          Batal
-                            </Button>
-                      </div>
-                    </Modal>
-
-                    &nbsp;&nbsp;
-
-                    <Button
-                      color="dark"
-                      className="mt-1"
-                      onClick={this.showModalHistory}>
-                      <i className="typcn typcn-input-checked" />Histori Surat
+                          onClick={this.showModalConfirm}>
+                          <i className="typcn typcn-input-checked" />Setujui
                     </Button>
+                        : null}
 
-                    <Modal
-                      isOpen={isShowModalHistory}
-                      toggle={this.showModalHistory} >
-                      <div className="modal-header  text-white bg-info">
-                        <h5 className="modal-title mt-0">Histori Surat</h5>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            this.setState({ isShowModalHistory: false })
-                          }
-                          className="close"
-                          data-dismiss="modal"
-                          aria-label="Close"
-                        >
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div className="modal-body">
-                        {this.historyModalContent(detailList)}
-                      </div>
-                    </Modal>
+                      <Modal
+                        isOpen={isShowModalConfirm}
+                        toggle={this.showModalConfirm} >
+                        <div className="modal-header  text-white bg-info">
+                          <h5 className="modal-title mt-0">Konfirmasi</h5>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              this.setState({ isShowModalConfirm: false })
+                            }
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
 
-                  </div>
+                        <form action="#" onSubmit={this.doApproveMail}>
+
+                          <div className="modal-body">
+                            <h5>Apakah Anda yakin ingin menyetujui surat ini?</h5> <br />
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-search-input"
+                                className="col-sm-2 col-form-label">
+                                Keterangan
+                          </label>
+                              <Col sm={10}>
+                                <input
+                                  name="description"
+                                  className="form-control"
+                                  type="text"
+                                  id="example-text-input"
+                                  ref={node => (this.inputNode = node)}
+                                />
+                              </Col>
+                            </Row>
+                            <div className="text-right mt-8">
+                              <Button
+                                color="success"
+                                className="mt-1"
+                                data-toggle="modal"
+                                data-target=".bs-example-modal-center">
+                                <i className="typcn typcn-input-checked" />Submit
+                         </Button>
+                            </div>
+                          </div>
+                        </form>
+                      </Modal>
+                    &nbsp;&nbsp;
+                    </Col>
+                  </Row>
+
                 </CardBody>
               </Card>
             </Col>

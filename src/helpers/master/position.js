@@ -156,6 +156,18 @@ export const searchParentPositionService = (request) => {
     .catch(() => { throw 'Gagal Mengubah Data'; });
 }
 
+export const searchPositionService = (request) => {
+
+  const SEARCH_POSITION_API = config.api_endpoint + `/jabatan/search`
+  return instance.get(SEARCH_POSITION_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
+
 export async function _handleError(error) {
   // var errorCode = error.code;
   var errorMessage = error.message;
