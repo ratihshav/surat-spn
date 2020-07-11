@@ -10,9 +10,12 @@ import {
   createDisposeIncomingMailService,
   closeIncomingMailService
 } from "../../helpers/master/incomingMail"
-import woman from "../../assets/images/woman.png";
 import toast from '../UI/toast';
+import { Document, Page, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import sample from './sample.pdf'
 
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 class IncomingMailDetail extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +28,9 @@ class IncomingMailDetail extends Component {
       status: '',
       selectedFile: null,
       stateIdMail: '',
-      modalConfirm: false
+      modalConfirm: false,
+      numPages: null,
+      pageNumber: 1,
     };
   }
 
@@ -121,84 +126,110 @@ class IncomingMailDetail extends Component {
     toast.error('Gagal menyelesaikan surat')
   }
 
-  getTableContent = (data) => {
-    const disposisi = data.disposisi
+  onDocumentLoadSuccess = ({ numPages }) => {
+    this.setState({ numPages });
+  }
 
+  getTableContent = (data) => {
+    const { pageNumber, numPages } = this.state;
+    const url = "http://localhost/spnbackend" + data.file_path
     return (
-      <table className="table table-borderless">
-        <tr>
-          <th style={{ width: '200px' }}>
-            <tr>
-              <th>Dokumen:</th>
-            </tr>
-            <tr>
-              <th>
+      <Row style={{ fontWeight: 'bold', paddingLeft: 7, paddingRight: 7 }}>
+        <Col xl={8}>
+          <Card>
+            <CardBody style={{ padding: 0 }}>
+              <table className="table table-hover table-centered table-bordered mb-0">
                 <tr>
-                  <a href={`http://localhost/spnbackend/` + data.file_path} target="_blank" download>{data.file_name}</a><br />
+                  <th style={{ backgroundColor: '#5cb85c', color: 'white' }}>Dokumen: </th>
                 </tr>
-              </th>
-            </tr>
-          </th>
-          <th>
-            <tr>
-              <th>Asal Surat:</th>
-              <td id="combo-1610-inputCell">{data.asal_surat}</td>
-            </tr>
-            <tr>
-              <th>Perihal:</th>
-              <td>{data.perihal}</td>
-            </tr>
-            <tr>
-              <th>Nomor Surat:</th>
-              <td>{data.nomor_surat}</td>
-            </tr>
-            <tr>
-              <th>Prioritas Surat:</th>
-              <td>{data.prioritas}</td>
-            </tr>
-            <tr>
-              <th>Klasifikasi Surat:</th>
-              <td>{data.klasifikasi}</td>
-            </tr>
-            <tr>
-              <th>Lampiran:</th>
-              <td>{data.lampiran}</td>
-            </tr>
-            <tr>
-              <th>Sifat Surat:</th>
-              <td>{data.sifat_surat}</td>
-            </tr>
-            <tr>
-              <th>Tanggal Surat:</th>
-              <td>{data.tgl_surat}</td>
-            </tr>
-            <tr>
-              <th>Tanggal Diterima:</th>
-              <td>{data.tgl_diterima}</td>
-            </tr>
-          </th>
-          <th>
-            <tr>
-              {disposisi ? data.disposisi.map(function (nextItem, j) {
-                return (
-                  <tr key={nextItem.id}>
+                <tr>
+                  <th>
                     <tr>
-                      <th rowspan="3">  <img src={woman} alt="" height="35" /></th>
-                      <td>{nextItem.label_disposisi}:</td>
+                      {data.file_path ?
+                        <div>
+                          <Document
+                            file={sample}
+                            onLoadSuccess={this.onDocumentLoadSuccess}
+                            externalLinkTarget="_blank"
+                          >
+                            <Page pageNumber={1} width={600} />
+                            <p className="text-right mt-8">Halaman {pageNumber} dari {numPages}</p>
+                          </Document>
+                        </div>
+
+                        : 'Belum ada dokumen yang ditandatangani'}
+                    </tr>
+                  </th>
+                </tr>
+              </table>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col xl={4}>
+          <Row>
+            <Col md={12}>
+              <Card>
+                <CardBody style={{ padding: 0 }}>
+                  <table className="table table-bordered mb-0">
+                    <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                      <th style={{ width: 200 }}>Asal Surat:</th>
+                      <td id="combo-1610-inputCell">{data.asal_surat}</td>
                     </tr>
                     <tr>
-                      <td> {nextItem.position_name}</td>
+                      <th>Nomor Surat:</th>
+                      <td>{data.nomor_surat}</td>
                     </tr>
                     <tr>
-                      <td> Pada {moment(nextItem.created_at).format('LLLL')}</td>
+                      <th>Tanggal Surat:</th>
+                      <td>{data.tgl_surat}</td>
                     </tr>
-                  </tr>
-                );
-              }) : null}
-            </tr>
-          </th>
-        </tr>
-      </table>
+                    <tr>
+                      <th>Hal:</th>
+                      <td>{data.perihal}</td>
+                    </tr>
+                    <tr>
+                      <th>Sifat Surat:</th>
+                      <td>{data.sifat_surat}</td>
+                    </tr>
+                    <tr>
+                      <th>Lampiran:</th>
+                      <td>{data.lampiran}</td>
+                    </tr>
+
+                  </table>
+                </CardBody>
+              </Card>
+            </Col>
+
+          </Row>
+          <Row>
+            <Col md={12}>
+              <Card>
+                <CardBody style={{ padding: 0 }}>
+                  <table className="table table-bordered mb-0">
+                    <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                      <th style={{ width: 200 }}>Ditujukan Kepada:</th>
+                      <td id="combo-1610-inputCell">{data.position_name}</td>
+                    </tr>
+                    <tr>
+                      <th>Klasifikasi:</th>
+                      <td>{data.klasifikasi_name}</td>
+                    </tr>
+                    <tr>
+                      <th>Dibuat Oleh:</th>
+                      <td>{data.created_by}</td>
+                    </tr>
+                    <tr>
+                      <th>Tanggal Diterima:</th>
+                      <td>{data.tgl_diterima}</td>
+                    </tr>
+                  </table>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
     )
   }
 
