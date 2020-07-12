@@ -4,7 +4,7 @@ import Select from "react-select";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
-import { getMasterPositionServices } from "../../helpers/master/position"
+import { searchPositionService } from "../../helpers/master/position"
 import { saveMasterUserService } from "../../helpers/master/user"
 import toast from '../UI/toast';
 
@@ -56,10 +56,10 @@ class UserAdd extends Component {
   }
 
   getDataPosition = () => {
-    getMasterPositionServices()
+    searchPositionService()
       .then((data) => {
         this.setState({
-          dataPosition: data.data
+          dataPosition: data.data.data
         })
       })
       .catch(() => { throw 'Gagal Mengambil Data' })
@@ -85,7 +85,7 @@ class UserAdd extends Component {
 
     const optionsPosition = dataPosition.length !== 0 ?
       dataPosition.map((data) => {
-        return { value: data.id, label: data.position_name };
+        return { value: data.id, label: data.text };
       })
       : null
 
