@@ -170,27 +170,26 @@ class OutgoingMailDetail extends Component {
   content = (data) => {
     const disposisi = data.disposisi
     return (
-      <Row style={{ fontWeight: 'bold' }}>
+      <Row style={{ fontWeight: 'bold', paddingLeft: 7, paddingRight: 7 }}>
         <Col xl={6}>
           <Card>
             <CardBody style={{ padding: 0 }}>
-              <table className="table table-hover table-centered table-borderless mb-0">
-                <tr>
+              <table className="table table-hover table-centered table-bordered mb-0">
+                <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
                   <th>Dokumen: </th>
                 </tr>
                 <tr>
                   <th>
-                    <tr>
-                      {data.signed_file_path ?
-                        <a href={`http://localhost/spnbackend/` + data.signed_file_path} target="_blank" download>
-                          <img src={logoPdf} alt="" height="55" />
-                        </a>
-                        : 'Belum ada dokumen yang ditandatangani'}
-                    </tr>
+                    {data.signed_file_path ?
+                      <a href={`http://localhost/spnbackend/` + data.signed_file_path} target="_blank" download>
+                        <img src={logoPdf} alt="" height="60" />
+                        <p style={{ fontWeight: '800' }}>{data.signed_file_name}</p>
+                      </a>
+                      : <p style={{ fontWeight: '800' }}>Belum ada dokumen yang ditandatangani</p>}
                   </th>
                 </tr>
 
-                <tr>
+                <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
                   <th>Log Dokumen: </th>
                 </tr>
                 <tr>

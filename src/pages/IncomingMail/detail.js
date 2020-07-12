@@ -11,11 +11,8 @@ import {
   closeIncomingMailService
 } from "../../helpers/master/incomingMail"
 import toast from '../UI/toast';
-import { Document, Page, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import sample from './sample.pdf'
+import logoPdf from "../../assets/images/logo-pdf.png";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 class IncomingMailDetail extends Component {
   constructor(props) {
     super(props);
@@ -132,40 +129,31 @@ class IncomingMailDetail extends Component {
 
   getTableContent = (data) => {
     const { pageNumber, numPages } = this.state;
-    const url = "http://localhost/spnbackend" + data.file_path
+    const url = "https://ratafd.xyz/upload/tes.pdf"
     return (
       <Row style={{ fontWeight: 'bold', paddingLeft: 7, paddingRight: 7 }}>
-        <Col xl={8}>
+        <Col xl={4}>
           <Card>
             <CardBody style={{ padding: 0 }}>
               <table className="table table-hover table-centered table-bordered mb-0">
-                <tr>
-                  <th style={{ backgroundColor: '#5cb85c', color: 'white' }}>Dokumen: </th>
+                <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                  <th>Dokumen: </th>
                 </tr>
                 <tr>
                   <th>
-                    <tr>
-                      {data.file_path ?
-                        <div>
-                          <Document
-                            file={sample}
-                            onLoadSuccess={this.onDocumentLoadSuccess}
-                            externalLinkTarget="_blank"
-                          >
-                            <Page pageNumber={1} width={600} />
-                            <p className="text-right mt-8">Halaman {pageNumber} dari {numPages}</p>
-                          </Document>
-                        </div>
-
-                        : 'Belum ada dokumen yang ditandatangani'}
-                    </tr>
+                    {data.file_path ?
+                      <a href={`http://localhost/spnbackend/` + data.file_path} target="_blank" download>
+                        <img src={logoPdf} alt="" height="60" />
+                        <p style={{ fontWeight: '800' }}>{data.file_name}</p>
+                      </a>
+                      : <p style={{ fontWeight: '800' }}>Belum ada dokumen yang ditandatangani</p>}
                   </th>
                 </tr>
               </table>
             </CardBody>
           </Card>
         </Col>
-        <Col xl={4}>
+        <Col xl={8}>
           <Row>
             <Col md={12}>
               <Card>
