@@ -210,7 +210,7 @@ class OutgoingMailDetail extends Component {
             </CardBody>
           </Card>
         </Col>
-        <Col xl={7}>
+        <Col xl={6}>
           <Row>
             <Col md={12}>
               <Card>
