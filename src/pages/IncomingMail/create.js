@@ -399,7 +399,7 @@ class IncomingMailCreate extends Component {
                               id="validatedCustomFile"
                               required
                               onChange={this.onFileChange}
-                              accept=".doc, .docx, .pdf"
+                              accept=".pdf"
                               name="file"
                               ref={node => (this.inputNode = node)}
                             />
