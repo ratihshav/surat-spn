@@ -12,6 +12,7 @@ import {
 } from "../../helpers/master/incomingMail"
 import toast from '../UI/toast';
 import logoPdf from "../../assets/images/logo-pdf.png";
+import config from '../../helpers/config'
 
 class IncomingMailDetail extends Component {
   constructor(props) {
@@ -129,7 +130,6 @@ class IncomingMailDetail extends Component {
 
   getTableContent = (data) => {
     const { pageNumber, numPages } = this.state;
-    const url = "https://ratafd.xyz/upload/tes.pdf"
     return (
       <Row style={{ fontWeight: 'bold', paddingLeft: 7, paddingRight: 7 }}>
         <Col xl={4}>
@@ -142,7 +142,7 @@ class IncomingMailDetail extends Component {
                 <tr>
                   <th>
                     {data.file_path ?
-                      <a href={`http://localhost/spnbackend/` + data.file_path} target="_blank" download>
+                      <a href={config.url_img + data.file_path} target="_blank" download>
                         <img src={logoPdf} alt="" height="60" />
                         <p style={{ fontWeight: '800' }}>{data.file_name}</p>
                       </a>

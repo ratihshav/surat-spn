@@ -14,10 +14,8 @@ import {
 import { searchUserService } from "../../helpers/master/user"
 import logoPdf from "../../assets/images/logo-pdf.png";
 import toast from '../UI/toast';
+import config from '../../helpers/config'
 
-const logDokumen = [
-
-]
 class OutgoingMailDetail extends Component {
   constructor(props) {
     super(props);
@@ -181,7 +179,7 @@ class OutgoingMailDetail extends Component {
                 <tr>
                   <th>
                     {data.signed_file_path ?
-                      <a href={`http://localhost/spnbackend/` + data.signed_file_path} target="_blank" download>
+                      <a href={config.url_img + data.signed_file_path} target="_blank" download>
                         <img src={logoPdf} alt="" height="60" />
                         <p style={{ fontWeight: '800' }}>{data.signed_file_name}</p>
                       </a>
@@ -199,7 +197,7 @@ class OutgoingMailDetail extends Component {
                         <tr key={nextItem.id} >
                           <Col style={{ backgroundColor: '#E9EBEE', borderRadius: 5, textAlign: 'center', justifyContent: 'center', margin: 5 }}>
                             <Row>{nextItem.created_by} - {nextItem.position_name}</Row>
-                            <Row> <a href={`http://localhost/spnbackend/` + nextItem.file_path} target="_blank" download>{nextItem.file_name}</a></Row>
+                            <Row> <a href={config.url_img + nextItem.file_path} target="_blank" download>{nextItem.file_name}</a></Row>
                           </Col>
                         </tr>
                       );
