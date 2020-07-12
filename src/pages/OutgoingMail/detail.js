@@ -171,12 +171,12 @@ class OutgoingMailDetail extends Component {
     const disposisi = data.disposisi
     return (
       <Row style={{ fontWeight: 'bold' }}>
-        <Col xl={6}>
+        <Col xl={5}>
           <Card>
             <CardBody style={{ padding: 0 }}>
               <table className="table table-hover table-centered table-borderless mb-0">
-                <tr>
-                  <th>Dokumen: </th>
+                <tr style={{ backgroundColor: '#626ed4', color: 'white' }}>
+                  <th style={{ width: 250 }}>Dokumen: </th>
                 </tr>
                 <tr>
                   <th>
@@ -190,8 +190,8 @@ class OutgoingMailDetail extends Component {
                   </th>
                 </tr>
 
-                <tr>
-                  <th>Log Dokumen: </th>
+                <tr style={{ backgroundColor: '#626ed4', color: 'white' }}>
+                  <th style={{ width: 250 }}>Log Dokumen: </th>
                 </tr>
                 <tr>
                   <th>
@@ -211,7 +211,7 @@ class OutgoingMailDetail extends Component {
             </CardBody>
           </Card>
         </Col>
-        <Col xl={6}>
+        <Col xl={7}>
           <Row>
             <Col md={12}>
               <Card>

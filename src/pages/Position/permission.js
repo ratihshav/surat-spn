@@ -187,7 +187,7 @@ class PositionPermission extends Component {
                         Hak Akses
                       </label>
                       <Col sm={10}>
-                        <Card style={{ borderWidth: 1, padding: 5 }}>
+                        <Card style={{ borderWidth: 1, padding: 2 }}>
                           <table className="table table-bordered mb-0">
                             <tbody>
                               <tr>
@@ -198,8 +198,8 @@ class PositionPermission extends Component {
                                 const value = string !== null ? string.includes(item.value) : false
                                 return (
                                   <tr key={index}>
-                                    <td>{item.text}</td>
-                                    <td>
+                                    <td style={{ padding: 1, verticalAlign:'middle' }}>&nbsp;&nbsp;{item.text}</td>
+                                    <td style={{ padding: 1 }}>&nbsp;
                                       <SwitchComponent
                                         onColor="#EF476F"
                                         onChange={this.handleToogle}
@@ -221,8 +221,8 @@ class PositionPermission extends Component {
                                 const value = string !== null ? string.includes(item.value) : false
                                 return (
                                   <tr key={index}>
-                                    <td>{item.text}</td>
-                                    <td>
+                                    <td style={{ padding: 1, verticalAlign:'middle' }}>&nbsp;&nbsp;{item.text}</td>
+                                    <td style={{ padding: 1 }}>&nbsp;
                                       <SwitchComponent
                                         onColor="#EF476F"
                                         onChange={this.handleToogle}
@@ -244,8 +244,8 @@ class PositionPermission extends Component {
                                 const value = string !== null ? string.includes(item.value) : false
                                 return (
                                   <tr key={index}>
-                                    <td>{item.text}</td>
-                                    <td>
+                                    <td style={{ padding: 1, verticalAlign:'middle' }}>&nbsp;&nbsp;{item.text}</td>
+                                    <td style={{ padding: 1 }}>&nbsp;
                                       <SwitchComponent
                                         onColor="#EF476F"
                                         onChange={this.handleToogle}
@@ -266,8 +266,8 @@ class PositionPermission extends Component {
                                 const value = string !== null ? string.includes(item.value) : false
                                 return (
                                   <tr key={index}>
-                                    <td>{item.text}</td>
-                                    <td>
+                                    <td style={{ padding: 1, verticalAlign:'middle' }}>&nbsp;&nbsp;{item.text}</td> 
+                                    <td style={{ padding: 1 }}>&nbsp;
                                       <SwitchComponent
                                         onColor="#EF476F"
                                         onChange={this.handleToogle}
@@ -288,8 +288,8 @@ class PositionPermission extends Component {
                                 const value = string !== null ? string.includes(item.value) : false
                                 return (
                                   <tr key={index}>
-                                    <td >{item.text}</td>
-                                    <td>
+                                    <td style={{ padding: 1, verticalAlign:'middle' }}>&nbsp;&nbsp;{item.text}</td>
+                                    <td style={{ padding: 1 }}>&nbsp;
                                       <SwitchComponent
                                         onColor="#EF476F"
                                         onChange={this.handleToogle}
@@ -307,9 +307,6 @@ class PositionPermission extends Component {
                         </Card>
                       </Col>
                     </Row>
-
-
-
                     <div className="text-right mt-4">
                       <Button
                         color="success"
