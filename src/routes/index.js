@@ -8,6 +8,7 @@ import Login from "../pages/Authentication/Login";
 import Logout from "../pages/Authentication/Logout";
 import ResetPwd from "../pages/Authentication/ResetPassword";
 import ForgetPwd from "../pages/Authentication/ForgetPassword";
+import ValidateMail from "../pages/Authentication/ValidateMail";
 
 import Dashboard from "../pages/Dashboard";
 
@@ -108,6 +109,7 @@ const publicRoutes = [
   { path: "/logout", component: Logout },
   { path: "/forget-password", component: ForgetPwd },
   { path: "/reset-password/:params?", component: ResetPwd },
+  { path: "/validate-mail", component: ValidateMail },
   { path: "/", exact: true, component: () => <Redirect to="/login" /> },
 
 ];

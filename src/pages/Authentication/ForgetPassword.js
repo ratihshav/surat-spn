@@ -41,91 +41,89 @@ class ForgetPasswordPage extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="account-pages my-5 pt-5">
-          <div className="container">
-            <Row className="justify-content-center">
-              <Col md={8} lg={6} xl={5}>
-                <div className="position-relative">
+        <div className="container">
+          <Row className="justify-content-center">
+            <Col md={8} lg={6} xl={5}>
+              <div className="position-relative">
 
-                  <div className="text-primary text-center p-4">
-                    <Link to="/" className="logo logo-admin">
-                      <img src={logoKabKerinci} height="150" alt="" />
-                      <h1 className="text-blue">
-                        e-Office Dinas Pendidikan
+                <div className="text-primary text-center p-4">
+                  <Link to="/" className="logo logo-admin">
+                    <img src={logoKabKerinci} height="150" alt="" />
+                    <h1 className="text-blue">
+                      e-Office Dinas Pendidikan
                             <br />
                           Kabupaten Kerinci
                         </h1>
-                    </Link>
+                  </Link>
+                </div>
+
+                <Card className="overflow-hidden">
+                  <div className="bg-primary">
+                    <div className="text-primary text-center p-4">
+                      <h5 className="text-white font-size-24">
+                        Lupa Password
+                        </h5>
+                      <p className="text-white">
+                        Masukkan e-mail Anda yang terdaftar. Kami akan mengirimkan kode verifikasi untuk atur ulang password ke e-mail Anda.
+                        </p>
+                    </div>
                   </div>
 
-                  <Card className="overflow-hidden">
-                    <div className="bg-primary">
-                      <div className="text-primary text-center p-4">
-                        <h5 className="text-white font-size-24">
-                          Lupa Password
-                        </h5>
-                        <p className="text-white">
-                          Masukkan e-mail Anda yang terdaftar. Kami akan mengirimkan kode verifikasi untuk atur ulang password ke e-mail Anda.
-                        </p>
-                      </div>
-                    </div>
+                  <CardBody className="p-4">
+                    <div className="p-3">
+                      {this.props.forgetError && this.props.forgetError ? (
+                        <Alert color="danger" style={{ marginTop: "13px" }}>
+                          {this.props.forgetError}
+                        </Alert>
+                      ) : null}
+                      {this.props.forgetSuccess ? (
+                        <Alert color="success" style={{ marginTop: "13px" }}>
+                          {this.props.forgetSuccess}
+                        </Alert>
+                      ) : null}
 
-                    <CardBody className="p-4">
-                      <div className="p-3">
-                        {this.props.forgetError && this.props.forgetError ? (
-                          <Alert color="danger" style={{ marginTop: "13px" }}>
-                            {this.props.forgetError}
-                          </Alert>
-                        ) : null}
-                        {this.props.forgetSuccess ? (
-                          <Alert color="success" style={{ marginTop: "13px" }}>
-                            {this.props.forgetSuccess}
-                          </Alert>
-                        ) : null}
-
-                        <AvForm
-                          className="form-horizontal mt-4"
-                          onValidSubmit={this.handleValidSubmit}>
-                          <div className="form-group">
-                            <AvField
-                              name="email"
-                              className="form-control"
-                              placeholder="Masukkan e-mail Anda"
-                              type="email"
-                              required
-                            />
-                          </div>
-                          <br /><br />
-                          <div className="button-items">
-                            <Button
-                              color="primary"
-                              className="btn btn-primary btn-block waves-effect waves-light">
-                              Kirim
+                      <AvForm
+                        className="form-horizontal mt-4"
+                        onValidSubmit={this.handleValidSubmit}>
+                        <div className="form-group">
+                          <AvField
+                            name="email"
+                            className="form-control"
+                            placeholder="Masukkan e-mail Anda"
+                            type="email"
+                            required
+                          />
+                        </div>
+                        <br /><br />
+                        <div className="button-items">
+                          <Button
+                            color="primary"
+                            className="btn btn-primary btn-block waves-effect waves-light">
+                            Kirim
                                 </Button>
 
-                          </div>
-                        </AvForm>
-                      </div>
-                    </CardBody>
-                  </Card>
-                  <div className="mt-5 text-center">
-                    <p>
-                      Kembali ke{" "}
-                      <Link
-                        to="pages-login"
-                        className="font-weight-medium text-primary"
-                      >
-                        Login
+                        </div>
+                      </AvForm>
+                    </div>
+                  </CardBody>
+                </Card>
+                <div className="mt-5 text-center">
+                  <p>
+                    Kembali ke{" "}
+                    <Link
+                      to="pages-login"
+                      className="font-weight-medium text-primary"
+                    >
+                      Login
                       </Link>{" "}
-                    </p>
-                    <p className="mb-0">
-                      © {new Date().getFullYear()} Ikhwan Komputer. All Rights Reserved
                   </p>
-                  </div>
+                  <p className="mb-0">
+                    © {new Date().getFullYear()} Ikhwan Komputer. All Rights Reserved
+                  </p>
                 </div>
-              </Col>
-            </Row>
-          </div>
+              </div>
+            </Col>
+          </Row>
         </div>
       </React.Fragment>
     );

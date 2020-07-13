@@ -17,112 +17,123 @@ class Login extends Component {
     this.props.loginUser(values);
   }
 
-
+  // goToValidateSurat = () => {
+  //   this.props.history.push('')
+  // }
 
   render() {
 
     return (
       < React.Fragment >
         <div>
-          <div className="account-pages my-5 pt-5">
-            <div className="container">
-              <Row className="justify-content-center">
-                <Col md={8} lg={6} xl={5}>
-                  <div className="position-relative">
-                    {this.props.loading ? <Loader /> : null}
+          <div className="container">
+            <br />
+            <Row style={{ justifyContent: 'flex-end' }}>
+              <Link to="/validate-mail">
+                <Button
+                  color="success"
+                  className="mt-1">
+                  Validasi Surat
+              </Button>
+              </Link>
+            </Row>
+            <Row className="justify-content-center">
+              <Col md={8} lg={6} xl={5}>
+                <div className="position-relative">
+                  {this.props.loading ? <Loader /> : null}
 
-                    <div className="text-primary text-center p-4">
-                      <Link to="/" className="logo logo-admin">
-                        <img src={logoKabKerinci} height="150" alt="" />
-                        <h1 className="text-blue">
-                          e-Office Dinas Pendidikan
+                  <div className="text-primary text-center p-4">
+                    <Link to="/" className="logo logo-admin">
+                      <img src={logoKabKerinci} height="150" alt="" />
+                      <h1 className="text-blue">
+                        e-Office Dinas Pendidikan
                             <br />
                           Kabupaten Kerinci
                         </h1>
-                      </Link>
+                    </Link>
+                  </div>
+
+                  {/* </div> */}
+                  <Card className="overflow-hidden">
+                    <div className="bg-primary">
+                      <div className="text-primary text-center p-3">
+                        <h5 className="text-white font-size-20">
+                          Silahkan Masuk
+                        </h5>
+                      </div>
                     </div>
 
-                    {/* </div> */}
-                    <Card className="overflow-hidden">
-                      <div className="bg-primary">
-                        <div className="text-primary text-center p-3">
-                          <h5 className="text-white font-size-20">
-                            Silahkan Masuk
-                        </h5>
-                        </div>
+                    <CardBody className="p-4">
+                      <div className="">
+                        <Alert color="info">
+                          <strong>Selamat Datang</strong> di e-Office Dinas Pendidikan Kabupaten Kerinci
+                              </Alert>
                       </div>
 
-                      <CardBody className="p-4">
-                        <div className="">
-                          <Alert color="info">
-                            <strong>Selamat Datang</strong> di e-Office Dinas Pendidikan Kabupaten Kerinci
-                              </Alert>
-                        </div>
+                      <div className="p-2">
+                        <AvForm
+                          className="form-horizontal mt-4"
+                          onValidSubmit={this.handleValidSubmit}
+                        >
+                          {this.props.error ? (
+                            <Alert color="danger">{this.props.error}</Alert>
+                          ) : null}
 
-                        <div className="p-2">
-                          <AvForm
-                            className="form-horizontal mt-4"
-                            onValidSubmit={this.handleValidSubmit}
-                          >
-                            {this.props.error ? (
-                              <Alert color="danger">{this.props.error}</Alert>
-                            ) : null}
+                          <div className="form-group">
+                            <AvField
+                              name="email"
+                              label="Email"
+                              className="form-control"
+                              defaultValue="admin@ratafd.xyz"
+                              value=""
+                              placeholder="Enter email"
+                              required
+                            />
+                          </div>
+                          <div className="form-group">
+                            <AvField
+                              name="password"
+                              label="Password"
+                              type="password"
+                              defaultValue="admin"
+                              required
+                              value=""
+                              placeholder="Enter Password"
+                            />
+                          </div>
 
-                            <div className="form-group">
-                              <AvField
-                                name="email"
-                                label="Email"
-                                className="form-control"
-                                defaultValue="admin@ratafd.xyz"
-                                value=""
-                                placeholder="Enter email"
-                                required
-                              />
-                            </div>
-                            <div className="form-group">
-                              <AvField
-                                name="password"
-                                label="Password"
-                                type="password"
-                                defaultValue="admin"
-                                required
-                                value=""
-                                placeholder="Enter Password"
-                              />
-                            </div>
-
-                            <Row className="form-group">
-                              <Col sm={6}>
-                                <div className="custom-control custom-checkbox">
-                                  <input type="checkbox" className="custom-control-input" id="customControlInline" />
-                                  <label className="custom-control-label" htmlFor="customControlInline">Ingat Saya</label>
-                                </div>
-                              </Col>
-                              <Col sm={6} className="text-right">
-                                <Link to="/forget-password">
-                                  <i className="mdi mdi-lock"></i> Lupa
+                          <Row className="form-group">
+                            <Col sm={6}>
+                              <div className="custom-control custom-checkbox">
+                                <input type="checkbox" className="custom-control-input" id="customControlInline" />
+                                <label className="custom-control-label" htmlFor="customControlInline">Ingat Saya</label>
+                              </div>
+                            </Col>
+                            <Col sm={6} className="text-right">
+                              <Link to="/forget-password">
+                                <i className="mdi mdi-lock"></i> Lupa
                                   password?
                                     </Link>
 
-                              </Col>
-                            </Row>
+                            </Col>
+                          </Row>
 
-                            <div className="button-items">
-                              <Button
-                                color="primary"
-                                className="btn btn-primary btn-block waves-effect waves-light"
-                              >
-                                Log In
+                          <div className="button-items">
+                            <Button
+                              color="primary"
+                              className="btn btn-primary btn-block waves-effect waves-light"
+                            >
+                              Log In
                                 </Button>
 
-                            </div>
-                          </AvForm>
-                        </div>
-                      </CardBody>
-                    </Card>
-                  </div>
-                  <div className="mt-5 text-center">
-                    {/* <p>
+                          </div>
+                        </AvForm>
+                      </div>
+                    </CardBody>
+                  </Card>
+                </div>
+                <div className="mt-5 text-center">
+                  {/* <p>
                         Don't have an account ?{" "}
                         <Link
                           to="pages-register"
@@ -132,13 +143,12 @@ class Login extends Component {
                           Signup now{" "}
                         </Link>{" "}
                       </p> */}
-                    <p className="mb-0">
-                      © {new Date().getFullYear()} Ikhwan Komputer. All Rights Reserved
+                  <p className="mb-0">
+                    © {new Date().getFullYear()} Ikhwan Komputer. All Rights Reserved
                   </p>
-                  </div>
-                </Col>
-              </Row>
-            </div>
+                </div>
+              </Col>
+            </Row>
           </div>
         </div>
 

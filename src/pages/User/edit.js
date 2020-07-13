@@ -139,8 +139,8 @@ class UserEdit extends Component {
     this.setState({ selectedGroup })
   }
 
-  handleChangeGender = selectedGender => {
-    this.setState({ selectedGender })
+  handleChangeGender = e => {
+    this.setState({ selectedGender: e.target.value })
   }
 
   goBack = () => {
@@ -165,6 +165,13 @@ class UserEdit extends Component {
       value: dataUser.position_id,
       label: dataUser.position_name
     }
+    const valMale = dataUser.length !== 0 ?
+      dataUser.jenis_kelamin === 'Laki-laki' ? true : false
+      : null
+
+    const valFemale = dataUser.length !== 0 ?
+      dataUser.jenis_kelamin === 'Perempuan' ? true : false
+      : null
 
     return (
       <React.Fragment>
@@ -388,10 +395,10 @@ class UserEdit extends Component {
                                             id="male"
                                             name="gender"
                                             value="Laki-laki"
-                                            checked={dataUser.jenis_kelamin === 'Laki-laki'}
+                                            defaultChecked={valMale}
                                             onChange={this.handleChangeGender}
                                             ref={node => (this.inputNode = node)} />&nbsp;
-                                            <label htmlFor="accept"> Laki-laki</label>
+                                          <label htmlFor="male"> Laki-laki</label>
 
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -400,10 +407,10 @@ class UserEdit extends Component {
                                             id="female"
                                             name="gender"
                                             value="Perempuan"
-                                            checked={dataUser.jenis_kelamin === 'Perempuan'}
+                                            defaultChecked={valFemale}
                                             onChange={this.handleChangeGender}
                                             ref={node => (this.inputNode = node)} />&nbsp;
-                                            <label htmlFor="reject"> Perempuan</label>
+                                          <label htmlFor="female"> Perempuan</label>
                                         </Col>
                                       </Row>
                                     </Col>
