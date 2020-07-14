@@ -14,45 +14,21 @@ class TemplateMailCreate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedFiles: [],
+      selectedFile: [],
     };
-    this.handleAcceptedFiles = this.handleAcceptedFiles.bind(this);
   }
 
-  handleAcceptedFiles = files => {
-    files.map(file =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-        formattedSize: this.formatBytes(file.size)
-      })
-    );
-
-    this.setState({ selectedFiles: files });
-  };
-
-  /**
-   * Formats the size
-   */
-  formatBytes = (bytes, decimals = 2) => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
-  };
-
-
   onFileChange = event => {
-    this.setState({ selectedFile: event.target.files[0] });
+    console.log('asa', event.target.files[0])
+    const { selectedFile } = this.state
+    this.setState({ selectedFile: [...selectedFile, event.target.files[0]] });
   };
 
   saveTemplateMail = (e) => {
     const params = {
       template_type: e.target.type.value,
       template_name: e.target.name.value,
-      file: this.state.selectedFiles
+      file: this.state.selectedFile
     }
 
     createTemplateMailService(params)
@@ -80,9 +56,58 @@ class TemplateMailCreate extends Component {
     this.props.history.push('/template-surat')
   }
 
-  render() {
-    const { selectedFiles } = this.state;
+  deleteFromTable = (data) => {
+    const { selectedFile } = this.state
+    const updatedData = selectedFile.splice(data, selectedFile.length)
+    console.log('updatedData', updatedData)
+  }
 
+  filesTable = (data) => {
+    return (
+      <Col xl={4} >
+        <Card>
+          <CardBody style={{ padding: 0 }}>
+            <table className="table table-hover table-centered table-bordered mb-0">
+              <thead>
+                <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                  <th>No </th>
+                  <th>Nama File </th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data ? data.map(function (nextItem, index) {
+                  return (
+                    <tr key={index}>
+                      <th>
+                        {index + 1}
+                      </th>
+                      <th style={{ fontWeight: 'bold' }}>
+                        {nextItem.name}
+                      </th>
+                      <th>
+                        <Button
+                          color="danger"
+                        // onClick={() => {
+                        //   this.deleteFromTable(index)}}
+                        >
+                          Hapus
+                         </Button>
+                      </th>
+                    </tr>
+                  );
+                }) : null}
+              </tbody>
+            </table>
+          </CardBody>
+        </Card>
+      </Col>
+    )
+  }
+
+  render() {
+    const { selectedFile } = this.state;
+    console.log('selec', selectedFile)
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -147,88 +172,51 @@ class TemplateMailCreate extends Component {
                       </Col>
                     </Row>
 
-
                     <Row className="form-group">
                       <label
                         htmlFor="example-search-input"
-                        className="col-sm-2 col-form-label"
-                      >
+                        className="col-sm-2 col-form-label">
                         Dokumen
-                    </label>
+                          </label>
                       <Col sm={10}>
-
-                        <div className="mb-5">
-                          <Form>
-                            <Dropzone
-                              multiple={true}
-                              onDrop={acceptedFiles =>
-                                this.handleAcceptedFiles(acceptedFiles)
-                              }
-                            >
-                              {({ getRootProps, getInputProps }) => (
-                                <div className="dropzone">
-                                  <div
-                                    className="dz-message needsclick"
-                                    {...getRootProps()}
-                                  >
-                                    <input {...getInputProps()} />
-                                    <h3>Drop files here or click to upload.</h3>
-                                  </div>
-                                </div>
-                              )}
-                            </Dropzone>
-                            <div
-                              className="dropzone-previews mt-3"
-                              id="file-previews"
-                            >
-                              {selectedFiles.map((f, i) => {
-                                return (
-                                  <Card
-                                    className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
-                                    key={i + "-file"}
-                                  >
-                                    <div className="p-2">
-                                      <Row className="align-items-center">
-                                        <Col className="col-auto">
-                                          <img
-                                            data-dz-thumbnail=""
-                                            height="80"
-                                            className="avatar-sm rounded bg-light"
-                                            alt={f.name}
-                                            src={f.preview}
-                                          />
-                                        </Col>
-                                        <Col>
-                                          <Link
-                                            to="#"
-                                            className="text-muted font-weight-bold"
-                                          >
-                                            {f.name}
-                                          </Link>
-                                          <p className="mb-0">
-                                            <strong>{f.formattedSize}</strong>
-                                          </p>
-                                        </Col>
-                                      </Row>
-                                    </div>
-                                  </Card>
-                                );
-                              })}
-                            </div>
-                          </Form>
-                        </div>
-
+                        <form action="#">
+                          <div className="custom-file">
+                            <input
+                              type="file"
+                              className="form-control"
+                              id="validatedCustomFile"
+                              required
+                              onChange={this.onFileChange}
+                              accept=".pdf"
+                              name="file"
+                              ref={node => (this.inputNode = node)}
+                            />
+                            <label
+                              className="custom-file-label"
+                              htmlFor="validatedCustomFile"
+                              style={{ zIndex: 0 }}>
+                              {selectedFile.length !== 0 ? selectedFile.name : 'No file chosen'}
+                            </label>
+                          </div>
+                        </form>
                       </Col>
                     </Row>
+
+                    <br />
+                    {selectedFile.length !== 0 ?
+                      <Row>
+                        <div className="table-responsive">
+                          {this.filesTable(selectedFile)}
+                        </div>
+                      </Row>
+                      : null}
 
                     <div className="text-center mt-4">
                       <Button
                         color="success"
-                        className="mt-1"
-                      // onClick={this.notify}
-                      >
+                        className="mt-1">
                         <i className="typcn typcn-input-checked" />Simpan
-                    </Button>
+                      </Button>
 
                     &nbsp; &nbsp;
                     <Button
