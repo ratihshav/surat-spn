@@ -20,14 +20,14 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    console.log('fromaman', this.props)
+    setTimeout(this.reload, 500);
   }
 
-  componentDidUpdate(prevProps) {
-    // will be true
-    // const locationChanged = this.props.location !== prevProps.location;
-
-    console.log('locationChanged', prevProps)
+  reload = () => {
+    if (this.props.data) {
+      window.location.reload()
+      return true
+    }
   }
 
   render() {

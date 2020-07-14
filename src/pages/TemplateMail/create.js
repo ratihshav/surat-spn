@@ -187,7 +187,7 @@ class TemplateMailCreate extends Component {
                               id="validatedCustomFile"
                               required
                               onChange={this.onFileChange}
-                              accept=".pdf"
+                              accept=".doc, .docx"
                               name="file"
                               ref={node => (this.inputNode = node)}
                             />

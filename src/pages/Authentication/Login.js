@@ -17,10 +17,6 @@ class Login extends Component {
     this.props.loginUser(values);
   }
 
-  // goToValidateSurat = () => {
-  //   this.props.history.push('')
-  // }
-
   render() {
 
     return (

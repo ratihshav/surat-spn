@@ -34,10 +34,14 @@ export const getTemplateMailService = () => {
 
 //create
 export const createTemplateMailService = (request) => {
+  console.log('requestTemp', request)
+  const file = request.file
   const formData = new FormData();
   formData.append('template_type', request.template_type);
   formData.append('template_name', request.template_name);
-  formData.append('file', request.file);
+  file.map((file, index) => {
+    formData.append(`file[${index}]`, file);
+  });
 
   const SAVE_TEMPLATE_MAIL_API = config.api_endpoint + '/templateSurat/save';
   return instance.post(SAVE_TEMPLATE_MAIL_API, formData)
