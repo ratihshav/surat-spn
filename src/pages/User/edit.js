@@ -31,7 +31,7 @@ import toast from '../UI/toast';
 // import images
 import config from '../../helpers/config'
 import "chartist/dist/scss/chartist.scss";
-
+import userAva from "../../assets/images/users/avatar-1.jpg"
 
 class UserEdit extends Component {
   constructor(props) {
@@ -200,7 +200,7 @@ class UserEdit extends Component {
                       <div>
                         <img
                           className="rounded-circle center"
-                          src={config.url_img + dataUser.path_foto}
+                          src={dataUser.path_foto ? config.url_img + dataUser.path_foto : userAva}
                           alt="veltrix"
                           width="150"
                           data-holder-rendered="true"

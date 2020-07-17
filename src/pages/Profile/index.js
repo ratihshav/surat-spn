@@ -28,6 +28,7 @@ import SignaturePad from 'react-signature-canvas'
 // import images
 import config from '../../helpers/config'
 import "chartist/dist/scss/chartist.scss";
+import userAva from "../../assets/images/users/avatar-1.jpg"
 
 
 class Profile extends Component {
@@ -193,7 +194,7 @@ class Profile extends Component {
                       <div>
                         <img
                           className="rounded-circle center"
-                          src={config.url_img + dataUser.path_foto}
+                          src={dataUser.path_foto ? config.url_img + dataUser.path_foto : userAva}
                           alt="foto_user"
                           width="150"
                           data-holder-rendered="true"
