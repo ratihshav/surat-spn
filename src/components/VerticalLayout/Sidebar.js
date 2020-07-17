@@ -13,6 +13,7 @@ const SidebarContent = props => {
   const template = props.data.perms.includes('templateSurat_list');
   const jabatan = props.data.perms.includes('jabatan_list');
   const user = props.data.perms.includes('user_list');
+  const isAdmin = props.data.perms.includes('is_admin')
 
   return (
     <div id="sidebar-menu">
@@ -40,7 +41,7 @@ const SidebarContent = props => {
 
           <ul className="sub-menu" aria-expanded="false">
 
-            {suratKeluar ?
+            {suratKeluar || isAdmin ?
               <li>
                 <Link to="/incoming-mail">
                   <i className="mdi mdi-email-receive"></i>
@@ -49,7 +50,7 @@ const SidebarContent = props => {
               </li>
               : null}
 
-            {suratMasuk ?
+            {suratMasuk || isAdmin ?
               <li>
                 <Link to="/outgoing-mail">
                   <i className="mdi mdi-email-send"></i>
@@ -63,7 +64,7 @@ const SidebarContent = props => {
 
 
         <li>
-          {jabatan || template || user ?
+          {jabatan || template || user || isAdmin ?
             <Link to="/#" className="has-arrow waves-effect">
               <i className="fas fa-database"></i>
               <span>Master Data</span>
@@ -71,7 +72,7 @@ const SidebarContent = props => {
             : null
           }
           <ul className="sub-menu" aria-expanded="false">
-            {user ?
+            {user || isAdmin ?
               <li>
                 <Link to="/user">
                   <i className="fas fa-user-alt"></i>
@@ -84,7 +85,7 @@ const SidebarContent = props => {
               <Link to="/group">Data Divisi</Link>
             </li>
 
-            {jabatan ?
+            {jabatan || isAdmin ?
               <li>
                 <Link to="/position">Data Jabatan</Link>
               </li>
@@ -95,7 +96,7 @@ const SidebarContent = props => {
               <Link to="/classification">Data Klasifikasi Surat</Link>
             </li>
 
-            {template ?
+            {template || isAdmin ?
               <li>
                 <Link to="/template-mail">Template Surat</Link>
               </li>
