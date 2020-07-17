@@ -1,14 +1,23 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 import MetisMenu from "metismenujs";
-
+import { connect } from "react-redux";
+import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import SimpleBar from "simplebar-react";
 
 const SidebarContent = props => {
+  const suratKeluar = props.data.perms.includes('suratKeluar_list');
+  const suratMasuk = props.data.perms.includes('suratMasuk_list');
+  const divisi = props.data.perms.includes('divisi_list');
+  const klasifikasi = props.data.perms.includes('klasifikasi_list');
+  const template = props.data.perms.includes('templateSurat_list');
+  const jabatan = props.data.perms.includes('jabatan_list');
+  const user = props.data.perms.includes('user_list');
+
   return (
     <div id="sidebar-menu">
       <br /><br />
-      aa
+      <p style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 22, margin: 0 }}>e-Office <br /> Dinas Pendidikan <br /> Kabupaten Kerinci </p>
       <ul className="metismenu list-unstyled" id="side-menu">
         <li className="menu-title"> </li>
         <br></br>
@@ -28,47 +37,71 @@ const SidebarContent = props => {
             <i className="ti-email"></i>
             <span>Surat</span>
           </Link>
+
           <ul className="sub-menu" aria-expanded="false">
-            <li>
-              <Link to="/incoming-mail">
-                <i className="mdi mdi-email-receive"></i>
-                <span>Surat Masuk</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="/outgoing-mail">
-                <i className="mdi mdi-email-send"></i>
-                <span>Surat Keluar</span>
-              </Link>
-            </li>
+
+            {suratKeluar ?
+              <li>
+                <Link to="/incoming-mail">
+                  <i className="mdi mdi-email-receive"></i>
+                  <span>Surat Masuk</span>
+                </Link>
+              </li>
+              : null}
+
+            {suratMasuk ?
+              <li>
+                <Link to="/outgoing-mail">
+                  <i className="mdi mdi-email-send"></i>
+                  <span>Surat Keluar</span>
+                </Link>
+              </li>
+              : null}
+
           </ul>
         </li>
 
 
         <li>
-          <Link to="/#" className="has-arrow waves-effect">
-            <i className="fas fa-database"></i>
-            <span>Master Data</span>
-          </Link>
+          {jabatan || template || user ?
+            <Link to="/#" className="has-arrow waves-effect">
+              <i className="fas fa-database"></i>
+              <span>Master Data</span>
+            </Link>
+            : null
+          }
           <ul className="sub-menu" aria-expanded="false">
-            <li>
-              <Link to="/user">
-                <i className="fas fa-user-alt"></i>
-                <span>Data User</span>
-              </Link>
-            </li>
+            {user ?
+              <li>
+                <Link to="/user">
+                  <i className="fas fa-user-alt"></i>
+                  <span>Data User</span>
+                </Link>
+              </li>
+              : null
+            }
             <li>
               <Link to="/group">Data Divisi</Link>
             </li>
-            <li>
-              <Link to="/position">Data Jabatan</Link>
-            </li>
+
+            {jabatan ?
+              <li>
+                <Link to="/position">Data Jabatan</Link>
+              </li>
+              : null
+            }
+
             <li>
               <Link to="/classification">Data Klasifikasi Surat</Link>
             </li>
-            <li>
-              <Link to="/template-mail">Template Surat</Link>
-            </li>
+
+            {template ?
+              <li>
+                <Link to="/template-mail">Template Surat</Link>
+              </li>
+              : null
+            }
+
           </ul>
         </li>
 
@@ -142,18 +175,25 @@ class Sidebar extends Component {
   };
 
   render() {
+    const data = this.props.data
     return (
       <React.Fragment>
         {this.props.type !== "condensed" ? (
           <SimpleBar style={{ maxHeight: "100%" }}>
-            <SidebarContent />
+            <SidebarContent data={data} />
           </SimpleBar>
         ) : (
-            <SidebarContent />
+            <SidebarContent data={data} />
           )}
       </React.Fragment>
     );
   }
 }
 
-export default withRouter(Sidebar);
+const mapStatetoProps = state => {
+  const { error, loading, data } = state.Login;
+  return { error, loading, data };
+};
+
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(Sidebar));
+

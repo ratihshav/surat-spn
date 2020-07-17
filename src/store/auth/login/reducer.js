@@ -16,11 +16,7 @@ const initialState = {
 
 const login = (state = initialState, action) => {
   switch (action.type) {
-    case REHYDRATE:
-      return {
-        ...state,
-        persistedState: action.payload
-      };
+
     case LOGIN_USER:
       return {
         ...state,
@@ -38,6 +34,7 @@ const login = (state = initialState, action) => {
         error: action.payload,
         loading: false
       }
+
 
     case LOGOUT_USER:
       return {

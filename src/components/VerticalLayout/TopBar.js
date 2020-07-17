@@ -60,8 +60,9 @@ class TopBar extends Component {
             </div>
 
             <div className="d-flex">
-              <NotificationDropdown />
               <ProfileMenu />
+              &nbsp;
+              <NotificationDropdown />
             </div>
           </div>
         </header>

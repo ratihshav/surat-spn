@@ -19,16 +19,16 @@ class Dashboard extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    setTimeout(this.reload, 500);
-  }
+  // componentDidMount() {
+  //   setTimeout(this.reload, 500);
+  // }
 
-  reload = () => {
-    if (this.props.data) {
-      window.location.reload()
-      return true
-    }
-  }
+  // reload = () => {
+  //   if (this.props.data) {
+  //     window.location.reload()
+  //     return true
+  //   }
+  // }
 
   render() {
     return (
@@ -176,7 +176,5 @@ const mapStatetoProps = state => {
   const { error, loading, data } = state.Login;
   return { error, loading, data };
 };
-
-// const mapStatetoProps = (response) => ({response});
 
 export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(Dashboard));

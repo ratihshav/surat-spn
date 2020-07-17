@@ -1,7 +1,7 @@
 import axios from 'axios'
 import config from './config'
 
-var token = JSON.parse(window.localStorage.getItem('authUser'));
+var token = window.localStorage.getItem('authUser');
 const CancelToken = axios.CancelToken;
 let cancel;
 
@@ -22,11 +22,14 @@ const instance = axios.create({
  * Returns the authenticated user
  */
 export const getAuthenticatedUser = () => {
-  if (!localStorage.getItem("authUser")) return null;
-  return JSON.parse(localStorage.getItem("authUser"));
+  // if (!localStorage.getItem("authUser")) return null;
+
+  return (
+    console.log('getAuth', localStorage.getItem("authUser")),
+    localStorage.getItem("authUser"))
 };
 
-setTimeout(getAuthenticatedUser, 50);
+// setTimeout(getAuthenticatedUser, 3000);
 
 export const loginUserService = (request) => {
   const sanctum = config.endpoint + '/sanctum/csrf-cookie';
@@ -39,7 +42,7 @@ export const loginUserService = (request) => {
           console.log('data', data.data.data)
           const storedToken = data.data.data.token
           const id = data.data.data.userid
-          localStorage.setItem('authUser', JSON.stringify(storedToken))
+          localStorage.setItem('authUser', storedToken)
           localStorage.setItem('id', JSON.stringify(id))
           return data.data.data
         })

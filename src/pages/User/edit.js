@@ -29,7 +29,7 @@ import { searchPositionService } from '../../helpers/master/position'
 import toast from '../UI/toast';
 
 // import images
-import user2 from "../../assets/images/users/user-2.jpg";
+import config from '../../helpers/config'
 import "chartist/dist/scss/chartist.scss";
 
 
@@ -200,7 +200,7 @@ class UserEdit extends Component {
                       <div>
                         <img
                           className="rounded-circle center"
-                          src={user2}
+                          src={config.url_img + dataUser.path_foto}
                           alt="veltrix"
                           width="150"
                           data-holder-rendered="true"
