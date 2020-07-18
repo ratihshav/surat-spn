@@ -154,7 +154,6 @@ class Login extends Component {
 }
 
 const mapStatetoProps = state => {
-  console.log('login', state.Login)
   const { error, loading, data } = state.Login;
   return { error, loading, data };
 };

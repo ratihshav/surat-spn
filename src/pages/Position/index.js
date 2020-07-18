@@ -14,7 +14,6 @@ import DataGrid, {
   Pager,
 } from 'devextreme-react/data-grid';
 import DataStore from 'devextreme/data/data_source';
-import { isNotEmpty, dxGridFilter } from '../../helpers/gridFilter'
 import { getMasterPositionServices, deleteMasterPositionService } from '../../helpers/master/position'
 
 import toast from '../UI/toast';

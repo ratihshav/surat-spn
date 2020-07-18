@@ -1,4 +1,4 @@
-import { takeEvery, fork, put, all, call, select, takeLatest } from 'redux-saga/effects';
+import { takeEvery, fork, put, all, call, takeLatest } from 'redux-saga/effects';
 
 // Master User Redux States
 import {

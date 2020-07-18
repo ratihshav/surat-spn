@@ -13,7 +13,6 @@ import { searchGroupService } from '../../helpers/master/group';
 import SwitchComponent from "../UI/Switch"
 import toast from '../UI/toast';
 
-const idDivisi = window.localStorage.getItem('idDivisi');
 class PositionEdit extends Component {
   constructor(props) {
     super(props);
@@ -67,7 +66,6 @@ class PositionEdit extends Component {
 
 
   handleCheckboxParent = (e) => {
-    console.log('e', e.target.checked)
     this.setState({ isParent: e.target.checked })
   }
 

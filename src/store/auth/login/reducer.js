@@ -1,4 +1,3 @@
-import { REHYDRATE } from 'redux-persist/lib/constants';
 import {
   LOGIN_USER,
   LOGIN_USER_SUCCESS,

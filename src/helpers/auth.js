@@ -22,10 +22,7 @@ const instance = axios.create({
  * Returns the authenticated user
  */
 export const getAuthenticatedUser = () => {
-  // if (!localStorage.getItem("authUser")) return null;
-
   return (
-    console.log('getAuth', localStorage.getItem("authUser")),
     localStorage.getItem("authUser"))
 };
 
@@ -39,7 +36,6 @@ export const loginUserService = (request) => {
     .then((data) => {
       return instance.post(LOGIN_API_ENDPOINT, request)
         .then((data) => {
-          console.log('data', data.data.data)
           const storedToken = data.data.data.token
           const id = data.data.data.userid
           localStorage.setItem('authUser', storedToken)

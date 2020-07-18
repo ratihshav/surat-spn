@@ -61,8 +61,6 @@ class ProfileSignature extends Component {
 
   render() {
     const { trimmedDataURL } = this.state
-
-    console.log('trimeee', trimmedDataURL)
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -114,7 +112,8 @@ class ProfileSignature extends Component {
                       <div>
                         <img
                           className={styles.sigImage}
-                          src={trimmedDataURL} />
+                          src={trimmedDataURL}
+                          alt={'signature'} />
 
                         <div className="text-center mt-3">
                           <Button

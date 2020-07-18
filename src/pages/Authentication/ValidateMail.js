@@ -73,7 +73,6 @@ class ValidateMail extends Component {
 
   render() {
     const { dataResult, errMsg } = this.state
-    console.log('daya', dataResult)
     return (
       <React.Fragment>
         <Row className="justify-content-center">

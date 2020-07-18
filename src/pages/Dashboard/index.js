@@ -172,7 +172,6 @@ class Dashboard extends Component {
 }
 
 const mapStatetoProps = state => {
-  console.log('dashboard', state.Login)
   const { error, loading, data } = state.Login;
   return { error, loading, data };
 };

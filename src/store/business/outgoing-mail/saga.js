@@ -1,9 +1,8 @@
-import { takeEvery, fork, put, all, call, select, takeLatest } from 'redux-saga/effects';
+import { takeEvery, fork, put, all, call, takeLatest } from 'redux-saga/effects';
 
 // Master Group Redux States
 import {
   CREATE_OUTGOING_MAIL,
-  SEARCH_USER,
   GET_OUTGOING_MAIL,
   GET_DETAIL_OUTGOING_MAIL,
   CREATE_DISPOSE_OUTGOING_MAIL
@@ -12,8 +11,6 @@ import {
 import {
   createOutgoingMailSuccess,
   createOutgoingMailFail,
-  searchUserSuccess,
-  searchUserFail,
   getOutgoingMailSuccess,
   getOutgoingMailFail,
   getDetailOutgoingMailSuccess,

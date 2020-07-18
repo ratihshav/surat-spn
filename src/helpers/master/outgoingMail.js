@@ -20,7 +20,6 @@ const instance = axios.create({
 });
 
 export const getOutgoingMailService = (request) => {
-  const req = request ? request : ''
   const GET_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/list`;
   return instance.get(GET_OUTGOING_MAIL_API + `${request}`)
     .then((data) => {

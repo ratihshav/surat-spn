@@ -176,7 +176,6 @@ export const searchUserSMService = (request) => {
 
 
 export const logoutUserService = (request) => {
-  console.log('token', token)
   const LOGOUT_USER_API = config.api_endpoint + `/logout`
   return instance.post(LOGOUT_USER_API)
     .then((data) => {

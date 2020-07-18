@@ -123,8 +123,6 @@ class IncomingMailEdit extends Component {
       file: this.state.selectedFile
     }
 
-    console.log('params', params)
-
     updateIncomingMailService(params)
       .then((data) => {
         this.alertSuccess()
@@ -184,7 +182,6 @@ class IncomingMailEdit extends Component {
 
     const date = detailList.tgl_surat
     const curr = moment(date).format('DD-MM-YYYY')
-    console.log('curr', curr)
 
     return (
       <React.Fragment>

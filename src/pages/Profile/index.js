@@ -13,7 +13,7 @@ import {
   Button
 } from "reactstrap";
 import { connect } from "react-redux";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import classnames from "classnames";
 import Select from "react-select";
 
@@ -23,7 +23,6 @@ import {
 } from '../../helpers/master/user';
 import { getMasterPositionServices } from '../../helpers/master/position'
 import toast from '../UI/toast';
-import SignaturePad from 'react-signature-canvas'
 
 // import images
 import config from '../../helpers/config'
@@ -150,7 +149,6 @@ class Profile extends Component {
       dataUser,
       dataPosition,
       selectedPosition,
-      selectedGender
     } = this.state;
 
     const optionsPosition = dataPosition.length !== 0 ?
@@ -197,6 +195,7 @@ class Profile extends Component {
                           src={dataUser.path_foto ? config.url_img + dataUser.path_foto : userAva}
                           alt="foto_user"
                           width="150"
+                          alt={dataUser.username}
                           data-holder-rendered="true"
                         />
                         <br /> <br />
@@ -232,7 +231,7 @@ class Profile extends Component {
                                 this.toggleCustomJustified("1");
                               }}
                             >
-                              <span class="d-none d-sm-block">Data Pribadi</span>
+                              <span className="d-none d-sm-block">Data Pribadi</span>
                             </NavLink>
                           </NavItem>
                           <NavItem>
@@ -244,7 +243,7 @@ class Profile extends Component {
                                 this.toggleCustomJustified("6");
                               }}
                             >
-                              <span class="d-none d-sm-block">Data Jabatan</span>
+                              <span className="d-none d-sm-block">Data Jabatan</span>
                             </NavLink>
                           </NavItem>
                           <NavItem>
@@ -256,7 +255,7 @@ class Profile extends Component {
                                 this.toggleCustomJustified("7");
                               }}
                             >
-                              <span class="d-none d-sm-block">Data Divisi</span>
+                              <span className="d-none d-sm-block">Data Divisi</span>
                             </NavLink>
                           </NavItem>
                         </Nav>

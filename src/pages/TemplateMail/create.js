@@ -19,7 +19,6 @@ class TemplateMailCreate extends Component {
   }
 
   onFileChange = event => {
-    console.log('asa', event.target.files[0])
     const { selectedFile } = this.state
     this.setState({ selectedFile: [...selectedFile, event.target.files[0]] });
   };
@@ -59,7 +58,6 @@ class TemplateMailCreate extends Component {
   deleteFromTable = (data) => {
     const { selectedFile } = this.state
     const updatedData = selectedFile.splice(data, selectedFile.length)
-    console.log('updatedData', updatedData)
   }
 
   filesTable = (data) => {
@@ -107,7 +105,6 @@ class TemplateMailCreate extends Component {
 
   render() {
     const { selectedFile } = this.state;
-    console.log('selec', selectedFile)
     return (
       <React.Fragment>
         <div className="container-fluid">

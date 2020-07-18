@@ -21,7 +21,7 @@ const SidebarContent = props => {
       <ul className="metismenu list-unstyled" id="side-menu">
         <li className="menu-title"> </li>
         <li>
-          <Link className="waves-effect" style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 22, margin: 0 }}>
+          <Link to="/dashboard" className="waves-effect" style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 22, margin: 0 }}>
             <span >e-Office <br /> Dinas Pendidikan <br /> Kabupaten Kerinci </span>
           </Link>
         </li>
@@ -119,8 +119,6 @@ class Sidebar extends Component {
   }
 
   componentDidMount() {
-    console.log('siderbar', this.props.location);
-
     this.initMenu();
   }
 

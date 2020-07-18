@@ -9,7 +9,6 @@ import {
 } from "../../helpers/master/group"
 import toast from '../UI/toast';
 
-const idDivisi = window.localStorage.getItem('idDivisi');
 class GroupEdit extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +18,6 @@ class GroupEdit extends Component {
   }
 
   componentDidMount() {
-    console.log('this', this.props.location)
     const idDivisi = window.localStorage.getItem('idDivisi')
 
     this.getDetailDivisi(idDivisi)

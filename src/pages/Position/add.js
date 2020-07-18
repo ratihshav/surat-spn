@@ -85,7 +85,6 @@ class PositionAdd extends Component {
   }
 
   handleCheckboxParent = (e) => {
-    console.log('e', e.target.checked)
     this.setState({ isParent: e.target.checked })
   }
 
