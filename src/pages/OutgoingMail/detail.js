@@ -161,8 +161,8 @@ class OutgoingMailDetail extends Component {
     toast.error('Gagal menyelesaikan surat')
   }
 
-  handleStatusMail = selectedStatusMail => {
-    this.setState({ selectedStatusMail })
+  handleStatusMail = e => {
+    this.setState({ selectedStatusMail: e.target.value })
   }
 
   content = (data) => {
@@ -195,10 +195,12 @@ class OutgoingMailDetail extends Component {
                     {disposisi ? data.disposisi.map(function (nextItem, j) {
                       return (
                         <tr key={nextItem.id} >
-                          <Col style={{ backgroundColor: '#E9EBEE', borderRadius: 5, textAlign: 'center', justifyContent: 'center', margin: 5 }}>
-                            <Row>{nextItem.created_by} - {nextItem.position_name}</Row>
-                            <Row> <a href={config.url_img + nextItem.file_path} target="_blank" download>{nextItem.file_name}</a></Row>
-                          </Col>
+                          {nextItem.file_id !== null && nextItem.file_path !== null ?
+                            <Col style={{ backgroundColor: '#E9EBEE', borderRadius: 5, textAlign: 'center', justifyContent: 'center', margin: 5 }}>
+                              <Row>{nextItem.created_by} - {nextItem.position_name}</Row>
+                              <Row> <a href={config.url_img + nextItem.file_path} target="_blank" download>{nextItem.file_name}</a></Row>
+                            </Col>
+                            : null}
                         </tr>
                       );
                     }) : null}
@@ -321,6 +323,7 @@ class OutgoingMailDetail extends Component {
       isShowModalAgenda,
       isShowModalConfirm,
       isShowModalHistory,
+      selectedStatusMail,
       dataUser } = this.state;
 
     const optionsSignature = dataUser.length !== 0 ?
@@ -438,7 +441,7 @@ class OutgoingMailDetail extends Component {
                                 htmlFor="example-text-input"
                                 className="col-sm-2 col-form-label">
                                 Status
-                                           </label>
+                              </label>
                               <Col sm={10}>
                                 <input
                                   type="radio"
@@ -447,37 +450,40 @@ class OutgoingMailDetail extends Component {
                                   value="1"
                                   onChange={this.handleStatusMail}
                                   ref={node => (this.inputNode = node)} />&nbsp;
-                                            <label htmlFor="accept">Disetujui</label>
+                                <label htmlFor="accept">Disetujui</label>
 
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-                                            <input
+                                <input
                                   type="radio"
                                   id="reject"
                                   name="status"
                                   value="0"
                                   onChange={this.handleStatusMail}
                                   ref={node => (this.inputNode = node)} />&nbsp;
-                                            <label htmlFor="reject"> Dikembalikan</label>
+                                <label htmlFor="reject"> Dikembalikan</label>
                               </Col>
                             </Row>
 
-                            <Row className="form-group">
-                              <label
-                                htmlFor="example-search-input"
-                                className="col-sm-2 col-form-label">
-                                Diteruskan kepada
+
+                            {selectedStatusMail !== '0' ?
+                              <Row className="form-group">
+                                <label
+                                  htmlFor="example-search-input"
+                                  className="col-sm-2 col-form-label">
+                                  Diteruskan kepada
                          </label>
-                              <Col sm={10}>
-                                <Select
-                                  value={selectedSignature}
-                                  onChange={this.handleSelectSignature}
-                                  options={optionsSignature}
-                                  name="sendTo"
-                                  ref={node => (this.inputNode = node)}
-                                />
-                              </Col>
-                            </Row>
+                                <Col sm={10}>
+                                  <Select
+                                    value={selectedSignature}
+                                    onChange={this.handleSelectSignature}
+                                    options={optionsSignature}
+                                    name="sendTo"
+                                    ref={node => (this.inputNode = node)}
+                                  />
+                                </Col>
+                              </Row>
+                              : null}
 
                             <Row className="form-group">
                               <label

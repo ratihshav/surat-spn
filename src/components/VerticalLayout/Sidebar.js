@@ -18,16 +18,17 @@ const SidebarContent = props => {
   return (
     <div id="sidebar-menu">
       <br /><br />
-      <p style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 22, margin: 0 }}>e-Office <br /> Dinas Pendidikan <br /> Kabupaten Kerinci </p>
       <ul className="metismenu list-unstyled" id="side-menu">
         <li className="menu-title"> </li>
-        <br></br>
+        <li>
+          <Link className="waves-effect" style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 22, margin: 0 }}>
+            <span >e-Office <br /> Dinas Pendidikan <br /> Kabupaten Kerinci </span>
+          </Link>
+        </li>
+
         <li>
           <Link to="/dashboard" className="waves-effect">
             <i className="ti-home"></i>
-            <span className="badge badge-pill badge-primary float-right">
-              2
-            </span>
             <span>Dashboard</span>
           </Link>
         </li>

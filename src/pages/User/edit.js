@@ -12,15 +12,9 @@ import {
   CardBody,
   Button
 } from "reactstrap";
-import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import classnames from "classnames";
 import Select from "react-select";
-
-import {
-  updateMasterUser,
-  updateMasterUserSuccess
-} from "../../store/business/master-user/actions";
 import {
   getDetailUserService,
   updateMasterUserService
@@ -74,8 +68,9 @@ class UserEdit extends Component {
   }
 
   submitUpdatedData = (e) => {
+    const { selectedPosition, dataUser } = this.state
     const params = {
-      position_id: e.target.type.value,
+      position_id: selectedPosition === null ? dataUser.position_id : e.target.type.value,
       username: e.target.username.value,
       full_name: e.target.fullName.value,
       nip: e.target.idEmployee.value,
@@ -468,9 +463,8 @@ class UserEdit extends Component {
                                   </label>
                                   <Col sm={10}>
                                     <Select
-                                      value={selectedPosition === null ? dataUser.position_id : selectedPosition}
+                                      value={selectedPosition}
                                       placeholder={[dataUser.position_name]}
-
                                       defaultValue={defaValPosition}
                                       onChange={this.handleSelectPosition}
                                       options={optionsPosition}
@@ -541,12 +535,4 @@ class UserEdit extends Component {
   }
 }
 
-const mapStatetoProps = state => {
-  const { error, loading, response } = state.MasterUser;
-  return { error, loading, response };
-};
-
-export default withRouter(connect(mapStatetoProps, {
-  updateMasterUser,
-  updateMasterUserSuccess
-})(UserEdit));
+export default withRouter(UserEdit);
