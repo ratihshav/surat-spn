@@ -124,20 +124,7 @@ class PositionPermission extends Component {
       grantedPermission,
     } = this.state
 
-   // const string = grantedPermission.length !== 0 ? grantedPermission[0].toString() : null
-    // const grantedJabatan = allPermission.length !== 0 ?
-    //   allPermission.jabatan.actions.map((data) => {
-    //     return (data.value)
-    //   }) : null
-
-    // const grantedSK = allPermission.length !== 0 ?
-    //   allPermission[0].suratKeluar.actions.map((data) => {
-    //     return (data.value)
-    //   }) : null
-
-    // const grantedList = grantedPermission.length !== 0 ? grantedPermission[0].includes(grantedJabatan) : null
-
-console.log(allPermission)
+    console.log(allPermission)
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -187,134 +174,35 @@ console.log(allPermission)
                         Hak Akses
                       </label>
                       <Col sm={10}>
-                        <Card style={{ borderWidth: 1, padding: 2 }}>
-                          <table className="table table-bordered mb-0">
-                            <tbody>
-                              {allPermission.map((item, index) =>(
-                                <tr data-index={index}>
+                        <table className="table table-bordered mb-0" style={{ width: '100%' }}>
+                          {allPermission.map((item, index) => {
+                            return (
+                              <tbody key={index}>
+                                <tr>
                                   <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>{item.module}</h5></td>
-                                  {item.actions.map((action, aIndex) => {
-                                    // tambahin
-                                  })}
                                 </tr>
-                              ))}
+                                {item.actions.map((action, aIndex) => {
+                                  const string = grantedPermission.length !== 0 ? grantedPermission[0].toString() : null
+                                  const value = string !== null ? string.includes(action.value) : false
 
-
-                              {/* <tr>
-                                <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Jabatan</h5></td>
-                              </tr> */}
-
-                              {/* {allPermission.length !== 0 ? allPermission[0].jabatan.actions.map((item, index) => {
-                                const value = string !== null ? string.includes(item.value) : false
-                                return (
-                                  <tr key={index}>
-                                    <td style={{ padding: 1, verticalAlign:'middle' }}>&nbsp;&nbsp;{item.text}</td>
-                                    <td style={{ padding: 1 }}>&nbsp;
+                                  return (
+                                    <tr key={aIndex}>
+                                      <td style={{ padding: 1, verticalAlign: 'middle' }}>&nbsp;&nbsp;{action.text}</td>
+                                      <td style={{ padding: 1 }}>&nbsp;
                                       <SwitchComponent
-                                        onColor="#EF476F"
-                                        onChange={this.handleToogle}
-                                        value={item.value}
-                                        defaultChecked={value}
-                                      />
-                                    </td>
-
-                                  </tr>
-                                )
-                              })
-                                : null}
-
-                              <tr>
-                                <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Surat Keluar</h5></td>
-                              </tr>
-                              {allPermission.length !== 0 ? allPermission[0].suratKeluar.actions.map((item, index) => {
-                                const string = grantedPermission.length !== 0 ? grantedPermission[0].toString() : null
-                                const value = string !== null ? string.includes(item.value) : false
-                                return (
-                                  <tr key={index}>
-                                    <td style={{ padding: 1, verticalAlign:'middle' }}>&nbsp;&nbsp;{item.text}</td>
-                                    <td style={{ padding: 1 }}>&nbsp;
-                                      <SwitchComponent
-                                        onColor="#EF476F"
-                                        onChange={this.handleToogle}
-                                        value={item.value}
-                                        defaultChecked={value}
-
-                                      />
-                                    </td>
-
-                                  </tr>
-                                )
-                              })
-                                : null}
-
-                              <tr>
-                                <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Surat Masuk</h5></td>
-                              </tr>
-                              {allPermission.length !== 0 ? allPermission[0].suratMasuk.actions.map((item, index) => {
-                                const value = string !== null ? string.includes(item.value) : false
-                                return (
-                                  <tr key={index}>
-                                    <td style={{ padding: 1, verticalAlign:'middle' }}>&nbsp;&nbsp;{item.text}</td>
-                                    <td style={{ padding: 1 }}>&nbsp;
-                                      <SwitchComponent
-                                        onColor="#EF476F"
-                                        onChange={this.handleToogle}
-                                        defaultChecked={value}
-                                        value={item.value}
-                                      />
-                                    </td>
-
-                                  </tr>
-                                )
-                              })
-                                : null}
-
-                              <tr>
-                                <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Template Surat</h5></td>
-                              </tr>
-                              {allPermission.length !== 0 ? allPermission[0].templateSurat.actions.map((item, index) => {
-                                const value = string !== null ? string.includes(item.value) : false
-                                return (
-                                  <tr key={index}>
-                                    <td style={{ padding: 1, verticalAlign:'middle' }}>&nbsp;&nbsp;{item.text}</td> 
-                                    <td style={{ padding: 1 }}>&nbsp;
-                                      <SwitchComponent
-                                        onColor="#EF476F"
-                                        onChange={this.handleToogle}
-                                        defaultChecked={value}
-                                        value={item.value}
-                                      />
-                                    </td>
-
-                                  </tr>
-                                )
-                              })
-                                : null}
-
-                              <tr>
-                                <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>User</h5></td>
-                              </tr>
-                              {allPermission.length !== 0 ? allPermission[0].user.actions.map((item, index) => {
-                                const value = string !== null ? string.includes(item.value) : false
-                                return (
-                                  <tr key={index}>
-                                    <td style={{ padding: 1, verticalAlign:'middle' }}>&nbsp;&nbsp;{item.text}</td>
-                                    <td style={{ padding: 1 }}>&nbsp;
-                                      <SwitchComponent
-                                        onColor="#EF476F"
-                                        onChange={this.handleToogle}
-                                        defaultChecked={value}
-                                        value={item.value}
-                                      />
-                                    </td>
-
-                                  </tr>
-                                )
-                              })
-                                : null} */}
-                            </tbody>
-                          </table>
-                        </Card>
+                                          onColor="#EF476F"
+                                          onChange={this.handleToogle}
+                                          value={action.value}
+                                          defaultChecked={value}
+                                        />
+                                      </td>
+                                    </tr>
+                                  )
+                                })}
+                              </tbody>
+                            )
+                          })}
+                        </table>
                       </Col>
                     </Row>
                     <div className="text-right mt-4">
