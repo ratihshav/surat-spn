@@ -124,20 +124,20 @@ class PositionPermission extends Component {
       grantedPermission,
     } = this.state
 
-    const string = grantedPermission.length !== 0 ? grantedPermission[0].toString() : null
-    const grantedJabatan = allPermission.length !== 0 ?
-      allPermission[0].jabatan.actions.map((data) => {
-        return (data.value)
-      }) : null
+   // const string = grantedPermission.length !== 0 ? grantedPermission[0].toString() : null
+    // const grantedJabatan = allPermission.length !== 0 ?
+    //   allPermission.jabatan.actions.map((data) => {
+    //     return (data.value)
+    //   }) : null
 
-    const grantedSK = allPermission.length !== 0 ?
-      allPermission[0].suratKeluar.actions.map((data) => {
-        return (data.value)
-      }) : null
+    // const grantedSK = allPermission.length !== 0 ?
+    //   allPermission[0].suratKeluar.actions.map((data) => {
+    //     return (data.value)
+    //   }) : null
 
-    const grantedList = grantedPermission.length !== 0 ? grantedPermission[0].includes(grantedJabatan) : null
+    // const grantedList = grantedPermission.length !== 0 ? grantedPermission[0].includes(grantedJabatan) : null
 
-
+console.log(allPermission)
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -190,11 +190,21 @@ class PositionPermission extends Component {
                         <Card style={{ borderWidth: 1, padding: 2 }}>
                           <table className="table table-bordered mb-0">
                             <tbody>
-                              <tr>
-                                <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Jabatan</h5></td>
-                              </tr>
+                              {allPermission.map((item, index) =>(
+                                <tr data-index={index}>
+                                  <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>{item.module}</h5></td>
+                                  {item.actions.map((action, aIndex) => {
+                                    // tambahin
+                                  })}
+                                </tr>
+                              ))}
 
-                              {allPermission.length !== 0 ? allPermission[0].jabatan.actions.map((item, index) => {
+
+                              {/* <tr>
+                                <td colSpan={2} style={{ backgroundColor: '#F8F8FA' }}><h5>Jabatan</h5></td>
+                              </tr> */}
+
+                              {/* {allPermission.length !== 0 ? allPermission[0].jabatan.actions.map((item, index) => {
                                 const value = string !== null ? string.includes(item.value) : false
                                 return (
                                   <tr key={index}>
@@ -301,7 +311,7 @@ class PositionPermission extends Component {
                                   </tr>
                                 )
                               })
-                                : null}
+                                : null} */}
                             </tbody>
                           </table>
                         </Card>

@@ -171,10 +171,10 @@ class User extends Component {
                     <Column dataField="id" visible={false} />
                     <Column dataField="password" visible={false} />
                     <Column dataField="confirm_password" visible={false} />
-                    <Column dataField="full_name" />
+                    <Column caption="Nama Lengkap" dataField="full_name" />
                     <Column dataField="username" />
                     <Column dataField="email" />
-                    <Column dataField="group_name" visible={false} />
+                    <Column caption="Jabatan" dataField="position_name" />
                     <Column dataField="address" visible={false} />
                     <Column dataField="phone" visible={false} />
                     <Column dataField="last_login" visible={false} />
