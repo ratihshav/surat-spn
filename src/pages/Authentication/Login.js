@@ -23,16 +23,17 @@ class Login extends Component {
       < React.Fragment >
         <div>
           <div className="container">
-            <br />
-            <Row style={{ justifyContent: 'flex-end' }}>
+            <div className="home-btn d-none d-sm-block">
               <Link to="/validate-mail">
                 <Button
-                  color="success"
-                  className="mt-1">
-                  Validasi Surat
-              </Button>
+                    color="success"
+                    className="mt-1">
+                    Validasi Surat
+                </Button>
               </Link>
-            </Row>
+            </div>
+            <br />
+            
             <Row className="justify-content-center">
               <Col md={8} lg={6} xl={5}>
                 <div className="position-relative">
