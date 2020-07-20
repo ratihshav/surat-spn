@@ -170,7 +170,7 @@ class OutgoingMail extends Component {
   }
 
   render() {
-    const isAbleCreate = this.props.data.perms.includes('suratKeluar_save');
+    const isAbleCreate = this.props.data.perms.includes('suratKeluar_save', 'is_admin');
 
     return (
       <React.Fragment>
