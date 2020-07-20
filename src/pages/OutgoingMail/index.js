@@ -170,7 +170,9 @@ class OutgoingMail extends Component {
   }
 
   render() {
-    const isAbleCreate = this.props.data.perms.includes('suratKeluar_save', 'is_admin');
+    const { perms } = this.props.data
+    const granted = ['suratKeluar_save', 'is_admin']
+    const isAbleCreate = granted.some(x => perms.includes(x));
 
     return (
       <React.Fragment>

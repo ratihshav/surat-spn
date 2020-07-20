@@ -162,7 +162,9 @@ class IncomingMail extends Component {
   }
 
   render() {
-    const isAbleCreate = this.props.data.perms.includes('suratMasuk_save', 'is_admin');
+    const { perms } = this.props.data
+    const granted = ['suratMasuk_save', 'is_admin']
+    const isAbleCreate = granted.some(x => perms.includes(x));
 
     return (
       <React.Fragment>
