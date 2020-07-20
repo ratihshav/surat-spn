@@ -6,7 +6,7 @@ import { Redirect, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { getMasterGroupServices } from "../../helpers/master/group"
 import { createOutgoingMailService } from "../../helpers/master/outgoingMail"
-import { searchUserService } from "../../helpers/master/user"
+import { searchUserSKService, searchUserTtdService } from "../../helpers/master/user"
 import { searchMasterClassService } from '../../helpers/master/classification'
 import toast from '../UI/toast';
 
@@ -44,19 +44,29 @@ class OutgoingMailCreate extends Component {
       selectedType: null,
       selectedClass: null,
       dataClass: [],
-      dataUser: []
+      dataUserTtd: [],
+      dataUserSK: []
     };
   }
 
   componentDidMount() {
-    this.getDataUser()
+    this.getUserTtd()
+    this.getUserSK()
     this.getDataClass()
   }
 
-  getDataUser = () => {
-    searchUserService()
+  getUserTtd = () => {
+    searchUserTtdService()
       .then((data) => {
-        this.setState({ dataUser: data.data.data })
+        this.setState({ dataUserTtd: data.data.data })
+      })
+      .catch(() => { throw 'Gagal Mengubah Data'; });
+  }
+
+  getUserSK = () => {
+    searchUserSKService()
+      .then((data) => {
+        this.setState({ dataUserSK: data.data.data })
       })
       .catch(() => { throw 'Gagal Mengubah Data'; });
   }
@@ -139,22 +149,24 @@ class OutgoingMailCreate extends Component {
       selectedFile,
       selectedSignature,
       selectedSubmit,
-      dataUser,
       selectedType,
       selectedClass,
-      dataClass } = this.state;
+      dataClass,
+      dataUserSK,
+      dataUserTtd } = this.state;
 
-    const optionsSignature = dataUser.length !== 0 ?
-      dataUser.map(function (data) {
+    console.log('dataUserSK', dataUserSK)
+    const optionsSignature = dataUserTtd.length !== 0 ?
+      dataUserTtd.map(function (data) {
         return { value: data.id, label: data.text };
       })
-      : null
+      : 'Tidak ada data'
 
-    const optionsSubmit = dataUser.length !== 0 ?
-      dataUser.map(function (data) {
+    const optionsSubmit = dataUserSK.length !== 0 ?
+      dataUserSK.map(function (data) {
         return { value: data.id, label: data.text };
       })
-      : null
+      : { value: 0, label: 'Tidak ada data' };
 
     const optionsClass = dataClass.length !== 0 ?
       dataClass.map(function (data) {

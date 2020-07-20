@@ -21,6 +21,7 @@ import {
   readOutgoingMailService
 } from '../../helpers/master/outgoingMail'
 import toast from '../UI/toast';
+import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 
 // const subjectMail = (cellData) => {
 //   return (
@@ -50,7 +51,7 @@ class OutgoingMail extends Component {
   // }
 
   renderCol = (data) => {
-    
+
   }
 
   allowDeleting = (e) => {
@@ -129,6 +130,7 @@ class OutgoingMail extends Component {
   }
 
   onToolbarPreparing = (e) => {
+
     e.toolbarOptions.items.unshift({
       location: 'after',
       widget: 'dxButton',
@@ -142,9 +144,9 @@ class OutgoingMail extends Component {
 
   getSubjectMail = (rowData) => {
     console.log(rowData)
-    return <div >{rowData.data.hal_surat} <br></br> 
-    <i>{rowData.data.group_name}</i> <br></br>
-    <div style={{color: 'blue'}}>{rowData.data.status} - {rowData.data.position_name}</div>
+    return <div >{rowData.data.hal_surat} <br></br>
+      <i>{rowData.data.group_name}</i> <br></br>
+      <div style={{ color: 'blue' }}>{rowData.data.status} - {rowData.data.position_name}</div>
     </div>;
   }
 
@@ -168,6 +170,8 @@ class OutgoingMail extends Component {
   }
 
   render() {
+    const isAbleCreate = this.props.data.perms.includes('suratKeluar_save');
+
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -199,7 +203,7 @@ class OutgoingMail extends Component {
                     showColumnLines={false}
                     columnAutoWidth={true}
                     onRowClick={this.onRowClick}
-                    onToolbarPreparing={this.onToolbarPreparing}
+                    onToolbarPreparing={isAbleCreate ? this.onToolbarPreparing : null}
                   >
                     <Editing
                       mode="row"
@@ -248,4 +252,9 @@ class OutgoingMail extends Component {
   }
 }
 
-export default withRouter(connect()(OutgoingMail));
+const mapStatetoProps = state => {
+  const { error, loading, data } = state.Login;
+  return { error, loading, data };
+};
+
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(OutgoingMail));

@@ -22,6 +22,7 @@ import {
   readIncomingMailService
 } from '../../helpers/master/incomingMail'
 import toast from '../UI/toast';
+import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 
 class IncomingMail extends Component {
   constructor(props) {
@@ -161,6 +162,8 @@ class IncomingMail extends Component {
   }
 
   render() {
+    const isAbleCreate = this.props.data.perms.includes('suratMasuk_save');
+
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -192,7 +195,7 @@ class IncomingMail extends Component {
                     showColumnLines={false}
                     columnAutoWidth={true}
                     onRowClick={this.onRowClick}
-                    onToolbarPreparing={this.onToolbarPreparing}
+                    onToolbarPreparing={isAbleCreate ? this.onToolbarPreparing : null}
                   >
                     <Editing
                       mode="row"
@@ -237,5 +240,9 @@ class IncomingMail extends Component {
   }
 }
 
-export default withRouter(connect()(IncomingMail));
+const mapStatetoProps = state => {
+  const { error, loading, data } = state.Login;
+  return { error, loading, data };
+};
 
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(IncomingMail));

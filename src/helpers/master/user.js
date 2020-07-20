@@ -150,6 +150,18 @@ export const searchUserService = (request) => {
     .catch(() => { throw 'Gagal Mengubah Data'; });
 }
 
+export const searchUserTtdService = (request) => {
+
+  const SEARCH_USER_TTD_API = config.api_endpoint + `/user/searchTtd`
+  return instance.get(SEARCH_USER_TTD_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
+
 export const searchUserSKService = (request) => {
 
   const SEARCH_USER_SK_API = config.api_endpoint + `/user/searchSK`
