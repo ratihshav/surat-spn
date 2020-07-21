@@ -11,7 +11,7 @@ import {
   createAgendaOutgoingMailService,
   approveOutgoingMailService
 } from "../../helpers/master/outgoingMail"
-import { searchUserService } from "../../helpers/master/user"
+import { searchUserSKService } from "../../helpers/master/user"
 import logoPdf from "../../assets/images/logo-pdf.png";
 import toast from '../UI/toast';
 import config from '../../helpers/config'
@@ -51,7 +51,7 @@ class OutgoingMailDetail extends Component {
   }
 
   getDataUser = () => {
-    searchUserService()
+    searchUserSKService()
       .then((data) => {
         this.setState({ dataUser: data.data.data })
       })
