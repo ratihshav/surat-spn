@@ -57,12 +57,14 @@ class TemplateMailCreate extends Component {
 
   deleteFromTable = (data) => {
     const { selectedFile } = this.state
-    const updatedData = selectedFile.splice(data, selectedFile.length)
+    selectedFile.splice(data, 1)
+
+    this.setState({ selectedFile })
   }
 
   filesTable = (data) => {
     return (
-      <Col xl={4} >
+      <Col xl={12} >
         <Card>
           <CardBody style={{ padding: 0 }}>
             <table className="table table-hover table-centered table-bordered mb-0">
@@ -74,7 +76,7 @@ class TemplateMailCreate extends Component {
                 </tr>
               </thead>
               <tbody>
-                {data ? data.map(function (nextItem, index) {
+                {data ? data.map((nextItem, index) => {
                   return (
                     <tr key={index}>
                       <th>
@@ -86,8 +88,9 @@ class TemplateMailCreate extends Component {
                       <th>
                         <Button
                           color="danger"
-                        // onClick={() => {
-                        //   this.deleteFromTable(index)}}
+                          onClick={() => {
+                            this.deleteFromTable(index)
+                          }}
                         >
                           Hapus
                          </Button>
@@ -105,6 +108,7 @@ class TemplateMailCreate extends Component {
 
   render() {
     const { selectedFile } = this.state;
+
     return (
       <React.Fragment>
         <div className="container-fluid">
