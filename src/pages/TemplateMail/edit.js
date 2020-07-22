@@ -224,7 +224,7 @@ class TemplateMailEdit extends Component {
                     </Row>
 
                     <br />
-                    {existingFile ?
+                    {dataDetail.detail ?
                       <Row>
                         <div className="table-responsive">
                           {this.filesTable(selectedFile)}

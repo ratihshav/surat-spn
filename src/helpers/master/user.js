@@ -241,6 +241,18 @@ export const saveSignatureUserService = (request) => {
     .catch((error) => { throw 'Gagal'; });
 }
 
+export const getNotifService = (request) => {
+
+  const GET_NOTIF_API = config.api_endpoint + `/notif/topbar/view`
+  return instance.get(GET_NOTIF_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
+
 export async function _handleError(error) {
   // var errorCode = error.code;
   var errorMessage = error.message;
