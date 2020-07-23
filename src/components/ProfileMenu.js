@@ -25,12 +25,12 @@ class ProfileMenu extends Component {
   }
 
   logout = () => {
-    logoutUserService()
-      .then((data) => {
-        window.localStorage.clear()
-        window.location = '/'
-      })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+    // logoutUserService()
+    //   .then((data) => {
+    window.localStorage.clear()
+    window.location = '/'
+    // })
+    // .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
   render() {
