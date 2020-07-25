@@ -15,7 +15,8 @@ class TemplateMailEdit extends Component {
     super(props);
     this.state = {
       selectedFile: [],
-      dataDetail: []
+      dataDetail: [],
+      existingFile: []
     };
   }
 
@@ -30,7 +31,7 @@ class TemplateMailEdit extends Component {
       .then((data) => {
         this.setState({
           dataDetail: data.data.data,
-          selectedFile: data.data.data.detail
+          existingFile: data.data.data.detail
         })
       })
       .catch(() => { throw 'Gagal Mengubah Data'; })
@@ -42,10 +43,13 @@ class TemplateMailEdit extends Component {
   };
 
   saveTemplateMail = (e) => {
+    const { existingFile, selectedFile } = this.state
+
     const params = {
       template_type: e.target.type.value,
       template_name: e.target.name.value,
-      file: this.state.selectedFile
+      existing_file: JSON.stringify(existingFile),
+      file: selectedFile
     }
 
     updateTemplateMailService(params)
@@ -73,11 +77,18 @@ class TemplateMailEdit extends Component {
     this.props.history.push('/template-surat')
   }
 
-  deleteFromTable = (data) => {
+  deleteSelectedFile = (data) => {
     const { selectedFile } = this.state
     selectedFile.splice(data, 1)
 
     this.setState({ selectedFile })
+  }
+
+  deleteExistingFile = (data) => {
+    const { existingFile } = this.state
+    existingFile.splice(data, 1)
+
+    this.setState({ existingFile })
   }
 
   filesTable = (data) => {
@@ -94,7 +105,7 @@ class TemplateMailEdit extends Component {
                 </tr>
               </thead>
               <tbody>
-                {data ? data.map((nextItem, index) => {
+                {data ? data.existingFile.map((nextItem, index) => {
                   return (
                     <tr key={index}>
                       <th>
@@ -107,7 +118,7 @@ class TemplateMailEdit extends Component {
                         <Button
                           color="danger"
                           onClick={() => {
-                            this.deleteFromTable(index)
+                            this.deleteExistingFile(index)
                           }}
                         >
                           Hapus
@@ -116,7 +127,28 @@ class TemplateMailEdit extends Component {
                     </tr>
                   );
                 }) : null}
-
+                {data ? data.selectedFile.map((nextItem, index) => {
+                  return (
+                    <tr key={index}>
+                      <th>
+                        {index + 1}
+                      </th>
+                      <th style={{ fontWeight: 'bold' }}>
+                        {nextItem.name}
+                      </th>
+                      <th>
+                        <Button
+                          color="danger"
+                          onClick={() => {
+                            this.deleteSelectedFile(index)
+                          }}
+                        >
+                          Hapus
+                         </Button>
+                      </th>
+                    </tr>
+                  );
+                }) : null}
               </tbody>
             </table>
           </CardBody>
@@ -126,7 +158,7 @@ class TemplateMailEdit extends Component {
   }
 
   render() {
-    const { selectedFile, dataDetail } = this.state;
+    const { selectedFile, dataDetail, existingFile } = this.state;
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -224,10 +256,10 @@ class TemplateMailEdit extends Component {
                     </Row>
 
                     <br />
-                    {dataDetail.detail ?
+                    {existingFile ?
                       <Row>
                         <div className="table-responsive">
-                          {this.filesTable(selectedFile)}
+                          {this.filesTable({ existingFile, selectedFile })}
                         </div>
                       </Row>
                       : null}

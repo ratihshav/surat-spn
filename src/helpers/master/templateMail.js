@@ -35,6 +35,8 @@ export const getTemplateMailService = () => {
 //create
 export const createTemplateMailService = (request) => {
   const file = request.file
+  console.log('create', file)
+
   const formData = new FormData();
   formData.append('template_type', request.template_type);
   formData.append('template_name', request.template_name);
@@ -55,11 +57,17 @@ export const createTemplateMailService = (request) => {
 //update
 export const updateTemplateMailService = (request) => {
   const id = window.localStorage.getItem('idTemp');
+  const file = request.file
+
   const formData = new FormData();
-  formData.append('position_name', request.position_name);
-  formData.append('position_type', request.position_type);
-  formData.append('group_name', request.group_name);
-  formData.append('group_id', request.group_id);
+  formData.append('template_type', request.template_type);
+  formData.append('template_name', request.template_name);
+  formData.append('existing_file', request.existing_file);
+
+  file.map((file, index) => {
+    formData.append(`file[${index}]`, file);
+  });
+
 
   const UPDATE_TEMPLATE_MAIL_API = config.api_endpoint + `/templateSurat/save/${id}`;
   return instance.post(UPDATE_TEMPLATE_MAIL_API, formData)
