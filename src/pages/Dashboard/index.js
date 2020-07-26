@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Row, Col, Card, CardBody } from "reactstrap";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+// import Pusher from 'pusher-js';
+import Echo from 'laravel-echo';
 
 // import images
 import servicesIcon1 from "../../assets/images/services-icon/01.png";
@@ -19,6 +21,48 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
+    this.notifOneSignal()
+    this.getCountNotif()
+
+  }
+
+  getCountNotif = () => {
+    const { userid, token } = this.props.data
+
+    // Pusher.logToConsole = true;
+
+    const options = {
+      broadcaster: 'pusher',
+      key: '18b11a0a23e374de892f',
+      cluster: 'ap1',
+      forceTLS: false,
+      encrypted: true,
+      authEndpoint: 'http://localhost/spnbackend/public/api/broadcasting/auth',
+      auth: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      },
+    };
+
+    const echo = new Echo(options);
+
+    echo.private(`App.User.${userid}`).notification((data) => {
+      console.log('dataPusher', data);
+    });
+
+    // var pusher = new Pusher('18b11a0a23e374de892f', {
+    //   cluster: 'ap1'
+    // });
+
+    // var channel = pusher.subscribe('my-channel');
+    // channel.bind('my-event', function (data) {
+    //   alert(JSON.stringify(data));
+    // });
+  }
+
+  notifOneSignal = () => {
     const { email } = this.props.data
     console.log('email', email)
     var useragentid = null;

@@ -54,15 +54,16 @@ class NotificationDropdown extends Component {
 
             <SimpleBar>
               <Link to="" className="text-reset notification-item">
-                <div className="media">
-                  <div className="avatar-xs mr-3">
-                    <span className="avatar-title bg-success rounded-circle font-size-16">
-                      <i className="mdi mdi-email-send"></i>
-                    </span>
-                  </div>
-                  {data.map((item, index) => {
-                    return (
-                      <div className="media-body" key={index}>
+
+                {data.map((item, index) => {
+                  return (
+                    <div className="media" key={index}>
+                      <div className="avatar-xs mr-3">
+                        <span className="avatar-title bg-success rounded-circle font-size-16">
+                          <i className="mdi mdi-cart-outline"></i>
+                        </span>
+                      </div>
+                      <div className="media-body">
                         <h6 className="mt-0 mb-1">{item.type}</h6>
                         <div className="font-size-12 text-muted">
                           <p className="mb-1">
@@ -70,10 +71,10 @@ class NotificationDropdown extends Component {
                           </p>
                         </div>
                       </div>
-                    )
-                  })}
+                    </div>
+                  )
+                })}
 
-                </div>
               </Link>
 
             </SimpleBar>
