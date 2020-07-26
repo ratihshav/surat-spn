@@ -1,16 +1,51 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { Dropdown, DropdownToggle, DropdownMenu, Row, Col } from "reactstrap";
 import SimpleBar from "simplebar-react";
+import Echo from 'laravel-echo';
+import { connect } from "react-redux";
+
 import { getNotifService } from "../helpers/master/user"
+import { loginUser, loginUserSuccess, loginUserFail } from "../store/actions";
 
 class NotificationDropdown extends Component {
   constructor(props) {
     super(props);
     this.state = {
       menu: false,
-      data: []
+      data: [],
+      totalCount: ''
     };
+  }
+
+  componentDidMount() {
+    this.getCountNotif()
+  }
+
+  getCountNotif = () => {
+    const { userid, token } = this.props.data
+
+    const options = {
+      broadcaster: 'pusher',
+      key: '18b11a0a23e374de892f',
+      cluster: 'ap1',
+      forceTLS: false,
+      encrypted: true,
+      authEndpoint: 'http://localhost/spnbackend/public/api/broadcasting/auth',
+      auth: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      },
+    };
+
+    const echo = new Echo(options);
+
+    echo.private(`App.User.${userid}`).notification((data) => {
+      this.setState({ totalCount: data.totalCount })
+      console.log('dataPusher', data);
+    });
   }
 
   toggle = () => {
@@ -25,7 +60,7 @@ class NotificationDropdown extends Component {
 
   }
   render() {
-    const { data } = this.state
+    const { data, totalCount } = this.state
     return (
       <React.Fragment>
         <Dropdown
@@ -40,7 +75,9 @@ class NotificationDropdown extends Component {
             tag="button"
           >
             <i className="mdi mdi-bell-outline"></i>
-            <span className="badge badge-danger badge-pill">3</span>
+            {totalCount ?
+              <span className="badge badge-danger badge-pill">{totalCount}</span>
+              : null}
           </DropdownToggle>
 
           <DropdownMenu className="dropdown-menu-lg p-0" right>
@@ -93,4 +130,10 @@ class NotificationDropdown extends Component {
     );
   }
 }
-export default NotificationDropdown;
+
+const mapStatetoProps = state => {
+  const { error, loading, data } = state.Login;
+  return { error, loading, data };
+};
+
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(NotificationDropdown));
