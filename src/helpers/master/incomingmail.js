@@ -102,8 +102,7 @@ export const updateIncomingMailService = (request) => {
 
 export const getDetailIncomingMailService = (request) => {
 
-  const id = window.localStorage.getItem('idInMail');
-  const GET_DETAIL_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/view/${id}`
+  const GET_DETAIL_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/view/${request}`
   return instance.get(GET_DETAIL_INCOMING_MAIL_API)
     .then((data) => {
       return {
@@ -153,8 +152,7 @@ export const readIncomingMailService = (request) => {
 };
 
 export const closeIncomingMailService = (request) => {
-  const id = window.localStorage.getItem('idInMail');
-  const CLOSE_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/close/${id}`;
+  const CLOSE_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/close/${request}`;
   return instance.post(CLOSE_INCOMING_MAIL_API)
     .then((data) => {
       return {

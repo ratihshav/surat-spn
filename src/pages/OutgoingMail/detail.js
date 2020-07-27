@@ -111,6 +111,7 @@ class OutgoingMailDetail extends Component {
 
   createAgendaMail = (e) => {
     const params = {
+      id: this.state.stateIdMail,
       nomor_surat: e.target.noMail.value,
       nomor_agenda: e.target.noAgenda.value,
       tgl_surat: e.target.dateMail.value,
@@ -131,6 +132,7 @@ class OutgoingMailDetail extends Component {
 
   doApproveMail = (e) => {
     const params = {
+      id: this.state.stateIdMail,
       keterangan: e.target.description.value,
     }
 

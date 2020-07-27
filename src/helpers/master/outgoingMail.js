@@ -132,8 +132,7 @@ export const readOutgoingMailService = (request) => {
 };
 
 export const createAgendaOutgoingMailService = (request) => {
-  const id = window.localStorage.getItem('idOutMail');
-
+  const id = request.id
   const formData = new FormData();
   formData.append('nomor_surat', request.nomor_surat);
   formData.append('nomor_agenda', request.nomor_agenda);
@@ -151,7 +150,7 @@ export const createAgendaOutgoingMailService = (request) => {
 }
 
 export const approveOutgoingMailService = (request) => {
-  const id = window.localStorage.getItem('idOutMail');
+  const id = request.id
   const formData = new FormData();
   formData.append('keterangan', request.keterangan);
 

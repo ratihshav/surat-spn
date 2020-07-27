@@ -114,7 +114,7 @@ class IncomingMailCreate extends Component {
       nomor_surat: e.target.numMail.value,
       tgl_surat: e.target.date.value,
       to_user_id: e.target.sendto.value,
-      sifat_surat: e.target.type.value,
+      sifat_surat: e.target.urgency.value,
       lampiran: e.target.attachment.value,
       // prioritas: e.target.urgency.value,
       klasifikasi_id: e.target.classification.value,
