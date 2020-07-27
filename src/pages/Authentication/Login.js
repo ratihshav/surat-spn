@@ -26,14 +26,14 @@ class Login extends Component {
             <div className="home-btn d-none d-sm-block">
               <Link to="/validate-mail">
                 <Button
-                    color="success"
-                    className="mt-1">
-                    Validasi Surat
+                  color="success"
+                  className="mt-1">
+                  Validasi Surat
                 </Button>
               </Link>
             </div>
             <br />
-            
+
             <Row className="justify-content-center">
               <Col md={8} lg={6} xl={5}>
                 <div className="position-relative">
@@ -81,7 +81,6 @@ class Login extends Component {
                               name="email"
                               label="Email"
                               className="form-control"
-                              defaultValue="admin@ratafd.xyz"
                               value=""
                               placeholder="Enter email"
                               required
@@ -92,7 +91,6 @@ class Login extends Component {
                               name="password"
                               label="Password"
                               type="password"
-                              defaultValue="admin"
                               required
                               value=""
                               placeholder="Enter Password"

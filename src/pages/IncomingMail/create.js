@@ -207,7 +207,6 @@ class IncomingMailCreate extends Component {
                           name="origin"
                           className="form-control"
                           type="text"
-                          defaultValue="Ikhwan Komputer"
                           id="example-text-input"
                           ref={node => (this.inputNode = node)}
                           required
@@ -225,7 +224,6 @@ class IncomingMailCreate extends Component {
                         <input
                           className="form-control"
                           type="text"
-                          defaultValue="Izin Penggunaan Website"
                           id="example-text-input"
                           name="subject"
                           ref={node => (this.inputNode = node)}
@@ -244,7 +242,6 @@ class IncomingMailCreate extends Component {
                         <input
                           className="form-control"
                           type="text"
-                          defaultValue="1/A/2020"
                           id="example-text-input"
                           name="numMail"
                           ref={node => (this.inputNode = node)}
