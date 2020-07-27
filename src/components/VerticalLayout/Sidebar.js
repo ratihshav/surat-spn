@@ -76,30 +76,42 @@ const SidebarContent = props => {
             {user || isAdmin ?
               <li>
                 <Link to="/user">
-                  <i className="fas fa-user-alt"></i>
+                  <i className="fas fa-users"></i>
                   <span>Data User</span>
                 </Link>
               </li>
               : null
             }
             <li>
-              <Link to="/group">Data Divisi</Link>
+              <Link to="/group">
+                <i className="fas fa-address-book"></i>
+                <span>Data Divisi</span>
+              </Link>
             </li>
 
             {jabatan || isAdmin ?
               <li>
-                <Link to="/position">Data Jabatan</Link>
+                <Link to="/position">
+                  <i className="fas fa-briefcase"></i>
+                  <span>Data Jabatan</span>
+                </Link>
               </li>
               : null
             }
 
             <li>
-              <Link to="/classification">Data Klasifikasi Surat</Link>
+              <Link to="/classification">
+                <i className="fas fa-folder"></i>
+                <span>Data Klasifikasi Surat</span>
+              </Link>
             </li>
 
             {template || isAdmin ?
               <li>
-                <Link to="/template-mail">Template Surat</Link>
+                <Link to="/template-mail">
+                  <i className="fas fa-file"></i>
+                  <span>Template Surat</span>
+                </Link>
               </li>
               : null
             }

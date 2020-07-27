@@ -145,8 +145,7 @@ class Register extends Component {
                     </Link>{" "}
                   </p>
                   <p>
-                    © {new Date().getFullYear()} Veltrix. Crafted with{" "}
-                    <i className="mdi mdi-heart text-danger"></i> by Themesbrand
+                    © {new Date().getFullYear()} Dinas Pendidikan Kab. Kerinci - Ikhwan Komputer
                   </p>
                 </div>
               </Col>

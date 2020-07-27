@@ -4,6 +4,7 @@ import { Dropdown, DropdownToggle, DropdownMenu, Row, Col } from "reactstrap";
 import SimpleBar from "simplebar-react";
 import Echo from 'laravel-echo';
 import { connect } from "react-redux";
+import config from '../helpers/config'
 
 import { getNotifService, getNotifCountService, getNotifReadService } from "../helpers/master/user"
 import { loginUser, loginUserSuccess, loginUserFail } from "../store/actions";
@@ -33,7 +34,7 @@ class NotificationDropdown extends Component {
       cluster: 'ap1',
       forceTLS: false,
       encrypted: true,
-      authEndpoint: 'http://localhost/spnbackend/public/api/broadcasting/auth',
+      authEndpoint: config.api_endpoint + `/broadcasting/auth`,
       auth: {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -75,6 +76,7 @@ class NotificationDropdown extends Component {
 
     getNotifReadService(val)
       .then((data) => {
+        this.setState({ totalCount: data })
         console.log('data', data)
       })
       .catch(() => { throw 'Gagal Mengambil Data' })
@@ -100,7 +102,7 @@ class NotificationDropdown extends Component {
             <i className="mdi mdi-bell-outline"></i>
             {totalCount ?
               <span className="badge badge-danger badge-pill">{totalCount}</span>
-              : <span className="badge badge-danger badge-pill">{dataCount}</span>}
+              : ''}
           </DropdownToggle>
 
           <DropdownMenu className="dropdown-menu-lg p-0" right>
