@@ -253,6 +253,28 @@ export const getNotifService = (request) => {
     .catch(() => { throw 'Gagal Mengubah Data'; });
 }
 
+export const getNotifCountService = (request) => {
+
+  const GET_NOTIF_COUNT_API = config.api_endpoint + `/notif/topbar/count`
+  return instance.get(GET_NOTIF_COUNT_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
+export const getNotifReadService = (request) => {
+
+  const GET_NOTIF_READ_API = config.api_endpoint + `/notif/read/${request}`
+  return instance.post(GET_NOTIF_READ_API)
+    .then((data) => {
+      return {
+        data: data.data
+      };
+    })
+    .catch(() => { throw 'Gagal Mengubah Data'; });
+}
 export async function _handleError(error) {
   // var errorCode = error.code;
   var errorMessage = error.message;

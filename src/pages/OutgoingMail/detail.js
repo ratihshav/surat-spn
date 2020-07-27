@@ -36,14 +36,17 @@ class OutgoingMailDetail extends Component {
   }
 
   componentDidMount() {
+    const idRef = this.props.location.state.idRef
     const idMail = window.localStorage.getItem('idOutMail');
-    this.setState({ stateIdMail: idMail })
-    this.getDetailList(idMail)
+    const idOutgoingMail = idRef ? idRef : idMail
+
+    this.setState({ stateIdMail: idOutgoingMail })
+    this.getDetailList(idOutgoingMail)
     this.getDataUser()
   }
 
-  getDetailList = (idMail) => {
-    getDetailOutgoingMailService(idMail)
+  getDetailList = (idOutgoingMail) => {
+    getDetailOutgoingMailService(idOutgoingMail)
       .then((data) => {
         this.setState({ detailList: data.data.data })
       })
@@ -131,7 +134,6 @@ class OutgoingMailDetail extends Component {
       keterangan: e.target.description.value,
     }
 
-    console.log('params', params)
     approveOutgoingMailService(params)
       .then((data) => {
         this.alertSuccess()
@@ -293,9 +295,9 @@ class OutgoingMailDetail extends Component {
     return (
       <div>
         <ol className="activity-feed">
-          {disposisi ? data.disposisi.map(function (nextItem, j) {
+          {disposisi ? data.disposisi.map(function (nextItem, index) {
             return (
-              <li className="feed-item">
+              <li className="feed-item" key={index}>
                 <div className="feed-item-list">
                   <span className="date">{nextItem.created_at}</span>
                   <span className="activity-text">

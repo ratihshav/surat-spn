@@ -80,9 +80,7 @@ export const updateOutgoingMailService = (request) => {
 
 export const getDetailOutgoingMailService = (request) => {
 
-  const id = window.localStorage.getItem('idOutMail');
-
-  const GET_DETAIL_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/view/${id}`
+  const GET_DETAIL_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/view/${request}`
   return instance.get(GET_DETAIL_OUTGOING_MAIL_API)
     .then((data) => {
       return {

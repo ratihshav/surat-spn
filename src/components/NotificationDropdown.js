@@ -5,7 +5,7 @@ import SimpleBar from "simplebar-react";
 import Echo from 'laravel-echo';
 import { connect } from "react-redux";
 
-import { getNotifService } from "../helpers/master/user"
+import { getNotifService, getNotifCountService, getNotifReadService } from "../helpers/master/user"
 import { loginUser, loginUserSuccess, loginUserFail } from "../store/actions";
 
 class NotificationDropdown extends Component {
@@ -13,13 +13,15 @@ class NotificationDropdown extends Component {
     super(props);
     this.state = {
       menu: false,
-      data: [],
-      totalCount: ''
+      dataView: [],
+      totalCount: '',
+      dataCount: []
     };
   }
 
   componentDidMount() {
     this.getCountNotif()
+    this.getDataFromApi()
   }
 
   getCountNotif = () => {
@@ -48,19 +50,40 @@ class NotificationDropdown extends Component {
     });
   }
 
+  getDataFromApi = () => {
+    getNotifCountService()
+      .then((data) => {
+        this.setState({
+          dataCount: data.data.data,
+        });
+      })
+      .catch(() => { throw 'Gagal Mengambil Data' })
+  }
+
   toggle = () => {
     getNotifService()
       .then((data) => {
         this.setState({
-          data: data.data.data,
+          dataView: data.data.data,
           menu: !this.state.menu
         });
       })
       .catch(() => { throw 'Gagal Mengambil Data' })
-
   }
+
+  readNotif = (val) => {
+
+    getNotifReadService(val)
+      .then((data) => {
+        console.log('data', data)
+      })
+      .catch(() => { throw 'Gagal Mengambil Data' })
+  }
+
+
+
   render() {
-    const { data, totalCount } = this.state
+    const { dataView, totalCount, dataCount } = this.state
     return (
       <React.Fragment>
         <Dropdown
@@ -77,7 +100,7 @@ class NotificationDropdown extends Component {
             <i className="mdi mdi-bell-outline"></i>
             {totalCount ?
               <span className="badge badge-danger badge-pill">{totalCount}</span>
-              : null}
+              : <span className="badge badge-danger badge-pill">{dataCount}</span>}
           </DropdownToggle>
 
           <DropdownMenu className="dropdown-menu-lg p-0" right>
@@ -90,29 +113,37 @@ class NotificationDropdown extends Component {
             </div>
 
             <SimpleBar>
-              <Link to="" className="text-reset notification-item">
 
-                {data.map((item, index) => {
-                  return (
-                    <div className="media" key={index}>
+              {dataView.map((item, index) => {
+                const detail = JSON.parse(item.data)
+                const link = detail.type === 'SURATKELUAR' ? "/outgoing-mail-detail" : "incoming-mail-detail"
+                const params = detail.id_reference
+                const uuId = item.id
+                return (
+                  <Link
+                    onClick={() => this.readNotif(uuId)}
+                    to={{ pathname: link, state: { idRef: params } }}
+                    className="text-reset notification-item"
+                    key={index}>
+                    <div className="media" >
                       <div className="avatar-xs mr-3">
                         <span className="avatar-title bg-success rounded-circle font-size-16">
                           <i className="mdi mdi-cart-outline"></i>
                         </span>
                       </div>
                       <div className="media-body">
-                        <h6 className="mt-0 mb-1">{item.type}</h6>
+                        <h6 className="mt-0 mb-1">{detail.type}</h6>
                         <div className="font-size-12 text-muted">
                           <p className="mb-1">
-                            {item.display}
+                            {detail.display}
                           </p>
                         </div>
                       </div>
                     </div>
-                  )
-                })}
+                  </Link>
+                )
+              })}
 
-              </Link>
 
             </SimpleBar>
             <div className="p-2 border-top">
