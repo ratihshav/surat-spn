@@ -33,14 +33,17 @@ class IncomingMailDetail extends Component {
   }
 
   componentDidMount() {
+    const idRef = this.props.location.state ? this.props.location.state.idRef : null
     const idMail = window.localStorage.getItem('idInMail');
-    this.setState({ stateIdMail: idMail })
-    this.getDetailList(idMail)
+    const idIncomingMail = idRef ? idRef : idMail
+
+    this.setState({ stateIdMail: idIncomingMail })
+    this.getDetailList(idIncomingMail)
     this.getDataUser()
   }
 
-  getDetailList = (idMail) => {
-    getDetailIncomingMailService(idMail)
+  getDetailList = (idIncomingMail) => {
+    getDetailIncomingMailService(idIncomingMail)
       .then((data) => {
         this.setState({ detailList: data.data.data })
       })

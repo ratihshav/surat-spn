@@ -22,16 +22,16 @@ import toast from '../UI/toast';
 // ];
 
 //  for later
-// const urgency = [
-//   {
-//     label: "Pilih Sifat Surat",
-//     options: [
-//       { label: "Biasa", value: "Biasa" },
-//       { label: "Segera", value: "Segera" },
-//       { label: "Penting", value: "Penting" }
-//     ]
-//   }
-// ]
+const urgency = [
+  {
+    label: "Pilih Sifat Surat",
+    options: [
+      { label: "Biasa", value: "Biasa" },
+      { label: "Segera", value: "Segera" },
+      { label: "Penting", value: "Penting" }
+    ]
+  }
+]
 
 
 class IncomingMailCreate extends Component {
@@ -291,21 +291,23 @@ class IncomingMailCreate extends Component {
                     </Row>
 
                     <Row className="form-group">
-                      <label className="col-sm-2 col-form-label">
+                      <label
+                        htmlFor="example-search-input"
+                        className="col-sm-2 col-form-label"
+                      >
                         Sifat Surat
                     </label>
                       <Col sm={10}>
-                        <input
-                          className="form-control"
-                          type="text"
-                          id="example-text-input"
-                          name="type"
+                        <Select
+                          value={selectedUrgency}
+                          onChange={this.handleSelectUrgency}
+                          options={urgency}
+                          name="urgency"
                           ref={node => (this.inputNode = node)}
                           required
                         />
                       </Col>
                     </Row>
-
                     <Row className="form-group">
                       <label
                         htmlFor="example-text-input"

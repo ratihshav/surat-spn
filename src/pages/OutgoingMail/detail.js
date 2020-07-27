@@ -36,7 +36,7 @@ class OutgoingMailDetail extends Component {
   }
 
   componentDidMount() {
-    const idRef = this.props.location.state.idRef
+    const idRef = this.props.location.state ? this.props.location.state.idRef : null
     const idMail = window.localStorage.getItem('idOutMail');
     const idOutgoingMail = idRef ? idRef : idMail
 

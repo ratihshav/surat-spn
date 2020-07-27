@@ -76,8 +76,7 @@ class NotificationDropdown extends Component {
 
     getNotifReadService(val)
       .then((data) => {
-        this.setState({ totalCount: data })
-        console.log('data', data)
+        this.setState({ totalCount: data.data.data })
       })
       .catch(() => { throw 'Gagal Mengambil Data' })
   }
@@ -109,46 +108,56 @@ class NotificationDropdown extends Component {
             <div className="p-3">
               <Row className="align-items-center">
                 <Col>
-                  <h5 className="m-0 font-size-16"> Notifications </h5>
+                  <h5 className="m-0 font-size-16"> Notifikasi </h5>
                 </Col>
               </Row>
             </div>
 
             <SimpleBar>
-
-              {dataView.map((item, index) => {
-                const detail = JSON.parse(item.data)
-                const link = detail.type === 'SURATKELUAR' ? "/outgoing-mail-detail" : "incoming-mail-detail"
-                const params = detail.id_reference
-                const uuId = item.id
-                return (
-                  <Link
-                    onClick={() => this.readNotif(uuId)}
-                    to={{ pathname: link, state: { idRef: params } }}
-                    className="text-reset notification-item"
-                    key={index}>
-                    <div className="media" >
-                      <div className="avatar-xs mr-3">
-                        <span className="avatar-title bg-success rounded-circle font-size-16">
-                          <i className="mdi mdi-cart-outline"></i>
-                        </span>
-                      </div>
-                      <div className="media-body">
-                        <h6 className="mt-0 mb-1">{detail.type}</h6>
-                        <div className="font-size-12 text-muted">
-                          <p className="mb-1">
-                            {detail.display}
-                          </p>
+              {dataView.length !== 0 ?
+                <div>
+                  {dataView.map((item, index) => {
+                    const detail = JSON.parse(item.data)
+                    const link = detail.type === 'SURATKELUAR' ? "/outgoing-mail-detail" : "incoming-mail-detail"
+                    const params = detail.id_reference
+                    const uuId = item.id
+                    return (
+                      <Link
+                        onClick={() => this.readNotif(uuId)}
+                        to={{ pathname: link, state: { idRef: params } }}
+                        className="text-reset notification-item"
+                        key={index}>
+                        <div className="media" >
+                          <div className="avatar-xs mr-3">
+                            <span className="avatar-title bg-success rounded-circle font-size-16">
+                              <i className="mdi mdi-email-send"></i>
+                            </span>
+                          </div>
+                          <div className="media-body">
+                            <h6 className="mt-0 mb-1">{detail.type}</h6>
+                            <div className="font-size-12 text-muted">
+                              <p className="mb-1">
+                                {detail.display}
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </Link>
-                )
-              })}
+                      </Link>
+                    )
+                  })}
+                </div>
+                :
 
+                <div className="p-3">
+                  <Row className="align-items-center">
+                    <Col>
+                      <h5 className="m-0 font-size-14"> Tidak ada notifikasi baru </h5>
+                    </Col>
+                  </Row>
+                </div>}
 
             </SimpleBar>
-            <div className="p-2 border-top">
+            {/* <div className="p-2 border-top">
               <Link
                 className="btn btn-sm btn-link font-size-14 btn-block text-center"
                 to="#"
@@ -156,7 +165,7 @@ class NotificationDropdown extends Component {
                 {" "}
                 View all{" "}
               </Link>
-            </div>
+            </div> */}
           </DropdownMenu>
         </Dropdown>
       </React.Fragment>
