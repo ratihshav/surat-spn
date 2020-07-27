@@ -16,7 +16,6 @@ class NotificationDropdown extends Component {
       menu: false,
       dataView: [],
       totalCount: '',
-      dataCount: []
     };
   }
 
@@ -55,7 +54,7 @@ class NotificationDropdown extends Component {
     getNotifCountService()
       .then((data) => {
         this.setState({
-          dataCount: data.data.data,
+          totalCount: data.data.data,
         });
       })
       .catch(() => { throw 'Gagal Mengambil Data' })
@@ -73,7 +72,6 @@ class NotificationDropdown extends Component {
   }
 
   readNotif = (val) => {
-
     getNotifReadService(val)
       .then((data) => {
         this.setState({ totalCount: data.data.data })
@@ -84,7 +82,7 @@ class NotificationDropdown extends Component {
 
 
   render() {
-    const { dataView, totalCount, dataCount } = this.state
+    const { dataView, totalCount } = this.state
     return (
       <React.Fragment>
         <Dropdown
