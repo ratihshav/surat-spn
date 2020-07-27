@@ -4,7 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 import Select from "react-select";
 import { connect } from "react-redux";
 import moment from 'moment'
-import { searchUserSKService } from "../../helpers/master/user"
+import { searchUserSMService } from "../../helpers/master/user"
 import {
   getDetailIncomingMailService,
   createDisposeIncomingMailService,
@@ -51,7 +51,7 @@ class IncomingMailDetail extends Component {
   }
 
   getDataUser = () => {
-    searchUserSKService()
+    searchUserSMService()
       .then((data) => {
         this.setState({ dataUser: data.data.data })
       })
