@@ -107,10 +107,8 @@ class IncomingMailDetail extends Component {
 
   closeIncomingMail = () => {
     const { stateIdMail } = this.state
-    const params = {
-      id: stateIdMail,
-    }
-    closeIncomingMailService(params)
+
+    closeIncomingMailService(stateIdMail)
       .then((data) => {
         this.alertSuccess()
         this.props.history.push('/incoming-mail');
