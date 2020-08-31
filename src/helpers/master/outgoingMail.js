@@ -166,6 +166,24 @@ export const approveOutgoingMailService = (request) => {
     });
 };
 
+export const generateNumMailService = (request) => {
+  const id = request.id
+  const formData = new FormData();
+  formData.append('tgl_teks', request.tgl_teks);
+  formData.append('tgl_agenda', request.tgl_agenda);
+
+  const GENERATE_NUM_MAIL_API = config.api_endpoint + `/suratKeluar/generate/${id}`;
+  return instance.post(GENERATE_NUM_MAIL_API, formData)
+    .then((data) => {
+      return {
+        data: data
+      };
+    })
+    .catch((error) => {
+      throw 'Gagal Mengubah Data';
+    });
+};
+
 export async function _handleError(error) {
   // var errorCode = error.code;
   var errorMessage = error.message;

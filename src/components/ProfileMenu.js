@@ -40,8 +40,16 @@ class ProfileMenu extends Component {
         <Dropdown isOpen={this.state.menu} toggle={this.toggle} className="d-inline-block" >
           <DropdownToggle className="btn header-item waves-effect" id="page-header-user-dropdown" tag="button" >
             <Row>
-              <img className="rounded-circle header-profile-user" src={data.path_foto ? config.url_img + data.path_foto : userAva} alt="Header Avatar" />
-              <p style={{ fontWeight: 'bold', margin: 0, marginLeft: 10, alignSelf: 'center' }}>{data.full_name}</p>
+              <img
+                className="rounded-circle header-profile-user"
+                src={
+                  data !== null
+                    ? data.path_foto !== null
+                      ? config.url_img + data.path_foto
+                      : userAva
+                    : userAva}
+                alt="Header Avatar" />
+              <p style={{ fontWeight: 'bold', margin: 0, marginLeft: 10, alignSelf: 'center' }}>{data !== null ? data.full_name : null}</p>
             </Row>
           </DropdownToggle>
           <DropdownMenu right>

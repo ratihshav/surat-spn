@@ -4,12 +4,14 @@ import { Link, withRouter } from "react-router-dom";
 import Select from "react-select";
 import { connect } from "react-redux";
 import moment from 'moment'
+import 'moment/locale/id';
 
 import {
   getDetailOutgoingMailService,
   createDisposeOutgoingMailService,
   createAgendaOutgoingMailService,
-  approveOutgoingMailService
+  approveOutgoingMailService,
+  generateNumMailService
 } from "../../helpers/master/outgoingMail"
 import { searchUserSKService } from "../../helpers/master/user"
 import logoPdf from "../../assets/images/logo-pdf.png";
@@ -31,7 +33,8 @@ class OutgoingMailDetail extends Component {
       isShowModalAgenda: false,
       selectedStatusMail: null,
       isShowModalConfirm: false,
-      isShowModalHistory: false
+      isShowModalHistory: false,
+      isShowModalGenerate: false
     };
   }
 
@@ -75,6 +78,13 @@ class OutgoingMailDetail extends Component {
   showModalAgenda = () => {
     this.setState(prevState => ({
       isShowModalAgenda: !prevState.isShowModalAgenda
+    }));
+    this.removeBodyCss();
+  }
+
+  showModalGenerate = () => {
+    this.setState(prevState => ({
+      isShowModalGenerate: !prevState.isShowModalGenerate
     }));
     this.removeBodyCss();
   }
@@ -140,6 +150,28 @@ class OutgoingMailDetail extends Component {
       .then((data) => {
         this.alertSuccess()
         this.props.history.push('/outgoing-mail');
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
+    e.preventDefault();
+
+  }
+
+  generateNoMail = (e) => {
+    moment.locale('id')
+    const tgl = e.target.dateMail.value
+    const params = {
+      id: this.state.stateIdMail,
+      tgl_teks: moment(tgl).format("DD MMMM YYYY"),
+      tgl_agenda: tgl
+    }
+
+    generateNumMailService(params)
+      .then((data) => {
+        this.alertSuccess()
       })
       .catch(() => {
         return (
@@ -327,6 +359,7 @@ class OutgoingMailDetail extends Component {
       isShowModalAgenda,
       isShowModalConfirm,
       isShowModalHistory,
+      isShowModalGenerate,
       selectedStatusMail,
       dataUser } = this.state;
 
@@ -564,7 +597,70 @@ class OutgoingMailDetail extends Component {
 
                     &nbsp;&nbsp;
 
-                    {detailList.can_agenda === 1 ?
+                    {detailList.agenda_file_path === null && detailList.can_agenda === 1 ?
+                        <Button
+                          color="orange"
+                          className="mt-1"
+                          onClick={this.showModalGenerate}
+                          data-target=".bs-example-modal-center">
+                          <i className="typcn typcn-input-checked" />Buat Nomor Surat
+                      </Button>
+                        : null}
+
+                      <Modal
+                        isOpen={isShowModalGenerate}
+                        toggle={this.showModalGenerate} >
+                        <div className="modal-header  text-white bg-info">
+                          <h5 className="modal-title mt-0">Buat Nomor Surat</h5>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              this.setState({ isShowModalGenerate: false })
+                            }
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+
+                        <div className="modal-body">
+                          <form action="#" onSubmit={this.generateNoMail}>
+
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-text-input"
+                                className="col-sm-2 col-form-label" >
+                                Tanggal Surat
+                            </label>
+                              <Col sm={10}>
+                                <input
+                                  className="form-control"
+                                  type="date"
+                                  id="example-text-input"
+                                  name="dateMail"
+                                  defaultValue={detailList.tgl_surat}
+                                  ref={node => (this.inputNode = node)}
+                                />
+                              </Col>
+                            </Row>
+
+
+                            <div className="text-right mt-8">
+                              <Button
+                                color="success"
+                                className="mt-1"
+                                data-toggle="modal"
+                                data-target=".bs-example-modal-center">
+                                <i className="typcn typcn-input-checked" />Submit
+                         </Button>
+                            </div>
+                          </form>
+                        </div>
+                      </Modal>
+
+                      {detailList.can_agenda === 1 && detailList.agenda_file_path !== null ?
                         <Button
                           color="warning"
                           className="mt-1"
@@ -573,6 +669,7 @@ class OutgoingMailDetail extends Component {
                           <i className="typcn typcn-input-checked" />Agenda
                       </Button>
                         : null}
+
 
                       <Modal
                         isOpen={isShowModalAgenda}

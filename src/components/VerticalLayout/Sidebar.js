@@ -6,14 +6,14 @@ import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions"
 import SimpleBar from "simplebar-react";
 
 const SidebarContent = props => {
-  const suratKeluar = props.data.perms.includes('suratKeluar_list');
-  const suratMasuk = props.data.perms.includes('suratMasuk_list');
-  const divisi = props.data.perms.includes('divisi_list');
-  const klasifikasi = props.data.perms.includes('klasifikasi_list');
-  const template = props.data.perms.includes('templateSurat_list');
-  const jabatan = props.data.perms.includes('jabatan_list');
-  const user = props.data.perms.includes('user_list');
-  const isAdmin = props.data.perms.includes('is_admin')
+  const suratKeluar = props.data != null ? props.data.perms.includes('suratKeluar_list') : null;
+  const suratMasuk = props.data != null ? props.data.perms.includes('suratMasuk_list') : null;
+  const divisi = props.data != null ? props.data.perms.includes('divisi_list') : null;
+  const klasifikasi = props.data != null ? props.data.perms.includes('klasifikasi_list') : null;
+  const template = props.data != null ? props.data.perms.includes('templateSurat_list') : null;
+  const jabatan = props.data != null ? props.data.perms.includes('jabatan_list') : null;
+  const user = props.data != null ? props.data.perms.includes('user_list') : null;
+  const isAdmin = props.data != null ? props.data.perms.includes('is_admin') : null
 
   return (
     <div id="sidebar-menu">
