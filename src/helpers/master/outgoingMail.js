@@ -134,9 +134,6 @@ export const readOutgoingMailService = (request) => {
 export const createAgendaOutgoingMailService = (request) => {
   const id = request.id
   const formData = new FormData();
-  formData.append('nomor_surat', request.nomor_surat);
-  formData.append('nomor_agenda', request.nomor_agenda);
-  formData.append('tgl_surat', request.tgl_surat);
   formData.append('file', request.file);
 
   const CREATE_AGENDA_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/agenda/${id}`
