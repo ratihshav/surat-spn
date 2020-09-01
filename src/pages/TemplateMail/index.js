@@ -15,7 +15,7 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import DataStore from 'devextreme/data/data_source';
 import { getTemplateMailService, deleteTemplateMailService } from '../../helpers/master/templateMail';
-
+import config from '../../helpers/config'
 import toast from '../UI/toast';
 
 class TemplateMail extends Component {
@@ -87,6 +87,20 @@ class TemplateMail extends Component {
     });
   }
 
+  getDocumentMapped = (rowData) => {
+    return (
+      <div>
+        {rowData.data.detail.map(function (item, index) {
+          return (
+            <a href={config.url_img + item.file_path} target="_blank" download>
+              <Row style={{ marginLeft: '2%' }}> <i className="mdi mdi-file-document" /> <p style={{ fontWeight: '800' }}>{item.original_name}</p> </Row>
+            </a>
+          )
+        })}
+      </div>
+    )
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -132,7 +146,7 @@ class TemplateMail extends Component {
                     <Column dataField="id" visible={false} />
                     <Column caption="Tipe Template Surat" dataField="template_type" />
                     <Column caption="Nama Template Surat" dataField="template_name" />
-                    <Column caption="Dokumen" dataField="file" />
+                    <Column caption="Dokumen" dataField="detail" cellRender={this.getDocumentMapped} />
                     <Column type="buttons"
                       buttons={[{
                         hint: 'Edit',
