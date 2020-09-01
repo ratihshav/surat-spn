@@ -172,6 +172,7 @@ class OutgoingMailDetail extends Component {
     generateNumMailService(params)
       .then((data) => {
         this.alertSuccess()
+        window.location.reload()
       })
       .catch(() => {
         return (
@@ -640,6 +641,7 @@ class OutgoingMailDetail extends Component {
                                   type="date"
                                   id="example-text-input"
                                   name="dateMail"
+                                  min={new Date().toISOString().substring(0, 10)}
                                   defaultValue={detailList.tgl_surat}
                                   ref={node => (this.inputNode = node)}
                                 />
