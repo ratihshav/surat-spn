@@ -122,9 +122,6 @@ class OutgoingMailDetail extends Component {
   createAgendaMail = (e) => {
     const params = {
       id: this.state.stateIdMail,
-      nomor_surat: e.target.noMail.value,
-      nomor_agenda: e.target.noAgenda.value,
-      tgl_surat: e.target.dateMail.value,
       file: this.state.selectedFile,
     }
     createAgendaOutgoingMailService(params)
@@ -171,6 +168,7 @@ class OutgoingMailDetail extends Component {
 
     generateNumMailService(params)
       .then((data) => {
+        this.setState({isShowModalGenerate: false})
         this.alertSuccess()
         window.location.reload()
       })
@@ -227,6 +225,18 @@ class OutgoingMailDetail extends Component {
                 <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
                   <th>Log Dokumen: </th>
                 </tr>
+                  {data.agenda_file_path !== null && !data.is_agenda && data.can_agenda?
+                    <tr>
+                      <th>
+                        <tr>
+                            <Col style={{ backgroundColor: '#E9EBEE', borderRadius: 5, textAlign: 'center', justifyContent: 'center', margin: 5 }}>
+                              <Row> Hasil Nomor Surat </Row>
+                              <Row> <a href={config.url_img + data.agenda_file_path} target="_blank" download>{data.agenda_file_name}</a></Row>
+                            </Col>
+                        </tr>
+                      </th>
+                    </tr>
+                  : null}
                 <tr>
                   <th>
                     {disposisi ? data.disposisi.map(function (nextItem, j) {
@@ -662,7 +672,7 @@ class OutgoingMailDetail extends Component {
                         </div>
                       </Modal>
 
-                      {detailList.can_agenda === 1 && detailList.agenda_file_path !== null ?
+                      {detailList.can_agenda && detailList.agenda_file_path !== null && !detailList.is_agenda?
                         <Button
                           color="warning"
                           className="mt-1"
@@ -693,60 +703,6 @@ class OutgoingMailDetail extends Component {
 
                         <div className="modal-body">
                           <form action="#" onSubmit={this.createAgendaMail}>
-
-                            <Row className="form-group">
-                              <label
-                                htmlFor="example-search-input"
-                                className="col-sm-2 col-form-label">
-                                No. Surat
-                          </label>
-                              <Col sm={10}>
-                                <input
-                                  name="noMail"
-                                  className="form-control"
-                                  type="text"
-                                  defaultValue={detailList.nomor_surat}
-                                  id="example-text-input"
-                                  ref={node => (this.inputNode = node)}
-                                />
-                              </Col>
-                            </Row>
-
-                            <Row className="form-group">
-                              <label
-                                htmlFor="example-search-input"
-                                className="col-sm-2 col-form-label">
-                                No. Agenda
-                          </label>
-                              <Col sm={10}>
-                                <input
-                                  name="noAgenda"
-                                  className="form-control"
-                                  type="text"
-                                  defaultValue={detailList.nomor_agenda}
-                                  id="example-text-input"
-                                  ref={node => (this.inputNode = node)}
-                                />
-                              </Col>
-                            </Row>
-
-                            <Row className="form-group">
-                              <label
-                                htmlFor="example-text-input"
-                                className="col-sm-2 col-form-label" >
-                                Tanggal Surat
-                            </label>
-                              <Col sm={10}>
-                                <input
-                                  className="form-control"
-                                  type="date"
-                                  id="example-text-input"
-                                  name="dateMail"
-                                  defaultValue={detailList.tgl_surat}
-                                  ref={node => (this.inputNode = node)}
-                                />
-                              </Col>
-                            </Row>
 
                             <Row className="form-group">
                               <label
@@ -793,7 +749,7 @@ class OutgoingMailDetail extends Component {
 
                     &nbsp;&nbsp;
 
-                    {detailList.can_approve === 1 ?
+                    {detailList.can_approve ?
                         <Button
                           color="success"
                           className="mt-1"

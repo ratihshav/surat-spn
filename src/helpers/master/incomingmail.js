@@ -113,9 +113,12 @@ export const getDetailIncomingMailService = (request) => {
 }
 
 export const createDisposeIncomingMailService = (request) => {
+  const to_user_id = request.to_user_id
   const formData = new FormData();
   formData.append('surat_masuk_id', request.surat_masuk_id);
-  formData.append('to_user_id', request.to_user_id);
+  to_user_id.map((to_user_id, index) => {
+    formData.append(`to_user_id[${index}]`, to_user_id);
+  });
   formData.append('arahan', request.arahan);
 
   const CREATE_DISPOSE_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/disposisi`

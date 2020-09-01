@@ -21,7 +21,7 @@ class IncomingMailDetail extends Component {
       detailList: [],
       visible: false,
       modalCenter: false,
-      selectedSignature: null,
+      selectedSignature: [],
       dataUser: [],
       status: '',
       selectedFile: null,
@@ -86,10 +86,13 @@ class IncomingMailDetail extends Component {
 
 
   doDisposition = (e) => {
-    const { stateIdMail } = this.state
+    const { stateIdMail, selectedSignature } = this.state
+    const mapped = selectedSignature.map(function (data) {
+      return data.value
+    })
     const params = {
       surat_masuk_id: stateIdMail,
-      to_user_id: e.target.sendTo.value,
+      to_user_id: mapped,
       arahan: e.target.instruction.value
     }
     createDisposeIncomingMailService(params)
@@ -320,6 +323,7 @@ class IncomingMailDetail extends Component {
                          </label>
                             <Col sm={10}>
                               <Select
+                                isMulti
                                 value={selectedSignature}
                                 onChange={this.handleSelectSignature}
                                 options={optionsSignature}
