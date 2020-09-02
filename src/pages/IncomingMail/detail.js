@@ -3,7 +3,6 @@ import { Row, Col, Card, CardBody, Button, Modal } from "reactstrap";
 import { Link, withRouter } from "react-router-dom";
 import Select from "react-select";
 import { connect } from "react-redux";
-import moment from 'moment'
 import { searchUserSMService } from "../../helpers/master/user"
 import {
   getDetailIncomingMailService,
@@ -13,6 +12,8 @@ import {
 import toast from '../UI/toast';
 import logoPdf from "../../assets/images/logo-pdf.png";
 import config from '../../helpers/config'
+import moment from 'moment'
+import 'moment/locale/id';
 
 class IncomingMailDetail extends Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class IncomingMailDetail extends Component {
       modalConfirm: false,
       numPages: null,
       pageNumber: 1,
+      isShowModalHistory: false,
     };
   }
 
@@ -135,6 +137,33 @@ class IncomingMailDetail extends Component {
     this.setState({ numPages });
   }
 
+  showModalHistory = () => {
+    this.setState(prevState => ({
+      isShowModalHistory: !prevState.isShowModalHistory
+    }));
+    this.removeBodyCss();
+  }
+
+  historyModalContent = (data) => {
+    const disposisi = data.disposisi
+    return (
+      <div>
+        <ol className="activity-feed">
+          {disposisi ? data.disposisi.map(function (nextItem, index) {
+            return (
+              <li className="feed-item" key={index}>
+                <div className="feed-item-list">
+                  <span className="activity-text"><b>{nextItem.label_history}</b></span>
+                  <span className="date">{nextItem.status_read} - {moment(data.last_read).format("DD MMMM YYYY")}</span>
+                </div>
+              </li>
+            )
+          }) : null}
+        </ol>
+      </div>
+    )
+  }
+
   getTableContent = (data) => {
     const { pageNumber, numPages } = this.state;
     return (
@@ -171,12 +200,16 @@ class IncomingMailDetail extends Component {
                       <td id="combo-1610-inputCell">{data.asal_surat}</td>
                     </tr>
                     <tr>
+                      <th>Diarsipkan Oleh:</th>
+                      <td>{data.created_by}</td>
+                    </tr>
+                    <tr>
                       <th>Nomor Surat:</th>
                       <td>{data.nomor_surat}</td>
                     </tr>
                     <tr>
                       <th>Tanggal Surat:</th>
-                      <td>{data.tgl_surat}</td>
+                      <td>{moment(data.tgl_surat).format("DD MMMM YYYY")}</td>
                     </tr>
                     <tr>
                       <th>Hal:</th>
@@ -216,13 +249,42 @@ class IncomingMailDetail extends Component {
                     </tr>
                     <tr>
                       <th>Tanggal Diterima:</th>
-                      <td>{data.tgl_diterima}</td>
+                      <td>{moment(data.tgl_diterima).format("DD MMMM YYYY")}</td>
                     </tr>
                   </table>
                 </CardBody>
               </Card>
             </Col>
           </Row>
+
+          {data.disposition_created_at !== null ?
+            <Row>
+              <Col md={12}>
+                <Card>
+                  <CardBody style={{ padding: 0 }}>
+                    <table className="table table-bordered mb-0">
+                      <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                        <th style={{ width: 200 }}>Didisposisikan Oleh:</th>
+                        <td id="combo-1610-inputCell">{data.disposition_name}</td>
+                      </tr>
+                      <tr>
+                        <th>Jabatan:</th>
+                        <td>{data.disposition_position_name}</td>
+                      </tr>
+                      <tr>
+                        <th>Arahan:</th>
+                        <td>{data.disposition_arahan}</td>
+                      </tr>
+                      <tr>
+                        <th>Tanggal Didisposisikan:</th>
+                        <td>{moment(data.disposition_created_at).format("DD MMMM YYYY")}</td>
+                      </tr>
+                    </table>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+            : null}
         </Col>
       </Row>
     )
@@ -238,7 +300,9 @@ class IncomingMailDetail extends Component {
       selectedFile,
       dataUser,
       modalCenter,
-      modalConfirm } = this.state;
+      modalConfirm,
+      isShowModalHistory
+    } = this.state;
 
     const optionsSignature = dataUser.length !== 0 ?
       dataUser.map(function (data) {
@@ -285,15 +349,50 @@ class IncomingMailDetail extends Component {
                       {this.getTableContent(detailList)}
                     </div>
                   </Row>
-                  <div className="text-right mt-8">
-                    <Button
-                      color="success"
-                      className="mt-1"
-                      onClick={this.showModalDispose}
-                      data-toggle="modal"
-                      data-target=".bs-example-modal-center">
-                      <i className="typcn typcn-input-checked" />Disposisi
+                  <Row>
+                    <Col style={{ justifyContent: 'flex-start' }}>
+                      <Button
+                        color="dark"
+                        className="mt-1"
+                        onClick={this.showModalHistory}>
+                        <i className="typcn typcn-input-checked" />Histori Surat
+                      </Button>
+
+                      <Modal
+                        isOpen={isShowModalHistory}
+                        toggle={this.showModalHistory}
+                        size={30}
+                        scrollable >
+                        <div className="modal-header  text-white bg-info">
+                          <h5 className="modal-title mt-0">Histori Surat</h5>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              this.setState({ isShowModalHistory: false })
+                            }
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div className="modal-body">
+                          {this.historyModalContent(detailList)}
+                        </div>
+                      </Modal>
+                    </Col>
+
+                    {detailList.can_disposition ?
+                      <Button
+                        color="success"
+                        className="mt-1"
+                        onClick={this.showModalDispose}
+                        data-toggle="modal"
+                        data-target=".bs-example-modal-center">
+                        <i className="typcn typcn-input-checked" />Disposisi
                     </Button>
+                      : null}
 
                     <Modal
                       isOpen={modalCenter}
@@ -368,13 +467,15 @@ class IncomingMailDetail extends Component {
 
                     &nbsp;&nbsp;
 
-                    <Button
-                      color="danger"
-                      className="mt-1"
-                      onClick={this.showModalConfirm}
-                      data-target=".bs-example-modal-center">
-                      <i className="typcn typcn-input-checked" />Close
+                    {detailList.can_closed ?
+                      <Button
+                        color="danger"
+                        className="mt-1"
+                        onClick={this.showModalConfirm}
+                        data-target=".bs-example-modal-center">
+                        <i className="typcn typcn-input-checked" />Close
                     </Button>
+                      : null}
 
                     <Modal
                       isOpen={modalConfirm}
@@ -414,7 +515,7 @@ class IncomingMailDetail extends Component {
                             </Button>
                       </div>
                     </Modal>
-                  </div>
+                  </Row>
                 </CardBody>
               </Card>
             </Col>
