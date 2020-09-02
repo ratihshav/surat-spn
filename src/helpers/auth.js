@@ -48,6 +48,18 @@ export const loginUserService = (request) => {
 }
 
 
+export const checkUserSession = () => {
+  const CHECK_USER_SESSION = config.api_endpoint + '/cekUser';
+
+  return instance.get(CHECK_USER_SESSION)
+    .then((data) => {
+      return {
+        data: data
+      }
+    })
+    .catch((error) => { throw error });
+}
+
 
 export const setLoggeedInUser = user => {
   localStorage.setItem("authUser", JSON.stringify(user));
