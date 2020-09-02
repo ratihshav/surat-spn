@@ -154,7 +154,7 @@ class IncomingMailDetail extends Component {
               <li className="feed-item" key={index}>
                 <div className="feed-item-list">
                   <span className="activity-text"><b>{nextItem.label_history}</b></span>
-                  <span className="date">{nextItem.status_read} - {moment(data.last_read).format("DD MMMM YYYY")}</span>
+                  <span className="date">{nextItem.status_read} {nextItem.last_read !== null ? ` - ` + moment(nextItem.last_read).format("DD MMMM YYYY  h:mm") : null}</span>
                 </div>
               </li>
             )
