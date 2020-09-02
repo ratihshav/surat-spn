@@ -52,7 +52,7 @@ class TemplateMailCreate extends Component {
   }
 
   goBack = () => {
-    this.props.history.push('/template-surat')
+    this.props.history.push('/template-mail')
   }
 
   deleteFromTable = (data) => {
@@ -212,7 +212,7 @@ class TemplateMailCreate extends Component {
                       </Row>
                       : null}
 
-                    <div className="text-center mt-4">
+                    <div className="text-right mt-4">
                       <Button
                         color="success"
                         className="mt-1">

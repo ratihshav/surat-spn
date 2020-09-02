@@ -65,7 +65,7 @@ const SidebarContent = props => {
 
 
         <li>
-          {jabatan || template || user || isAdmin ?
+          {jabatan || template || user || isAdmin ||klasifikasi || divisi ?
             <Link to="/#" className="has-arrow waves-effect">
               <i className="fas fa-database"></i>
               <span>Master Data</span>
@@ -82,13 +82,15 @@ const SidebarContent = props => {
               </li>
               : null
             }
-            <li>
-              <Link to="/group">
-                <i className="fas fa-address-book"></i>
-                <span>Data Divisi</span>
-              </Link>
-            </li>
-
+            {divisi || isAdmin ?
+              <li>
+                <Link to="/group">
+                  <i className="fas fa-address-book"></i>
+                  <span>Data Divisi</span>
+                </Link>
+              </li>
+              : null
+            }
             {jabatan || isAdmin ?
               <li>
                 <Link to="/position">
@@ -99,13 +101,15 @@ const SidebarContent = props => {
               : null
             }
 
+          {klasifikasi || isAdmin ?
             <li>
               <Link to="/classification">
                 <i className="fas fa-folder"></i>
                 <span>Data Klasifikasi Surat</span>
               </Link>
             </li>
-
+            : null
+            }
             {template || isAdmin ?
               <li>
                 <Link to="/template-mail">
