@@ -74,7 +74,7 @@ class TemplateMailEdit extends Component {
   }
 
   goBack = () => {
-    this.props.history.push('/template-surat')
+    this.props.history.push('/template-mail')
   }
 
   deleteSelectedFile = (data) => {
@@ -264,7 +264,7 @@ class TemplateMailEdit extends Component {
                       </Row>
                       : null}
 
-                    <div className="text-center mt-4">
+                    <div className="text-right mt-4">
                       <Button
                         color="success"
                         className="mt-1">
