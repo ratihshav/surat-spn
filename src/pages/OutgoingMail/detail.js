@@ -101,10 +101,10 @@ class OutgoingMailDetail extends Component {
     const { stateIdMail } = this.state
     const params = {
       surat_keluar_id: stateIdMail,
-      tujuan_user: e.target.sendTo.value,
+      tujuan_user_id: e.target.sendTo.value,
       file: this.state.selectedFile,
       keterangan: e.target.description.value,
-      is_approved: e.target.status.value
+      approved: e.target.status.value
     }
     createDisposeOutgoingMailService(params)
       .then((data) => {
@@ -168,7 +168,7 @@ class OutgoingMailDetail extends Component {
 
     generateNumMailService(params)
       .then((data) => {
-        this.setState({isShowModalGenerate: false})
+        this.setState({ isShowModalGenerate: false })
         this.alertSuccess()
         window.location.reload()
       })
@@ -225,17 +225,17 @@ class OutgoingMailDetail extends Component {
                 <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
                   <th>Log Dokumen: </th>
                 </tr>
-                  {data.agenda_file_path !== null && !data.is_agenda && data.can_agenda?
-                    <tr>
-                      <th>
-                        <tr>
-                            <Col style={{ backgroundColor: '#E9EBEE', borderRadius: 5, textAlign: 'center', justifyContent: 'center', margin: 5 }}>
-                              <Row> Hasil Nomor Surat </Row>
-                              <Row> <a href={config.url_img + data.agenda_file_path} target="_blank" download>{data.agenda_file_name}</a></Row>
-                            </Col>
-                        </tr>
-                      </th>
-                    </tr>
+                {data.agenda_file_path !== null && !data.is_agenda && data.can_agenda ?
+                  <tr>
+                    <th>
+                      <tr>
+                        <Col style={{ backgroundColor: '#E9EBEE', borderRadius: 5, textAlign: 'center', justifyContent: 'center', margin: 5 }}>
+                          <Row> Hasil Nomor Surat </Row>
+                          <Row> <a href={config.url_img + data.agenda_file_path} target="_blank" download>{data.agenda_file_name}</a></Row>
+                        </Col>
+                      </tr>
+                    </th>
+                  </tr>
                   : null}
                 <tr>
                   <th>
@@ -453,7 +453,7 @@ class OutgoingMailDetail extends Component {
 
 
                     <Col style={{ justifyContent: 'flex-end' }}>
-                      {detailList.can_disposition === 1 ?
+                      {detailList.can_approve ?
                         <Button
                           color="primary"
                           className="mt-1"
@@ -672,7 +672,7 @@ class OutgoingMailDetail extends Component {
                         </div>
                       </Modal>
 
-                      {detailList.can_agenda && detailList.agenda_file_path !== null && !detailList.is_agenda?
+                      {detailList.can_agenda && detailList.agenda_file_path !== null && !detailList.is_agenda ?
                         <Button
                           color="warning"
                           className="mt-1"
@@ -749,7 +749,7 @@ class OutgoingMailDetail extends Component {
 
                     &nbsp;&nbsp;
 
-                    {detailList.can_approve ?
+                    {detailList.can_sign ?
                         <Button
                           color="success"
                           className="mt-1"

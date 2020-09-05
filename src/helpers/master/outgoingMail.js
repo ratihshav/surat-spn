@@ -23,8 +23,8 @@ export const createOutgoingMailService = (request) => {
   formData.append('tujuan_surat', request.tujuan_surat);
   formData.append('hal_surat', request.hal_surat);
   formData.append('lampiran_surat', request.lampiran_surat);
-  formData.append('approval_user', request.approval_user);
-  formData.append('to_user', request.to_user);
+  formData.append('sign_user_id', request.sign_user_id);
+  formData.append('approval_user_id', request.approval_user_id);
   formData.append('file', request.file);
 
   const CREATE_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/save`
@@ -34,7 +34,7 @@ export const createOutgoingMailService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
 }
 
 
@@ -76,12 +76,12 @@ export const getDetailOutgoingMailService = (request) => {
 export const createDisposeOutgoingMailService = (request) => {
   const formData = new FormData();
   formData.append('surat_keluar_id', request.surat_keluar_id);
-  formData.append('tujuan_user', request.tujuan_user);
+  formData.append('tujuan_user_id', request.tujuan_user_id);
   formData.append('file', request.file);
   formData.append('keterangan', request.keterangan);
-  formData.append('is_approved', request.is_approved);
+  formData.append('approved', request.approved);
 
-  const CREATE_DISPOSE_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/disposisi`
+  const CREATE_DISPOSE_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/approve`
   return instance.post(CREATE_DISPOSE_OUTGOING_MAIL_API, formData)
     .then((data) => {
       return {

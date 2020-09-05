@@ -113,8 +113,8 @@ class OutgoingMailCreate extends Component {
       tujuan_surat: e.target.destination.value,
       hal_surat: e.target.subject.value,
       lampiran_surat: e.target.attachment.value,
-      approval_user: e.target.approval.value,
-      to_user: e.target.sendto.value,
+      sign_user_id: e.target.approval.value,
+      approval_user_id: e.target.sendto.value,
       file: this.state.selectedFile
     }
 

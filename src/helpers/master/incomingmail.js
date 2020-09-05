@@ -1,24 +1,6 @@
 import config from '../config'
 import instance, { cancel } from "../axios";
 
-async function handleError({
-  error = {},
-}) {
-  if (error.response) {
-    // Check unauthorized request by detecting header status 401
-    const responseStatus = error.response.status;
-    const responseMessage = error.response.message
-
-    if (responseStatus === 401) {
-      return Promise.all([window.localStorage.clear()]).then(() => {
-        setTimeout(() => {
-          window.location = '/'
-        }, 350);
-      })
-    }
-  }
-}
-
 export const getIncomingMailService = (request) => {
   const req = request ? request : ''
   const GET_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/list`;
@@ -29,7 +11,7 @@ export const getIncomingMailService = (request) => {
         totalCount: data.data.data ? data.data.data.totalCount : null
       };
     })
-    .catch((error) => { return handleError(error) });
+    .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
 }
 
 export const createIncomingMailService = (request) => {

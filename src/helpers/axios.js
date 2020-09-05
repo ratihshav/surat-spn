@@ -24,8 +24,8 @@ instance.interceptors.request.use((config) => {
 });
 
 instance.interceptors.response.use(
-  (response) => response,
-  (error) => error
+  (response) => { return response },
+  (error) => { return Promise.reject(error); }
 );
 
 export default instance
