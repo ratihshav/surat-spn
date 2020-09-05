@@ -1,23 +1,5 @@
-import axios from 'axios'
 import config from '../config'
-import { getAuthenticatedUser } from "../auth";
-
-var token = getAuthenticatedUser()
-const CancelToken = axios.CancelToken;
-let cancel;
-
-const instance = axios.create({
-  baseURL: config.api_endpoint,
-  timeout: 20000,
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
-  },
-  cancelToken: new CancelToken(function executor(c) {
-    cancel = c;
-  })
-});
+import instance, { cancel } from "../axios";
 
 async function handleError({
   error = {},
