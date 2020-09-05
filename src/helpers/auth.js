@@ -1,29 +1,13 @@
-import axios from 'axios'
 import config from './config'
+import instance from "./axios";
 
-var token = window.localStorage.getItem('authUser');
-const CancelToken = axios.CancelToken;
-let cancel;
-
-const instance = axios.create({
-  baseURL: config.api_endpoint,
-  timeout: 20000,
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
-  },
-  cancelToken: new CancelToken(function executor(c) {
-    cancel = c;
-  })
-});
+const TOKEN_NAME = 'authUser'
 
 /**
  * Returns the authenticated user
  */
 export const getAuthenticatedUser = () => {
-  return (
-    localStorage.getItem("authUser"))
+  return getToken(TOKEN_NAME)
 };
 
 // setTimeout(getAuthenticatedUser, 3000);
@@ -38,13 +22,40 @@ export const loginUserService = (request) => {
         .then((data) => {
           const storedToken = data.data.data.token
           const id = data.data.data.userid
-          localStorage.setItem('authUser', storedToken)
+          saveToken(storedToken)
           localStorage.setItem('id', JSON.stringify(id))
           return data.data.data
         })
         .catch((error) => { throw error.response.data.messages[0] });
     })
     .catch((error) => { throw error });
+}
+
+// save token with cookies
+function saveToken(access_token) {
+  document.cookie = `${TOKEN_NAME}=${access_token}`;
+}
+
+// remove all cookies with same the origin
+export function removeToken() {
+  const cookies = document.cookie.split(";");
+
+  // delete cookies token
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i];
+    const eqPos = cookie.indexOf("=");
+    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+
+    document.cookie = `${name}=;Max-Age=0`;
+  }
+}
+
+// just get token value
+export function getToken() {
+  const getCookie = document.cookie.split("; ").find((row) => row.startsWith(TOKEN_NAME));
+
+  if (getCookie) return getCookie.split("=")[1];
+  else return null;
 }
 
 

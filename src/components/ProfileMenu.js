@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, Row } from 'reactstrap';
 import { withRouter, Link } from 'react-router-dom';
 import { logoutUserService } from '../helpers/master/user'
+import { removeToken } from '../helpers/auth'
 import { connect } from "react-redux";
 import { loginUser, loginUserSuccess, loginUserFail } from "../store/actions";
 import config from '../helpers/config'
@@ -27,6 +28,7 @@ class ProfileMenu extends Component {
   logout = () => {
     // logoutUserService()
     //   .then((data) => {
+    removeToken()
     window.localStorage.clear()
     window.location = '/'
     // })
