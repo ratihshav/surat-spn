@@ -133,6 +133,7 @@ export const approveOutgoingMailService = (request) => {
   const id = request.id
   const formData = new FormData();
   formData.append('keterangan', request.keterangan);
+  formData.append('approved', request.approved);
 
   const APPROVE_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/sign/${id}`;
   return instance.post(APPROVE_OUTGOING_MAIL_API, formData)
