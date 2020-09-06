@@ -164,6 +164,25 @@ export const generateNumMailService = (request) => {
     });
 };
 
+export const verifyOutgoingMailService = (request) => {
+  const id = request.id
+  const formData = new FormData();
+  formData.append('approved', request.approved);
+  formData.append('to_user_id', request.to_user_id);
+  formData.append('keterangan', request.keterangan);
+
+  const VERIFY_OUT_MAIL_API = config.api_endpoint + `/suratKeluar/verify/${id}`;
+  return instance.post(VERIFY_OUT_MAIL_API, formData)
+    .then((data) => {
+      return {
+        data: data
+      };
+    })
+    .catch((error) => {
+      throw 'Gagal Mengubah Data';
+    });
+};
+
 export async function _handleError(error) {
   // var errorCode = error.code;
   var errorMessage = error.message;

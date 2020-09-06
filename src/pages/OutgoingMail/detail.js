@@ -11,7 +11,8 @@ import {
   createDisposeOutgoingMailService,
   createAgendaOutgoingMailService,
   approveOutgoingMailService,
-  generateNumMailService
+  generateNumMailService,
+  verifyOutgoingMailService
 } from "../../helpers/master/outgoingMail"
 import { searchUserSKService } from "../../helpers/master/user"
 import logoPdf from "../../assets/images/logo-pdf.png";
@@ -34,7 +35,8 @@ class OutgoingMailDetail extends Component {
       selectedStatusMail: null,
       isShowModalConfirm: false,
       isShowModalHistory: false,
-      isShowModalGenerate: false
+      isShowModalGenerate: false,
+      isShowModalVerify: false
     };
   }
 
@@ -85,6 +87,13 @@ class OutgoingMailDetail extends Component {
   showModalGenerate = () => {
     this.setState(prevState => ({
       isShowModalGenerate: !prevState.isShowModalGenerate
+    }));
+    this.removeBodyCss();
+  }
+
+  showModalVerify = () => {
+    this.setState(prevState => ({
+      isShowModalVerify: !prevState.isShowModalVerify
     }));
     this.removeBodyCss();
   }
@@ -179,6 +188,28 @@ class OutgoingMailDetail extends Component {
       });
     e.preventDefault();
 
+  }
+
+  verifyMail = (e) => {
+    const params = {
+      id: this.state.stateIdMail,
+      approved: e.target.status.value,
+      to_user_id: e.target.to_user_id.value,
+      keterangan: e.target.keterangan.value
+    }
+
+    verifyOutgoingMailService(params)
+      .then((data) => {
+        this.setState({ isShowModalVerify: false })
+        this.alertSuccess()
+        window.location.reload()
+      })
+      .catch(() => {
+        return (
+          this.alertError()
+        )
+      });
+    e.preventDefault();
   }
 
   showModalConfirm = () => {
@@ -300,7 +331,7 @@ class OutgoingMailDetail extends Component {
                   <table className="table table-bordered mb-0">
                     <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
                       <th style={{ width: 250 }}>Penandatangan:</th>
-                      <td id="combo-1610-inputCell">{data.approval_name}</td>
+                      <td id="combo-1610-inputCell">{data.signed_name}</td>
                     </tr>
                     <tr>
                       <th>Perihal:</th>
@@ -371,6 +402,7 @@ class OutgoingMailDetail extends Component {
       isShowModalConfirm,
       isShowModalHistory,
       isShowModalGenerate,
+      isShowModalVerify,
       selectedStatusMail,
       dataUser } = this.state;
 
@@ -453,6 +485,117 @@ class OutgoingMailDetail extends Component {
 
 
                     <Col style={{ justifyContent: 'flex-end' }}>
+
+                      {detailList.can_verify ?
+                        <Button
+                          color="primary"
+                          className="mt-1"
+                          onClick={this.showModalVerify}
+                          data-toggle="modal"
+                          data-target=".bs-example-modal-center">
+                          <i className="typcn typcn-input-checked" />Verifikasi
+                      </Button>
+                        : null}
+                      <Modal
+                        isOpen={isShowModalVerify}
+                        toggle={this.showModalVerify} >
+                        <div className="modal-header  text-white bg-info">
+                          <h5 className="modal-title mt-0">Verifikasi Surat Keluar</h5>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              this.setState({ isShowModalVerify: false })
+                            }
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+
+                        <div className="modal-body">
+                          <form action="#" onSubmit={this.verifyMail}>
+
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-text-input"
+                                className="col-sm-2 col-form-label">
+                                Status
+                              </label>
+                              <Col sm={10}>
+                                <input
+                                  type="radio"
+                                  id="accept"
+                                  name="status"
+                                  value="1"
+                                  onChange={this.handleStatusMail}
+                                  ref={node => (this.inputNode = node)} />&nbsp;
+                                <label htmlFor="accept">Disetujui</label>
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                <input
+                                  type="radio"
+                                  id="reject"
+                                  name="status"
+                                  value="0"
+                                  onChange={this.handleStatusMail}
+                                  ref={node => (this.inputNode = node)} />&nbsp;
+                                <label htmlFor="reject"> Ditolak</label>
+                              </Col>
+                            </Row>
+
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-search-input"
+                                className="col-sm-2 col-form-label">
+                                Diteruskan kepada
+                         </label>
+                              <Col sm={10}>
+                                <Select
+                                  value={selectedSignature}
+                                  onChange={this.handleSelectSignature}
+                                  options={optionsSignature}
+                                  name="to_user_id"
+                                  ref={node => (this.inputNode = node)}
+                                />
+                              </Col>
+                            </Row>
+
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-search-input"
+                                className="col-sm-2 col-form-label">
+                                Keterangan
+                          </label>
+                              <Col sm={10}>
+                                <input
+                                  name="keterangan"
+                                  className="form-control"
+                                  type="text"
+                                  defaultValue=""
+                                  id="example-text-input"
+                                  ref={node => (this.inputNode = node)}
+                                />
+                              </Col>
+                            </Row>
+
+                            <div className="text-right mt-8">
+                              <Button
+                                color="success"
+                                className="mt-1"
+                                data-toggle="modal"
+                                data-target=".bs-example-modal-center">
+                                <i className="typcn typcn-input-checked" />Submit
+                         </Button>
+                            </div>
+                          </form>
+                        </div>
+                      </Modal>
+
+                    &nbsp;&nbsp;
+
                       {detailList.can_approve ?
                         <Button
                           color="primary"
@@ -608,7 +751,7 @@ class OutgoingMailDetail extends Component {
 
                     &nbsp;&nbsp;
 
-                    {detailList.agenda_file_path === null && detailList.can_agenda === 1 ?
+                    {detailList.agenda_file_path === null && detailList.can_agenda ?
                         <Button
                           color="orange"
                           className="mt-1"

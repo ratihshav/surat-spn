@@ -146,7 +146,7 @@ class OutgoingMail extends Component {
     console.log(rowData)
     return <div >{rowData.data.hal_surat} <br></br>
       <div style={{ color: 'blue' }}>{rowData.data.status_surat}</div>
-      <i>{rowData.data.position_name}</i> <br></br>
+      <i>{rowData.data.status_position_name}</i> <br></br>
     </div>;
   }
 
