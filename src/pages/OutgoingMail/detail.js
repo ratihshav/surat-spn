@@ -256,7 +256,7 @@ class OutgoingMailDetail extends Component {
                 <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
                   <th>Log Dokumen: </th>
                 </tr>
-                {data.agenda_file_path !== null && !data.is_agenda && data.can_agenda ?
+                {data.agenda_file_path !== null && data.can_agenda ?
                   <tr>
                     <th>
                       <tr>
@@ -815,7 +815,7 @@ class OutgoingMailDetail extends Component {
                         </div>
                       </Modal>
 
-                      {detailList.can_agenda && detailList.agenda_file_path !== null && !detailList.is_agenda ?
+                      {detailList.can_agenda && detailList.agenda_file_path !== null ?
                         <Button
                           color="warning"
                           className="mt-1"

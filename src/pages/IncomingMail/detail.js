@@ -156,6 +156,7 @@ class IncomingMailDetail extends Component {
                   <span className="activity-text"><b>{nextItem.label_history}</b></span>
                   <span className="date">{nextItem.status_read} {nextItem.last_read !== null ? ` - ` + moment(nextItem.last_read).format("DD MMMM YYYY  h:mm") : null}</span>
                 </div>
+                <span className="activity-text red"><b>{nextItem.arahan}</b></span>
               </li>
             )
           }) : null}
@@ -200,16 +201,16 @@ class IncomingMailDetail extends Component {
                       <td id="combo-1610-inputCell">{data.asal_surat}</td>
                     </tr>
                     <tr>
-                      <th>Diarsipkan Oleh:</th>
-                      <td>{data.created_by}</td>
-                    </tr>
-                    <tr>
                       <th>Nomor Surat:</th>
                       <td>{data.nomor_surat}</td>
                     </tr>
                     <tr>
                       <th>Tanggal Surat:</th>
                       <td>{moment(data.tgl_surat).format("DD MMMM YYYY")}</td>
+                    </tr>
+                    <tr>
+                      <th>Klasifikasi:</th>
+                      <td>{data.klasifikasi_name}</td>
                     </tr>
                     <tr>
                       <th>Hal:</th>
@@ -237,14 +238,14 @@ class IncomingMailDetail extends Component {
                   <table className="table table-bordered mb-0">
                     <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
                       <th style={{ width: 200 }}>Ditujukan Kepada:</th>
-                      <td id="combo-1610-inputCell">{data.position_name}</td>
+                      <td id="combo-1610-inputCell">{data.to_user_name}</td>
                     </tr>
                     <tr>
-                      <th>Klasifikasi:</th>
-                      <td>{data.klasifikasi_name}</td>
+                      <th>Jabatan:</th>
+                      <td>{data.to_position_name}</td>
                     </tr>
                     <tr>
-                      <th>Dibuat Oleh:</th>
+                      <th>Diarsip Oleh:</th>
                       <td>{data.created_by}</td>
                     </tr>
                     <tr>
