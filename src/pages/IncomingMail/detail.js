@@ -153,10 +153,10 @@ class IncomingMailDetail extends Component {
             return (
               <li className="feed-item" key={index}>
                 <div className="feed-item-list">
-                  <span className="activity-text"><b>{nextItem.label_history}</b></span>
-                  <span className="date">{nextItem.status_read} {nextItem.last_read !== null ? ` - ` + moment(nextItem.last_read).format("DD MMMM YYYY  h:mm") : null}</span>
+                  <span className="activity-text"><b>{nextItem.label_history}</b></span> <br></br>
+                <span className="activity-text red"><b>Arahan:</b> {nextItem.arahan}</span> <br></br>
+                  <span className="activity-text"><i>{nextItem.status_read} {nextItem.last_read !== null ? ` - ` + moment(nextItem.last_read).format("DD MMMM YYYY  h:mm") : null}</i></span>
                 </div>
-                <span className="activity-text red"><b>{nextItem.arahan}</b></span>
               </li>
             )
           }) : null}

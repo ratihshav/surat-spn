@@ -150,6 +150,7 @@ class OutgoingMailDetail extends Component {
     const params = {
       id: this.state.stateIdMail,
       keterangan: e.target.description.value,
+      approved: e.target.status.value
     }
 
     approveOutgoingMailService(params)
@@ -343,7 +344,7 @@ class OutgoingMailDetail extends Component {
                     </tr>
                     <tr>
                       <th>Lampiran:</th>
-                      <td>{data.lampiran}</td>
+                      <td>{data.lampiran_surat}</td>
                     </tr>
                     <tr>
                       <th>Ditujukan Kepada:</th>
@@ -375,10 +376,10 @@ class OutgoingMailDetail extends Component {
             return (
               <li className="feed-item" key={index}>
                 <div className="feed-item-list">
-                  <span className="date">{nextItem.created_at}</span>
+                  <span className="date">{nextItem.created_at} ( {nextItem.status_read} {nextItem.last_read !== null ? ` - ` + moment(nextItem.last_read).format("DD MMM YYYY  h:mm") : null} )</span>
                   <span className="activity-text">
-                    {nextItem.label_disposisi}
-                  </span>
+                    {nextItem.label}
+                  </span> <br></br>
                   <span className="activity-text">
                     <b>{nextItem.position_name} </b>
                   </span>
@@ -923,6 +924,35 @@ class OutgoingMailDetail extends Component {
 
                           <div className="modal-body">
                             <h5>Apakah Anda yakin ingin menyetujui surat ini?</h5> <br />
+
+                            <Row className="form-group">
+                              <label
+                                htmlFor="example-text-input"
+                                className="col-sm-2 col-form-label">
+                                Status
+                              </label>
+                              <Col sm={10}>
+                                <input
+                                  type="radio"
+                                  id="accept"
+                                  name="status"
+                                  value="1"
+                                  onChange={this.handleStatusMail}
+                                  ref={node => (this.inputNode = node)} />&nbsp;
+                                <label htmlFor="accept">Disetujui</label>
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                <input
+                                  type="radio"
+                                  id="reject"
+                                  name="status"
+                                  value="0"
+                                  onChange={this.handleStatusMail}
+                                  ref={node => (this.inputNode = node)} />&nbsp;
+                                <label htmlFor="reject"> Ditolak</label>
+                              </Col>
+                            </Row>
                             <Row className="form-group">
                               <label
                                 htmlFor="example-search-input"
