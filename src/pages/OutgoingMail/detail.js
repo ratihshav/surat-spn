@@ -110,7 +110,7 @@ class OutgoingMailDetail extends Component {
     const { stateIdMail, selectedSignature } = this.state
     const params = {
       surat_keluar_id: stateIdMail,
-      tujuan_user_id: selectedSignature,
+      tujuan_user_id: selectedSignature !== null ? e.target.sendTo.value : selectedSignature,
       file: this.state.selectedFile,
       keterangan: e.target.description.value,
       approved: e.target.status.value
