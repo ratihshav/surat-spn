@@ -47,8 +47,8 @@ export const updateOutgoingMailService = (request) => {
   formData.append('tujuan_surat', request.tujuan_surat);
   formData.append('hal_surat', request.hal_surat);
   formData.append('lampiran_surat', request.lampiran_surat);
-  formData.append('approval_user', request.approval_user);
-  formData.append('to_user', request.to_user);
+  formData.append('approval_user_id', request.approval_user);
+  formData.append('sign_user_id', request.to_user);
   formData.append('file', request.file);
 
   const UPDATE_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/save/${id}`

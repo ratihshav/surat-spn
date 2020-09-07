@@ -146,8 +146,8 @@ class OutgoingMailEdit extends Component {
       tujuan_surat: e.target.destination.value,
       hal_surat: e.target.subject.value,
       lampiran_surat: e.target.attachment.value,
-      approval_user: detailList.approval_user ? detailList.approval_user : selectedSignature,
-      to_user: detailList.to_user ? detailList.to_user : selectedSubmit,
+      approval_user: selectedSignature === null ? detailList.sign_user_id : e.target.approval.value,
+      to_user: selectedSubmit === null ? detailList.approval_user_id : e.target.sendto.value,
       file: this.state.selectedFile
     }
     console.log('params', params)

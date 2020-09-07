@@ -107,14 +107,16 @@ class OutgoingMailDetail extends Component {
   };
 
   doDisposition = (e) => {
-    const { stateIdMail } = this.state
+    const { stateIdMail, selectedSignature } = this.state
     const params = {
       surat_keluar_id: stateIdMail,
-      tujuan_user_id: e.target.sendTo.value,
+      tujuan_user_id: selectedSignature,
       file: this.state.selectedFile,
       keterangan: e.target.description.value,
       approved: e.target.status.value
     }
+    console.log('paramsss', params)
+
     createDisposeOutgoingMailService(params)
       .then((data) => {
         this.alertSuccess()
