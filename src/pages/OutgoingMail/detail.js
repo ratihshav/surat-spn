@@ -278,7 +278,8 @@ class OutgoingMailDetail extends Component {
                         <tr key={nextItem.id} >
                           {nextItem.file_id !== null && nextItem.file_path !== null ?
                             <Col style={{ backgroundColor: '#E9EBEE', borderRadius: 5, textAlign: 'center', justifyContent: 'center', margin: 5 }}>
-                              <Row>{nextItem.created_by} - {nextItem.position_name}</Row>
+                              <Row style={{ fontWeight: 'bold', fontSize: 16 }}>{nextItem.created_by} - {nextItem.position_name}</Row>
+                              <Row> <i>Keterangan - {moment(nextItem.created_at).format("DD MMM YYYY  h:mm")}</i></Row>
                               <Row> <a href={config.url_img + nextItem.file_path} target="_blank" download>{nextItem.file_name}</a></Row>
                             </Col>
                             : null}
