@@ -335,7 +335,7 @@ class OutgoingMailDetail extends Component {
                   <table className="table table-bordered mb-0">
                     <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
                       <th style={{ width: 250 }}>Penandatangan:</th>
-                      <td id="combo-1610-inputCell">{data.signed_name}</td>
+                      <td id="combo-1610-inputCell">{data.sign_name}</td>
                     </tr>
                     <tr>
                       <th>Perihal:</th>
