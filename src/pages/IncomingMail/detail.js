@@ -189,6 +189,27 @@ class IncomingMailDetail extends Component {
               </table>
             </CardBody>
           </Card>
+          <div>
+            {data.disposition_file_path != null && data.disposition_kasi == 1 ? <Card>
+              <CardBody style={{ padding: 0 }}>
+                <table className="table table-hover table-centered table-bordered mb-0">
+                  <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                    <th>Lembar Disposisi: </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      {data.file_path ?
+                        <a href={config.url_img + data.disposition_file_path} target="_blank" download>
+                          <img src={logoPdf} alt="" height="60" />
+                          <p style={{ fontWeight: '800' }}>{data.disposition_file_name}</p>
+                        </a>
+                        : <p style={{ fontWeight: '800' }}>Belum ada dokumen disposisi</p>}
+                    </th>
+                  </tr>
+                </table>
+              </CardBody>
+            </Card>: null}
+          </div>
         </Col>
         <Col xl={8}>
           <Row>
