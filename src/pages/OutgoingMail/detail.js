@@ -279,7 +279,7 @@ class OutgoingMailDetail extends Component {
                           {nextItem.file_id !== null && nextItem.file_path !== null ?
                             <Col style={{ backgroundColor: '#E9EBEE', borderRadius: 5, textAlign: 'center', justifyContent: 'center', margin: 5 }}>
                               <Row style={{ fontWeight: 'bold', fontSize: 16 }}>{nextItem.created_by} - {nextItem.position_name}</Row>
-                              <Row> <i>Keterangan - {moment(nextItem.created_at).format("DD MMM YYYY  h:mm")}</i></Row>
+                              <Row> <i>{nextItem.keterangan} - {moment(nextItem.created_at).format("DD MMM YYYY  h:mm")}</i></Row>
                               <Row> <a href={config.url_img + nextItem.file_path} target="_blank" download>{nextItem.file_name}</a></Row>
                             </Col>
                             : null}
@@ -381,10 +381,10 @@ class OutgoingMailDetail extends Component {
                 <div className="feed-item-list">
                   <span className="date">{nextItem.created_at} ( {nextItem.status_read} {nextItem.last_read !== null ? ` - ` + moment(nextItem.last_read).format("DD MMM YYYY  h:mm") : null} )</span>
                   <span className="activity-text">
-                    {nextItem.label}
+                    {nextItem.label} -  <b>{nextItem.position_name} </b>
                   </span> <br></br>
                   <span className="activity-text">
-                    <b>{nextItem.position_name} </b>
+                    <i>{nextItem.keterangan} </i>
                   </span>
                 </div>
               </li>
@@ -550,22 +550,24 @@ class OutgoingMailDetail extends Component {
                               </Col>
                             </Row>
 
-                            <Row className="form-group">
-                              <label
-                                htmlFor="example-search-input"
-                                className="col-sm-2 col-form-label">
-                                Diteruskan kepada
+                            {selectedStatusMail !== '0' ?
+                              <Row className="form-group">
+                                <label
+                                  htmlFor="example-search-input"
+                                  className="col-sm-2 col-form-label">
+                                  Diteruskan kepada
                          </label>
-                              <Col sm={10}>
-                                <Select
-                                  value={selectedSignature}
-                                  onChange={this.handleSelectSignature}
-                                  options={optionsSignature}
-                                  name="to_user_id"
-                                  ref={node => (this.inputNode = node)}
-                                />
-                              </Col>
-                            </Row>
+                                <Col sm={10}>
+                                  <Select
+                                    value={selectedSignature}
+                                    onChange={this.handleSelectSignature}
+                                    options={optionsSignature}
+                                    name="to_user_id"
+                                    ref={node => (this.inputNode = node)}
+                                  />
+                                </Col>
+                              </Row>
+                              : null}
 
                             <Row className="form-group">
                               <label
@@ -698,48 +700,52 @@ class OutgoingMailDetail extends Component {
                               </Col>
                             </Row>
 
-                            <Row className="form-group">
-                              <label
-                                htmlFor="example-search-input"
-                                className="col-sm-2 col-form-label">
-                                File
+                            {selectedStatusMail !== '0' ?
+                              <Row className="form-group">
+                                <label
+                                  htmlFor="example-search-input"
+                                  className="col-sm-2 col-form-label">
+                                  File
                            </label>
-                              <Col sm={10}>
-                                <input
-                                  name="existingFile"
-                                  className="form-control"
-                                  type="text"
-                                  value={detailList.disposisi ? detailList.disposisi[detailList.disposisi.length - 1].file_name : null}
-                                  id="example-text-input"
-                                  ref={node => (this.inputNode = node)}
-                                  disabled
-                                />
-                              </Col>
-                            </Row>
+                                <Col sm={10}>
+                                  <input
+                                    name="existingFile"
+                                    className="form-control"
+                                    type="text"
+                                    value={detailList.disposisi ? detailList.disposisi[detailList.disposisi.length - 1].file_name : null}
+                                    id="example-text-input"
+                                    ref={node => (this.inputNode = node)}
+                                    disabled
+                                  />
+                                </Col>
+                              </Row>
+                              : null}
 
-                            <Row className="form-group">
-                              <label
-                                htmlFor="example-search-input"
-                                className="col-sm-2 col-form-label">
-                                Ganti File (Jika ada perubahan)
+                            {selectedStatusMail !== '0' ?
+                              <Row className="form-group">
+                                <label
+                                  htmlFor="example-search-input"
+                                  className="col-sm-2 col-form-label">
+                                  Ganti File (Jika ada perubahan)
                            </label>
-                              <Col sm={10}>
-                                <form action="#">
-                                  <div className="custom-file">
-                                    <input
-                                      type="file"
-                                      className="form-control"
-                                      id="validatedCustomFile"
-                                      required
-                                      onChange={this.onFileChange}
-                                      accept=".doc, .docx, .pdf"
-                                      name="file"
-                                      ref={node => (this.inputNode = node)}
-                                    />
-                                  </div>
-                                </form>
-                              </Col>
-                            </Row>
+                                <Col sm={10}>
+                                  <form action="#">
+                                    <div className="custom-file">
+                                      <input
+                                        type="file"
+                                        className="form-control"
+                                        id="validatedCustomFile"
+                                        required
+                                        onChange={this.onFileChange}
+                                        accept=".doc, .docx, .pdf"
+                                        name="file"
+                                        ref={node => (this.inputNode = node)}
+                                      />
+                                    </div>
+                                  </form>
+                                </Col>
+                              </Row>
+                              : null}
                             <div className="text-right mt-8">
                               <Button
                                 color="success"
@@ -901,7 +907,7 @@ class OutgoingMailDetail extends Component {
                           color="success"
                           className="mt-1"
                           onClick={this.showModalConfirm}>
-                          <i className="typcn typcn-input-checked" />Setujui
+                          <i className="typcn typcn-input-checked" />Tanda Tangan
                     </Button>
                         : null}
 
