@@ -19,7 +19,6 @@ class ForgetPasswordPage extends Component {
 
   // handleValidSubmit
   handleValidSubmit = (e, values) => {
-    console.log('values', values)
     forgetPasswordService(values)
       .then((data) => {
         this.alertSuccess()

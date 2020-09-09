@@ -64,9 +64,6 @@ class Group extends Component {
     });
   }
 
-  onRowClick = (e) => {
-    console.log('row', e)
-  }
 
   onToolbarPreparing = (e) => {
     e.toolbarOptions.items.unshift({
@@ -118,7 +115,6 @@ class Group extends Component {
                     rowAlternationEnabled={true}
                     showColumnLines={false}
                     columnAutoWidth={true}
-                    onRowClick={this.onRowClick}
                     onToolbarPreparing={this.onToolbarPreparing}
                   >
                     <Editing

@@ -115,10 +115,6 @@ class OutgoingMail extends Component {
     });
   }
 
-  onRowClick = (e) => {
-    console.log('row', e)
-  }
-
   hasReadMail = (params) => {
     readOutgoingMailService(params)
       .then((data) => {
@@ -143,7 +139,6 @@ class OutgoingMail extends Component {
   }
 
   getSubjectMail = (rowData) => {
-    console.log(rowData)
     return <div >{rowData.data.hal_surat} <br></br>
       <div style={{ color: 'blue' }}>{rowData.data.status_surat}</div>
       <i>{rowData.data.status_position_name}</i> <br></br>
@@ -204,7 +199,6 @@ class OutgoingMail extends Component {
                     rowAlternationEnabled={true}
                     showColumnLines={false}
                     columnAutoWidth={true}
-                    onRowClick={this.onRowClick}
                     onToolbarPreparing={isAbleCreate ? this.onToolbarPreparing : null}
                   >
                     <Editing

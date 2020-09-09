@@ -86,7 +86,6 @@ class PositionEdit extends Component {
         : selectedParent.value ? selectedParent.value
           : dataPosition.parent_id
     }
-    console.log('params', params)
 
     updateMasterPositionService(params)
       .then((data) => {

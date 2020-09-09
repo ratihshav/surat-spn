@@ -150,7 +150,6 @@ class OutgoingMailEdit extends Component {
       to_user: selectedSubmit === null ? detailList.approval_user_id : e.target.sendto.value,
       file: this.state.selectedFile
     }
-    console.log('params', params)
 
     updateOutgoingMailService(params)
       .then((data) => {

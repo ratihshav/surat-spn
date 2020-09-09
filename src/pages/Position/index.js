@@ -38,7 +38,6 @@ class Position extends Component {
   }
 
   onDeletePosition = (values) => {
-    console.log('values', values)
     deleteMasterPositionService(values)
       .then((data) => {
         this.alertSuccess()
@@ -73,10 +72,6 @@ class Position extends Component {
       pathname: '/position-permission',
       params: data,
     });
-  }
-
-  onRowClick = (e) => {
-    console.log('row', e)
   }
 
   onToolbarPreparing = (e) => {
@@ -125,7 +120,6 @@ class Position extends Component {
                     rowAlternationEnabled={true}
                     showColumnLines={false}
                     columnAutoWidth={true}
-                    onRowClick={this.onRowClick}
                     onToolbarPreparing={this.onToolbarPreparing}
                   >
                     <Editing

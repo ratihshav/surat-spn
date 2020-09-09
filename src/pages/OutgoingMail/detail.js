@@ -115,7 +115,6 @@ class OutgoingMailDetail extends Component {
       keterangan: e.target.description.value,
       approved: e.target.status.value
     }
-    console.log('paramsss', params)
 
     createDisposeOutgoingMailService(params)
       .then((data) => {

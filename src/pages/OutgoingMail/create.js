@@ -155,7 +155,6 @@ class OutgoingMailCreate extends Component {
       dataUserSK,
       dataUserTtd } = this.state;
 
-    console.log('dataUserSK', dataUserSK)
     const optionsSignature = dataUserTtd.length !== 0 ?
       dataUserTtd.map(function (data) {
         return { value: data.id, label: data.text };

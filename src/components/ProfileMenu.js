@@ -26,13 +26,13 @@ class ProfileMenu extends Component {
   }
 
   logout = () => {
-    // logoutUserService()
-    //   .then((data) => {
-    removeToken()
-    window.localStorage.clear()
-    window.location = '/'
-    // })
-    // .catch(() => { throw 'Gagal Mengubah Data'; });
+    logoutUserService()
+      .then((data) => {
+        removeToken()
+        window.localStorage.clear()
+        window.location = '/'
+      })
+      .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
   render() {

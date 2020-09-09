@@ -88,10 +88,6 @@ class User extends Component {
   //   });
   // }
 
-  onRowClick = (e) => {
-    console.log('row', e)
-  }
-
   onToolbarPreparing = (e) => {
     e.toolbarOptions.items.unshift({
       location: 'after',
@@ -154,7 +150,6 @@ class User extends Component {
                     rowAlternationEnabled={true}
                     showColumnLines={false}
                     columnAutoWidth={true}
-                    onRowClick={this.onRowClick}
                     onToolbarPreparing={this.onToolbarPreparing}
                   >
                     <Editing

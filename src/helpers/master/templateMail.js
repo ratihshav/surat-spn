@@ -18,7 +18,6 @@ export const getTemplateMailService = () => {
 //create
 export const createTemplateMailService = (request) => {
   const file = request.file
-  console.log('create', file)
 
   const formData = new FormData();
   formData.append('template_type', request.template_type);

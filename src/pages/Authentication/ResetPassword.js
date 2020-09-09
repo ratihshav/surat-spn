@@ -31,7 +31,6 @@ class ResetPassword extends Component {
     let url = this.props.location.search
     let stringUrl = queryString.parse(url);
     this.setState({ paramsUrl: stringUrl })
-    console.log('stringUrl', stringUrl);
   }
 
   handleValidSubmit = (e) => {

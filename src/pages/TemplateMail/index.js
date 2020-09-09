@@ -65,10 +65,6 @@ class TemplateMail extends Component {
     });
   }
 
-  onRowClick = (e) => {
-    console.log('row', e)
-  }
-
   onToolbarPreparing = (e) => {
     e.toolbarOptions.items.unshift({
       location: 'after',
@@ -130,7 +126,6 @@ class TemplateMail extends Component {
                     rowAlternationEnabled={true}
                     showColumnLines={false}
                     columnAutoWidth={true}
-                    onRowClick={this.onRowClick}
                     onToolbarPreparing={this.onToolbarPreparing}
                   >
                     <Editing

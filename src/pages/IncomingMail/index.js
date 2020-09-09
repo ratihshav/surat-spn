@@ -110,9 +110,6 @@ class IncomingMail extends Component {
     });
   }
 
-  onRowClick = (e) => {
-    console.log('row', e)
-  }
 
   hasReadMail = (params) => {
     readIncomingMailService(params)
@@ -196,7 +193,6 @@ class IncomingMail extends Component {
                     rowAlternationEnabled={true}
                     showColumnLines={false}
                     columnAutoWidth={true}
-                    onRowClick={this.onRowClick}
                     onToolbarPreparing={isAbleCreate ? this.onToolbarPreparing : null}
                   >
                     <Editing
