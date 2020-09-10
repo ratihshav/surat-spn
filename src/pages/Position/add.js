@@ -40,9 +40,9 @@ class PositionAdd extends Component {
         this.alertSuccess()
         this.props.history.push('/position');
       })
-      .catch(() => {
+      .catch((e) => {
         return (
-          this.alertError()
+          this.alertError(e)
         )
       });
     e.preventDefault()
@@ -72,8 +72,8 @@ class PositionAdd extends Component {
     toast.success('Sukses menyimpan data!')
   };
 
-  alertError = () => {
-    toast.error('Gagal menyimpan data')
+  alertError = (e) => {
+    toast.error(e)
   }
 
   handleSelectGroup = selectedGroup => {
@@ -175,7 +175,7 @@ class PositionAdd extends Component {
                       <label
                         htmlFor="example-search-input"
                         className="col-sm-2 col-form-label">
-                        Nama Divisi
+                        Nama Unit
                                   </label>
                       <Col sm={10}>
                         <Select

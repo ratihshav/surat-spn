@@ -19,14 +19,7 @@ import { getMasterUserServices, deleteMasterUserService } from '../../helpers/ma
 import 'react-toastify/dist/ReactToastify.css';
 
 //Reducer
-import {
-  getMasterUser,
-  getMasterUserSuccess,
-  saveMasterUser,
-  saveMasterUserSuccess,
-  deleteMasterUser,
-  deleteMasterUserSuccess
-} from "../../store/business/master-user/actions";
+import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import toast from '../UI/toast';
 
 class User extends Component {
@@ -35,7 +28,6 @@ class User extends Component {
     this.state = {
       isModalVisible: false,
       dataUser: [],
-      totalCount: 0
     };
   }
 
@@ -120,6 +112,10 @@ class User extends Component {
   }
 
   render() {
+    const { perms } = this.props.data
+    const granted = ['user_save', 'is_admin']
+    const isAbleCreate = granted.some(x => perms.includes(x));
+
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -150,7 +146,7 @@ class User extends Component {
                     rowAlternationEnabled={true}
                     showColumnLines={false}
                     columnAutoWidth={true}
-                    onToolbarPreparing={this.onToolbarPreparing}
+                    onToolbarPreparing={isAbleCreate ? this.onToolbarPreparing : null}
                   >
                     <Editing
                       mode="row"
@@ -198,15 +194,8 @@ class User extends Component {
 }
 
 const mapStatetoProps = state => {
-  const { error, loading, data, totalCount } = state.MasterUser;
-  return { error, loading, data, totalCount };
+  const { error, loading, data } = state.Login;
+  return { error, loading, data };
 };
 
-export default withRouter(connect(mapStatetoProps, {
-  getMasterUser,
-  getMasterUserSuccess,
-  saveMasterUser,
-  saveMasterUserSuccess,
-  deleteMasterUser,
-  deleteMasterUserSuccess
-})(User));
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(User));

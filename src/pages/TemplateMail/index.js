@@ -17,6 +17,7 @@ import DataStore from 'devextreme/data/data_source';
 import { getTemplateMailService, deleteTemplateMailService } from '../../helpers/master/templateMail';
 import config from '../../helpers/config'
 import toast from '../UI/toast';
+import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 
 class TemplateMail extends Component {
   constructor(props) {
@@ -98,6 +99,10 @@ class TemplateMail extends Component {
   }
 
   render() {
+    const { perms } = this.props.data
+    const granted = ['templateSurat_save', 'is_admin']
+    const isAbleCreate = granted.some(x => perms.includes(x));
+
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -126,7 +131,7 @@ class TemplateMail extends Component {
                     rowAlternationEnabled={true}
                     showColumnLines={false}
                     columnAutoWidth={true}
-                    onToolbarPreparing={this.onToolbarPreparing}
+                    onToolbarPreparing={isAbleCreate ? this.onToolbarPreparing : null}
                   >
                     <Editing
                       mode="row"
@@ -162,4 +167,9 @@ class TemplateMail extends Component {
   }
 }
 
-export default withRouter(connect()(TemplateMail));
+const mapStatetoProps = state => {
+  const { error, loading, data } = state.Login;
+  return { error, loading, data };
+};
+
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(TemplateMail));

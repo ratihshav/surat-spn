@@ -141,7 +141,6 @@ class UserAdd extends Component {
                           name="username"
                           className="form-control"
                           type="text"
-                          defaultValue=""
                           id="example-text-input"
                           ref={node => (this.inputNode = node)}
                         />
@@ -159,7 +158,6 @@ class UserAdd extends Component {
                         <input
                           className="form-control"
                           type="text"
-                          defaultValue="Izin Penggunaan Website"
                           id="example-text-input"
                           name="fullName"
                           ref={node => (this.inputNode = node)}
@@ -222,7 +220,6 @@ class UserAdd extends Component {
                         <input
                           className="form-control"
                           type="number"
-                          defaultValue=""
                           id="example-text-input"
                           name="idEmployee"
                           ref={node => (this.inputNode = node)}
@@ -241,7 +238,6 @@ class UserAdd extends Component {
                         <input
                           className="form-control"
                           type="email"
-                          defaultValue=""
                           id="example-text-input"
                           name="email"
                           ref={node => (this.inputNode = node)}
@@ -260,7 +256,6 @@ class UserAdd extends Component {
                         <input
                           className="form-control"
                           type="date"
-                          defaultValue=""
                           id="example-text-input"
                           name="birthDate"
                           ref={node => (this.inputNode = node)}
@@ -279,7 +274,6 @@ class UserAdd extends Component {
                         <input
                           className="form-control"
                           type="password"
-                          defaultValue=""
                           id="example-text-input"
                           name="password"
                           ref={node => (this.inputNode = node)}
@@ -298,7 +292,6 @@ class UserAdd extends Component {
                         <input
                           className="form-control"
                           type="text"
-                          defaultValue=""
                           id="example-text-input"
                           name="phone"
                           ref={node => (this.inputNode = node)}

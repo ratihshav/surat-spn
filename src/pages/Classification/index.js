@@ -15,6 +15,7 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import DataStore from 'devextreme/data/data_source';
 import { getMasterClassService, deleteMasterClassService } from '../../helpers/master/classification'
+import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import toast from '../UI/toast';
 
 class Classification extends Component {
@@ -87,6 +88,10 @@ class Classification extends Component {
   }
 
   render() {
+    const { perms } = this.props.data
+    const granted = ['klasifikasiSurat_save', 'is_admin']
+    const isAbleCreate = granted.some(x => perms.includes(x));
+
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -119,7 +124,7 @@ class Classification extends Component {
                     showColumnLines={false}
                     columnAutoWidth={true}
                     onRowClick={this.onRowClick}
-                    onToolbarPreparing={this.onToolbarPreparing}
+                    onToolbarPreparing={isAbleCreate ? this.onToolbarPreparing : null}
                   >
                     <Editing
                       mode="row"
@@ -155,4 +160,9 @@ class Classification extends Component {
   }
 }
 
-export default withRouter(connect()(Classification));
+const mapStatetoProps = state => {
+  const { error, loading, data } = state.Login;
+  return { error, loading, data };
+};
+
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(Classification));

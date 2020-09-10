@@ -16,6 +16,8 @@ import DataGrid, {
 import DataStore from 'devextreme/data/data_source';
 import { getMasterGroupServices, deleteMasterGroupService } from '../../helpers/master/group'
 import toast from '../UI/toast';
+import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
+
 
 class Group extends Component {
   constructor(props) {
@@ -84,6 +86,10 @@ class Group extends Component {
   }
 
   render() {
+    const { perms } = this.props.data
+    const granted = ['unit_save', 'is_admin']
+    const isAbleCreate = granted.some(x => perms.includes(x));
+
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -96,9 +102,9 @@ class Group extends Component {
                     <Link to="#">Home</Link>
                   </li>
                   <li className="breadcrumb-item">
-                    <Link to="#">Divisi</Link>
+                    <Link to="#">Unit</Link>
                   </li>
-                  <li className="breadcrumb-item active">Daftar Divisi</li>
+                  <li className="breadcrumb-item active">Daftar Unit</li>
                 </ol>
               </div>
               <br />
@@ -115,7 +121,8 @@ class Group extends Component {
                     rowAlternationEnabled={true}
                     showColumnLines={false}
                     columnAutoWidth={true}
-                    onToolbarPreparing={this.onToolbarPreparing}
+                    onToolbarPreparing={isAbleCreate ? this.onToolbarPreparing : null}
+
                   >
                     <Editing
                       mode="row"
@@ -128,8 +135,8 @@ class Group extends Component {
                       showInfo={true} />
 
                     <Column dataField="id" visible={false} />
-                    <Column dataField="group_code" />
-                    <Column dataField="group_name" />
+                    <Column caption="Kode Unit" dataField="group_code" />
+                    <Column caption="Nama Unit" dataField="group_name" />
                     <Column type="buttons"
                       buttons={[{
                         hint: 'Edit',
@@ -150,4 +157,9 @@ class Group extends Component {
   }
 }
 
-export default withRouter(connect()(Group));
+const mapStatetoProps = state => {
+  const { error, loading, data } = state.Login;
+  return { error, loading, data };
+};
+
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(Group));

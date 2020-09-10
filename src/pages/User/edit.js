@@ -251,7 +251,7 @@ class UserEdit extends Component {
                                 this.toggleCustomJustified("7");
                               }}
                             >
-                              <span class="d-none d-sm-block">Data Divisi</span>
+                              <span class="d-none d-sm-block">Data Unit</span>
                             </NavLink>
                           </NavItem>
                         </Nav>
@@ -485,7 +485,7 @@ class UserEdit extends Component {
                                     <label
                                       htmlFor="example-text-input"
                                       className="col-sm-2 col-form-label">
-                                      Nama Divisi
+                                      Nama Unit
                                           </label>
                                     <Col sm={10}>
                                       <input

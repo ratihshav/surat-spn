@@ -255,7 +255,7 @@ class Profile extends Component {
                                 this.toggleCustomJustified("7");
                               }}
                             >
-                              <span className="d-none d-sm-block">Data Divisi</span>
+                              <span className="d-none d-sm-block">Data Unit</span>
                             </NavLink>
                           </NavItem>
                         </Nav>
@@ -506,7 +506,7 @@ class Profile extends Component {
                                     <label
                                       htmlFor="example-text-input"
                                       className="col-sm-2 col-form-label">
-                                      Nama Divisi
+                                      Nama Unit
                                           </label>
                                     <Col sm={10}>
                                       <input

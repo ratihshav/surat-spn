@@ -210,7 +210,7 @@ class PositionEdit extends Component {
                       <label
                         htmlFor="example-search-input"
                         className="col-sm-2 col-form-label">
-                        Divisi
+                        Unit
                                   </label>
                       <Col sm={10}>
                         <Select

@@ -52,15 +52,15 @@ class GroupAdd extends Component {
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">
-                <h4 className="font-size-18">Tambah Divisi</h4>
+                <h4 className="font-size-18">Tambah Unit</h4>
                 <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
                     <Link to="#">Home</Link>
                   </li>
                   <li className="breadcrumb-item">
-                    <Link to="/group">Master Divisi</Link>
+                    <Link to="/group">Master Unit</Link>
                   </li>
-                  <li className="breadcrumb-item active">Tambah Divisi</li>
+                  <li className="breadcrumb-item active">Tambah Unit</li>
                 </ol>
               </div>
             </Col>
@@ -76,7 +76,7 @@ class GroupAdd extends Component {
                         htmlFor="group_code"
                         className="col-sm-2 col-form-label"
                       >
-                        Kode Divisi
+                        Kode Unit
                     </label>
                       <Col sm={10}>
                         <input
@@ -94,7 +94,7 @@ class GroupAdd extends Component {
                         htmlFor="group_name"
                         className="col-sm-2 col-form-label"
                       >
-                        Nama Divisi
+                        Nama Unit
                     </label>
                       <Col sm={10}>
                         <input

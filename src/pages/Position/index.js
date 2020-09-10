@@ -15,7 +15,7 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import DataStore from 'devextreme/data/data_source';
 import { getMasterPositionServices, deleteMasterPositionService } from '../../helpers/master/position'
-
+import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import toast from '../UI/toast';
 
 class Position extends Component {
@@ -93,6 +93,10 @@ class Position extends Component {
   }
 
   render() {
+    const { perms } = this.props.data
+    const granted = ['jabatan_save', 'is_admin']
+    const isAbleCreate = granted.some(x => perms.includes(x));
+
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -120,7 +124,7 @@ class Position extends Component {
                     rowAlternationEnabled={true}
                     showColumnLines={false}
                     columnAutoWidth={true}
-                    onToolbarPreparing={this.onToolbarPreparing}
+                    onToolbarPreparing={isAbleCreate ? this.onToolbarPreparing : null}
                   >
                     <Editing
                       mode="row"
@@ -135,7 +139,7 @@ class Position extends Component {
                     <Column dataField="id" visible={false} />
                     <Column caption="Nama Jabatan" dataField="position_name" />
                     <Column caption="Tipe" dataField="position_type" />
-                    <Column caption="Divisi" dataField="group_name" />
+                    <Column caption="Unit" dataField="group_name" />
                     <Column type="buttons"
                       buttons={[{
                         hint: 'Edit',
@@ -161,4 +165,9 @@ class Position extends Component {
   }
 }
 
-export default withRouter(connect()(Position));
+const mapStatetoProps = state => {
+  const { error, loading, data } = state.Login;
+  return { error, loading, data };
+};
+
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(Position));
