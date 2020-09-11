@@ -11,7 +11,7 @@ export const getIncomingMailService = (request) => {
         totalCount: data.data.data ? data.data.data.totalCount : null
       };
     })
-    .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const createIncomingMailService = (request) => {
@@ -35,7 +35,7 @@ export const createIncomingMailService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const updateIncomingMailService = (request) => {
@@ -61,7 +61,7 @@ export const updateIncomingMailService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const getDetailIncomingMailService = (request) => {
@@ -73,7 +73,7 @@ export const getDetailIncomingMailService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const createDisposeIncomingMailService = (request) => {
@@ -92,7 +92,7 @@ export const createDisposeIncomingMailService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const deleteIncomingMailService = (request) => {
@@ -104,7 +104,7 @@ export const deleteIncomingMailService = (request) => {
         data: data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 export const readIncomingMailService = (request) => {
@@ -115,7 +115,7 @@ export const readIncomingMailService = (request) => {
         data: data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 export const closeIncomingMailService = (request) => {
@@ -126,7 +126,7 @@ export const closeIncomingMailService = (request) => {
         data: data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 

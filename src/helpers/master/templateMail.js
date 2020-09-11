@@ -11,7 +11,7 @@ export const getTemplateMailService = () => {
         data: data.data.data,
       };
     })
-    .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 
@@ -33,7 +33,7 @@ export const createTemplateMailService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 //update
@@ -58,7 +58,7 @@ export const updateTemplateMailService = (request) => {
         data: data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 //delete
@@ -71,7 +71,7 @@ export const deleteTemplateMailService = (request) => {
         data: data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 //detail
@@ -85,7 +85,7 @@ export const getDetailTemplateMailService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 

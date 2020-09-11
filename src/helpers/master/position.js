@@ -11,7 +11,7 @@ export const getMasterPositionServices = () => {
         data: data.data.data,
       };
     })
-    .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 
@@ -66,7 +66,7 @@ export const deleteMasterPositionService = (request) => {
         data: data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 //detail
@@ -80,7 +80,7 @@ export const getDetailPositionService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 //get all permissions
@@ -94,7 +94,7 @@ export const getAllPermissionService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 //get granted permissions
@@ -108,7 +108,7 @@ export const getGrantedPermissionService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 //get granted permissions
@@ -124,7 +124,7 @@ export const saveGrantedPermissionService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 export const searchParentPositionService = (request) => {
@@ -136,7 +136,7 @@ export const searchParentPositionService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const searchPositionService = (request) => {
@@ -148,7 +148,7 @@ export const searchPositionService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export async function _handleError(error) {

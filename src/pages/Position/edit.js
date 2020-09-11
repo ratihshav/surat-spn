@@ -92,9 +92,9 @@ class PositionEdit extends Component {
         this.alertSuccess()
         this.props.history.push('/position');
       })
-      .catch(() => {
+      .catch((e) => {
         return (
-          this.alertError()
+          this.alertError(e)
         )
       });
     e.preventDefault()
@@ -104,8 +104,8 @@ class PositionEdit extends Component {
     toast.success('Sukses menyimpan data!')
   };
 
-  alertError = () => {
-    toast.error('Gagal menyimpan data')
+  alertError = (e) => {
+    toast.error(e)
   }
 
   handleSelectGroup = selectedGroup => {

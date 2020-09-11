@@ -23,8 +23,8 @@ class ForgetPasswordPage extends Component {
       .then((data) => {
         this.alertSuccess()
       })
-      .catch(() => {
-        this.alertError()
+      .catch((e) => {
+        this.alertError(e)
       });
     e.preventDefault();
   }
@@ -33,8 +33,8 @@ class ForgetPasswordPage extends Component {
     toast.success('Sukses! Silahkan cek e-mail Anda')
   };
 
-  alertError = () => {
-    toast.error('Gagal')
+  alertError = (e) => {
+    toast.error(e)
   }
 
   render() {

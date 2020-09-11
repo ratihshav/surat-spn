@@ -10,7 +10,7 @@ export const getMasterGroupServices = () => {
         data: data.data.data,
       };
     })
-    .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 //create
@@ -26,7 +26,7 @@ export const saveMasterGroupService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 
@@ -45,7 +45,7 @@ export const updateMasterGroupService = (request) => {
         data: data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 //delete
@@ -58,7 +58,7 @@ export const deleteMasterGroupService = (request) => {
         data: data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 //detail
@@ -72,7 +72,7 @@ export const getDetailGroupService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 export const searchGroupService = (request) => {
@@ -84,7 +84,7 @@ export const searchGroupService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 

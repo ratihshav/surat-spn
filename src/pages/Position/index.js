@@ -43,8 +43,8 @@ class Position extends Component {
         this.alertSuccess()
         this.props.history.push('/position');
       })
-      .catch(() => {
-        this.alertError()
+      .catch((e) => {
+        this.alertError(e)
       });
   }
 
@@ -52,8 +52,8 @@ class Position extends Component {
     toast.success('Sukses Menghapus data!')
   };
 
-  alertError = () => {
-    toast.error('Gagal Menghapus data')
+  alertError = (e) => {
+    toast.error(e)
   }
 
   navigateToEdit = (val) => {

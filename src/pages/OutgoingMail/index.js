@@ -151,8 +151,8 @@ class OutgoingMail extends Component {
         this.alertSuccess()
         this.props.history.push('/outgoing-mail');
       })
-      .catch(() => {
-        this.alertError()
+      .catch((e) => {
+        this.alertError(e)
       });
   }
 
@@ -160,8 +160,8 @@ class OutgoingMail extends Component {
     toast.success('Sukses Menghapus data!')
   };
 
-  alertError = () => {
-    toast.error('Gagal Menghapus data')
+  alertError = (e) => {
+    toast.error(e)
   }
 
   render() {

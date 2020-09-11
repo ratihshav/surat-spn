@@ -43,8 +43,8 @@ class Classification extends Component {
         this.alertSuccess()
         this.props.history.push('/classification');
       })
-      .catch(() => {
-        this.alertError()
+      .catch((e) => {
+        this.alertError(e)
       });
   }
 
@@ -52,8 +52,8 @@ class Classification extends Component {
     toast.success('Sukses Menghapus data!')
   };
 
-  alertError = () => {
-    toast.error('Gagal Menghapus data')
+  alertError = (e) => {
+    toast.error(e)
   }
 
   navigateToEdit = (val) => {

@@ -44,8 +44,8 @@ class TemplateMail extends Component {
         this.alertSuccess()
         this.props.history.push('/template-mail');
       })
-      .catch(() => {
-        this.alertError()
+      .catch((e) => {
+        this.alertError(e)
       });
   }
 
@@ -53,8 +53,8 @@ class TemplateMail extends Component {
     toast.success('Sukses Menghapus data!')
   };
 
-  alertError = () => {
-    toast.error('Gagal Menghapus data')
+  alertError = (e) => {
+    toast.error(e)
   }
 
   navigateToEdit = (val) => {

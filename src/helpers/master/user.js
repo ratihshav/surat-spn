@@ -11,7 +11,7 @@ export const getMasterUserServices = (request) => {
         totalCount: data.data.data.totalCount
       };
     })
-    .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 
@@ -60,7 +60,7 @@ export const updateMasterUserService = (request) => {
         data: data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 //delete
@@ -73,7 +73,7 @@ export const deleteMasterUserService = (request) => {
         data: data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 //detail
@@ -85,7 +85,7 @@ export const getDetailUserService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; })
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 export const changePasswordUserService = (request) => {
@@ -101,7 +101,7 @@ export const changePasswordUserService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 
@@ -118,7 +118,7 @@ export const changePhotoUserService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const searchUserService = (request) => {
@@ -130,7 +130,7 @@ export const searchUserService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const searchUserTtdService = (request) => {
@@ -142,7 +142,7 @@ export const searchUserTtdService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const searchUserSKService = (request) => {
@@ -154,7 +154,7 @@ export const searchUserSKService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const searchUserSMService = (request) => {
@@ -166,7 +166,7 @@ export const searchUserSMService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 
@@ -178,7 +178,7 @@ export const logoutUserService = (request) => {
         data: data.data
       };
     })
-    .catch((error) => { console.log('error', error) });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const forgetPasswordService = (request) => {
@@ -189,7 +189,7 @@ export const forgetPasswordService = (request) => {
         data: data
       };
     })
-    .catch((error) => { throw 'Gagal'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const resetPasswordService = (request) => {
@@ -206,7 +206,7 @@ export const resetPasswordService = (request) => {
         data: data.data
       };
     })
-    .catch((error) => { throw 'Gagal'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const saveSignatureUserService = (request) => {
@@ -221,7 +221,7 @@ export const saveSignatureUserService = (request) => {
         data: data.data
       };
     })
-    .catch((error) => { throw 'Gagal'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const getNotifService = (request) => {
@@ -233,7 +233,7 @@ export const getNotifService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const getNotifCountService = (request) => {
@@ -245,7 +245,7 @@ export const getNotifCountService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 export const getNotifReadService = (request) => {
 
@@ -256,7 +256,7 @@ export const getNotifReadService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 export async function _handleError(error) {
   // var errorCode = error.code;

@@ -26,7 +26,7 @@ class ClassificationAdd extends Component {
       })
       .catch(() => {
         return (
-          this.alertError()
+          this.alertError(e)
         )
       });
     e.preventDefault()
@@ -36,8 +36,8 @@ class ClassificationAdd extends Component {
     toast.success('Sukses menyimpan data!')
   };
 
-  alertError = () => {
-    toast.error('Gagal menyimpan data')
+  alertError = (e) => {
+    toast.error(e)
   }
 
   goBack = () => {

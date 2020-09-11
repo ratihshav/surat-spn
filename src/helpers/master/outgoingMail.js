@@ -11,7 +11,7 @@ export const getOutgoingMailService = (request) => {
         totalCount: data.data.data.totalCount
       };
     })
-    .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 
@@ -34,7 +34,7 @@ export const createOutgoingMailService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 
@@ -59,7 +59,7 @@ export const updateOutgoingMailService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const getDetailOutgoingMailService = (request) => {
@@ -71,7 +71,7 @@ export const getDetailOutgoingMailService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const createDisposeOutgoingMailService = (request) => {
@@ -89,7 +89,7 @@ export const createDisposeOutgoingMailService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const deleteOutgoingMailService = (request) => {
@@ -101,7 +101,7 @@ export const deleteOutgoingMailService = (request) => {
         data: data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 export const readOutgoingMailService = (request) => {
@@ -112,7 +112,7 @@ export const readOutgoingMailService = (request) => {
         data: data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 export const createAgendaOutgoingMailService = (request) => {
@@ -127,7 +127,7 @@ export const createAgendaOutgoingMailService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 export const approveOutgoingMailService = (request) => {
@@ -143,9 +143,7 @@ export const approveOutgoingMailService = (request) => {
         data: data
       };
     })
-    .catch((error) => {
-      throw 'Gagal Mengubah Data';
-    });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 export const generateNumMailService = (request) => {
@@ -161,9 +159,7 @@ export const generateNumMailService = (request) => {
         data: data
       };
     })
-    .catch((error) => {
-      throw 'Gagal Mengubah Data';
-    });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 export const verifyOutgoingMailService = (request) => {
@@ -180,9 +176,7 @@ export const verifyOutgoingMailService = (request) => {
         data: data
       };
     })
-    .catch((error) => {
-      throw 'Gagal Mengubah Data';
-    });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 export async function _handleError(error) {

@@ -44,9 +44,9 @@ class ProfileSignature extends Component {
         this.alertSuccess()
         this.props.history.push('/profile');
       })
-      .catch(() => {
+      .catch((e) => {
         return (
-          this.alertError()
+          this.alertError(e)
         )
       });
   }
@@ -55,8 +55,8 @@ class ProfileSignature extends Component {
     toast.success('Sukses menyimpan data!')
   };
 
-  alertError = () => {
-    toast.error('Gagal menyimpan data')
+  alertError = (e) => {
+    toast.error(e)
   }
 
   render() {

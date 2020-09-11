@@ -59,7 +59,7 @@ class UserChangePhoto extends Component {
       })
       .catch(() => {
         return (
-          this.alertError()
+          this.alertError(e)
         )
       });
     e.preventDefault()
@@ -70,8 +70,8 @@ class UserChangePhoto extends Component {
     toast.success('Sukses menyimpan data!')
   };
 
-  alertError = () => {
-    toast.error('Gagal menyimpan data')
+  alertError = (e) => {
+    toast.error(e)
   }
 
   render() {

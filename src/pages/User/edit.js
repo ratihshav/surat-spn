@@ -54,7 +54,11 @@ class UserEdit extends Component {
           dataUser: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; })
+      .catch((e) => {
+        return (
+          this.alertError(e)
+        )
+      });
   }
 
   getDataPosition = () => {
@@ -86,9 +90,9 @@ class UserEdit extends Component {
         this.alertSuccess()
         this.props.history.push('/user');
       })
-      .catch(() => {
+      .catch((e) => {
         return (
-          this.alertError()
+          this.alertError(e)
         )
       });
     e.preventDefault()
@@ -98,8 +102,8 @@ class UserEdit extends Component {
     toast.success('Sukses menyimpan data!')
   };
 
-  alertError = () => {
-    toast.error('Gagal menyimpan data')
+  alertError = (e) => {
+    toast.error(e)
   }
 
   goToChangePassword = () => {

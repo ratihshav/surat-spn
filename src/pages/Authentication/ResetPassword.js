@@ -45,8 +45,8 @@ class ResetPassword extends Component {
         this.alertSuccess()
         this.props.history.push('/')
       })
-      .catch(() => {
-        this.alertError()
+      .catch((e) => {
+        this.alertError(e)
       });
     e.preventDefault();
   }
@@ -55,8 +55,8 @@ class ResetPassword extends Component {
     toast.success('Sukses mereset password!')
   };
 
-  alertError = () => {
-    toast.error('Gagal')
+  alertError = (e) => {
+    toast.error(e)
   }
 
   passwordComparison = () => {

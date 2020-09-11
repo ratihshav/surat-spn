@@ -121,9 +121,9 @@ class OutgoingMailDetail extends Component {
         this.alertSuccess()
         this.props.history.push('/outgoing-mail');
       })
-      .catch(() => {
+      .catch((e) => {
         return (
-          this.alertError()
+          this.alertError(e)
         )
       });
     e.preventDefault();
@@ -139,9 +139,9 @@ class OutgoingMailDetail extends Component {
         this.alertSuccess()
         this.props.history.push('/outgoing-mail');
       })
-      .catch(() => {
+      .catch((e) => {
         return (
-          this.alertError()
+          this.alertError(e)
         )
       });
     e.preventDefault();
@@ -159,9 +159,9 @@ class OutgoingMailDetail extends Component {
         this.alertSuccess()
         this.props.history.push('/outgoing-mail');
       })
-      .catch(() => {
+      .catch((e) => {
         return (
-          this.alertError()
+          this.alertError(e)
         )
       });
     e.preventDefault();
@@ -183,9 +183,9 @@ class OutgoingMailDetail extends Component {
         this.alertSuccess()
         window.location.reload()
       })
-      .catch(() => {
+      .catch((e) => {
         return (
-          this.alertError()
+          this.alertError(e)
         )
       });
     e.preventDefault();
@@ -206,9 +206,9 @@ class OutgoingMailDetail extends Component {
         this.alertSuccess()
         window.location.reload()
       })
-      .catch(() => {
+      .catch((e) => {
         return (
-          this.alertError()
+          this.alertError(e)
         )
       });
     e.preventDefault();
@@ -225,8 +225,8 @@ class OutgoingMailDetail extends Component {
     toast.success('Sukses menyelesaikan surat!')
   };
 
-  alertError = () => {
-    toast.error('Gagal menyelesaikan surat')
+  alertError = (e) => {
+    toast.error(e)
   }
 
   handleStatusMail = e => {

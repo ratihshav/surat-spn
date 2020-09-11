@@ -10,7 +10,7 @@ export const getMasterClassService = () => {
         data: data.data.data,
       };
     })
-    .catch(() => { throw 'Tidak Dapat Menampilkan Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 }
 
 
@@ -30,7 +30,7 @@ export const saveMasterClassService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 
@@ -50,7 +50,7 @@ export const updateMasterClassService = (request) => {
         data: data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 //delete
@@ -63,7 +63,7 @@ export const deleteMasterClassService = (request) => {
         data: data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 //detail
@@ -77,7 +77,7 @@ export const getDetailClassService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
 };
 
 export const searchMasterClassService = (request) => {
@@ -89,7 +89,8 @@ export const searchMasterClassService = (request) => {
         data: data.data
       };
     })
-    .catch(() => { throw 'Gagal Mengubah Data'; });
+    .catch((e) => { throw e.response.data.messages[0] });
+
 };
 
 export async function _handleError(error) {

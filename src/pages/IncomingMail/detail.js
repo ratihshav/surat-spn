@@ -102,9 +102,9 @@ class IncomingMailDetail extends Component {
         this.alertSuccess()
         this.props.history.push('/incoming-mail');
       })
-      .catch(() => {
+      .catch((e) => {
         return (
-          this.alertError()
+          this.alertError(e)
         )
       });
     e.preventDefault();
@@ -118,9 +118,9 @@ class IncomingMailDetail extends Component {
         this.alertSuccess()
         this.props.history.push('/incoming-mail');
       })
-      .catch(() => {
+      .catch((e) => {
         return (
-          this.alertError()
+          this.alertError(e)
         )
       });
   }
@@ -129,8 +129,8 @@ class IncomingMailDetail extends Component {
     toast.success('Sukses menyelesaikan surat!')
   };
 
-  alertError = () => {
-    toast.error('Gagal menyelesaikan surat')
+  alertError = (e) => {
+    toast.error(e)
   }
 
   onDocumentLoadSuccess = ({ numPages }) => {
@@ -154,7 +154,7 @@ class IncomingMailDetail extends Component {
               <li className="feed-item" key={index}>
                 <div className="feed-item-list">
                   <span className="activity-text"><b>{nextItem.label_history}</b></span> <br></br>
-                <span className="activity-text red"><b>Arahan:</b> {nextItem.arahan}</span> <br></br>
+                  <span className="activity-text red"><b>Arahan:</b> {nextItem.arahan}</span> <br></br>
                   <span className="activity-text"><i>{nextItem.status_read} {nextItem.last_read !== null ? ` - ` + moment(nextItem.last_read).format("DD MMMM YYYY  h:mm") : null}</i></span>
                 </div>
               </li>
@@ -208,7 +208,7 @@ class IncomingMailDetail extends Component {
                   </tr>
                 </table>
               </CardBody>
-            </Card>: null}
+            </Card> : null}
           </div>
         </Col>
         <Col xl={8}>
