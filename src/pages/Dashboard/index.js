@@ -4,22 +4,39 @@ import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 // import images
-import servicesIcon1 from "../../assets/images/services-icon/01.png";
-import servicesIcon2 from "../../assets/images/services-icon/02.png";
-import servicesIcon3 from "../../assets/images/services-icon/03.png";
-import servicesIcon4 from "../../assets/images/services-icon/04.png";
+import user2 from "../../assets/images/users/user-2.jpg";
+import user3 from "../../assets/images/users/user-3.jpg";
+import user4 from "../../assets/images/users/user-4.jpg";
+import user5 from "../../assets/images/users/user-5.jpg";
+import user6 from "../../assets/images/users/user-6.jpg";
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
+import { getDashboardDataService } from '../../helpers/master/dashboard'
 
 import "chartist/dist/scss/chartist.scss";
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      dataDashboard: []
+    };
   }
 
   componentDidMount() {
     this.notifOneSignal()
+    this.getDataDashboard()
+  }
+
+  getDataDashboard = () => {
+    getDashboardDataService()
+      .then((data) => {
+        this.setState({
+          dataDashboard: data
+        })
+      })
+      .catch((e) => {
+        // this.alertError(e)
+      });
   }
 
   notifOneSignal = () => {
@@ -100,10 +117,11 @@ class Dashboard extends Component {
   }
 
   render() {
+    const { username } = this.props.data
     return (
       <React.Fragment>
         <div className="container-fluid">
-          <Row className="align-items-center">
+          {/* <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">
                 <h4 className="font-size-18">Dashboard</h4>
@@ -111,123 +129,59 @@ class Dashboard extends Component {
                 </ol>
               </div>
             </Col>
-          </Row>
+          </Row> */}
 
           <Row>
-            <Col xl={3} md={6}>
-              <Card className="mini-stat bg-primary text-white">
-                <CardBody>
-                  <div className="mb-4">
-                    <div className="float-left mini-stat-img mr-4">
-                      <img src={servicesIcon1} alt="" />
-                    </div>
-                    <h5 className="font-size-16 text-uppercase mt-0 text-white-50">
-                      Surat Masuk
-                    </h5>
-                    <h4 className="font-weight-medium font-size-24">
-                      1,685{" "}
-                      <i className="mdi mdi-arrow-up text-success ml-2"></i>
-                    </h4>
-                    <div className="mini-stat-label bg-success">
-                      <p className="mb-0">+ 12%</p>
-                    </div>
-                  </div>
-                  <div className="pt-2">
-                    <div className="float-right">
-                      <Link to="#" className="text-white-50">
-                        <i className="mdi mdi-arrow-right h5"></i>
-                      </Link>
-                    </div>
-                    <p className="text-white-50 mb-0 mt-1">Since last month</p>
-                  </div>
-                </CardBody>
-              </Card>
+            <Col>
+              <br />
+              <div className="card text-white bg-info">
+                <div className="card-body" style={{ backgroundColor: '#2A9D8F', borderRadius: 5 }}>
+                  <blockquote className="card-blockquote mb-0">
+                    <h3>
+                      Selamat Datang, {username}!
+                    </h3>
+                  </blockquote>
+                </div>
+              </div>
             </Col>
-            <Col xl={3} md={6}>
-              <Card className="mini-stat bg-primary text-white">
+          </Row>
+          <Row>
+            <Col>
+              <Card>
                 <CardBody>
-                  <div className="mb-4">
-                    <div className="float-left mini-stat-img mr-4">
-                      <img src={servicesIcon2} alt="" />
-                    </div>
-                    <h5 className="font-size-16 text-uppercase mt-0 text-white-50">
-                      Surat Keluar
-                    </h5>
-                    <h4 className="font-weight-medium font-size-24">
-                      52,368{" "}
-                      <i className="mdi mdi-arrow-down text-danger ml-2"></i>
-                    </h4>
-                    <div className="mini-stat-label bg-danger">
-                      <p className="mb-0">- 28%</p>
-                    </div>
-                  </div>
-                  <div className="pt-2">
-                    <div className="float-right">
-                      <Link to="#" className="text-white-50">
-                        <i className="mdi mdi-arrow-right h5"></i>
-                      </Link>
-                    </div>
+                  <div className="table-responsive">
+                    <table className="table table-hover table-centered table-nowrap mb-0">
+                      <thead>
+                        <tr>
+                          <th scope="col">Tipe Surat</th>
+                          <th scope="col">Surat</th>
+                          <th scope="col">
+                            Status
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">Surat Masuk</th>
+                          <td>
+                            <div>
+                              <img
+                                src={user2}
+                                alt=""
+                                className="avatar-xs rounded-circle mr-2"
+                              />{" "}
+                              Philip Smead
+                            </div>
+                          </td>
+                          <td>
+                            <span className="badge badge-success">
+                              Delivered
+                            </span>
+                          </td>
+                        </tr>
 
-                    <p className="text-white-50 mb-0 mt-1">Since last month</p>
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col xl={3} md={6}>
-              <Card className="mini-stat bg-primary text-white">
-                <CardBody>
-                  <div className="mb-4">
-                    <div className="float-left mini-stat-img mr-4">
-                      <img src={servicesIcon3} alt="" />
-                    </div>
-                    <h5 className="font-size-16 text-uppercase mt-0 text-white-50">
-                      Asistensi
-                    </h5>
-                    <h4 className="font-weight-medium font-size-24">
-                      15.8{" "}
-                      <i className="mdi mdi-arrow-up text-success ml-2"></i>
-                    </h4>
-                    <div className="mini-stat-label bg-info">
-                      <p className="mb-0"> 00%</p>
-                    </div>
-                  </div>
-                  <div className="pt-2">
-                    <div className="float-right">
-                      <Link to="#" className="text-white-50">
-                        <i className="mdi mdi-arrow-right h5"></i>
-                      </Link>
-                    </div>
-
-                    <p className="text-white-50 mb-0 mt-1">Since last month</p>
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col xl={3} md={6}>
-              <Card className="mini-stat bg-primary text-white">
-                <CardBody>
-                  <div className="mb-4">
-                    <div className="float-left mini-stat-img mr-4">
-                      <img src={servicesIcon4} alt="" />
-                    </div>
-                    <h5 className="font-size-16 text-uppercase mt-0 text-white-50">
-                      Tugas
-                    </h5>
-                    <h4 className="font-weight-medium font-size-24">
-                      2436{" "}
-                      <i className="mdi mdi-arrow-up text-success ml-2"></i>
-                    </h4>
-                    <div className="mini-stat-label bg-warning">
-                      <p className="mb-0">+ 84%</p>
-                    </div>
-                  </div>
-                  <div className="pt-2">
-                    <div className="float-right">
-                      <Link to="#" className="text-white-50">
-                        <i className="mdi mdi-arrow-right h5"></i>
-                      </Link>
-                    </div>
-                    <p className="text-white-50 mb-0 mt-1">Since last month</p>
+                      </tbody>
+                    </table>
                   </div>
                 </CardBody>
               </Card>

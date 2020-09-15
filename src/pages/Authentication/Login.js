@@ -79,10 +79,10 @@ class Login extends Component {
                           <div className="form-group">
                             <AvField
                               name="email"
-                              label="Email"
+                              label="NIP"
                               className="form-control"
                               value=""
-                              placeholder="Enter email"
+                              placeholder="Masukkan NIP"
                               required
                             />
                           </div>
@@ -93,7 +93,7 @@ class Login extends Component {
                               type="password"
                               required
                               value=""
-                              placeholder="Enter Password"
+                              placeholder="Masukan password"
                             />
                           </div>
 

@@ -14,6 +14,7 @@ import logoPdf from "../../assets/images/logo-pdf.png";
 import config from '../../helpers/config'
 import moment from 'moment'
 import 'moment/locale/id';
+import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 
 class IncomingMailDetail extends Component {
   constructor(props) {
@@ -165,7 +166,7 @@ class IncomingMailDetail extends Component {
     )
   }
 
-  getTableContent = (data) => {
+  getTableContent = (detailList, isAdmin) => {
     const { pageNumber, numPages } = this.state;
     return (
       <Row style={{ fontWeight: 'bold', paddingLeft: 7, paddingRight: 7 }}>
@@ -178,10 +179,10 @@ class IncomingMailDetail extends Component {
                 </tr>
                 <tr>
                   <th>
-                    {data.file_path ?
-                      <a href={config.url_img + data.file_path} target="_blank" download>
+                    {detailList.file_path ?
+                      <a href={config.url_img + detailList.file_path} target="_blank" download>
                         <img src={logoPdf} alt="" height="60" />
-                        <p style={{ fontWeight: '800' }}>{data.file_name}</p>
+                        <p style={{ fontWeight: '800' }}>{detailList.file_name}</p>
                       </a>
                       : <p style={{ fontWeight: '800' }}>Belum ada dokumen yang ditandatangani</p>}
                   </th>
@@ -190,7 +191,7 @@ class IncomingMailDetail extends Component {
             </CardBody>
           </Card>
           <div>
-            {data.disposition_file_path != null && data.disposition_kasi == 1 ? <Card>
+            {detailList.disposition_file_path !== null && detailList.disposition_kasi || isAdmin ? <Card>
               <CardBody style={{ padding: 0 }}>
                 <table className="table table-hover table-centered table-bordered mb-0">
                   <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
@@ -198,10 +199,10 @@ class IncomingMailDetail extends Component {
                   </tr>
                   <tr>
                     <th>
-                      {data.file_path ?
-                        <a href={config.url_img + data.disposition_file_path} target="_blank" download>
+                      {detailList.file_path ?
+                        <a href={config.url_img + detailList.disposition_file_path} target="_blank" download>
                           <img src={logoPdf} alt="" height="60" />
-                          <p style={{ fontWeight: '800' }}>{data.disposition_file_name}</p>
+                          <p style={{ fontWeight: '800' }}>{detailList.disposition_file_name}</p>
                         </a>
                         : <p style={{ fontWeight: '800' }}>Belum ada dokumen disposisi</p>}
                     </th>
@@ -219,31 +220,31 @@ class IncomingMailDetail extends Component {
                   <table className="table table-bordered mb-0">
                     <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
                       <th style={{ width: 200 }}>Asal Surat:</th>
-                      <td id="combo-1610-inputCell">{data.asal_surat}</td>
+                      <td id="combo-1610-inputCell">{detailList.asal_surat}</td>
                     </tr>
                     <tr>
                       <th>Nomor Surat:</th>
-                      <td>{data.nomor_surat}</td>
+                      <td>{detailList.nomor_surat}</td>
                     </tr>
                     <tr>
                       <th>Tanggal Surat:</th>
-                      <td>{moment(data.tgl_surat).format("DD MMMM YYYY")}</td>
+                      <td>{moment(detailList.tgl_surat).format("DD MMMM YYYY")}</td>
                     </tr>
                     <tr>
                       <th>Klasifikasi:</th>
-                      <td>{data.klasifikasi_name}</td>
+                      <td>{detailList.klasifikasi_name}</td>
                     </tr>
                     <tr>
                       <th>Hal:</th>
-                      <td>{data.perihal}</td>
+                      <td>{detailList.perihal}</td>
                     </tr>
                     <tr>
                       <th>Sifat Surat:</th>
-                      <td>{data.sifat_surat}</td>
+                      <td>{detailList.sifat_surat}</td>
                     </tr>
                     <tr>
                       <th>Lampiran:</th>
-                      <td>{data.lampiran}</td>
+                      <td>{detailList.lampiran}</td>
                     </tr>
 
                   </table>
@@ -259,19 +260,19 @@ class IncomingMailDetail extends Component {
                   <table className="table table-bordered mb-0">
                     <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
                       <th style={{ width: 200 }}>Ditujukan Kepada:</th>
-                      <td id="combo-1610-inputCell">{data.to_user_name}</td>
+                      <td id="combo-1610-inputCell">{detailList.to_user_name}</td>
                     </tr>
                     <tr>
                       <th>Jabatan:</th>
-                      <td>{data.to_position_name}</td>
+                      <td>{detailList.to_position_name}</td>
                     </tr>
                     <tr>
                       <th>Diarsip Oleh:</th>
-                      <td>{data.created_by}</td>
+                      <td>{detailList.created_by}</td>
                     </tr>
                     <tr>
                       <th>Tanggal Diterima:</th>
-                      <td>{moment(data.tgl_diterima).format("DD MMMM YYYY")}</td>
+                      <td>{moment(detailList.tgl_diterima).format("DD MMMM YYYY")}</td>
                     </tr>
                   </table>
                 </CardBody>
@@ -279,7 +280,7 @@ class IncomingMailDetail extends Component {
             </Col>
           </Row>
 
-          {data.disposition_created_at !== null ?
+          {detailList.disposition_created_at !== null ?
             <Row>
               <Col md={12}>
                 <Card>
@@ -287,19 +288,19 @@ class IncomingMailDetail extends Component {
                     <table className="table table-bordered mb-0">
                       <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
                         <th style={{ width: 200 }}>Didisposisikan Oleh:</th>
-                        <td id="combo-1610-inputCell">{data.disposition_name}</td>
+                        <td id="combo-1610-inputCell">{detailList.disposition_name}</td>
                       </tr>
                       <tr>
                         <th>Jabatan:</th>
-                        <td>{data.disposition_position_name}</td>
+                        <td>{detailList.disposition_position_name}</td>
                       </tr>
                       <tr>
                         <th>Arahan:</th>
-                        <td>{data.disposition_arahan}</td>
+                        <td>{detailList.disposition_arahan}</td>
                       </tr>
                       <tr>
                         <th>Tanggal Didisposisikan:</th>
-                        <td>{moment(data.disposition_created_at).format("DD MMMM YYYY")}</td>
+                        <td>{moment(detailList.disposition_created_at).format("DD MMMM YYYY")}</td>
                       </tr>
                     </table>
                   </CardBody>
@@ -315,6 +316,9 @@ class IncomingMailDetail extends Component {
 
 
   render() {
+    const { perms } = this.props.data
+    const granted = ['is_admin']
+    const isAdmin = granted.some(x => perms.includes(x));
 
     const {
       detailList,
@@ -368,7 +372,7 @@ class IncomingMailDetail extends Component {
                   </div>
                   <Row>
                     <div className="table-responsive">
-                      {this.getTableContent(detailList)}
+                      {this.getTableContent(detailList, isAdmin)}
                     </div>
                   </Row>
                   <Row>
@@ -548,4 +552,9 @@ class IncomingMailDetail extends Component {
   }
 }
 
-export default withRouter(connect()(IncomingMailDetail));
+const mapStatetoProps = state => {
+  const { error, loading, data } = state.Login;
+  return { error, loading, data };
+};
+
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(IncomingMailDetail));
