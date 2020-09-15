@@ -78,7 +78,7 @@ class Login extends Component {
 
                           <div className="form-group">
                             <AvField
-                              name="email"
+                              name="nip"
                               label="NIP"
                               className="form-control"
                               value=""
