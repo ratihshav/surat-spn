@@ -23,6 +23,7 @@ import {
 } from '../../helpers/master/user';
 import { getMasterPositionServices } from '../../helpers/master/position'
 import toast from '../UI/toast';
+import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 
 // import images
 import config from '../../helpers/config'
@@ -71,8 +72,11 @@ class Profile extends Component {
   }
 
   submitUpdatedData = (e) => {
+    const { userid } = this.props.data
+    const { selectedPosition, dataUser } = this.state
     const params = {
-      position_id: e.target.type.value,
+      idProfile: userid,
+      position_id: selectedPosition === null ? dataUser.position_id : e.target.type.value,
       username: e.target.username.value,
       full_name: e.target.fullName.value,
       nip: e.target.idEmployee.value,
@@ -86,7 +90,7 @@ class Profile extends Component {
     updateMasterUserService(params)
       .then((data) => {
         this.alertSuccess()
-        this.props.history.push('/user');
+        window.location.reload()
       })
       .catch((e) => {
         return (
@@ -548,4 +552,9 @@ class Profile extends Component {
   }
 }
 
-export default withRouter(connect()(Profile));
+const mapStatetoProps = state => {
+  const { error, loading, data } = state.Login;
+  return { error, loading, data };
+};
+
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(Profile));

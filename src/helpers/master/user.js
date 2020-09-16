@@ -40,7 +40,7 @@ export const saveMasterUserService = (request) => {
 
 //update
 export const updateMasterUserService = (request) => {
-  const id = window.localStorage.getItem('idUser');
+  const id = request.isFromEditUser ? window.localStorage.getItem('idUser') : request.idProfile;
   const formData = new FormData();
   formData.append('position_id', request.position_id);
   formData.append('username', request.username);

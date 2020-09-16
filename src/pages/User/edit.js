@@ -74,6 +74,7 @@ class UserEdit extends Component {
   submitUpdatedData = (e) => {
     const { selectedPosition, dataUser } = this.state
     const params = {
+      isFromEditUser: true,
       position_id: selectedPosition === null ? dataUser.position_id : e.target.type.value,
       username: e.target.username.value,
       full_name: e.target.fullName.value,

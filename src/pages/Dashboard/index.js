@@ -5,10 +5,6 @@ import { connect } from "react-redux";
 
 // import images
 import user2 from "../../assets/images/users/user-2.jpg";
-import user3 from "../../assets/images/users/user-3.jpg";
-import user4 from "../../assets/images/users/user-4.jpg";
-import user5 from "../../assets/images/users/user-5.jpg";
-import user6 from "../../assets/images/users/user-6.jpg";
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import { getDashboardDataService } from '../../helpers/master/dashboard'
 
@@ -31,7 +27,7 @@ class Dashboard extends Component {
     getDashboardDataService()
       .then((data) => {
         this.setState({
-          dataDashboard: data
+          dataDashboard: data.data
         })
       })
       .catch((e) => {
@@ -116,8 +112,56 @@ class Dashboard extends Component {
     }
   }
 
+  getTableContent = (data) => {
+    return (
+
+      <table className="table table-hover table-centered table-nowrap mb-0">
+        <thead>
+          <tr>
+            <th scope="col">Tipe Surat</th>
+            <th scope="col">Surat</th>
+            <th scope="col">
+              Status
+                          </th>
+          </tr>
+        </thead>
+        <tbody>
+          {data ? data.map(function (item, index) {
+            return (
+              <tr key={index}>
+                <th scope="row">{item.tipe_surat}</th>
+                <td>
+                  <div>
+                    {item.hal_surat}
+                    <br />
+                    {item.tujuan_surat}
+                    <br />
+                    {item.nomor_surat}
+                    <br />
+                    {item.tgl_surat}
+                  </div>
+                </td>
+                <td>
+                  <div className="badge badge-success">
+                    {/* <h6>{item.status_surat}</h6> */}
+                    <div style={{ fontSize: 14, fontWeight: 'bold' }}>{item.status_surat}</div>
+                  </div>
+                </td>
+              </tr>
+
+            );
+          }) : null}
+        </tbody>
+      </table>
+
+    )
+  }
+
   render() {
-    const { username } = this.props.data
+    const { full_name } = this.props.data
+    const { dataDashboard } = this.state
+    console.log('dataasas', dataDashboard)
+
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -138,7 +182,7 @@ class Dashboard extends Component {
                 <div className="card-body" style={{ backgroundColor: '#2A9D8F', borderRadius: 5 }}>
                   <blockquote className="card-blockquote mb-0">
                     <h3>
-                      Selamat Datang, {username}!
+                      Selamat Datang, {full_name}!
                     </h3>
                   </blockquote>
                 </div>
@@ -149,39 +193,12 @@ class Dashboard extends Component {
             <Col>
               <Card>
                 <CardBody>
+                  <h3>
+                    TUGAS
+                    </h3>
+                  <br />
                   <div className="table-responsive">
-                    <table className="table table-hover table-centered table-nowrap mb-0">
-                      <thead>
-                        <tr>
-                          <th scope="col">Tipe Surat</th>
-                          <th scope="col">Surat</th>
-                          <th scope="col">
-                            Status
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row">Surat Masuk</th>
-                          <td>
-                            <div>
-                              <img
-                                src={user2}
-                                alt=""
-                                className="avatar-xs rounded-circle mr-2"
-                              />{" "}
-                              Philip Smead
-                            </div>
-                          </td>
-                          <td>
-                            <span className="badge badge-success">
-                              Delivered
-                            </span>
-                          </td>
-                        </tr>
-
-                      </tbody>
-                    </table>
+                    {this.getTableContent(dataDashboard)}
                   </div>
                 </CardBody>
               </Card>

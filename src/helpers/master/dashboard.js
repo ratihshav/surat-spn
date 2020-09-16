@@ -6,7 +6,7 @@ export const getDashboardDataService = (request) => {
   return instance.get(GET_DASHBOARD_DATA_API)
     .then((data) => {
       return {
-        data: data.data.data.data,
+        data: data.data.data
       };
     })
     .catch((e) => { throw e.response.data.messages[0] });
