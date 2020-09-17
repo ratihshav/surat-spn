@@ -7,7 +7,6 @@ import logosmImg from "../../assets/images/logo-sm.png";
 import logolightImg from "../../assets/images/logo-light.png";
 
 // Import other Dropdown
-import LanguageDropdown from "../../components/LanguageDropdown";
 import NotificationDropdown from "../../components/NotificationDropdown";
 import ProfileMenu from "../../components/ProfileMenu";
 
@@ -90,7 +89,7 @@ class TopBar extends Component {
                     <img src={logosmImg} alt="" height="22" />
                   </span>
                   <span className="logo-lg">
-                  Sistem Surat Dinas Pemerintahan
+                    Sistem Surat Dinas Pemerintahan
                   </span>
                 </Link>
               </div>
@@ -116,7 +115,6 @@ class TopBar extends Component {
                 </div>
               </form>
 
-              <LanguageDropdown />
               <div className="dropdown d-none d-lg-inline-block">
                 <button
                   type="button"

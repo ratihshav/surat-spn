@@ -4,7 +4,6 @@ import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 // import images
-import user2 from "../../assets/images/users/user-2.jpg";
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import { getDashboardDataService } from '../../helpers/master/dashboard'
 
