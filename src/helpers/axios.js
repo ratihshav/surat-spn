@@ -2,6 +2,7 @@ import axios from 'axios'
 import { getToken, removeToken } from "./auth";
 import config from './config'
 import { logoutUserService } from '../helpers/master/user'
+import toast from '../pages/UI/toast';
 
 const CancelToken = axios.CancelToken;
 export let cancel;
@@ -13,6 +14,11 @@ const instance = axios.create({
     cancel = c;
   })
 });
+
+function alertError(e) {
+  toast.error(e)
+}
+
 
 instance.interceptors.request.use((config) => {
   const token = getToken()
@@ -28,17 +34,22 @@ instance.interceptors.request.use((config) => {
 //   (error) => { return Promise.reject(error); }
 // );
 
-instance.interceptors.response.use(function (response) {
+instance.interceptors.response.use((response) => {
   return response;
 }, function (error) {
   if (401 === error.response.status) {
     logoutUserService()
       .then((data) => {
+        this.alertError(data)
         removeToken()
         window.localStorage.clear()
         window.location = '/'
       })
-      .catch((e) => { throw e.response.messages[0] });
+      .catch((e) => {
+        removeToken()
+        window.localStorage.clear()
+        window.location = '/'
+      });
   } else {
     return Promise.reject(error);
   }

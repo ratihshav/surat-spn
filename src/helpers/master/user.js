@@ -175,7 +175,7 @@ export const logoutUserService = (request) => {
   return instance.post(LOGOUT_USER_API)
     .then((data) => {
       return {
-        data: data.data
+        data: data
       };
     })
     .catch((e) => { throw e.response.data.messages[0] });

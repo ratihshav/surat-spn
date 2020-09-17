@@ -143,7 +143,6 @@ class Dashboard extends Component {
                 </td>
                 <td>
                   <div className="badge badge-success">
-                    {/* <h6>{item.status_surat}</h6> */}
                     <div style={{ fontSize: 14, fontWeight: 'bold' }}>{item.status_surat}</div>
                   </div>
                 </td>
