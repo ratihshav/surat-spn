@@ -30,9 +30,6 @@ import {
   getDetailPositionService
 } from '../../../helpers/master/position';
 
-//AUTH related methods
-import { getFirebaseBackend } from '../../../helpers/authUtils';
-
 
 function* getMasterPositionSaga({ payload }) {
   try {

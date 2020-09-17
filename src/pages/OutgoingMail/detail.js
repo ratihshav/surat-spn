@@ -31,7 +31,6 @@ class OutgoingMailDetail extends Component {
       selectedFile: null,
       stateIdMail: '',
       isShowModalDispose: false,
-      isShowModalAgenda: false,
       selectedStatusMail: null,
       isShowModalConfirm: false,
       isShowModalHistory: false,
@@ -77,13 +76,6 @@ class OutgoingMailDetail extends Component {
     this.removeBodyCss();
   }
 
-  showModalAgenda = () => {
-    this.setState(prevState => ({
-      isShowModalAgenda: !prevState.isShowModalAgenda
-    }));
-    this.removeBodyCss();
-  }
-
   showModalGenerate = () => {
     this.setState(prevState => ({
       isShowModalGenerate: !prevState.isShowModalGenerate
@@ -117,24 +109,6 @@ class OutgoingMailDetail extends Component {
     }
 
     createDisposeOutgoingMailService(params)
-      .then((data) => {
-        this.alertSuccess()
-        this.props.history.push('/outgoing-mail');
-      })
-      .catch((e) => {
-        return (
-          this.alertError(e)
-        )
-      });
-    e.preventDefault();
-  }
-
-  createAgendaMail = (e) => {
-    const params = {
-      id: this.state.stateIdMail,
-      file: this.state.selectedFile,
-    }
-    createAgendaOutgoingMailService(params)
       .then((data) => {
         this.alertSuccess()
         this.props.history.push('/outgoing-mail');
@@ -401,7 +375,6 @@ class OutgoingMailDetail extends Component {
       selectedSignature,
       selectedFile,
       isShowModalDispose,
-      isShowModalAgenda,
       isShowModalConfirm,
       isShowModalHistory,
       isShowModalGenerate,
@@ -766,7 +739,7 @@ class OutgoingMailDetail extends Component {
                           className="mt-1"
                           onClick={this.showModalGenerate}
                           data-target=".bs-example-modal-center">
-                          <i className="typcn typcn-input-checked" />Buat Nomor Surat
+                          <i className="typcn typcn-input-checked" />Agenda
                       </Button>
                         : null}
 
@@ -774,7 +747,7 @@ class OutgoingMailDetail extends Component {
                         isOpen={isShowModalGenerate}
                         toggle={this.showModalGenerate} >
                         <div className="modal-header  text-white bg-info">
-                          <h5 className="modal-title mt-0">Buat Nomor Surat</h5>
+                          <h5 className="modal-title mt-0">Agenda Surat Keluar</h5>
                           <button
                             type="button"
                             onClick={() =>
@@ -810,81 +783,6 @@ class OutgoingMailDetail extends Component {
                               </Col>
                             </Row>
 
-
-                            <div className="text-right mt-8">
-                              <Button
-                                color="success"
-                                className="mt-1"
-                                data-toggle="modal"
-                                data-target=".bs-example-modal-center">
-                                <i className="typcn typcn-input-checked" />Submit
-                         </Button>
-                            </div>
-                          </form>
-                        </div>
-                      </Modal>
-
-                      {detailList.can_agenda && detailList.agenda_file_path !== null ?
-                        <Button
-                          color="warning"
-                          className="mt-1"
-                          onClick={this.showModalAgenda}
-                          data-target=".bs-example-modal-center">
-                          <i className="typcn typcn-input-checked" />Agenda
-                      </Button>
-                        : null}
-
-
-                      <Modal
-                        isOpen={isShowModalAgenda}
-                        toggle={this.showModalAgenda} >
-                        <div className="modal-header  text-white bg-info">
-                          <h5 className="modal-title mt-0">Agenda Surat Keluar</h5>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              this.setState({ isShowModalAgenda: false })
-                            }
-                            className="close"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                          >
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-
-                        <div className="modal-body">
-                          <form action="#" onSubmit={this.createAgendaMail}>
-
-                            <Row className="form-group">
-                              <label
-                                htmlFor="example-search-input"
-                                className="col-sm-2 col-form-label">
-                                Dokumen
-                            </label>
-                              <Col sm={10}>
-                                <form action="#">
-                                  <div className="custom-file">
-                                    <input
-                                      type="file"
-                                      className="form-control"
-                                      id="validatedCustomFile"
-                                      required
-                                      onChange={this.onFileChange}
-                                      accept=".doc, .docx, .pdf"
-                                      name="file"
-                                      ref={node => (this.inputNode = node)}
-                                    />
-                                    <label
-                                      className="custom-file-label"
-                                      htmlFor="validatedCustomFile"
-                                      style={{ zIndex: 0 }}>
-                                      {selectedFile !== null && selectedFile !== undefined ? selectedFile.name : 'Belum ada file yang dipilih'}
-                                    </label>
-                                  </div>
-                                </form>
-                              </Col>
-                            </Row>
 
                             <div className="text-right mt-8">
                               <Button

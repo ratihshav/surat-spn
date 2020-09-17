@@ -30,9 +30,6 @@ import {
   getDetailGroupService
 } from '../../../helpers/master/group';
 
-//AUTH related methods
-import { getFirebaseBackend } from '../../../helpers/authUtils';
-
 
 function* getMasterGroupSaga({ payload }) {
   try {

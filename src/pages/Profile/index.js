@@ -124,9 +124,6 @@ class Profile extends Component {
     });
   }
 
-  goToChangeSignature = () => {
-    this.props.history.push('/profile-signature')
-  }
 
   toggleCustomJustified = (tab) => {
     if (this.state.activeTabJustify !== tab) {
@@ -214,12 +211,6 @@ class Profile extends Component {
                           className="btn btn-primary btn-block waves-effect waves-light"
                           onClick={this.goToChangePassword}>
                           Ganti Password
-                        </Button>
-                        <Button
-                          color="primary"
-                          className="btn btn-primary btn-block waves-effect waves-light"
-                          onClick={this.goToChangeSignature}>
-                          Ganti Tanda Tangan
                         </Button>
                       </div>
                     </Col>

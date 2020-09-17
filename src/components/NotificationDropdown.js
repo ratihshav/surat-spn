@@ -117,12 +117,14 @@ class NotificationDropdown extends Component {
                   {dataView.map((item, index) => {
                     const detail = JSON.parse(item.data)
                     const link = detail.type === 'SURATKELUAR' ? "/outgoing-mail-detail" : "incoming-mail-detail"
-                    const params = detail.id_reference
-                    const uuId = item.id
+                    const idReference = detail.id_reference
+
+                    const params = item.id + '/' + detail.id_subreference + '/' + detail.type
+
                     return (
                       <Link
-                        onClick={() => this.readNotif(uuId)}
-                        to={{ pathname: link, state: { idRef: params } }}
+                        onClick={() => this.readNotif(params)}
+                        to={{ pathname: link, state: { idRef: idReference } }}
                         className="text-reset notification-item"
                         key={index}>
                         <div className="media" >
