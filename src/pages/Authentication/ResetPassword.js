@@ -168,7 +168,7 @@ class ResetPassword extends Component {
                 <div className="mt-5 text-center">
 
                   <p className="mb-0">
-                    © {new Date().getFullYear()} Ikhwan Komputer. All Rights Reserved
+                    © {new Date().getFullYear()} Dinas Pendidikan Kab. Kerinci
                   </p>
                 </div>
               </div>

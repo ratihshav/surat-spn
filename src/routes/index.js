@@ -1,53 +1,54 @@
-import React from "react";
+import React, { lazy } from "react";
 import { Redirect } from "react-router-dom";
 
 // Pages Component
 
 // Authentication related pages
-import Login from "../pages/Authentication/Login";
-import Logout from "../pages/Authentication/Logout";
-import ResetPwd from "../pages/Authentication/ResetPassword";
-import ForgetPwd from "../pages/Authentication/ForgetPassword";
-import ValidateMail from "../pages/Authentication/ValidateMail";
+const Login = lazy(() => import("../pages/Authentication/Login"));
+const Logout = lazy(() => import("../pages/Authentication/Logout"));
+const ResetPwd = lazy(() => import("../pages/Authentication/ResetPassword"));
+const ForgetPwd = lazy(() => import("../pages/Authentication/ForgetPassword"));
+const ValidateMail = lazy(() => import("../pages/Authentication/ValidateMail"));
 
-import Dashboard from "../pages/Dashboard";
+const Dashboard = lazy(() => import("../pages/Dashboard"));
 
-import Profile from "../pages/Profile"
-import ProfileChangePassword from "../pages/Profile/change-password"
-import ProfileChangePhoto from "../pages/Profile/change-photo"
+const Profile = lazy(() => import("../pages/Profile"));
+const ProfileChangePassword = lazy(() => import("../pages/Profile/change-password"));
+const ProfileChangePhoto = lazy(() => import("../pages/Profile/change-photo"));
 
-import User from "../pages/User"
-import UserAdd from "../pages/User/add"
-import UserEdit from "../pages/User/edit"
-import UserChangePassword from "../pages/User/change-password"
-import UserChangePhoto from "../pages/User/change-photo"
+const User = lazy(() => import("../pages/User"));
+const UserAdd = lazy(() => import("../pages/User/add"));
+const UserEdit = lazy(() => import("../pages/User/edit"));
+const UserChangePassword = lazy(() => import("../pages/User/change-password"));
+const UserChangePhoto = lazy(() => import("../pages/User/change-photo"));
 
-import Group from "../pages/Group"
-import GroupAdd from "../pages/Group/add"
-import GroupEdit from "../pages/Group/edit"
+const Group = lazy(() => import("../pages/Group"));
+const GroupAdd = lazy(() => import("../pages/Group/add"));
+const GroupEdit = lazy(() => import("../pages/Group/edit"));
 
-import Position from "../pages/Position"
-import PositionAdd from "../pages/Position/add"
-import PositionEdit from "../pages/Position/edit"
-import PositionPermission from "../pages/Position/permission"
+const Position = lazy(() => import("../pages/Position"));
+const PositionAdd = lazy(() => import("../pages/Position/add"));
+const PositionEdit = lazy(() => import("../pages/Position/edit"));
+const PositionPermission = lazy(() => import("../pages/Position/permission"));
 
-import OutgoingMail from "../pages/OutgoingMail"
-import OutgoingMailCreate from "../pages/OutgoingMail/create"
-import OutgoingMailDetail from "../pages/OutgoingMail/detail"
-import OutgoingMailEdit from "../pages/OutgoingMail/edit"
+const OutgoingMail = lazy(() => import("../pages/OutgoingMail"));
+const OutgoingMailCreate = lazy(() => import("../pages/OutgoingMail/create"));
+const OutgoingMailDetail = lazy(() => import("../pages/OutgoingMail/detail"));
+const OutgoingMailEdit = lazy(() => import("../pages/OutgoingMail/edit"));
 
-import IncomingMail from "../pages/IncomingMail"
-import IncomingMaillCreate from "../pages/IncomingMail/create"
-import IncomingMailDetail from "../pages/IncomingMail/detail"
-import IncomingMailEdit from "../pages/IncomingMail/edit"
+const IncomingMail = lazy(() => import("../pages/IncomingMail"));
+const IncomingMaillCreate = lazy(() => import("../pages/IncomingMail/create"));
+const IncomingMailDetail = lazy(() => import("../pages/IncomingMail/detail"));
+const IncomingMailEdit = lazy(() => import("../pages/IncomingMail/edit"));
 
-import TemplateMail from "../pages/TemplateMail"
-import TemplateMailCreate from "../pages/TemplateMail/create"
-import TemplateMailEdit from "../pages/TemplateMail/edit"
+const TemplateMail = lazy(() => import("../pages/TemplateMail"));
+const TemplateMailCreate = lazy(() => import("../pages/TemplateMail/create"));
+const TemplateMailEdit = lazy(() => import("../pages/TemplateMail/edit"));
 
-import Classification from "../pages/Classification"
-import ClassificationAdd from '../pages/Classification/add'
-import ClassificationEdit from '../pages/Classification/edit'
+const Classification = lazy(() => import("../pages/Classification"));
+const ClassificationAdd = lazy(() => import("../pages/Classification/add"));
+const ClassificationEdit = lazy(() => import("../pages/Classification/edit"));
+
 
 const authProtectedRoutes = [
 

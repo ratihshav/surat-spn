@@ -22,15 +22,3 @@ ReactDOM.render(
         </Provider>
     </BrowserRouter>, document.getElementById('root')
 );
-
-// const app = (
-//     <Provider store={store}>
-//         <BrowserRouter>
-//             <App />
-//             <ToastContainer />
-//         </BrowserRouter>
-//     </Provider>
-// );
-
-// ReactDOM.render(app, document.getElementById('root'));
-// serviceWorker.unregister();

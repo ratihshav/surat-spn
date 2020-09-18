@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="container-fluid">
           <div className="row">
             <div className="col-12">
-              © {new Date().getFullYear()} Dinas Pendidikan Kab. Kerinci - Ikhwan Komputer
+              © {new Date().getFullYear()} Dinas Pendidikan Kab. Kerinci
             </div>
           </div>
         </div>

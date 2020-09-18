@@ -266,5 +266,5 @@ export async function _handleError(error) {
 
 export default {
   fetch: instance,
-  cancel,
+  // cancel,
 }

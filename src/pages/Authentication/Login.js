@@ -139,7 +139,7 @@ class Login extends Component {
                         </Link>{" "}
                       </p> */}
                   <p className="mb-0">
-                    © {new Date().getFullYear()} Ikhwan Komputer. All Rights Reserved
+                    © {new Date().getFullYear()} Dinas Pendidikan Kab. Kerinci
                   </p>
                 </div>
               </Col>
