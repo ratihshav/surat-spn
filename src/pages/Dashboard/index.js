@@ -18,7 +18,6 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.notifOneSignal()
     this.getDataDashboard()
   }
 
@@ -32,83 +31,6 @@ class Dashboard extends Component {
       .catch((e) => {
         // this.alertError(e)
       });
-  }
-
-  notifOneSignal = () => {
-    const { email } = this.props.data
-    console.log('email', email)
-    var useragentid = null;
-    var OneSignal = window.OneSignal || [];
-    OneSignal.push(["init", {
-      appId: "b867ffe2-3c0d-4b41-9522-9e120321f5cd",
-      autoRegister: false,
-      notifyButton: {
-        enable: false
-      },
-      persistNotification: false
-    }]);
-    //Firstly this will check user id 
-    OneSignal.push(function () {
-      OneSignal.getUserId().then(function (userId) {
-        if (userId == null) {
-          console.log("OneSignal User ID:", userId);
-        }
-        else {
-          useragentid = userId;
-          console.log('useragentid', useragentid)
-
-          OneSignal.push(["getNotificationPermission", function (permission) {
-          }]);
-          OneSignal.isPushNotificationsEnabled(function (isEnabled) {
-            if (isEnabled) {
-              console.log("Push notifications are enabled!");
-            }
-            else {
-              console.log("Push notifications are not enabled yet.");
-            }
-          });
-        }
-      });
-    });
-    //Secondly this will check when subscription changed
-    OneSignal.push(function () {
-      OneSignal.on('subscriptionChange', function (isSubscribed) {
-        if (isSubscribed == true) {
-          OneSignal.getUserId().then(function (userId) {
-            useragentid = userId;
-          }).then(function () {
-            // this is custom function
-            // here you can send post request to php file as well.
-            // OneSignalUserSubscription(useragentid);
-            console.log('useragentid', useragentid)
-          });
-        }
-        else if (isSubscribed == false) {
-          OneSignal.getUserId().then(function (userId) {
-            useragentid = userId;
-          });
-        }
-        else {
-          console.log('Unable to process the request');
-        }
-      });
-    });
-    OneSignal.push(function () {
-      OneSignal.sendTag("email", email);
-    });
-    function subscribeOneSignal() {
-      if (useragentid != null) {
-        OneSignal.setSubscription(true);
-      }
-      else {
-        OneSignal.registerForPushNotifications({
-          modalPrompt: true
-        });
-      }
-    }
-    function unSubscribeOneSignal() {
-      OneSignal.setSubscription(false);
-    }
   }
 
   getTableContent = (data) => {

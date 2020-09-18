@@ -56,7 +56,6 @@ class OutgoingMail extends Component {
 
   allowDeleting = (e) => {
     return e.row.data.can_delete
-    //return !this.isChief(e.row.data.Position);
   }
 
   allowEditing = (e) => {
