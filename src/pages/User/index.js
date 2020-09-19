@@ -17,10 +17,35 @@ import DataStore from 'devextreme/data/data_source';
 import { isNotEmpty, dxGridFilter } from '../../helpers/gridFilter'
 import { getMasterUserServices, deleteMasterUserService } from '../../helpers/master/user'
 import 'react-toastify/dist/ReactToastify.css';
+import DataTable from 'react-data-table-component';
 
 //Reducer
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import toast from '../UI/toast';
+
+const columns = [
+  {
+    name: 'Nama Lengkap',
+    selector: 'full_name',
+    sortable: true,
+  }, {
+    name: 'Username',
+    selector: 'username',
+    sortable: true,
+  }, {
+    name: 'Email',
+    selector: 'email',
+    sortable: true,
+  }, {
+    name: 'Jabatan',
+    selector: 'position_name',
+    sortable: true,
+  }, {
+    name: 'Username',
+    selector: 'username',
+    sortable: true,
+  }
+]
 
 class User extends Component {
   constructor(props) {
@@ -31,29 +56,22 @@ class User extends Component {
     };
   }
 
-  cLoad = () => {
-    return new DataStore({
-      load: (loadOptions) => {
-        let params = '?';
-        [
-          'skip',
-          'sort',
-          'take',
-          'order',
-          'filter'
-        ].forEach(function (i) {
+  componentDidMount() {
+    getMasterUserServices()
+      .then((data) => {
+        this.setState({
+          dataUser: data.data.data.data
+        })
+      })
+      .catch((e) => {
+        return (
+          this.alertError(e)
+        )
+      });
+  }
 
-          if (i in loadOptions && isNotEmpty(loadOptions[i]) && i == 'filter') {
-            let filterCol = dxGridFilter(loadOptions.filter);
-            params += `${i}=${JSON.stringify(filterCol)}&`;
-          }
-          else if (i in loadOptions && isNotEmpty(loadOptions[i])) { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
-        });
-        params = params.slice(0, -1);
-        return getMasterUserServices(params)
-      },
-      remove: (values) => { this.onDeleteUser(values) }
-    })
+  alertError = (e) => {
+    toast.error(e)
   }
 
   navigateToAdd = () => {
@@ -70,15 +88,6 @@ class User extends Component {
       params: data,
     });
   }
-
-  /* navigate to detail user */
-  // navigateToDetail = (val) => {
-  //   const data = val.row.data
-  //   this.props.history.push({
-  //     pathname: '/user-detail',
-  //     params: data,
-  //   });
-  // }
 
   onToolbarPreparing = (e) => {
     e.toolbarOptions.items.unshift({
@@ -113,8 +122,11 @@ class User extends Component {
 
   render() {
     const { perms } = this.props.data
+    const { dataUser } = this.state
     const granted = ['user_save', 'is_admin']
     const isAbleCreate = granted.some(x => perms.includes(x));
+
+    console.log('dataUser', dataUser)
 
     return (
       <React.Fragment>
@@ -140,48 +152,29 @@ class User extends Component {
             <div className="col-12">
               <div className="card">
                 <div className="card-body">
-                  <DataGrid
-                    dataSource={this.cLoad()}
-                    remoteOperations={true}
-                    rowAlternationEnabled={true}
-                    showColumnLines={false}
-                    columnAutoWidth={true}
-                    onToolbarPreparing={isAbleCreate ? this.onToolbarPreparing : null}
-                  >
-                    <Editing
-                      mode="row"
-                      allowDeleting={true} />
-                    <FilterRow visible={true} />
-
-                    <Paging defaultPageSize={10} />
-                    <Pager
-                      showPageSizeSelector={true}
-                      allowedPageSizes={[5, 10, 20]}
-                      showInfo={true} />
-
-                    <Column dataField="id" visible={false} />
-                    <Column dataField="password" visible={false} />
-                    <Column dataField="confirm_password" visible={false} />
-                    <Column caption="Nama Lengkap" dataField="full_name" />
-                    <Column dataField="username" />
-                    <Column dataField="email" />
-                    <Column caption="Jabatan" dataField="position_name" />
-                    <Column dataField="address" visible={false} />
-                    <Column dataField="phone" visible={false} />
-                    <Column dataField="last_login" visible={false} />
-                    <Column dataField="created_at" visible={false} />
-                    <Column dataField="created_by" visible={false} />
-                    <Column dataField="modified_at" visible={false} />
-                    <Column dataField="modified_by" visible={false} />
-                    <Column type="buttons"
-                      buttons={[{
-                        hint: 'Edit',
-                        text: 'Edit',
-                        onClick: this.navigateToEdit
-                      }, 'delete']}
-                    />
-
-                  </DataGrid>
+                  <DataTable
+                    columns={columns}
+                    data={dataUser}
+                    expandableRows={true}
+                    expandOnRowClicked={true}
+                    pagination={true}
+                    highlightOnHover={true}
+                    striped={true}
+                    dense={true}
+                    noHeader={true}
+                    subHeader={true}
+                    subHeaderComponent={
+                      (
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          {/* <TextField id="outlined-basic" label="Search" variant="outlined" size="small" style={{ margin: '5px' }} /> */}
+                          {/* <Icon1 style={{ margin: '5px' }} color="action" />
+                          <Icon2 style={{ margin: '5px' }} color="action" />
+                          <Icon3 style={{ margin: '5px' }} color="action" /> */}
+                        </div>
+                      )
+                    }
+                    subHeaderAlign={"right"}
+                  />
                 </div>
               </div>
             </div>

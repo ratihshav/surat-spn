@@ -2,12 +2,13 @@ import config from '../config'
 import instance, { cancel } from "../axios";
 
 //get list user directly
-export const getMasterUserServices = (request) => {
+export const getMasterUserServices = () => {
   const GET_MASTER_USER_API = config.api_endpoint + `/user/list`;
+  const request = `?skip=0&take=10`
   return instance.get(GET_MASTER_USER_API + `${request}`)
     .then((data) => {
       return {
-        data: data.data.data.data,
+        data: data.data,
         totalCount: data.data.data.totalCount
       };
     })
