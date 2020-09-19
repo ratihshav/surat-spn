@@ -1,27 +1,50 @@
 import React, { Component } from "react";
 import {
   Row,
-  Col
+  Col,
+  Button
 } from "reactstrap";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import "chartist/dist/scss/chartist.scss";
-import DataGrid, {
-  Column,
-  Editing,
-  Paging,
-  FilterRow,
-  Pager,
-} from 'devextreme-react/data-grid';
-import DataStore from 'devextreme/data/data_source';
-import { isNotEmpty, dxGridFilter } from '../../helpers/gridFilter'
 import { getMasterUserServices, deleteMasterUserService } from '../../helpers/master/user'
 import 'react-toastify/dist/ReactToastify.css';
 import DataTable from 'react-data-table-component';
+import styled from 'styled-components';
 
 //Reducer
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import toast from '../UI/toast';
+
+const TextField = styled.input`
+  height: 32px;
+  width: 200px;
+  border-radius: 3px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border: 1px solid #e5e5e5;
+  padding: 0 32px 0 16px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const ClearButton = styled(Button)`
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  height: 32px;
+  width: 32px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4285F4
+`;
 
 const columns = [
   {
@@ -47,12 +70,28 @@ const columns = [
   }
 ]
 
+const FilterComponent = ({ filterText, onFilter, onClear }) => (
+  <>
+    <TextField id="search" type="text" placeholder="Filter By Name" aria-label="Search Input" value={filterText} onChange={onFilter} />
+    <ClearButton type="button" onClick={onClear}>X</ClearButton>
+  </>
+);
+
+const AddButtonComponent = ({ onClick }) => {
+  return (
+    <Button color="success" key="add" onClick={onClick}>Tambah Data</Button>
+  )
+}
+
+
 class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isModalVisible: false,
       dataUser: [],
+      filterText: "",
+      resetPaginationToggle: false
     };
   }
 
@@ -120,13 +159,50 @@ class User extends Component {
     toast.error(e)
   }
 
-  render() {
+  handleClear = () => {
+    const { resetPaginationToggle, filterText } = this.state;
+
+    if (filterText) {
+      this.setState({
+        resetPaginationToggle: !resetPaginationToggle,
+        filterText: ""
+      });
+    }
+  };
+
+  getSubHeaderComponent = () => {
+    const { dataUser, filterText } = this.state
     const { perms } = this.props.data
-    const { dataUser } = this.state
     const granted = ['user_save', 'is_admin']
     const isAbleCreate = granted.some(x => perms.includes(x));
+    return (
+      <Row>
+        <FilterComponent onFilter={(e) => {
+          let newFilterText = e.target.value;
+          this.filteredItems = dataUser.filter(
+            (item) =>
+              item.full_name &&
+              item.full_name.toLowerCase().includes(newFilterText.toLowerCase())
+          );
+          this.setState({ filterText: newFilterText });
+        }}
+          onClear={this.handleClear}
+          filterText={filterText}
+        /> &nbsp; &nbsp;
 
-    console.log('dataUser', dataUser)
+        { isAbleCreate ?
+          <AddButtonComponent
+            onClick={this.navigateToAdd}
+          />
+          : null}
+      </Row>
+    );
+  };
+
+  render() {
+    const { dataUser, resetPaginationToggle, filterText } = this.state
+
+    const filteredItems = dataUser.filter(item => item.full_name && item.full_name.toLowerCase().includes(filterText.toLowerCase()));
 
     return (
       <React.Fragment>
@@ -154,27 +230,18 @@ class User extends Component {
                 <div className="card-body">
                   <DataTable
                     columns={columns}
-                    data={dataUser}
-                    expandableRows={true}
-                    expandOnRowClicked={true}
-                    pagination={true}
-                    highlightOnHover={true}
-                    striped={true}
-                    dense={true}
-                    noHeader={true}
-                    subHeader={true}
-                    subHeaderComponent={
-                      (
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                          {/* <TextField id="outlined-basic" label="Search" variant="outlined" size="small" style={{ margin: '5px' }} /> */}
-                          {/* <Icon1 style={{ margin: '5px' }} color="action" />
-                          <Icon2 style={{ margin: '5px' }} color="action" />
-                          <Icon3 style={{ margin: '5px' }} color="action" /> */}
-                        </div>
-                      )
-                    }
-                    subHeaderAlign={"right"}
+                    data={filteredItems}
+                    // expandableRows
+                    // expandOnRowClicked
+                    pagination
+                    highlightOnHover
+                    striped
+                    dense
+                    subHeader
+                    subHeaderComponent={this.getSubHeaderComponent()}
+                    paginationResetDefaultPage={resetPaginationToggle}
                   />
+
                 </div>
               </div>
             </div>
