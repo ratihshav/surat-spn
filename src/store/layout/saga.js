@@ -52,15 +52,8 @@ function manageBodyClass(cssClass, action = "toggle") {
  */
 function* changeLayout({ payload: layout }) {
   try {
-    if (layout === 'horizontal') {
-      yield put(changeTopbarThemeAction('dark'));
-      document.body.removeAttribute('data-sidebar');
-      document.body.removeAttribute('data-sidebar-size');
-    } else {
-      yield put(changeTopbarThemeAction('light'));
-    }
     yield call(changeBodyAttribute, "data-layout", layout);
-    
+
   } catch (error) { }
 }
 

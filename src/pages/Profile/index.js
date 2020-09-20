@@ -40,7 +40,6 @@ class Profile extends Component {
       selectedPosition: null,
       selectedGender: null
     };
-
   }
 
   componentDidMount() {

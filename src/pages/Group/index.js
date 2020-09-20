@@ -92,18 +92,13 @@ class Group extends Component {
     const { groupId } = this.state
     deleteMasterGroupService(groupId)
       .then((data) => {
-        const { dataGroup } = this.state;
-        const { row } = this.state;
-        const index = dataGroup.findIndex(r => r === row);
 
-        this.setState(state => ({
-          // dataGroup: [...state.dataGroup.slice(0, index), ...state.dataGroup.slice(index + 1)]
-          dataGroup: [...state.dataGroup.slice(0, index)]
-        }));
-
-        this.alertSuccess(data)
-        this.props.history.push('/group')
-        this.setState({ modalConfirm: false })
+        this.setState({
+          modalConfirm: false
+        }, () =>
+          this.alertSuccess(data),
+          window.location.reload()
+        )
       })
       .catch((e) => {
         this.alertError(e)

@@ -180,9 +180,6 @@ class IncomingMailEdit extends Component {
       label: detailList.klasifikasi_name
     }
 
-    const date = detailList.tgl_surat
-    const curr = moment(date).format('DD-MM-YYYY')
-
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -279,7 +276,7 @@ class IncomingMailEdit extends Component {
                           type="date"
                           id="example-text-input"
                           name="date"
-                          // value={curr}
+                          value={detailList.tgl_surat}
                           ref={node => (this.inputNode = node)}
                         />
                       </Col>
@@ -434,7 +431,7 @@ class IncomingMailEdit extends Component {
                       </Col>
                     </Row>
 
-                    <div className="text-center mt-4">
+                    <div className="text-right mt-4">
                       <Button
                         color="success"
                         className="mt-1"
