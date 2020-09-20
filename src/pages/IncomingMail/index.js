@@ -67,7 +67,9 @@ class IncomingMail extends Component {
 
   getListIncomingMail = () => {
     const { perPage, page } = this.state;
+    let order = null;
     const params = {
+      order,
       page,
       perPage
     }
@@ -89,10 +91,14 @@ class IncomingMail extends Component {
       });
   }
 
-  handlePageChange = async () => {
-    const { perPage, page } = this.state;
+  handlePageChange = async (param, sortDirection) => {
+    const { perPage } = this.state;
+    let paramLength = Object.keys(param).length;
+    let page = paramLength === 0 ? param : null;
+    let order = paramLength > 1 ? param.selector + ' ' + sortDirection : null;
     const params = {
-      page: page + perPage,
+      order,
+      page,
       perPage
     }
     this.setState({ loading: true });
@@ -298,6 +304,8 @@ class IncomingMail extends Component {
                     paginationTotalRows={totalRows}
                     onChangeRowsPerPage={this.handlePerRowsChange}
                     onChangePage={this.handlePageChange}
+                    onSort={this.handlePageChange}
+                    sortServer
                     subHeaderComponent={this.getSubHeaderComponent()}
                     paginationResetDefaultPage={resetPaginationToggle} />
                 </div>

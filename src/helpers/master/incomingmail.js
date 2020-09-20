@@ -1,10 +1,11 @@
 import config from '../config'
 import instance, { cancel } from "../axios";
 
-export const getIncomingMailService = () => {
+export const getIncomingMailService = (request) => {
   const GET_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/list`;
-  const request = `?skip=0&take=10`
-  return instance.get(GET_INCOMING_MAIL_API + `${request}`)
+  let sort = request.order !== null ? `&order=${request.order}` : '';
+  const req = `?page=${request.page}&per_page=${request.perPage}${sort}`
+  return instance.get(GET_INCOMING_MAIL_API + `${req}`)
     .then((data) => {
       return {
         data: data.data.data.data,

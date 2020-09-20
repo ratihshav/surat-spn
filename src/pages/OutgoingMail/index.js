@@ -81,7 +81,9 @@ class OutgoingMail extends Component {
 
   getListOutgoingMail = () => {
     const { perPage, page } = this.state;
+    let order = null;
     const params = {
+      order,
       page,
       perPage
     }
@@ -103,9 +105,13 @@ class OutgoingMail extends Component {
       });
   }
 
-  handlePageChange = async page => {
+  handlePageChange = async (param, sortDirection) => {
+    let paramLength = Object.keys(param).length;
+    let page = paramLength === 0 ? param : null;
+    let order = paramLength > 1 ? param.selector + ' ' + sortDirection : null;
     const { perPage } = this.state;
     const params = {
+      order,
       page,
       perPage
     }
@@ -147,7 +153,6 @@ class OutgoingMail extends Component {
         )
       });
   }
-
 
   alertError = (e) => {
     toast.error(e)
@@ -266,7 +271,6 @@ class OutgoingMail extends Component {
       .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
-
   render() {
     const {
       dataSurat,
@@ -293,10 +297,7 @@ class OutgoingMail extends Component {
               </div>
               <br />
             </Col>
-
           </Row>
-
-
           <div className="row">
             <div className="col-12">
               <div className="card">
@@ -313,6 +314,8 @@ class OutgoingMail extends Component {
                     paginationTotalRows={totalRows}
                     onChangeRowsPerPage={this.handlePerRowsChange}
                     onChangePage={this.handlePageChange}
+                    onSort={this.handlePageChange}
+                    sortServer
                     subHeader
                     subHeaderComponent={this.getSubHeaderComponent()}
                     paginationResetDefaultPage={resetPaginationToggle}
