@@ -93,7 +93,7 @@ class OutgoingMail extends Component {
       .then((data) => {
         this.setState({
           dataSurat: data.data,
-          totalRows: data.totalCount,
+          totalRows: data.total,
           loading: false,
         })
       })
@@ -104,10 +104,10 @@ class OutgoingMail extends Component {
       });
   }
 
-  handlePageChange = async () => {
-    const { perPage, page } = this.state;
+  handlePageChange = async page => {
+    const { perPage } = this.state;
     const params = {
-      page: page + perPage,
+      page,
       perPage
     }
     this.setState({ loading: true });

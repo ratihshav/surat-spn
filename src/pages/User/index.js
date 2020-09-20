@@ -62,7 +62,7 @@ class User extends Component {
     getMasterUserServices()
       .then((data) => {
         this.setState({
-          dataUser: data.data.data.data
+          dataUser: data.data.data
         })
       })
       .catch((e) => {

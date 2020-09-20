@@ -4,12 +4,12 @@ import instance, { cancel } from "../axios";
 
 export const getOutgoingMailService = (request) => {
   const GET_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/list`;
-  const req = `?skip=${request.page}&take=${request.perPage}`
+  const req = `?page=${request.page}&per_page=${request.perPage}`
   return instance.get(GET_OUTGOING_MAIL_API + `${req}`)
     .then((data) => {
       return {
         data: data.data.data.data,
-        totalCount: data.data.data.totalCount
+        total: data.data.data.total
       };
     })
     .catch((e) => { throw e.response.data.messages[0] });
