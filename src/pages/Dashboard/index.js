@@ -80,21 +80,10 @@ class Dashboard extends Component {
   render() {
     const { full_name } = this.props.data
     const { dataDashboard } = this.state
-    console.log('dataasas', dataDashboard)
 
     return (
       <React.Fragment>
         <div className="container-fluid">
-          {/* <Row className="align-items-center">
-            <Col sm={6}>
-              <div className="page-title-box">
-                <h4 className="font-size-18">Dashboard</h4>
-                <ol className="breadcrumb mb-0">
-                </ol>
-              </div>
-            </Col>
-          </Row> */}
-
           <Row>
             <Col>
               <br />
@@ -117,9 +106,12 @@ class Dashboard extends Component {
                     TUGAS
                     </h3>
                   <br />
-                  <div className="table-responsive">
-                    {this.getTableContent(dataDashboard)}
-                  </div>
+                  {dataDashboard.length !== 0 ?
+                    <div className="table-responsive">
+                      {this.getTableContent(dataDashboard)}
+                    </div>
+                    : <Row className="justify-content-center">Tidak ada tugas baru</Row>
+                  }
                 </CardBody>
               </Card>
             </Col>

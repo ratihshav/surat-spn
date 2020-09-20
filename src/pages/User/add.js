@@ -82,13 +82,13 @@ class UserAdd extends Component {
       selectedPosition,
       dataPosition } = this.state;
 
-
     const optionsPosition = dataPosition.length !== 0 ?
       dataPosition.map((data) => {
         return { value: data.id, label: data.text };
       })
       : null
 
+    const finalOptions = optionsPosition ? optionsPosition.push({ value: null, label: 'Sudah pensiun' }) : null
 
     return (
       <React.Fragment>
