@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Modal, Button} from "reactstrap";
+import { Row, Col, Modal, Button } from "reactstrap";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import "chartist/dist/scss/chartist.scss";
@@ -8,9 +8,9 @@ import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions"
 import toast from '../UI/toast';
 import DataTable from 'react-data-table-component';
 import memoize from 'memoize-one';
-import {Action, FilterComponent, AddButtonComponent} from '../../components/tabelComponents';
+import { Action, FilterComponent, AddButtonComponent } from '../../components/tabelComponents';
 
-const columns = memoize(actHandler =>[
+const columns = memoize(actHandler => [
   {
     name: 'Nama Jabatan',
     selector: 'position_name',
@@ -28,6 +28,7 @@ const columns = memoize(actHandler =>[
     ignoreRowClick: true,
     allowOverflow: true,
     button: true,
+    minWidth: '200px',
     cell: data => <Action data={data} actHandler={actHandler} />
   }
 ])
@@ -86,12 +87,10 @@ class Position extends Component {
     this.setState({ modalConfirm: true })
   }
 
-  navigateToPermissions = (val) => {
-    const data = val.row.data
-    localStorage.setItem('idPosition', JSON.stringify(data.id))
+  navigateToPermissions = (id) => {
+    localStorage.setItem('idPosition', JSON.stringify(Number(id)))
     this.props.history.push({
       pathname: '/position-permission',
-      params: data,
     });
   }
 
@@ -126,7 +125,8 @@ class Position extends Component {
   handleButtonClick = (state) => {
     this.setState({ row: state.target.value })
     const act = state.target.name === 'edit' ? this.navigateToEdit(state.target.id)
-      : state.target.name === 'delete' ? this.navigateToDelete(state.target.id) : null
+      : state.target.name === 'delete' ? this.navigateToDelete(state.target.id)
+        : state.target.name === 'permission' ? this.navigateToPermissions(state.target.id) : null
   }
 
   handleClear = () => {
@@ -139,7 +139,7 @@ class Position extends Component {
       });
     }
   };
-  
+
   getSubHeaderComponent = () => {
     const { dataPosition, filterText } = this.state
     const { perms } = this.props.data

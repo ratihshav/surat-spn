@@ -12,6 +12,7 @@ import { getAuthenticatedUser } from "./helpers/auth";
 import VerticalLayout from "./components/VerticalLayout/";
 import HorizontalLayout from "./components/HorizontalLayout/";
 import NonAuthLayout from "./components/NonAuthLayout";
+import Loader from "./components/Loader";
 
 // Import scss
 import "./assets/scss/theme.scss";
@@ -46,7 +47,7 @@ class App extends Component {
     return (
       <React.Fragment>
         <Router>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Loader />}>
             <Switch>
               {!getAuthenticatedUser() ? publicRoutes.map((route, idx) => (
                 <AppRoute

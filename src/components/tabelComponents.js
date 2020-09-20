@@ -4,7 +4,7 @@ import React from "react";
 import { Row, Col, Button } from "reactstrap";
 import styled from 'styled-components';
 
-export const TextField =  styled.input`
+export const TextField = styled.input`
   height: 32px;
   width: 200px;
   border-radius: 3px;
@@ -34,14 +34,24 @@ export const ClearButton = styled(Button)`
 `;
 
 export const Action = ({ actHandler, data }) => (
+  console.log('data', data),
   <Row>
-    {data.can_edit == 1 
-      ? <Button type="button" onClick={actHandler} id={data.id} value={JSON.stringify(data)} name={"edit"} className="btn btn-info btn-sm" color="success" title="Ubah">Ubah</Button> 
+    {data.disposisi_id
+      ? <Button type="button" onClick={actHandler} id={data.id} value={JSON.stringify(data)} name={"detail"} className="btn btn-orange btn-sm" color="success" title="Ubah">Detail</Button>
       : null}
       &nbsp;
-    {data.can_delete == 1
+    {data.can_edit
+      ? <Button type="button" onClick={actHandler} id={data.id} value={JSON.stringify(data)} name={"edit"} className="btn btn-info btn-sm" color="success" title="Ubah">Ubah</Button>
+      : null}
+      &nbsp;
+    {data.can_delete
       ? <Button type="button" onClick={actHandler} id={data.id} value={JSON.stringify(data)} name={"delete"} className="btn btn-danger btn-sm" color="success" title="Ubah">Hapus</Button>
       : null}
+      &nbsp;
+    {data.can_permissions
+      ? <Button type="button" onClick={actHandler} id={data.id} value={JSON.stringify(data)} name={"permission"} className="btn btn-warning btn-sm" color="success" title="Ubah">Hak Akses</Button>
+      : null}
+
   </Row>
 );
 

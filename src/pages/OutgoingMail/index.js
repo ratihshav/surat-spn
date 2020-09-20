@@ -12,12 +12,12 @@ import toast from '../UI/toast';
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import DataTable from 'react-data-table-component';
 import memoize from 'memoize-one';
-import {Action, FilterComponent, AddButtonComponent} from '../../components/tabelComponents';
+import { Action, FilterComponent, AddButtonComponent } from '../../components/tabelComponents';
 
 const CustomHal = ({ row }) => (
   <div>
-    <div>
-      <b>{row.hal_surat}</b>
+    <div style={{ fontWeight: 'bold', whiteSpace: 'wrap', textOverflow: 'ellipses' }}>
+      {row.hal_surat}
     </div>
     <div>
       {row.status_surat}
@@ -27,7 +27,7 @@ const CustomHal = ({ row }) => (
   </div>
 )
 
-const columns = memoize(actHandler =>[
+const columns = memoize(actHandler => [
   {
     name: 'Nomor Surat',
     selector: 'nomor_surat',
@@ -53,6 +53,7 @@ const columns = memoize(actHandler =>[
     ignoreRowClick: true,
     allowOverflow: true,
     button: true,
+    minWidth: '150px',
     cell: data => <Action data={data} actHandler={actHandler} />
   }
 ])
@@ -67,16 +68,33 @@ class OutgoingMail extends Component {
       modalConfirm: false,
       row: null,
       filterText: "",
-      resetPaginationToggle: false
+      resetPaginationToggle: false,
+      loading: false,
+      page: 0,
+      totalRows: 0,
+      perPage: 10
     };
   }
 
   componentDidMount() {
-    getOutgoingMailService()
+    this.getListOutgoingMail()
+  }
+
+  getListOutgoingMail = () => {
+    const { perPage, page } = this.state;
+    const params = {
+      page,
+      perPage
+    }
+
+    this.setState({ loading: true });
+
+    getOutgoingMailService(params)
       .then((data) => {
-        console.log('surat', data.data)
         this.setState({
-          dataSurat: data.data
+          dataSurat: data.data,
+          totalRows: data.totalCount,
+          loading: false,
         })
       })
       .catch((e) => {
@@ -85,6 +103,52 @@ class OutgoingMail extends Component {
         )
       });
   }
+
+  handlePageChange = async () => {
+    const { perPage, page } = this.state;
+    const params = {
+      page: page + perPage,
+      perPage
+    }
+    this.setState({ loading: true });
+
+    await getOutgoingMailService(params)
+      .then((data) => {
+        this.setState({
+          dataSurat: data.data,
+          loading: false,
+        })
+      })
+      .catch((e) => {
+        return (
+          this.alertError(e)
+        )
+      });
+  }
+
+  handlePerRowsChange = async (perPage, page) => {
+    const params = {
+      page,
+      perPage
+    }
+
+    this.setState({ loading: true });
+
+    await getOutgoingMailService(params)
+      .then((data) => {
+        this.setState({
+          loading: false,
+          dataSurat: data.data,
+          perPage,
+        })
+      })
+      .catch((e) => {
+        return (
+          this.alertError(e)
+        )
+      });
+  }
+
 
   alertError = (e) => {
     toast.error(e)
@@ -114,7 +178,7 @@ class OutgoingMail extends Component {
     }));
     document.body.classList.add("no_padding");
   }
-  
+
   deleteSurat = () => {
     const { suratId } = this.state
     deleteOutgoingMailService(suratId)
@@ -151,7 +215,8 @@ class OutgoingMail extends Component {
   handleButtonClick = (state) => {
     this.setState({ row: state.target.value })
     const act = state.target.name === 'edit' ? this.navigateToEdit(state.target.id)
-      : state.target.name === 'delete' ? this.navigateToDelete(state.target.id) : null
+      : state.target.name === 'delete' ? this.navigateToDelete(state.target.id)
+        : state.target.name === 'detail' ? this.navigateToDetail(state.target.id) : null
   }
 
   getSubHeaderComponent = () => {
@@ -182,16 +247,13 @@ class OutgoingMail extends Component {
       </Row>
     );
   };
-  
-  navigateToDetail = (val) => {
-    const data = val.row.data
-    const idDisposisi = data.disposisi_id
-    localStorage.setItem('idOutMail', JSON.stringify(data.id))
 
-    this.hasReadMail(idDisposisi)
+  navigateToDetail = (id) => {
+    localStorage.setItem('idOutMail', JSON.stringify(Number(id)))
+
+    this.hasReadMail(id)
     this.props.history.push({
       pathname: '/outgoing-mail-detail',
-      params: data,
     });
   }
 
@@ -207,7 +269,13 @@ class OutgoingMail extends Component {
 
 
   render() {
-    const { dataSurat, resetPaginationToggle, filterText, modalConfirm } = this.state
+    const {
+      dataSurat,
+      resetPaginationToggle,
+      filterText,
+      modalConfirm,
+      loading,
+      totalRows } = this.state
     const filteredItems = dataSurat.filter(item => item.nomor_surat && item.nomor_surat.toLowerCase().includes(filterText.toLowerCase()));
 
     return (
@@ -237,36 +305,40 @@ class OutgoingMail extends Component {
                   <DataTable
                     columns={columns(this.handleButtonClick)}
                     data={filteredItems}
-                    // expandableRows
-                    // expandOnRowClicked
                     pagination
                     highlightOnHover
                     striped
-                    // dense
+                    progressPending={loading}
+                    pagination
+                    paginationServer
+                    paginationTotalRows={totalRows}
+                    onChangeRowsPerPage={this.handlePerRowsChange}
+                    onChangePage={this.handlePageChange}
                     subHeader
                     subHeaderComponent={this.getSubHeaderComponent()}
-                    paginationResetDefaultPage={resetPaginationToggle} />
+                    paginationResetDefaultPage={resetPaginationToggle}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div><Modal isOpen={modalConfirm}>
-            <div className="modal-header text-white bg-danger">
-              <h5 className="modal-title mt-0">Konfirmasi</h5>
-              <button
-                type="button"
-                onClick={() =>
-                  this.setState({ modalConfirm: false })
-                }
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <h5>Apakah Anda yakin ingin menghapus Surat Keluar ini?</h5>
-            </div>
+          <div className="modal-header text-white bg-danger">
+            <h5 className="modal-title mt-0">Konfirmasi</h5>
+            <button
+              type="button"
+              onClick={() =>
+                this.setState({ modalConfirm: false })
+              }
+              className="close"
+              data-dismiss="modal"
+              aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <h5>Apakah Anda yakin ingin menghapus Surat Keluar ini?</h5>
+          </div>
           <div className="modal-footer">
             <Button
               color="danger"

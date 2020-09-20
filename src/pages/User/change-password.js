@@ -89,42 +89,44 @@ class UserChangePassword extends Component {
                 <Card>
                   <CardBody>
                     <Row className="form-group">
-                      <Col md={8}>
-                        <div className="dx-fieldset">
-                          <div className="dx-field">
-                            <div className="dx-field-label">Password</div>
-                            <div className="dx-field-value">
-                              {/* <TextBox
-                                mode="password"
-                                value={this.state.password}
-                                onValueChanged={this.onPasswordChanged}>
-                                <Validator>
-                                  <RequiredRule message="Password is required" />
-                                </Validator>
-                              </TextBox> */}
-                            </div>
-                          </div>
-                          <div className="dx-field">
-                            <div className="dx-field-label">Confirm Password</div>
-                            <div className="dx-field-value">
-                              {/* <TextBox mode="password">
-                                <Validator>
-                                  <RequiredRule message="Confirm Password is required" />
-                                  <CompareRule message="Password and Confirm Password do not match" comparisonTarget={this.passwordComparison} />
-                                </Validator>
-                              </TextBox> */}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <Button
-                            color="success"
-                            className="mt-1">
-                            <i className="typcn typcn-input-checked" />Submit
-                          </Button>
-                        </div>
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Password
+                    </label>
+                      <Col sm={10}>
+                        <input
+                          name="destination"
+                          className="form-control"
+                          type="text"
+                          id="example-text-input"
+                          ref={node => (this.inputNode = node)}
+                          required
+                        />
                       </Col>
                     </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Konfirmasi Password
+                    </label>
+                      <Col sm={10}>
+                        <input
+                          name="destination"
+                          className="form-control"
+                          type="text"
+                          id="example-text-input"
+                          ref={node => (this.inputNode = node)}
+                          required
+                        />
+                      </Col>
+                    </Row>
+
+
                   </CardBody>
                 </Card>
               </div>

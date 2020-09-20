@@ -2,10 +2,10 @@ import config from '../config'
 import instance, { cancel } from "../axios";
 
 
-export const getOutgoingMailService = () => {
+export const getOutgoingMailService = (request) => {
   const GET_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/list`;
-  const request = `?skip=0&take=10`
-  return instance.get(GET_OUTGOING_MAIL_API + `${request}`)
+  const req = `?skip=${request.page}&take=${request.perPage}`
+  return instance.get(GET_OUTGOING_MAIL_API + `${req}`)
     .then((data) => {
       return {
         data: data.data.data.data,

@@ -21,6 +21,7 @@ import {
 } from '../../helpers/master/user';
 import { searchPositionService } from '../../helpers/master/position'
 import toast from '../UI/toast';
+import Loader from "../../components/Loader";
 
 // import images
 import config from '../../helpers/config'
@@ -190,304 +191,305 @@ class UserEdit extends Component {
             </Col>
           </Row>
 
-
-          <Row>
-            <Col xl={12}>
-              <Card>
-                <CardBody>
-                  <Row>
-                    <Col lg={2}>
-                      <div>
-                        <img
-                          className="rounded-circle center"
-                          src={dataUser.path_foto ? config.url_img + dataUser.path_foto : userAva}
-                          alt="veltrix"
-                          width="150"
-                          data-holder-rendered="true"
-                        />
-                        <br /> <br />
-                        <Button
-                          color="primary"
-                          className="btn btn-primary btn-block waves-effect waves-light"
-                          onClick={this.goToChangePhoto}>
-                          Ganti Foto
+          {dataUser.length !== 0 ?
+            <Row>
+              <Col xl={12}>
+                <Card>
+                  <CardBody>
+                    <Row>
+                      <Col lg={2}>
+                        <div>
+                          <img
+                            className="rounded-circle center"
+                            src={dataUser.path_foto ? config.url_img + dataUser.path_foto : userAva}
+                            alt="veltrix"
+                            width="150"
+                            data-holder-rendered="true"
+                          />
+                          <br /> <br />
+                          <Button
+                            color="primary"
+                            className="btn btn-primary btn-block waves-effect waves-light"
+                            onClick={this.goToChangePhoto}>
+                            Ganti Foto
                     </Button>
-                        <Button
-                          color="primary"
-                          className="btn btn-primary btn-block waves-effect waves-light"
-                          onClick={this.goToChangePassword}>
-                          Ganti Password
+                          <Button
+                            color="primary"
+                            className="btn btn-primary btn-block waves-effect waves-light"
+                            onClick={this.goToChangePassword}>
+                            Ganti Password
                     </Button>
-                      </div>
-                    </Col>
-                    <Col md={8}>
-                      <form action="#" onSubmit={this.submitUpdatedData}>
-                        <Nav tabs className="nav-tabs-custom nav-justified">
-                          <NavItem style={{cursor: "pointer"}}>
-                            <NavLink
-                              className={classnames({
-                                active: this.state.activeTabJustify === "1"
-                              })}
-                              onClick={() => {
-                                this.toggleCustomJustified("1");
-                              }}>
-                              <span class="d-none d-sm-block">Data Pribadi</span>
-                            </NavLink>
-                          </NavItem>
-                          <NavItem style={{cursor: "pointer"}}>
-                            <NavLink
-                              className={classnames({
-                                active: this.state.activeTabJustify === "6"
-                              })}
-                              onClick={() => {
-                                this.toggleCustomJustified("6");
-                              }}>
-                              <span class="d-none d-sm-block">Data Jabatan</span>
-                            </NavLink>
-                          </NavItem>
-                          <NavItem style={{cursor: "pointer"}}>
-                            <NavLink
-                              className={classnames({
-                                active: this.state.activeTabJustify === "7"
-                              })}
-                              onClick={() => {
-                                this.toggleCustomJustified("7");
-                              }}>
-                              <span class="d-none d-sm-block">Data Unit</span>
-                            </NavLink>
-                          </NavItem>
-                        </Nav>
+                        </div>
+                      </Col>
+                      <Col md={8}>
+                        <form action="#" onSubmit={this.submitUpdatedData}>
+                          <Nav tabs className="nav-tabs-custom nav-justified">
+                            <NavItem style={{ cursor: "pointer" }}>
+                              <NavLink
+                                className={classnames({
+                                  active: this.state.activeTabJustify === "1"
+                                })}
+                                onClick={() => {
+                                  this.toggleCustomJustified("1");
+                                }}>
+                                <span class="d-none d-sm-block">Data Pribadi</span>
+                              </NavLink>
+                            </NavItem>
+                            <NavItem style={{ cursor: "pointer" }}>
+                              <NavLink
+                                className={classnames({
+                                  active: this.state.activeTabJustify === "6"
+                                })}
+                                onClick={() => {
+                                  this.toggleCustomJustified("6");
+                                }}>
+                                <span class="d-none d-sm-block">Data Jabatan</span>
+                              </NavLink>
+                            </NavItem>
+                            <NavItem style={{ cursor: "pointer" }}>
+                              <NavLink
+                                className={classnames({
+                                  active: this.state.activeTabJustify === "7"
+                                })}
+                                onClick={() => {
+                                  this.toggleCustomJustified("7");
+                                }}>
+                                <span class="d-none d-sm-block">Data Unit</span>
+                              </NavLink>
+                            </NavItem>
+                          </Nav>
 
-                        <TabContent activeTab={this.state.activeTabJustify}>
-                          <TabPane tabId="1" className="p-3">
-                            <Row>
-                              <Col sm="12">
-                                <CardText>
-                                  <Row className="form-group">
-                                    <label htmlFor="idEmployee"
-                                      className="col-sm-2 col-form-label"> NIP
+                          <TabContent activeTab={this.state.activeTabJustify}>
+                            <TabPane tabId="1" className="p-3">
+                              <Row>
+                                <Col sm="12">
+                                  <CardText>
+                                    <Row className="form-group">
+                                      <label htmlFor="idEmployee"
+                                        className="col-sm-2 col-form-label"> NIP
                                     </label>
-                                    <Col sm={10}>
-                                      <input className="form-control"
-                                        type="text"
-                                        defaultValue={dataUser.nip}
-                                        id="idEmployee"
-                                        name="idEmployee"
-                                        ref={node => (this.inputNode = node)}
-                                        style={{backgroundColor: "#cdcbcb9c"}}
-                                        readOnly
-                                      />
-                                    </Col>
-                                  </Row>
-                                  <Row className="form-group">
-                                    <label htmlFor="username"
-                                      className="col-sm-2 col-form-label"> Username
+                                      <Col sm={10}>
+                                        <input className="form-control"
+                                          type="text"
+                                          defaultValue={dataUser.nip}
+                                          id="idEmployee"
+                                          name="idEmployee"
+                                          ref={node => (this.inputNode = node)}
+                                          style={{ backgroundColor: "#cdcbcb9c" }}
+                                          readOnly
+                                        />
+                                      </Col>
+                                    </Row>
+                                    <Row className="form-group">
+                                      <label htmlFor="username"
+                                        className="col-sm-2 col-form-label"> Username
                                     </label>
-                                    <Col sm={10}>
-                                      <input className="form-control"
-                                        type="text"
-                                        defaultValue={dataUser.username}
-                                        id="username"
-                                        name="username"
-                                        ref={node => (this.inputNode = node)}
-                                        style={{backgroundColor: "#cdcbcb9c"}}
-                                        readOnly
-                                      />
-                                    </Col>
-                                  </Row>
-                                </CardText>
-                              </Col>
-                            </Row>
+                                      <Col sm={10}>
+                                        <input className="form-control"
+                                          type="text"
+                                          defaultValue={dataUser.username}
+                                          id="username"
+                                          name="username"
+                                          ref={node => (this.inputNode = node)}
+                                          style={{ backgroundColor: "#cdcbcb9c" }}
+                                          readOnly
+                                        />
+                                      </Col>
+                                    </Row>
+                                  </CardText>
+                                </Col>
+                              </Row>
 
-                            <Row>
-                              <Col sm="12">
-                                <CardText>
-                                  <Row className="form-group">
-                                    <label htmlFor="fullName"
-                                      className="col-sm-2 col-form-label"> Nama Lengkap
+                              <Row>
+                                <Col sm="12">
+                                  <CardText>
+                                    <Row className="form-group">
+                                      <label htmlFor="fullName"
+                                        className="col-sm-2 col-form-label"> Nama Lengkap
                                      </label>
-                                    <Col sm={10}>
-                                      <input className="form-control"
-                                        type="text"
-                                        defaultValue={dataUser.full_name}
-                                        id="fullName"
-                                        name="fullName"
-                                        ref={node => (this.inputNode = node)}
-                                        required
-                                      />
-                                    </Col>
-                                  </Row>
-                                </CardText>
-                              </Col>
-                            </Row>
+                                      <Col sm={10}>
+                                        <input className="form-control"
+                                          type="text"
+                                          defaultValue={dataUser.full_name}
+                                          id="fullName"
+                                          name="fullName"
+                                          ref={node => (this.inputNode = node)}
+                                          required
+                                        />
+                                      </Col>
+                                    </Row>
+                                  </CardText>
+                                </Col>
+                              </Row>
 
-                            <Row>
-                              <Col sm="12">
-                                <CardText>
-                                  <Row>
-                                    <Col sm="12">
-                                      <CardText>
-                                        <Row className="form-group">
-                                          <label htmlFor="email"
-                                            className="col-sm-2 col-form-label"> E-mail
+                              <Row>
+                                <Col sm="12">
+                                  <CardText>
+                                    <Row>
+                                      <Col sm="12">
+                                        <CardText>
+                                          <Row className="form-group">
+                                            <label htmlFor="email"
+                                              className="col-sm-2 col-form-label"> E-mail
                                           </label>
-                                          <Col sm={10}>
-                                            <input className="form-control"
-                                              type="email"
-                                              defaultValue={dataUser.email}
-                                              id="email"
-                                              name="email"
-                                              ref={node => (this.inputNode = node)}
-                                              required />
-                                          </Col>
-                                        </Row>
-                                      </CardText>
-                                    </Col>
-                                  </Row>
+                                            <Col sm={10}>
+                                              <input className="form-control"
+                                                type="email"
+                                                defaultValue={dataUser.email}
+                                                id="email"
+                                                name="email"
+                                                ref={node => (this.inputNode = node)}
+                                                required />
+                                            </Col>
+                                          </Row>
+                                        </CardText>
+                                      </Col>
+                                    </Row>
 
-                                  <Row className="form-group">
-                                    <label htmlFor="birthDate"
-                                      className="col-sm-2 col-form-label"> Tanggal Lahir
+                                    <Row className="form-group">
+                                      <label htmlFor="birthDate"
+                                        className="col-sm-2 col-form-label"> Tanggal Lahir
                                     </label>
-                                    <Col sm={10}>
-                                      <input className="form-control"
-                                        type="date"
-                                        defaultValue={dataUser.ttl}
-                                        id="birthDate"
-                                        name="birthDate"
-                                        ref={node => (this.inputNode = node)} />
-                                    </Col>
-                                  </Row>
+                                      <Col sm={10}>
+                                        <input className="form-control"
+                                          type="date"
+                                          defaultValue={dataUser.ttl}
+                                          id="birthDate"
+                                          name="birthDate"
+                                          ref={node => (this.inputNode = node)} />
+                                      </Col>
+                                    </Row>
 
-                                  <Row>
-                                    <Col sm="12">
-                                      <Row className="form-group">
-                                        <label htmlFor="gender"
-                                          className="col-sm-2 col-form-label"> Jenis Kelamin
+                                    <Row>
+                                      <Col sm="12">
+                                        <Row className="form-group">
+                                          <label htmlFor="gender"
+                                            className="col-sm-2 col-form-label"> Jenis Kelamin
                                         </label>
-                                        <Col sm={10}>
-                                          <input type="radio"
-                                            id="male"
-                                            name="gender"
-                                            value="Laki-laki"
-                                            defaultChecked={valMale}
-                                            onChange={this.handleChangeGender}
-                                            ref={node => (this.inputNode = node)} />&nbsp;
+                                          <Col sm={10}>
+                                            <input type="radio"
+                                              id="male"
+                                              name="gender"
+                                              value="Laki-laki"
+                                              defaultChecked={valMale}
+                                              onChange={this.handleChangeGender}
+                                              ref={node => (this.inputNode = node)} />&nbsp;
                                           <label htmlFor="male"> Laki-laki</label>
                                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                           <input type="radio"
-                                            id="female"
-                                            name="gender"
-                                            value="Perempuan"
-                                            defaultChecked={valFemale}
-                                            onChange={this.handleChangeGender}
-                                            ref={node => (this.inputNode = node)} />&nbsp;
+                                              id="female"
+                                              name="gender"
+                                              value="Perempuan"
+                                              defaultChecked={valFemale}
+                                              onChange={this.handleChangeGender}
+                                              ref={node => (this.inputNode = node)} />&nbsp;
                                           <label htmlFor="female"> Perempuan</label>
-                                        </Col>
-                                      </Row>
-                                    </Col>
-                                  </Row>
+                                          </Col>
+                                        </Row>
+                                      </Col>
+                                    </Row>
 
-                                  <Row className="form-group">
-                                    <label htmlFor="phone"
-                                      className="col-sm-2 col-form-label"> No. Handphone
+                                    <Row className="form-group">
+                                      <label htmlFor="phone"
+                                        className="col-sm-2 col-form-label"> No. Handphone
                                     </label>
-                                    <Col sm={10}>
-                                      <input className="form-control"
-                                        type="text"
-                                        defaultValue={dataUser.phone}
-                                        id="phone"
-                                        name="phone"
-                                        ref={node => (this.inputNode = node)} />
-                                    </Col>
-                                  </Row>
+                                      <Col sm={10}>
+                                        <input className="form-control"
+                                          type="text"
+                                          defaultValue={dataUser.phone}
+                                          id="phone"
+                                          name="phone"
+                                          ref={node => (this.inputNode = node)} />
+                                      </Col>
+                                    </Row>
 
-                                  <Row className="form-group">
-                                    <label htmlFor="address"
-                                      className="col-sm-2 col-form-label"> Alamat
+                                    <Row className="form-group">
+                                      <label htmlFor="address"
+                                        className="col-sm-2 col-form-label"> Alamat
                                     </label>
-                                    <Col sm={10}>
-                                      <textarea
-                                        className="form-control"
-                                        id="address"
-                                        name="address"
-                                        rows="4"
-                                        cols="50"
-                                        defaultValue={dataUser.address}
-                                        ref={node => (this.inputNode = node)} />
-                                    </Col>
-                                  </Row>
-                                </CardText>
-                              </Col>
-                            </Row>
-                          </TabPane>
+                                      <Col sm={10}>
+                                        <textarea
+                                          className="form-control"
+                                          id="address"
+                                          name="address"
+                                          rows="4"
+                                          cols="50"
+                                          defaultValue={dataUser.address}
+                                          ref={node => (this.inputNode = node)} />
+                                      </Col>
+                                    </Row>
+                                  </CardText>
+                                </Col>
+                              </Row>
+                            </TabPane>
 
-                          <TabPane tabId="6" className="p-3">
-                            <Row>
-                              <Col sm="12">
-                                <Row className="form-group">
-                                  <label className="col-sm-2 col-form-label">
-                                    Nama Jabatan
+                            <TabPane tabId="6" className="p-3">
+                              <Row>
+                                <Col sm="12">
+                                  <Row className="form-group">
+                                    <label className="col-sm-2 col-form-label">
+                                      Nama Jabatan
                                   </label>
-                                  <Col sm={10}>
-                                    <Select value={selectedPosition}
-                                      placeholder={[dataUser.position_name]}
-                                      defaultValue={defaValPosition}
-                                      onChange={this.handleSelectPosition}
-                                      options={optionsPosition}
-                                      name="type"
-                                      ref={node => (this.inputNode = node)} />
-                                  </Col>
-                                </Row>
-                              </Col>
-                            </Row>
-                          </TabPane>
-
-                          <TabPane tabId="7" className="p-3">
-                            <Row>
-                              <Col sm="12">
-                                <CardText>
-                                  <Row className="form-group">
-                                    <label htmlFor="group"
-                                      className="col-sm-2 col-form-label"> Unit Kerja 
-                                    </label>
                                     <Col sm={10}>
-                                      <input className="form-control"
-                                        type="text"
-                                        defaultValue={dataUser.group_name}
-                                        id="group"
-                                        name="group"
-                                        ref={node => (this.inputNode = node)}
-                                        style={{backgroundColor: "#cdcbcb9c"}}
-                                        readOnly />
+                                      <Select value={selectedPosition}
+                                        placeholder={[dataUser.position_name]}
+                                        defaultValue={defaValPosition}
+                                        onChange={this.handleSelectPosition}
+                                        options={optionsPosition}
+                                        name="type"
+                                        ref={node => (this.inputNode = node)} />
                                     </Col>
                                   </Row>
-                                </CardText>
-                              </Col>
-                            </Row>
-                          </TabPane>
-                        </TabContent>
-                        <div className="text-right mt-4">
-                          <Button
-                            color="success"
-                            className="mt-1">
-                            <i className="typcn typcn-input-checked" />Simpan
+                                </Col>
+                              </Row>
+                            </TabPane>
+
+                            <TabPane tabId="7" className="p-3">
+                              <Row>
+                                <Col sm="12">
+                                  <CardText>
+                                    <Row className="form-group">
+                                      <label htmlFor="group"
+                                        className="col-sm-2 col-form-label"> Unit Kerja
+                                    </label>
+                                      <Col sm={10}>
+                                        <input className="form-control"
+                                          type="text"
+                                          defaultValue={dataUser.group_name}
+                                          id="group"
+                                          name="group"
+                                          ref={node => (this.inputNode = node)}
+                                          style={{ backgroundColor: "#cdcbcb9c" }}
+                                          readOnly />
+                                      </Col>
+                                    </Row>
+                                  </CardText>
+                                </Col>
+                              </Row>
+                            </TabPane>
+                          </TabContent>
+                          <div className="text-right mt-4">
+                            <Button
+                              color="success"
+                              className="mt-1">
+                              <i className="typcn typcn-input-checked" />Simpan
                           </Button>
                           &nbsp; &nbsp;
                           <Button
-                            color="grayMed"
-                            className="mt-1"
-                            onClick={this.goBack}>
-                            <i className="ion ion-md-arrow-round-back" /> Kembali
+                              color="grayMed"
+                              className="mt-1"
+                              onClick={this.goBack}>
+                              <i className="ion ion-md-arrow-round-back" /> Kembali
                           </Button>
-                        </div>
-                      </form>
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
+                          </div>
+                        </form>
+                      </Col>
+                    </Row>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+            : <Loader />}
         </div>
       </React.Fragment>
     );
