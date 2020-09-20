@@ -88,17 +88,13 @@ class Classification extends Component {
     const { classId } = this.state
     deleteMasterClassService(classId)
       .then((data) => {
-        const { dataClass } = this.state;
-        const { row } = this.state;
-        const index = dataClass.findIndex(r => r === row);
 
-        this.setState(state => ({
-          dataClass: [...state.dataClass.slice(0, index)]
-        }));
-
-        this.alertSuccess(data)
-        this.props.history.push('/classification');
-        this.setState({ modalConfirm: false })
+        this.setState({
+          modalConfirm: false
+        }, () =>
+          this.alertSuccess(data),
+          window.location.reload()
+        )
       })
       .catch((e) => {
         this.alertError(e)

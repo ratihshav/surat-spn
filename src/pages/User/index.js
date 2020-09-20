@@ -104,18 +104,13 @@ class User extends Component {
     const { userId } = this.state
     deleteMasterUserService(userId)
       .then((data) => {
-        const { dataUser } = this.state;
-        const { row } = this.state;
-        const index = dataUser.findIndex(r => r === row);
 
-        this.setState(state => ({
-          // dataGroup: [...state.dataGroup.slice(0, index), ...state.dataGroup.slice(index + 1)]
-          dataUser: [...state.dataUser.slice(0, index)]
-        }));
-
-        this.alertSuccess(data)
-        this.props.history.push('/user')
-        this.setState({ modalConfirm: false })
+        this.setState({
+          modalConfirm: false
+        }, () =>
+          this.alertSuccess(data),
+          window.location.reload()
+        )
       })
       .catch((e) => {
         this.alertError(e)

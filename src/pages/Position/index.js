@@ -104,17 +104,13 @@ class Position extends Component {
     const { positionId } = this.state
     deleteMasterPositionService(positionId)
       .then((data) => {
-        const { dataPosition } = this.state;
-        const { row } = this.state;
-        const index = dataPosition.findIndex(r => r === row);
 
-        this.setState(state => ({
-          dataPosition: [...state.dataPosition.slice(0, index)]
-        }));
-
-        this.alertSuccess(data)
-        this.props.history.push('/position');
-        this.setState({ modalConfirm: false })
+        this.setState({
+          modalConfirm: false
+        }, () =>
+          this.alertSuccess(data),
+          window.location.reload()
+        )
       })
       .catch((e) => {
         this.alertError(e)

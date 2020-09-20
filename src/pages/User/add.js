@@ -127,7 +127,7 @@ class UserAdd extends Component {
                         />
                       </Col>
                     </Row>
-                    
+
                     <Row className="form-group">
                       <label htmlFor="username" className="col-sm-2 col-form-label" >
                         Username
@@ -142,7 +142,7 @@ class UserAdd extends Component {
                         />
                       </Col>
                     </Row>
-                    
+
                     <Row className="form-group">
                       <label
                         htmlFor="idEmployee"
@@ -222,7 +222,7 @@ class UserAdd extends Component {
                             name="customRadioInline1"
                             className="custom-control-input"
                             innerRef={this.input}
-                            value="laki-laki"
+                            value="Laki-laki"
                           />
                           <Label
                             className="custom-control-label"
@@ -235,7 +235,7 @@ class UserAdd extends Component {
                             name="customRadioInline1"
                             className="custom-control-input"
                             innerRef={this.input}
-                            value="perempuan" />
+                            value="Perempuan" />
                           <Label
                             className="custom-control-label"
                             for="customRadioInline2">

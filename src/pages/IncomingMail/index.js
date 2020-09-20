@@ -161,7 +161,7 @@ class IncomingMail extends Component {
 
     this.hasReadMail(id)
     this.props.history.push({
-      pathname: '/incoming-mail-edit',
+      pathname: '/incoming-mail-detail',
     });
   }
 
@@ -176,18 +176,13 @@ class IncomingMail extends Component {
     const { suratId } = this.state
     deleteIncomingMailService(suratId)
       .then((data) => {
-        const { dataSurat } = this.state;
-        const { row } = this.state;
-        const index = dataSurat.findIndex(r => r === row);
 
-        this.setState(state => ({
-          // dataGroup: [...state.dataGroup.slice(0, index), ...state.dataGroup.slice(index + 1)]
-          dataSurat: [...state.dataSurat.slice(0, index)]
-        }));
-
-        this.alertSuccess(data)
-        this.props.history.push('/incoming-mail');
-        this.setState({ modalConfirm: false })
+        this.setState({
+          modalConfirm: false
+        }, () =>
+          this.alertSuccess(data),
+          window.location.reload()
+        )
       })
       .catch((e) => {
         this.alertError(e)

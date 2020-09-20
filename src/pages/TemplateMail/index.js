@@ -10,6 +10,21 @@ import DataTable from 'react-data-table-component';
 import memoize from 'memoize-one';
 import { Action, FilterComponent, AddButtonComponent } from '../../components/tabelComponents';
 
+const Document = (data) => {
+  console.log('daya', data)
+  return (
+    <div>
+      {data.data.detail.map(function (item, index) {
+        return (
+          <a href={config.url_img + item.file_path} target="_blank" download>
+            <Row style={{ marginBottom: -10 }}> <i className="mdi mdi-file-document" /> <p style={{ fontWeight: "bold" }}>{item.original_name}</p> </Row>
+          </a>
+        )
+      })}
+    </div>
+  )
+}
+
 const columns = memoize(actHandler => [
   {
     name: 'Tipe Template',
@@ -21,8 +36,9 @@ const columns = memoize(actHandler => [
     sortable: true,
   }, {
     name: 'Dokumen',
-    selector: null,
+    selector: 'detail',
     sortable: true,
+    cell: data => <Document data={data} />
   }, {
     name: 'Aksi',
     ignoreRowClick: true,
@@ -56,17 +72,6 @@ class TemplateMail extends Component {
         return (
           this.alertError(e)
         )
-      });
-  }
-
-  onDeleteTemplate = (values) => {
-    deleteTemplateMailService(values)
-      .then((data) => {
-        this.alertSuccess()
-        this.props.history.push('/template-mail');
-      })
-      .catch((e) => {
-        this.alertError(e)
       });
   }
 
@@ -107,17 +112,13 @@ class TemplateMail extends Component {
     const { templateId } = this.state
     deleteTemplateMailService(templateId)
       .then((data) => {
-        const { dataTemplate } = this.state;
-        const { row } = this.state;
-        const index = dataTemplate.findIndex(r => r === row);
 
-        this.setState(state => ({
-          dataTemplate: [...state.dataTemplate.slice(0, index)]
-        }));
-
-        this.alertSuccess(data)
-        this.props.history.push('/template-mail');
-        this.setState({ modalConfirm: false })
+        this.setState({
+          modalConfirm: false
+        }, () =>
+          this.alertSuccess(data),
+          window.location.reload()
+        )
       })
       .catch((e) => {
         this.alertError(e)

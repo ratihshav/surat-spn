@@ -374,7 +374,9 @@ class UserEdit extends Component {
                                               onChange={this.handleChangeGender}
                                               ref={node => (this.inputNode = node)} />&nbsp;
                                           <label htmlFor="male"> Laki-laki</label>
+
                                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
                                           <input type="radio"
                                               id="female"
                                               name="gender"
