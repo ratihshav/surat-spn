@@ -128,16 +128,6 @@ class Login extends Component {
                   </Card>
                 </div>
                 <div className="mt-5 text-center">
-                  {/* <p>
-                        Don't have an account ?{" "}
-                        <Link
-                          to="pages-register"
-                          className="font-weight-medium text-primary"
-                        >
-                          {" "}
-                          Signup now{" "}
-                        </Link>{" "}
-                      </p> */}
                   <p className="mb-0">
                     © {new Date().getFullYear()} Dinas Pendidikan Kab. Kerinci
                   </p>

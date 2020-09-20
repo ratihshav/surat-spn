@@ -7,18 +7,17 @@ import {
 } from "reactstrap";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
-import "chartist/dist/scss/chartist.scss";
 import { getMasterUserServices, deleteMasterUserService } from '../../helpers/master/user'
 import 'react-toastify/dist/ReactToastify.css';
 import DataTable from 'react-data-table-component';
 import memoize from 'memoize-one';
-import {Action, FilterComponent, AddButtonComponent} from '../../components/tabelComponents';
+import { Action, FilterComponent, AddButtonComponent } from '../../components/tabelComponents';
 
 //Reducer
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import toast from '../UI/toast';
 
-const columns = memoize(actHandler =>[
+const columns = memoize(actHandler => [
   {
     name: 'Nama Lengkap',
     selector: 'full_name',
@@ -35,7 +34,7 @@ const columns = memoize(actHandler =>[
     name: 'Jabatan',
     selector: 'position_name',
     sortable: true,
-  },{
+  }, {
     name: 'Aksi',
     ignoreRowClick: true,
     allowOverflow: true,
@@ -210,24 +209,24 @@ class User extends Component {
               </div>
             </div>
           </div>
+        </div>
+        <Modal isOpen={modalConfirm}>
+          <div className="modal-header text-white bg-danger">
+            <h5 className="modal-title mt-0">Konfirmasi</h5>
+            <button
+              type="button"
+              onClick={() =>
+                this.setState({ modalConfirm: false })
+              }
+              className="close"
+              data-dismiss="modal"
+              aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-          <Modal isOpen={modalConfirm}>
-            <div className="modal-header text-white bg-danger">
-              <h5 className="modal-title mt-0">Konfirmasi</h5>
-              <button
-                type="button"
-                onClick={() =>
-                  this.setState({ modalConfirm: false })
-                }
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <h5>Apakah Anda yakin ingin menghapus User ini?</h5>
-            </div>
+          <div className="modal-body">
+            <h5>Apakah Anda yakin ingin menghapus User ini?</h5>
+          </div>
           <div className="modal-footer">
             <Button
               color="danger"

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Row, Col, Modal, Button } from "reactstrap";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
-import "chartist/dist/scss/chartist.scss";
 import { getMasterPositionServices, deleteMasterPositionService } from '../../helpers/master/position'
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import toast from '../UI/toast';

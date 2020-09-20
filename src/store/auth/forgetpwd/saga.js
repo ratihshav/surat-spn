@@ -4,22 +4,15 @@ import { takeEvery, fork, put, all, call } from "redux-saga/effects";
 import { FORGET_PASSWORD } from "./actionTypes";
 import { userForgetPasswordSuccess, userForgetPasswordError } from "./actions";
 
-//AUTH related methods
-import { getFirebaseBackend } from "../../../helpers/authUtils";
 
-const fireBaseBackend = getFirebaseBackend();
+import { forgetPasswordService } from '../../../helpers/master/user';
 
-//If user is send successfully send mail link then dispatch redux action's are directly from here.
-function* forgetUser({ payload: { user, history } }) {
+
+
+function* forgetUser({ payload: { request } }) {
   try {
-    const response = yield call(fireBaseBackend.forgetPassword, user.email);
-    if (response) {
-      yield put(
-        userForgetPasswordSuccess(
-          "Reset link are sended to your mailbox, check there first"
-        )
-      );
-    }
+    const response = yield call(forgetPasswordService, request);
+    yield put(userForgetPasswordSuccess(response));
   } catch (error) {
     yield put(userForgetPasswordError(error));
   }
