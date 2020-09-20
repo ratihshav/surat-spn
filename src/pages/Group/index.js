@@ -2,15 +2,14 @@ import React, { Component } from "react";
 import { Row, Col, Button, Modal } from "reactstrap";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
-import "chartist/dist/scss/chartist.scss";
 import { getMasterGroupServices, deleteMasterGroupService } from '../../helpers/master/group'
 import toast from '../UI/toast';
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import DataTable from 'react-data-table-component';
 import memoize from 'memoize-one';
-import {Action, FilterComponent, AddButtonComponent} from '../../components/tabelComponents';
+import { Action, FilterComponent, AddButtonComponent } from '../../components/tabelComponents';
 
-const columns = memoize(actHandler =>[
+const columns = memoize(actHandler => [
   {
     name: 'Kode Unit Kerja',
     selector: 'group_code',
@@ -127,7 +126,7 @@ class Group extends Component {
       });
     }
   };
-  
+
   getSubHeaderComponent = () => {
     const { dataGroup, filterText } = this.state
     const { perms } = this.props.data
@@ -156,7 +155,7 @@ class Group extends Component {
       </Row>
     );
   };
-  
+
   render() {
     const { dataGroup, resetPaginationToggle, filterText, modalConfirm } = this.state
     const filteredItems = dataGroup.filter(item => item.group_name && item.group_name.toLowerCase().includes(filterText.toLowerCase()));

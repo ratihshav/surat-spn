@@ -7,7 +7,6 @@ import { connect } from "react-redux";
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import { getDashboardDataService } from '../../helpers/master/dashboard'
 
-import "chartist/dist/scss/chartist.scss";
 
 class Dashboard extends Component {
   constructor(props) {

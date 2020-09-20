@@ -27,7 +27,6 @@ import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions"
 
 // import images
 import config from '../../helpers/config'
-import "chartist/dist/scss/chartist.scss";
 import userAva from "../../assets/images/users/avatar-1.jpg"
 
 

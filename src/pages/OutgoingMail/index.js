@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Row, Col, Button, Modal } from "reactstrap";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
-import "chartist/dist/scss/chartist.scss";
 import {
   getOutgoingMailService,
   deleteOutgoingMailService,

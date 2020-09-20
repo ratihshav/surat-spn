@@ -16,23 +16,36 @@ class UserChangePassword extends Component {
     super(props);
     this.state = {
       password: '',
-    };
-    this.passwordOptions = {
-      mode: 'password'
+      confirmPassword: ''
     };
   }
+
+  handleSubmit = (e) => {
+    const params = {
+      password: e.target.password.value,
+      confirmPassword: e.target.confirmPassword.value,
+    }
+
+    if (params.password !== params.confirmPassword) {
+      this.alertError("Password Anda tidak sesuai")
+      e.preventDefault()
+    } else {
+      this.changePassword(e)
+    }
+  }
+
 
   changePassword = (e) => {
     const idUser = window.localStorage.getItem('idUser');
 
     const params = {
-      password: this.state.password,
+      password: e.target.password.value,
       id: idUser
     }
 
     changePasswordUserService(params)
       .then((data) => {
-        this.alertSuccess()
+        this.alertSuccess(data.data.messages[0])
         this.props.history.push('/user-edit');
       })
       .catch((e) => {
@@ -43,8 +56,8 @@ class UserChangePassword extends Component {
     e.preventDefault()
   }
 
-  alertSuccess = () => {
-    toast.success('Sukses menyimpan data!')
+  alertSuccess = (e) => {
+    toast.success(e)
   };
 
   alertError = (e) => {
@@ -83,7 +96,7 @@ class UserChangePassword extends Component {
           </Row>
 
 
-          <form action="your-action" onSubmit={this.changePassword}>
+          <form action="your-action" onSubmit={this.handleSubmit}>
             <Row>
               <div className="col-12">
                 <Card>
@@ -93,39 +106,47 @@ class UserChangePassword extends Component {
                         htmlFor="example-text-input"
                         className="col-sm-2 col-form-label"
                       >
-                        Password
+                        Password Baru
                     </label>
                       <Col sm={10}>
                         <input
-                          name="destination"
+                          name="password"
                           className="form-control"
-                          type="text"
+                          type="password"
                           id="example-text-input"
                           ref={node => (this.inputNode = node)}
                           required
+                          autoComplete="new-password"
                         />
                       </Col>
                     </Row>
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="confirmPass"
                         className="col-sm-2 col-form-label"
                       >
-                        Konfirmasi Password
+                        Konfirmasi Password Baru
                     </label>
                       <Col sm={10}>
                         <input
-                          name="destination"
+                          name="confirmPassword"
                           className="form-control"
-                          type="text"
-                          id="example-text-input"
+                          type="password"
+                          id="confirmPass"
                           ref={node => (this.inputNode = node)}
                           required
+                          autoComplete="new-password"
                         />
                       </Col>
                     </Row>
-
+                    <div className="text-right mt-4">
+                      <Button
+                        color="success"
+                        className="mt-1">
+                        <i className="typcn typcn-input-checked" />Simpan
+                    </Button>
+                    </div>
 
                   </CardBody>
                 </Card>

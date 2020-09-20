@@ -2,15 +2,14 @@ import React, { Component } from "react";
 import { Row, Col, Modal, Button } from "reactstrap";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
-import "chartist/dist/scss/chartist.scss";
 import { getMasterClassService, deleteMasterClassService } from '../../helpers/master/classification'
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import toast from '../UI/toast';
 import DataTable from 'react-data-table-component';
 import memoize from 'memoize-one';
-import {Action, FilterComponent, AddButtonComponent} from '../../components/tabelComponents';
+import { Action, FilterComponent, AddButtonComponent } from '../../components/tabelComponents';
 
-const columns = memoize(actHandler =>[
+const columns = memoize(actHandler => [
   {
     name: 'Kode Klasifikasi',
     selector: 'kode_klasifikasi',
@@ -59,7 +58,7 @@ class Classification extends Component {
         )
       });
   }
-  
+
   navigateToAdd = () => {
     this.props.history.push({
       pathname: '/classification-add'
@@ -122,7 +121,7 @@ class Classification extends Component {
       });
     }
   };
-  
+
   getSubHeaderComponent = () => {
     const { dataClass, filterText } = this.state
     const { perms } = this.props.data

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Row, Col, Card, CardBody, Alert, Button } from "reactstrap";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
-import { AvForm } from "availity-reactstrap-validation";
+import { AvForm, AvField } from "availity-reactstrap-validation";
 import { userForgetPassword } from "../../store/actions";
 import { resetPasswordService } from "../../helpers/master/user"
 import logoKabKerinci from "../../assets/images/logo-kab-kerinci.png"
@@ -16,9 +16,6 @@ class ResetPassword extends Component {
       password: '',
       paramsUrl: ''
     };
-    this.passwordOptions = {
-      mode: 'password'
-    };
   }
 
   componentDidMount() {
@@ -27,7 +24,21 @@ class ResetPassword extends Component {
     this.setState({ paramsUrl: stringUrl })
   }
 
-  handleValidSubmit = (e) => {
+  handleSubmit = (e) => {
+    const params = {
+      password: e.target.password.value,
+      confirmPassword: e.target.confirmPassword.value,
+    }
+
+    if (params.password !== params.confirmPassword) {
+      this.alertError("Password Anda tidak sesuai")
+      e.preventDefault()
+    } else {
+      this.resetPassword(e)
+    }
+  }
+
+  resetPassword = (e) => {
     const { paramsUrl, password } = this.state
     const params = {
       email: paramsUrl.email,
@@ -36,7 +47,7 @@ class ResetPassword extends Component {
     }
     resetPasswordService(params)
       .then((data) => {
-        this.alertSuccess()
+        this.alertSuccess(data.data.messages[0])
         this.props.history.push('/')
       })
       .catch((e) => {
@@ -45,22 +56,12 @@ class ResetPassword extends Component {
     e.preventDefault();
   }
 
-  alertSuccess = () => {
-    toast.success('Sukses mereset password!')
+  alertSuccess = (e) => {
+    toast.success(e)
   };
 
   alertError = (e) => {
     toast.error(e)
-  }
-
-  passwordComparison = () => {
-    return this.state.password;
-  }
-
-  onPasswordChanged = (e) => {
-    this.setState({
-      password: e.value
-    });
   }
 
   render() {
@@ -110,41 +111,44 @@ class ResetPassword extends Component {
                         </Alert>
                       ) : null}
 
-                      <AvForm
+                      <form
                         className="form-horizontal mt-4"
-                        onValidSubmit={this.handleValidSubmit}>
-                        <div className="dx-field">
-                          <div className="dx-field-label">Email</div>
-                          <div className="dx-field-value">
-                            {/* <TextBox
-                              mode="text"
-                              value={paramsUrl.email}
-                              disabled /> */}
-                          </div>
+                        onSubmit={this.handleSubmit}>
+                        <div className="form-group">
+                          <input
+                            name="email"
+                            className="form-control"
+                            placeholder="E-mail"
+                            type="email"
+                            ref={node => (this.inputNode = node)}
+                            required
+                            value={paramsUrl.email}
+                            disabled
+                          />
                         </div>
-                        <div className="dx-field">
-                          <div className="dx-field-label">Password Baru</div>
-                          <div className="dx-field-value">
-                            {/* <TextBox
-                              mode="password"
-                              value={this.state.password}
-                              onValueChanged={this.onPasswordChanged}>
-                              <Validator>
-                                <RequiredRule message="Password is required" />
-                              </Validator>
-                            </TextBox> */}
-                          </div>
+                        <div className="form-group">
+                          <input
+                            name="password"
+                            className="form-control"
+                            type="password"
+                            id="example-text-input"
+                            ref={node => (this.inputNode = node)}
+                            required
+                            autoComplete="new-password"
+                            placeholder="Password Baru"
+                          />
                         </div>
-                        <div className="dx-field">
-                          <div className="dx-field-label">Konfirmasi Password</div>
-                          <div className="dx-field-value">
-                            {/* <TextBox mode="password">
-                              <Validator>
-                                <RequiredRule message="Confirm Password is required" />
-                                <CompareRule message="Password and Confirm Password do not match" comparisonTarget={this.passwordComparison} />
-                              </Validator>
-                            </TextBox> */}
-                          </div>
+                        <div className="form-group">
+                          <input
+                            name="confirmPassword"
+                            className="form-control"
+                            type="password"
+                            id="confirmPass"
+                            ref={node => (this.inputNode = node)}
+                            required
+                            autoComplete="new-password"
+                            placeholder="Konfirmasi Password Baru"
+                          />
                         </div>
                         <br /><br />
                         <div className="button-items">
@@ -155,7 +159,7 @@ class ResetPassword extends Component {
                                 </Button>
 
                         </div>
-                      </AvForm>
+                      </form>
                     </div>
                   </CardBody>
                 </Card>

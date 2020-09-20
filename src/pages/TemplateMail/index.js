@@ -1,17 +1,16 @@
 import React, { Component } from "react";
-import { Row, Col, Modal, Button} from "reactstrap";
+import { Row, Col, Modal, Button } from "reactstrap";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
-import "chartist/dist/scss/chartist.scss";
 import { getTemplateMailService, deleteTemplateMailService } from '../../helpers/master/templateMail';
 import config from '../../helpers/config'
 import toast from '../UI/toast';
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import DataTable from 'react-data-table-component';
 import memoize from 'memoize-one';
-import {Action, FilterComponent, AddButtonComponent} from '../../components/tabelComponents';
+import { Action, FilterComponent, AddButtonComponent } from '../../components/tabelComponents';
 
-const columns = memoize(actHandler =>[
+const columns = memoize(actHandler => [
   {
     name: 'Tipe Template',
     selector: 'template_type',
@@ -84,7 +83,7 @@ class TemplateMail extends Component {
       pathname: '/template-mail-create'
     });
   }
-  
+
   navigateToEdit = (id) => {
     localStorage.setItem('idTemp', JSON.stringify(Number(id)))
     this.props.history.push({
@@ -141,7 +140,7 @@ class TemplateMail extends Component {
       });
     }
   };
-  
+
   getSubHeaderComponent = () => {
     const { dataTemplate, filterText } = this.state
     const { perms } = this.props.data

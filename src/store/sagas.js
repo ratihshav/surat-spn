@@ -3,6 +3,7 @@ import { all } from 'redux-saga/effects';
 //public
 import AuthSaga from './auth/login/saga';
 import LayoutSaga from './layout/saga';
+import ForgetSaga from './auth/forgetpwd/saga';
 
 //business
 import MasterUserSaga from './business/master-user/saga';
@@ -15,6 +16,7 @@ export default function* rootSaga() {
         //public
         AuthSaga(),
         LayoutSaga(),
+        ForgetSaga(),
         MasterUserSaga(),
         MasterGroupSaga(),
         OutgoingMailSaga(),
