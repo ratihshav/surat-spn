@@ -11,7 +11,6 @@ import {
 
 // Other Layout related Component
 import TopBar from "./TopBar";
-import Navbar from "./Navbar";
 import Footer from "./Footer";
 
 class Layout extends Component {
@@ -61,7 +60,6 @@ class Layout extends Component {
             isMenuOpened={this.state.isMenuOpened}
             openLeftMenuCallBack={this.openMenu}
           />
-          <Navbar menuOpen={this.state.isMenuOpened} />
 
           <div className="main-content">
             <div className="page-content">{this.props.children}</div>

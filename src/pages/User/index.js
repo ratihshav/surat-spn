@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import {
   Row,
   Col,
-  Button
+  Button,
+  Modal
 } from "reactstrap";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
@@ -10,43 +11,14 @@ import "chartist/dist/scss/chartist.scss";
 import { getMasterUserServices, deleteMasterUserService } from '../../helpers/master/user'
 import 'react-toastify/dist/ReactToastify.css';
 import DataTable from 'react-data-table-component';
-import styled from 'styled-components';
+import memoize from 'memoize-one';
+import {Action, FilterComponent, AddButtonComponent} from '../../components/tabelComponents';
 
 //Reducer
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import toast from '../UI/toast';
 
-const TextField = styled.input`
-  height: 32px;
-  width: 200px;
-  border-radius: 3px;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border: 1px solid #e5e5e5;
-  padding: 0 32px 0 16px;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const ClearButton = styled(Button)`
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  height: 32px;
-  width: 32px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #4285F4
-`;
-
-const columns = [
+const columns = memoize(actHandler =>[
   {
     name: 'Nama Lengkap',
     selector: 'full_name',
@@ -63,33 +35,24 @@ const columns = [
     name: 'Jabatan',
     selector: 'position_name',
     sortable: true,
-  }, {
-    name: 'Username',
-    selector: 'username',
-    sortable: true,
+  },{
+    name: 'Aksi',
+    ignoreRowClick: true,
+    allowOverflow: true,
+    button: true,
+    cell: data => <Action data={data} actHandler={actHandler} />
   }
-]
-
-const FilterComponent = ({ filterText, onFilter, onClear }) => (
-  <>
-    <TextField id="search" type="text" placeholder="Filter By Name" aria-label="Search Input" value={filterText} onChange={onFilter} />
-    <ClearButton type="button" onClick={onClear}>X</ClearButton>
-  </>
-);
-
-const AddButtonComponent = ({ onClick }) => {
-  return (
-    <Button color="success" key="add" onClick={onClick}>Tambah Data</Button>
-  )
-}
-
+])
 
 class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isModalVisible: false,
+      userId: null,
       dataUser: [],
+      modalConfirm: false,
+      row: null,
       filterText: "",
       resetPaginationToggle: false
     };
@@ -119,44 +82,45 @@ class User extends Component {
     });
   }
 
-  navigateToEdit = (val) => {
-    const data = val.row.data
-    localStorage.setItem('idUser', JSON.stringify(data.id))
+  navigateToEdit = (id) => {
+    localStorage.setItem('idUser', JSON.stringify(Number(id)))
     this.props.history.push({
-      pathname: '/user-edit',
-      params: data,
+      pathname: '/user-edit'
     });
   }
 
-  onToolbarPreparing = (e) => {
-    e.toolbarOptions.items.unshift({
-      location: 'after',
-      widget: 'dxButton',
-      options: {
-        icon: 'add',
-        text: 'Tambah Baru',
-        onClick: this.navigateToAdd
-      }
-    });
+  navigateToDelete = (id) => {
+    this.setState({ userId: id })
+    this.setState({ modalConfirm: true })
   }
 
-  onDeleteUser = (values) => {
-    deleteMasterUserService(values)
+  showModalConfirm = () => {
+    this.setState(prevState => ({
+      modalConfirm: !prevState.modalConfirm
+    }));
+    document.body.classList.add("no_padding");
+  }
+
+  deleteUser = () => {
+    const { userId } = this.state
+    deleteMasterUserService(userId)
       .then((data) => {
-        this.alertSuccess()
-        this.props.history.push('/user');
+        const { dataUser } = this.state;
+        const { row } = this.state;
+        const index = dataUser.findIndex(r => r === row);
+
+        this.setState(state => ({
+          // dataGroup: [...state.dataGroup.slice(0, index), ...state.dataGroup.slice(index + 1)]
+          dataUser: [...state.dataUser.slice(0, index)]
+        }));
+
+        this.alertSuccess(data)
+        this.props.history.push('/user')
+        this.setState({ modalConfirm: false })
       })
       .catch((e) => {
         this.alertError(e)
       });
-  }
-
-  alertSuccess = () => {
-    toast.success('Sukses Menghapus data!')
-  };
-
-  alertError = (e) => {
-    toast.error(e)
   }
 
   handleClear = () => {
@@ -169,6 +133,12 @@ class User extends Component {
       });
     }
   };
+
+  handleButtonClick = (state) => {
+    this.setState({ row: state.target.value })
+    const act = state.target.name === 'edit' ? this.navigateToEdit(state.target.id)
+      : state.target.name === 'delete' ? this.navigateToDelete(state.target.id) : null
+  }
 
   getSubHeaderComponent = () => {
     const { dataUser, filterText } = this.state
@@ -200,8 +170,7 @@ class User extends Component {
   };
 
   render() {
-    const { dataUser, resetPaginationToggle, filterText } = this.state
-
+    const { dataUser, resetPaginationToggle, filterText, modalConfirm } = this.state
     const filteredItems = dataUser.filter(item => item.full_name && item.full_name.toLowerCase().includes(filterText.toLowerCase()));
 
     return (
@@ -220,34 +189,61 @@ class User extends Component {
               </div>
               <br />
             </Col>
-
           </Row>
-
-
           <div className="row">
             <div className="col-12">
               <div className="card">
                 <div className="card-body">
                   <DataTable
-                    columns={columns}
+                    columns={columns(this.handleButtonClick)}
                     data={filteredItems}
                     // expandableRows
                     // expandOnRowClicked
                     pagination
                     highlightOnHover
                     striped
-                    dense
+                    // dense
                     subHeader
                     subHeaderComponent={this.getSubHeaderComponent()}
-                    paginationResetDefaultPage={resetPaginationToggle}
-                  />
-
+                    paginationResetDefaultPage={resetPaginationToggle} />
                 </div>
               </div>
             </div>
           </div>
-
-        </div>
+          </div>
+          <Modal isOpen={modalConfirm}>
+            <div className="modal-header text-white bg-danger">
+              <h5 className="modal-title mt-0">Konfirmasi</h5>
+              <button
+                type="button"
+                onClick={() =>
+                  this.setState({ modalConfirm: false })
+                }
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <h5>Apakah Anda yakin ingin menghapus User ini?</h5>
+            </div>
+          <div className="modal-footer">
+            <Button
+              color="danger"
+              className="mt-1"
+              onClick={this.deleteUser}
+              data-target=".bs-example-modal-center">
+              Hapus
+            </Button>
+            <Button
+              className="btn btn-info"
+              onClick={() => this.setState({ modalConfirm: false })}
+              data-target=".bs-example-modal-center">
+              Batal
+            </Button>
+          </div>
+        </Modal>
       </React.Fragment>
     );
   }

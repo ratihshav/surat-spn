@@ -1,50 +1,62 @@
 import React, { Component } from "react";
-import {
-  Row,
-  Col,
-} from "reactstrap";
+import { Row, Col, Modal, Button} from "reactstrap";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import "chartist/dist/scss/chartist.scss";
-import DataGrid, {
-  Column,
-  Editing,
-  Paging,
-  FilterRow,
-  Pager,
-} from 'devextreme-react/data-grid';
-import DataStore from 'devextreme/data/data_source';
 import { getMasterPositionServices, deleteMasterPositionService } from '../../helpers/master/position'
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
 import toast from '../UI/toast';
+import DataTable from 'react-data-table-component';
+import memoize from 'memoize-one';
+import {Action, FilterComponent, AddButtonComponent} from '../../components/tabelComponents';
+
+const columns = memoize(actHandler =>[
+  {
+    name: 'Nama Jabatan',
+    selector: 'position_name',
+    sortable: true,
+  }, {
+    name: 'Tipe',
+    selector: 'position_type',
+    sortable: true,
+  }, {
+    name: 'Unit Kerja',
+    selector: 'group_name',
+    sortable: true,
+  }, {
+    name: 'Aksi',
+    ignoreRowClick: true,
+    allowOverflow: true,
+    button: true,
+    cell: data => <Action data={data} actHandler={actHandler} />
+  }
+])
 
 class Position extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isModalVisible: false,
-      dataUser: [],
-      totalCount: 0
+      dataPosition: [],
+      positionId: null,
+      modalConfirm: false,
+      row: null,
+      filterText: "",
+      resetPaginationToggle: false
     };
   }
 
-  cLoad = () => {
-    return new DataStore({
-      load: (loadOptions) => {
-        return getMasterPositionServices()
-      },
-      remove: (values) => { this.onDeletePosition(values) }
-    })
-  }
-
-  onDeletePosition = (values) => {
-    deleteMasterPositionService(values)
+  componentDidMount() {
+    getMasterPositionServices()
       .then((data) => {
-        this.alertSuccess()
-        this.props.history.push('/position');
+        this.setState({
+          dataPosition: data.data
+        })
       })
       .catch((e) => {
-        this.alertError(e)
+        return (
+          this.alertError(e)
+        )
       });
   }
 
@@ -56,13 +68,22 @@ class Position extends Component {
     toast.error(e)
   }
 
-  navigateToEdit = (val) => {
-    const data = val.row.data
-    localStorage.setItem('idPosition', JSON.stringify(data.id))
+  navigateToAdd = () => {
     this.props.history.push({
-      pathname: '/position-edit',
-      params: data,
+      pathname: '/position-add'
     });
+  }
+
+  navigateToEdit = (id) => {
+    localStorage.setItem('idPosition', JSON.stringify(Number(id)))
+    this.props.history.push({
+      pathname: '/position-edit'
+    });
+  }
+
+  navigateToDelete = (id) => {
+    this.setState({ positionId: id })
+    this.setState({ modalConfirm: true })
   }
 
   navigateToPermissions = (val) => {
@@ -74,28 +95,83 @@ class Position extends Component {
     });
   }
 
-  onToolbarPreparing = (e) => {
-    e.toolbarOptions.items.unshift({
-      location: 'after',
-      widget: 'dxButton',
-      options: {
-        icon: 'add',
-        text: 'Tambah Baru',
-        onClick: this.navigateToAdd
-      }
-    });
+  showModalConfirm = () => {
+    this.setState(prevState => ({
+      modalConfirm: !prevState.modalConfirm
+    }));
+    document.body.classList.add("no_padding");
   }
 
-  navigateToAdd = () => {
-    this.props.history.push({
-      pathname: '/position-add'
-    });
+  deletePosition = () => {
+    const { positionId } = this.state
+    deleteMasterPositionService(positionId)
+      .then((data) => {
+        const { dataPosition } = this.state;
+        const { row } = this.state;
+        const index = dataPosition.findIndex(r => r === row);
+
+        this.setState(state => ({
+          dataPosition: [...state.dataPosition.slice(0, index)]
+        }));
+
+        this.alertSuccess(data)
+        this.props.history.push('/position');
+        this.setState({ modalConfirm: false })
+      })
+      .catch((e) => {
+        this.alertError(e)
+      });
   }
 
-  render() {
+  handleButtonClick = (state) => {
+    this.setState({ row: state.target.value })
+    const act = state.target.name === 'edit' ? this.navigateToEdit(state.target.id)
+      : state.target.name === 'delete' ? this.navigateToDelete(state.target.id) : null
+  }
+
+  handleClear = () => {
+    const { resetPaginationToggle, filterText } = this.state;
+
+    if (filterText) {
+      this.setState({
+        resetPaginationToggle: !resetPaginationToggle,
+        filterText: ""
+      });
+    }
+  };
+  
+  getSubHeaderComponent = () => {
+    const { dataPosition, filterText } = this.state
     const { perms } = this.props.data
     const granted = ['jabatan_save', 'is_admin']
     const isAbleCreate = granted.some(x => perms.includes(x));
+    return (
+      <Row>
+        <FilterComponent onFilter={(e) => {
+          let newFilterText = e.target.value;
+          this.filteredItems = dataPosition.filter(
+            (item) =>
+              item.position_name &&
+              item.position_name.toLowerCase().includes(newFilterText.toLowerCase())
+          );
+          this.setState({ filterText: newFilterText });
+        }}
+          onClear={this.handleClear}
+          filterText={filterText}
+        /> &nbsp; &nbsp;
+
+        { isAbleCreate ?
+          <AddButtonComponent
+            onClick={this.navigateToAdd}
+          />
+          : null}
+      </Row>
+    );
+  };
+
+  render() {
+    const { dataPosition, resetPaginationToggle, filterText, modalConfirm } = this.state
+    const filteredItems = dataPosition.filter(item => item.position_name && item.position_name.toLowerCase().includes(filterText.toLowerCase()));
 
     return (
       <React.Fragment>
@@ -119,47 +195,54 @@ class Position extends Component {
             <div className="col-12">
               <div className="card">
                 <div className="card-body">
-                  <DataGrid
-                    dataSource={this.cLoad()}
-                    rowAlternationEnabled={true}
-                    showColumnLines={false}
-                    columnAutoWidth={true}
-                    onToolbarPreparing={isAbleCreate ? this.onToolbarPreparing : null}
-                  >
-                    <Editing
-                      mode="row"
-                      allowDeleting={true} />
-                    <FilterRow visible={true} />
-                    <Paging defaultPageSize={10} />
-                    <Pager
-                      showPageSizeSelector={true}
-                      allowedPageSizes={[5, 10, 20]}
-                      showInfo={true} />
-
-                    <Column dataField="id" visible={false} />
-                    <Column caption="Nama Jabatan" dataField="position_name" />
-                    <Column caption="Tipe" dataField="position_type" />
-                    <Column caption="Unit" dataField="group_name" />
-                    <Column type="buttons"
-                      buttons={[{
-                        hint: 'Edit',
-                        text: 'Edit',
-                        onClick: this.navigateToEdit
-                      },
-                      {
-                        hint: 'Hak Akses',
-                        text: 'Hak Akses',
-                        onClick: this.navigateToPermissions
-                      }, 'delete']}
-                    />
-
-                  </DataGrid>
+                  <DataTable title="Tabel Jabatan"
+                    columns={columns(this.handleButtonClick)}
+                    onSelectedRowsChange={this.handleButtonClick}
+                    data={filteredItems}
+                    pagination
+                    highlightOnHover
+                    striped
+                    subHeader
+                    subHeaderComponent={this.getSubHeaderComponent()}
+                    paginationResetDefaultPage={resetPaginationToggle} />
                 </div>
               </div>
             </div>
           </div>
-
         </div>
+        <Modal isOpen={modalConfirm}>
+          <div className="modal-header text-white bg-danger">
+            <h5 className="modal-title mt-0">Konfirmasi</h5>
+            <button
+              type="button"
+              onClick={() =>
+                this.setState({ modalConfirm: false })
+              }
+              className="close"
+              data-dismiss="modal"
+              aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <h5>Apakah Anda yakin ingin menghapus Jabatan ini?</h5>
+          </div>
+          <div className="modal-footer">
+            <Button
+              color="danger"
+              className="mt-1"
+              onClick={this.deletePosition}
+              data-target=".bs-example-modal-center">
+              Hapus
+            </Button>
+            <Button
+              className="btn btn-info"
+              onClick={() => this.setState({ modalConfirm: false })}
+              data-target=".bs-example-modal-center">
+              Batal
+            </Button>
+          </div>
+        </Modal>
       </React.Fragment>
     );
   }

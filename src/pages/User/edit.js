@@ -223,39 +223,36 @@ class UserEdit extends Component {
                     <Col md={8}>
                       <form action="#" onSubmit={this.submitUpdatedData}>
                         <Nav tabs className="nav-tabs-custom nav-justified">
-                          <NavItem>
+                          <NavItem style={{cursor: "pointer"}}>
                             <NavLink
                               className={classnames({
                                 active: this.state.activeTabJustify === "1"
                               })}
                               onClick={() => {
                                 this.toggleCustomJustified("1");
-                              }}
-                            >
+                              }}>
                               <span class="d-none d-sm-block">Data Pribadi</span>
                             </NavLink>
                           </NavItem>
-                          <NavItem>
+                          <NavItem style={{cursor: "pointer"}}>
                             <NavLink
                               className={classnames({
                                 active: this.state.activeTabJustify === "6"
                               })}
                               onClick={() => {
                                 this.toggleCustomJustified("6");
-                              }}
-                            >
+                              }}>
                               <span class="d-none d-sm-block">Data Jabatan</span>
                             </NavLink>
                           </NavItem>
-                          <NavItem>
+                          <NavItem style={{cursor: "pointer"}}>
                             <NavLink
                               className={classnames({
                                 active: this.state.activeTabJustify === "7"
                               })}
                               onClick={() => {
                                 this.toggleCustomJustified("7");
-                              }}
-                            >
+                              }}>
                               <span class="d-none d-sm-block">Data Unit</span>
                             </NavLink>
                           </NavItem>
@@ -267,21 +264,34 @@ class UserEdit extends Component {
                               <Col sm="12">
                                 <CardText>
                                   <Row className="form-group">
-                                    <label
-                                      htmlFor="example-text-input"
-                                      className="col-sm-2 col-form-label">
-                                      NIP
+                                    <label htmlFor="idEmployee"
+                                      className="col-sm-2 col-form-label"> NIP
                                     </label>
                                     <Col sm={10}>
-                                      <input
-                                        className="form-control"
+                                      <input className="form-control"
                                         type="text"
                                         defaultValue={dataUser.nip}
-                                        id="example-text-input"
+                                        id="idEmployee"
                                         name="idEmployee"
                                         ref={node => (this.inputNode = node)}
-                                        required
-                                        disabled
+                                        style={{backgroundColor: "#cdcbcb9c"}}
+                                        readOnly
+                                      />
+                                    </Col>
+                                  </Row>
+                                  <Row className="form-group">
+                                    <label htmlFor="username"
+                                      className="col-sm-2 col-form-label"> Username
+                                    </label>
+                                    <Col sm={10}>
+                                      <input className="form-control"
+                                        type="text"
+                                        defaultValue={dataUser.username}
+                                        id="username"
+                                        name="username"
+                                        ref={node => (this.inputNode = node)}
+                                        style={{backgroundColor: "#cdcbcb9c"}}
+                                        readOnly
                                       />
                                     </Col>
                                   </Row>
@@ -293,17 +303,14 @@ class UserEdit extends Component {
                               <Col sm="12">
                                 <CardText>
                                   <Row className="form-group">
-                                    <label
-                                      htmlFor="example-text-input"
-                                      className="col-sm-2 col-form-label">
-                                      Nama Lengkap
+                                    <label htmlFor="fullName"
+                                      className="col-sm-2 col-form-label"> Nama Lengkap
                                      </label>
                                     <Col sm={10}>
-                                      <input
-                                        className="form-control"
+                                      <input className="form-control"
                                         type="text"
                                         defaultValue={dataUser.full_name}
-                                        id="example-text-input"
+                                        id="fullName"
                                         name="fullName"
                                         ref={node => (this.inputNode = node)}
                                         required
@@ -317,46 +324,21 @@ class UserEdit extends Component {
                             <Row>
                               <Col sm="12">
                                 <CardText>
-                                  <Row className="form-group">
-                                    <label
-                                      htmlFor="example-text-input"
-                                      className="col-sm-2 col-form-label">
-                                      Username
-                                    </label>
-                                    <Col sm={10}>
-                                      <input
-                                        className="form-control"
-                                        type="text"
-                                        defaultValue={dataUser.username}
-                                        id="example-text-input"
-                                        name="username"
-                                        ref={node => (this.inputNode = node)}
-                                        required
-                                        disabled
-                                      />
-                                    </Col>
-                                  </Row>
-
                                   <Row>
                                     <Col sm="12">
                                       <CardText>
                                         <Row className="form-group">
-                                          <label
-                                            htmlFor="example-text-input"
-                                            className="col-sm-2 col-form-label">
-                                            E-mail
+                                          <label htmlFor="email"
+                                            className="col-sm-2 col-form-label"> E-mail
                                           </label>
                                           <Col sm={10}>
-                                            <input
-                                              className="form-control"
+                                            <input className="form-control"
                                               type="email"
                                               defaultValue={dataUser.email}
-                                              id="example-text-input"
+                                              id="email"
                                               name="email"
                                               ref={node => (this.inputNode = node)}
-                                              required
-                                              disabled
-                                            />
+                                              required />
                                           </Col>
                                         </Row>
                                       </CardText>
@@ -364,34 +346,27 @@ class UserEdit extends Component {
                                   </Row>
 
                                   <Row className="form-group">
-                                    <label
-                                      htmlFor="example-text-input"
-                                      className="col-sm-2 col-form-label">
-                                      Tanggal Lahir
+                                    <label htmlFor="birthDate"
+                                      className="col-sm-2 col-form-label"> Tanggal Lahir
                                     </label>
                                     <Col sm={10}>
-                                      <input
-                                        className="form-control"
+                                      <input className="form-control"
                                         type="date"
                                         defaultValue={dataUser.ttl}
-                                        id="example-text-input"
+                                        id="birthDate"
                                         name="birthDate"
-                                        ref={node => (this.inputNode = node)}
-                                      />
+                                        ref={node => (this.inputNode = node)} />
                                     </Col>
                                   </Row>
 
                                   <Row>
                                     <Col sm="12">
                                       <Row className="form-group">
-                                        <label
-                                          htmlFor="example-text-input"
-                                          className="col-sm-2 col-form-label">
-                                          Jenis Kelamin
-                                           </label>
+                                        <label htmlFor="gender"
+                                          className="col-sm-2 col-form-label"> Jenis Kelamin
+                                        </label>
                                         <Col sm={10}>
-                                          <input
-                                            type="radio"
+                                          <input type="radio"
                                             id="male"
                                             name="gender"
                                             value="Laki-laki"
@@ -399,11 +374,8 @@ class UserEdit extends Component {
                                             onChange={this.handleChangeGender}
                                             ref={node => (this.inputNode = node)} />&nbsp;
                                           <label htmlFor="male"> Laki-laki</label>
-
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                                            <input
-                                            type="radio"
+                                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                          <input type="radio"
                                             id="female"
                                             name="gender"
                                             value="Perempuan"
@@ -417,33 +389,27 @@ class UserEdit extends Component {
                                   </Row>
 
                                   <Row className="form-group">
-                                    <label
-                                      htmlFor="example-text-input"
-                                      className="col-sm-2 col-form-label">
-                                      No. Handphone
+                                    <label htmlFor="phone"
+                                      className="col-sm-2 col-form-label"> No. Handphone
                                     </label>
                                     <Col sm={10}>
-                                      <input
-                                        className="form-control"
+                                      <input className="form-control"
                                         type="text"
                                         defaultValue={dataUser.phone}
-                                        id="example-text-input"
+                                        id="phone"
                                         name="phone"
-                                        ref={node => (this.inputNode = node)}
-                                      />
+                                        ref={node => (this.inputNode = node)} />
                                     </Col>
                                   </Row>
 
                                   <Row className="form-group">
-                                    <label
-                                      htmlFor="example-text-input"
-                                      className="col-sm-2 col-form-label">
-                                      Alamat
+                                    <label htmlFor="address"
+                                      className="col-sm-2 col-form-label"> Alamat
                                     </label>
                                     <Col sm={10}>
                                       <textarea
                                         className="form-control"
-                                        id="w3review"
+                                        id="address"
                                         name="address"
                                         rows="4"
                                         cols="50"
@@ -451,7 +417,6 @@ class UserEdit extends Component {
                                         ref={node => (this.inputNode = node)} />
                                     </Col>
                                   </Row>
-
                                 </CardText>
                               </Col>
                             </Row>
@@ -461,21 +426,17 @@ class UserEdit extends Component {
                             <Row>
                               <Col sm="12">
                                 <Row className="form-group">
-                                  <label
-                                    htmlFor="example-search-input"
-                                    className="col-sm-2 col-form-label">
+                                  <label className="col-sm-2 col-form-label">
                                     Nama Jabatan
                                   </label>
                                   <Col sm={10}>
-                                    <Select
-                                      value={selectedPosition}
+                                    <Select value={selectedPosition}
                                       placeholder={[dataUser.position_name]}
                                       defaultValue={defaValPosition}
                                       onChange={this.handleSelectPosition}
                                       options={optionsPosition}
                                       name="type"
-                                      ref={node => (this.inputNode = node)}
-                                    />
+                                      ref={node => (this.inputNode = node)} />
                                   </Col>
                                 </Row>
                               </Col>
@@ -487,28 +448,23 @@ class UserEdit extends Component {
                               <Col sm="12">
                                 <CardText>
                                   <Row className="form-group">
-                                    <label
-                                      htmlFor="example-text-input"
-                                      className="col-sm-2 col-form-label">
-                                      Nama Unit
-                                          </label>
+                                    <label htmlFor="group"
+                                      className="col-sm-2 col-form-label"> Unit Kerja 
+                                    </label>
                                     <Col sm={10}>
-                                      <input
-                                        className="form-control"
-                                        type="email"
+                                      <input className="form-control"
+                                        type="text"
                                         defaultValue={dataUser.group_name}
-                                        id="example-text-input"
+                                        id="group"
                                         name="group"
                                         ref={node => (this.inputNode = node)}
-                                        required
-                                        disabled
-                                      />
+                                        style={{backgroundColor: "#cdcbcb9c"}}
+                                        readOnly />
                                     </Col>
                                   </Row>
                                 </CardText>
                               </Col>
                             </Row>
-
                           </TabPane>
                         </TabContent>
                         <div className="text-right mt-4">
@@ -517,18 +473,16 @@ class UserEdit extends Component {
                             className="mt-1">
                             <i className="typcn typcn-input-checked" />Simpan
                           </Button>
-
                           &nbsp; &nbsp;
-                    <Button
+                          <Button
                             color="grayMed"
                             className="mt-1"
                             onClick={this.goBack}>
                             <i className="ion ion-md-arrow-round-back" /> Kembali
-                      </Button>
+                          </Button>
                         </div>
                       </form>
                     </Col>
-
                   </Row>
                 </CardBody>
               </Card>

@@ -1,21 +1,8 @@
 import React, { Component } from "react";
-import {
-  Row,
-  Col,
-} from "reactstrap";
+import { Row, Col, Button, Modal } from "reactstrap";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import "chartist/dist/scss/chartist.scss";
-import DataGrid, {
-  Scrolling,
-  Column,
-  Paging,
-  FilterRow,
-  Pager,
-  Editing
-} from 'devextreme-react/data-grid';
-import DataStore from 'devextreme/data/data_source';
-import { isNotEmpty, dxGridFilter } from '../../helpers/gridFilter'
 import {
   getIncomingMailService,
   deleteIncomingMailService,
@@ -23,64 +10,69 @@ import {
 } from '../../helpers/master/incomingMail'
 import toast from '../UI/toast';
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
+import DataTable from 'react-data-table-component';
+import memoize from 'memoize-one';
+import {Action, FilterComponent, AddButtonComponent} from '../../components/tabelComponents';
 
+const columns = memoize(actHandler =>[
+  {
+    name: 'Asal Surat',
+    selector: 'asal_surat',
+    sortable: true,
+  }, {
+    name: 'Nomor Surat',
+    selector: 'nomor_surat',
+    sortable: true,
+  }, {
+    name: 'Perihal',
+    selector: 'perihal',
+    sortable: true,
+  }, {
+    name: 'Tgl. Surat',
+    selector: 'tgl_surat',
+    sortable: true,
+  }, {
+    name: 'Tgl. Diterima',
+    selector: 'tgl_diterima',
+    sortable: true,
+  }, {
+    name: 'Aksi',
+    ignoreRowClick: true,
+    allowOverflow: true,
+    button: true,
+    cell: data => <Action data={data} actHandler={actHandler} />
+  }
+])
 class IncomingMail extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isModalVisible: false,
-      dataUser: [],
-      // totalCount: 0
+      suratId: null,
+      dataSurat: [],
+      modalConfirm: false,
+      row: null,
+      filterText: "",
+      resetPaginationToggle: false
     };
   }
 
-  // componentDidMount() {
-  //   this.getDataMail()
-  // }
-
-  // getDataMail = () => {
-  //   this.props.getOutgoingMail()
-  // }
-
-  renderCol = (data) => {
-
+  componentDidMount() {
+    getIncomingMailService()
+      .then((data) => {
+        this.setState({
+          dataSurat: data.data.data.data
+        })
+      })
+      .catch((e) => {
+        return (
+          this.alertError(e)
+        )
+      });
   }
 
-  allowDeleting = (e) => {
-    return e.row.data.can_delete
-    //return !this.isChief(e.row.data.Position);
-  }
-
-  allowEditing = (e) => {
-    return e.row.data.can_edit
-  }
-
-  cLoad = () => {
-    return new DataStore({
-      load: (loadOptions) => {
-        let params = '?';
-        [
-          'skip',
-          'sort',
-          'take',
-          'order',
-          'filter'
-        ].forEach(function (i) {
-
-          if (i in loadOptions && isNotEmpty(loadOptions[i]) && i == 'filter') {
-            let filterCol = dxGridFilter(loadOptions.filter);
-            params += `${i}=${JSON.stringify(filterCol)}&`;
-          }
-          else if (i in loadOptions && isNotEmpty(loadOptions[i])) { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
-        });
-        params = params.slice(0, -1);
-        return getIncomingMailService(params)
-      },
-      onLoadError: (error) => {
-        console.log(error.message);
-      },
-      remove: (values) => { this.onDeleteIncomingMail(values) }
-    })
+  alertError = (e) => {
+    toast.error(e)
   }
 
   navigateToAdd = () => {
@@ -89,27 +81,92 @@ class IncomingMail extends Component {
     });
   }
 
-  navigateToEdit = (val) => {
-    const data = val.row.data
-    localStorage.setItem('idInMail', JSON.stringify(data.id))
+  navigateToEdit = (id) => {
+    localStorage.setItem('idInMail', JSON.stringify(Number(id)))
     this.props.history.push({
       pathname: '/incoming-mail-edit',
-      params: data,
     });
   }
 
-  navigateToDetail = (val) => {
-    const data = val.row.data
-    const idDisposisi = data.disposisi_id
-    localStorage.setItem('idInMail', JSON.stringify(data.id))
-
-    this.hasReadMail(idDisposisi)
-    this.props.history.push({
-      pathname: '/incoming-mail-detail',
-      params: data,
-    });
+  navigateToDelete = (id) => {
+    this.setState({ suratId: id })
+    this.setState({ modalConfirm: true })
   }
 
+  showModalConfirm = () => {
+    this.setState(prevState => ({
+      modalConfirm: !prevState.modalConfirm
+    }));
+    document.body.classList.add("no_padding");
+  }
+  
+  deleteSurat = () => {
+    const { suratId } = this.state
+    deleteIncomingMailService(suratId)
+      .then((data) => {
+        const { dataSurat } = this.state;
+        const { row } = this.state;
+        const index = dataSurat.findIndex(r => r === row);
+
+        this.setState(state => ({
+          // dataGroup: [...state.dataGroup.slice(0, index), ...state.dataGroup.slice(index + 1)]
+          dataSurat: [...state.dataSurat.slice(0, index)]
+        }));
+
+        this.alertSuccess(data)
+        this.props.history.push('/incoming-mail');
+        this.setState({ modalConfirm: false })
+      })
+      .catch((e) => {
+        this.alertError(e)
+      });
+  }
+
+  handleClear = () => {
+    const { resetPaginationToggle, filterText } = this.state;
+
+    if (filterText) {
+      this.setState({
+        resetPaginationToggle: !resetPaginationToggle,
+        filterText: ""
+      });
+    }
+  };
+
+  handleButtonClick = (state) => {
+    this.setState({ row: state.target.value })
+    const act = state.target.name === 'edit' ? this.navigateToEdit(state.target.id)
+      : state.target.name === 'delete' ? this.navigateToDelete(state.target.id) : null
+  }
+
+  getSubHeaderComponent = () => {
+    const { dataSurat, filterText } = this.state
+    const { perms } = this.props.data
+    const granted = ['suratMasuk_save', 'is_admin']
+    const isAbleCreate = granted.some(x => perms.includes(x));
+    return (
+      <Row>
+        <FilterComponent onFilter={(e) => {
+          let newFilterText = e.target.value;
+          this.filteredItems = dataSurat.filter(
+            (item) =>
+              item.nomor_surat &&
+              item.nomor_surat.toLowerCase().includes(newFilterText.toLowerCase())
+          );
+          this.setState({ filterText: newFilterText });
+        }}
+          onClear={this.handleClear}
+          filterText={filterText}
+        /> &nbsp; &nbsp;
+
+        { isAbleCreate ?
+          <AddButtonComponent
+            onClick={this.navigateToAdd}
+          />
+          : null}
+      </Row>
+    );
+  };
 
   hasReadMail = (params) => {
     readIncomingMailService(params)
@@ -121,47 +178,9 @@ class IncomingMail extends Component {
       .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
-  onToolbarPreparing = (e) => {
-    e.toolbarOptions.items.unshift({
-      location: 'after',
-      widget: 'dxButton',
-      options: {
-        icon: 'add',
-        text: 'Tambah Baru',
-        onClick: this.navigateToAdd
-      }
-    });
-  }
-
-  onDeleteIncomingMail = (values) => {
-    deleteIncomingMailService(values)
-      .then((data) => {
-        this.alertSuccess()
-        this.props.history.push('/incoming-mail');
-      })
-      .catch((e) => {
-        this.alertError(e)
-      });
-  }
-
-  getSubjectMail = (rowData) => {
-    return (
-      rowData.status + "-" + rowData.position_name + "-" + rowData.group_name
-    )
-  }
-
-  alertSuccess = () => {
-    toast.success('Sukses Menghapus data!')
-  };
-
-  alertError = (e) => {
-    toast.error(e)
-  }
-
   render() {
-    const { perms } = this.props.data
-    const granted = ['suratMasuk_save', 'is_admin']
-    const isAbleCreate = granted.some(x => perms.includes(x));
+    const { dataSurat, resetPaginationToggle, filterText, modalConfirm } = this.state
+    const filteredItems = dataSurat.filter(item => item.nomor_surat && item.nomor_surat.toLowerCase().includes(filterText.toLowerCase()));
 
     return (
       <React.Fragment>
@@ -187,52 +206,56 @@ class IncomingMail extends Component {
             <div className="col-12">
               <div className="card">
                 <div className="card-body">
-                  <DataGrid
-                    dataSource={this.cLoad()}
-                    remoteOperations={true}
-                    rowAlternationEnabled={true}
-                    showColumnLines={false}
-                    columnAutoWidth={true}
-                    onToolbarPreparing={isAbleCreate ? this.onToolbarPreparing : null}
-                  >
-                    <Editing
-                      mode="row"
-                      allowDeleting={this.allowDeleting} />
-                    <FilterRow visible={true} />
-                    <Scrolling mode="standard" useNative={true} />
-                    <Paging defaultPageSize={10} />
-                    <Pager
-                      showPageSizeSelector={true}
-                      allowedPageSizes={[5, 10, 20]}
-                      showInfo={true} />
-
-                    <Column dataField="disposisi_id" visible={false} />
-                    <Column dataField="asal_surat" />
-                    <Column dataField="nomor_surat" />
-                    <Column dataField="perihal" />
-                    <Column dataField="tgl_surat" dataType="date" format='dd/MM/yyyy' />
-                    <Column dataField="tgl_diterima" dataType="date" format='dd/MM/yyyy' />
-                    <Column dataField="id" visible={false} />
-                    <Column type="buttons"
-                      buttons={[{
-                        hint: 'Edit',
-                        text: 'Edit',
-                        visible: this.allowEditing,
-                        onClick: this.navigateToEdit
-                      }, {
-                        hint: 'Detail',
-                        text: 'Detail',
-                        onClick: this.navigateToDetail
-                      }, 'delete']}
-                    />
-
-                  </DataGrid>
+                  <DataTable
+                    columns={columns(this.handleButtonClick)}
+                    data={filteredItems}
+                    // expandableRows
+                    // expandOnRowClicked
+                    pagination
+                    highlightOnHover
+                    striped
+                    // dense
+                    subHeader
+                    subHeaderComponent={this.getSubHeaderComponent()}
+                    paginationResetDefaultPage={resetPaginationToggle} />
                 </div>
               </div>
             </div>
           </div>
-
         </div>
+        <Modal isOpen={modalConfirm}>
+            <div className="modal-header text-white bg-danger">
+              <h5 className="modal-title mt-0">Konfirmasi</h5>
+              <button
+                type="button"
+                onClick={() =>
+                  this.setState({ modalConfirm: false })
+                }
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <h5>Apakah Anda yakin ingin menghapus Surat Masuk ini?</h5>
+            </div>
+          <div className="modal-footer">
+            <Button
+              color="danger"
+              className="mt-1"
+              onClick={this.deleteSurat}
+              data-target=".bs-example-modal-center">
+              Hapus
+            </Button>
+            <Button
+              className="btn btn-info"
+              onClick={() => this.setState({ modalConfirm: false })}
+              data-target=".bs-example-modal-center">
+              Batal
+            </Button>
+          </div>
+        </Modal>
       </React.Fragment>
     );
   }

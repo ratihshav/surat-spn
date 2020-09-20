@@ -1,20 +1,8 @@
 import React, { Component } from "react";
-import {
-  Row,
-  Col,
-} from "reactstrap";
+import { Row, Col, Button, Modal } from "reactstrap";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import "chartist/dist/scss/chartist.scss";
-import DataGrid, {
-  Column,
-  Paging,
-  FilterRow,
-  Pager,
-  Editing
-} from 'devextreme-react/data-grid';
-import DataStore from 'devextreme/data/data_source';
-import { isNotEmpty, dxGridFilter } from '../../helpers/gridFilter'
 import {
   getOutgoingMailService,
   deleteOutgoingMailService,
@@ -22,69 +10,84 @@ import {
 } from '../../helpers/master/outgoingMail'
 import toast from '../UI/toast';
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
+import DataTable from 'react-data-table-component';
+import memoize from 'memoize-one';
+import {Action, FilterComponent, AddButtonComponent} from '../../components/tabelComponents';
 
-// const subjectMail = (cellData) => {
-//   return (
-//     <div>
-//       <p>{cellData.hal_surat}</p><br />
-//       <p>{cellData.group_name}</p><br />
-//       <p>{cellData.status - cellData.position_name}</p>
-//     </div>
-//   )
-// }
+const CustomHal = ({ row }) => (
+  <div>
+    <div>
+      <b>{row.hal_surat}</b>
+    </div>
+    <div>
+      {row.status_surat}
+      <br></br>
+      {row.status_position_name}
+    </div>
+  </div>
+)
+
+const columns = memoize(actHandler =>[
+  {
+    name: 'Nomor Surat',
+    selector: 'nomor_surat',
+    sortable: true,
+  }, {
+    name: 'Nomor Agenda',
+    selector: 'nomor_agenda',
+    sortable: true,
+  }, {
+    name: 'Tgl. Surat',
+    selector: 'tgl_surat',
+    sortable: true,
+  }, {
+    name: 'Jenis Surat',
+    selector: 'jenis_surat',
+    sortable: true,
+  }, {
+    name: 'Perihal',
+    selector: 'hal_surat',
+    cell: row => <CustomHal row={row} />
+  }, {
+    name: 'Aksi',
+    ignoreRowClick: true,
+    allowOverflow: true,
+    button: true,
+    cell: data => <Action data={data} actHandler={actHandler} />
+  }
+])
+
 class OutgoingMail extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isModalVisible: false,
-      dataUser: [],
-      totalCount: 0
+      suratId: null,
+      dataSurat: [],
+      modalConfirm: false,
+      row: null,
+      filterText: "",
+      resetPaginationToggle: false
     };
   }
 
-  // componentDidMount() {
-  //   this.getDataMail()
-  // }
-
-  // getDataMail = () => {
-  //   this.props.getOutgoingMail()
-  // }
-
-  renderCol = (data) => {
-
+  componentDidMount() {
+    getOutgoingMailService()
+      .then((data) => {
+        console.log('surat', data.data)
+        this.setState({
+          dataSurat: data.data
+        })
+      })
+      .catch((e) => {
+        return (
+          this.alertError(e)
+        )
+      });
   }
 
-  allowDeleting = (e) => {
-    return e.row.data.can_delete
-  }
-
-  allowEditing = (e) => {
-    return e.row.data.can_edit
-  }
-
-  cLoad = () => {
-    return new DataStore({
-      load: (loadOptions) => {
-        let params = '?';
-        [
-          'skip',
-          'sort',
-          'take',
-          'order',
-          'filter'
-        ].forEach(function (i) {
-
-          if (i in loadOptions && isNotEmpty(loadOptions[i]) && i == 'filter') {
-            let filterCol = dxGridFilter(loadOptions.filter);
-            params += `${i}=${JSON.stringify(filterCol)}&`;
-          }
-          else if (i in loadOptions && isNotEmpty(loadOptions[i])) { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
-        });
-        params = params.slice(0, -1);
-        return getOutgoingMailService(params)
-      },
-      remove: (values) => { this.onDeleteOutgoingMail(values) }
-    })
+  alertError = (e) => {
+    toast.error(e)
   }
 
   navigateToAdd = () => {
@@ -93,15 +96,93 @@ class OutgoingMail extends Component {
     });
   }
 
-  navigateToEdit = (val) => {
-    const data = val.row.data
-    localStorage.setItem('idOutMail', JSON.stringify(data.id))
+  navigateToEdit = (id) => {
+    localStorage.setItem('idOutMail', JSON.stringify(Number(id)))
     this.props.history.push({
       pathname: '/outgoing-mail-edit',
-      params: data,
     });
   }
 
+  navigateToDelete = (id) => {
+    this.setState({ suratId: id })
+    this.setState({ modalConfirm: true })
+  }
+
+  showModalConfirm = () => {
+    this.setState(prevState => ({
+      modalConfirm: !prevState.modalConfirm
+    }));
+    document.body.classList.add("no_padding");
+  }
+  
+  deleteSurat = () => {
+    const { suratId } = this.state
+    deleteOutgoingMailService(suratId)
+      .then((data) => {
+        const { dataSurat } = this.state;
+        const { row } = this.state;
+        const index = dataSurat.findIndex(r => r === row);
+
+        this.setState(state => ({
+          // dataGroup: [...state.dataGroup.slice(0, index), ...state.dataGroup.slice(index + 1)]
+          dataSurat: [...state.dataSurat.slice(0, index)]
+        }));
+
+        this.alertSuccess(data)
+        this.props.history.push('/outgoing-mail');
+        this.setState({ modalConfirm: false })
+      })
+      .catch((e) => {
+        this.alertError(e)
+      });
+  }
+
+  handleClear = () => {
+    const { resetPaginationToggle, filterText } = this.state;
+
+    if (filterText) {
+      this.setState({
+        resetPaginationToggle: !resetPaginationToggle,
+        filterText: ""
+      });
+    }
+  };
+
+  handleButtonClick = (state) => {
+    this.setState({ row: state.target.value })
+    const act = state.target.name === 'edit' ? this.navigateToEdit(state.target.id)
+      : state.target.name === 'delete' ? this.navigateToDelete(state.target.id) : null
+  }
+
+  getSubHeaderComponent = () => {
+    const { dataSurat, filterText } = this.state
+    const { perms } = this.props.data
+    const granted = ['suratKeluar_save', 'is_admin']
+    const isAbleCreate = granted.some(x => perms.includes(x));
+    return (
+      <Row>
+        <FilterComponent onFilter={(e) => {
+          let newFilterText = e.target.value;
+          this.filteredItems = dataSurat.filter(
+            (item) =>
+              item.nomor_surat &&
+              item.nomor_surat.toLowerCase().includes(newFilterText.toLowerCase())
+          );
+          this.setState({ filterText: newFilterText });
+        }}
+          onClear={this.handleClear}
+          filterText={filterText}
+        /> &nbsp; &nbsp;
+
+        { isAbleCreate ?
+          <AddButtonComponent
+            onClick={this.navigateToAdd}
+          />
+          : null}
+      </Row>
+    );
+  };
+  
   navigateToDetail = (val) => {
     const data = val.row.data
     const idDisposisi = data.disposisi_id
@@ -124,49 +205,10 @@ class OutgoingMail extends Component {
       .catch(() => { throw 'Gagal Mengubah Data'; });
   }
 
-  onToolbarPreparing = (e) => {
-
-    e.toolbarOptions.items.unshift({
-      location: 'after',
-      widget: 'dxButton',
-      options: {
-        icon: 'add',
-        text: 'Tambah Baru',
-        onClick: this.navigateToAdd
-      }
-    });
-  }
-
-  getSubjectMail = (rowData) => {
-    return <div >{rowData.data.hal_surat} <br></br>
-      <div style={{ color: 'blue' }}>{rowData.data.status_surat}</div>
-      <i>{rowData.data.status_position_name}</i> <br></br>
-    </div>;
-  }
-
-  onDeleteOutgoingMail = (values) => {
-    deleteOutgoingMailService(values)
-      .then((data) => {
-        this.alertSuccess()
-        this.props.history.push('/outgoing-mail');
-      })
-      .catch((e) => {
-        this.alertError(e)
-      });
-  }
-
-  alertSuccess = () => {
-    toast.success('Sukses Menghapus data!')
-  };
-
-  alertError = (e) => {
-    toast.error(e)
-  }
 
   render() {
-    const { perms } = this.props.data
-    const granted = ['suratKeluar_save', 'is_admin']
-    const isAbleCreate = granted.some(x => perms.includes(x));
+    const { dataSurat, resetPaginationToggle, filterText, modalConfirm } = this.state
+    const filteredItems = dataSurat.filter(item => item.nomor_surat && item.nomor_surat.toLowerCase().includes(filterText.toLowerCase()));
 
     return (
       <React.Fragment>
@@ -192,56 +234,55 @@ class OutgoingMail extends Component {
             <div className="col-12">
               <div className="card">
                 <div className="card-body">
-                  <DataGrid
-                    dataSource={this.cLoad()}
-                    remoteOperations={true}
-                    rowAlternationEnabled={true}
-                    showColumnLines={false}
-                    columnAutoWidth={true}
-                    onToolbarPreparing={isAbleCreate ? this.onToolbarPreparing : null}
-                  >
-                    <Editing
-                      mode="row"
-                      allowDeleting={this.allowDeleting} />
-                    <FilterRow visible={true} />
-                    <Paging defaultPageSize={10} />
-                    <Pager
-                      showPageSizeSelector={true}
-                      allowedPageSizes={[5, 10, 20]}
-                      showInfo={true} />
-
-                    <Column dataField="disposisi_id" visible={false} />
-                    <Column dataField="nomor_agenda" />
-                    <Column dataField="nomor_surat" />
-                    <Column dataField="tgl_surat" />
-                    <Column dataField="jenis_surat" />
-                    <Column dataField="tujuan_surat" />
-                    <Column caption="Hal" dataField="hal_surat" cellRender={this.getSubjectMail} />
-                    <Column dataField="group_name" visible={false} />
-                    <Column dataField="id" visible={false} />
-                    <Column dataField="is_editable" visible={false} />
-                    <Column dataField="position_name" visible={false} />
-                    <Column dataField="status" visible={false} />
-                    <Column type="buttons"
-                      buttons={[{
-                        hint: 'Edit',
-                        text: 'Edit',
-                        visible: this.allowEditing,
-                        onClick: this.navigateToEdit
-                      }, {
-                        hint: 'Detail',
-                        text: 'Detail',
-                        onClick: this.navigateToDetail
-                      }, 'delete']}
-                    />
-
-                  </DataGrid>
+                  <DataTable
+                    columns={columns(this.handleButtonClick)}
+                    data={filteredItems}
+                    // expandableRows
+                    // expandOnRowClicked
+                    pagination
+                    highlightOnHover
+                    striped
+                    // dense
+                    subHeader
+                    subHeaderComponent={this.getSubHeaderComponent()}
+                    paginationResetDefaultPage={resetPaginationToggle} />
                 </div>
               </div>
             </div>
           </div>
-
-        </div>
+        </div><Modal isOpen={modalConfirm}>
+            <div className="modal-header text-white bg-danger">
+              <h5 className="modal-title mt-0">Konfirmasi</h5>
+              <button
+                type="button"
+                onClick={() =>
+                  this.setState({ modalConfirm: false })
+                }
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <h5>Apakah Anda yakin ingin menghapus Surat Keluar ini?</h5>
+            </div>
+          <div className="modal-footer">
+            <Button
+              color="danger"
+              className="mt-1"
+              onClick={this.deleteSurat}
+              data-target=".bs-example-modal-center">
+              Hapus
+            </Button>
+            <Button
+              className="btn btn-info"
+              onClick={() => this.setState({ modalConfirm: false })}
+              data-target=".bs-example-modal-center">
+              Batal
+            </Button>
+          </div>
+        </Modal>
       </React.Fragment>
     );
   }

@@ -62,8 +62,7 @@ export const updateTemplateMailService = (request) => {
 };
 
 //delete
-export const deleteTemplateMailService = (request) => {
-  const id = request.id
+export const deleteTemplateMailService = (id) => {
   const DELETE_TEMPLATE_MAIL_API = config.api_endpoint + `/templateSurat/delete/${id}`;
   return instance.post(DELETE_TEMPLATE_MAIL_API)
     .then((data) => {

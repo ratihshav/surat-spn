@@ -65,8 +65,7 @@ export const updateMasterUserService = (request) => {
 }
 
 //delete
-export const deleteMasterUserService = (request) => {
-  const id = request.id
+export const deleteMasterUserService = (id) => {
   const DELETE_MASTER_USER_API_ENDPOINT = config.api_endpoint + `/user/delete/${id}`;
   return instance.post(DELETE_MASTER_USER_API_ENDPOINT, id)
     .then((data) => {

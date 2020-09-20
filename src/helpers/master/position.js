@@ -57,8 +57,7 @@ export const updateMasterPositionService = (request) => {
 };
 
 //delete
-export const deleteMasterPositionService = (request) => {
-  const id = request.id
+export const deleteMasterPositionService = (id) => {
   const DELETE_MASTER_POSITION_API = config.api_endpoint + `/jabatan/delete/${id}`;
   return instance.post(DELETE_MASTER_POSITION_API)
     .then((data) => {

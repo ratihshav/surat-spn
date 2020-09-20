@@ -54,8 +54,7 @@ export const updateMasterClassService = (request) => {
 };
 
 //delete
-export const deleteMasterClassService = (request) => {
-  const id = request.id
+export const deleteMasterClassService = (id) => {
   const DELETE_MASTER_CLASS_API = config.api_endpoint + `/klasifikasi/delete/${id}`;
   return instance.post(DELETE_MASTER_CLASS_API, id)
     .then((data) => {

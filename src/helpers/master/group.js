@@ -49,8 +49,7 @@ export const updateMasterGroupService = (request) => {
 };
 
 //delete
-export const deleteMasterGroupService = (request) => {
-  const id = request.id
+export const deleteMasterGroupService = (id) => {
   const DELETE_MASTER_GROUP_API = config.api_endpoint + `/unit/delete/${id}`;
   return instance.post(DELETE_MASTER_GROUP_API, id)
     .then((data) => {

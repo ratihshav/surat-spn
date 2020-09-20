@@ -1,10 +1,10 @@
 import config from '../config'
 import instance, { cancel } from "../axios";
 
-export const getIncomingMailService = (request) => {
-  const req = request ? request : ''
+export const getIncomingMailService = () => {
   const GET_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/list`;
-  return instance.get(GET_INCOMING_MAIL_API + `${req}`)
+  const request = `?skip=0&take=10`
+  return instance.get(GET_INCOMING_MAIL_API + `${request}`)
     .then((data) => {
       return {
         data: data.data.data.data,
@@ -95,8 +95,7 @@ export const createDisposeIncomingMailService = (request) => {
     .catch((e) => { throw e.response.data.messages[0] });
 }
 
-export const deleteIncomingMailService = (request) => {
-  const id = request.id
+export const deleteIncomingMailService = (id) => {
   const DELETE_INCOMING_MAIL_API = config.api_endpoint + `/suratMasuk/delete/${id}`;
   return instance.post(DELETE_INCOMING_MAIL_API)
     .then((data) => {

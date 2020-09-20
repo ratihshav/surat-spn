@@ -1,13 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col, Card, CardBody, Alert, Button } from "reactstrap";
-import {
-  Validator,
-  RequiredRule,
-  CompareRule
-} from 'devextreme-react/validator';
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
-import { TextBox } from 'devextreme-react';
 import { AvForm } from "availity-reactstrap-validation";
 import { userForgetPassword } from "../../store/actions";
 import { resetPasswordService } from "../../helpers/master/user"
@@ -122,34 +116,34 @@ class ResetPassword extends Component {
                         <div className="dx-field">
                           <div className="dx-field-label">Email</div>
                           <div className="dx-field-value">
-                            <TextBox
+                            {/* <TextBox
                               mode="text"
                               value={paramsUrl.email}
-                              disabled />
+                              disabled /> */}
                           </div>
                         </div>
                         <div className="dx-field">
                           <div className="dx-field-label">Password Baru</div>
                           <div className="dx-field-value">
-                            <TextBox
+                            {/* <TextBox
                               mode="password"
                               value={this.state.password}
                               onValueChanged={this.onPasswordChanged}>
                               <Validator>
                                 <RequiredRule message="Password is required" />
                               </Validator>
-                            </TextBox>
+                            </TextBox> */}
                           </div>
                         </div>
                         <div className="dx-field">
                           <div className="dx-field-label">Konfirmasi Password</div>
                           <div className="dx-field-value">
-                            <TextBox mode="password">
+                            {/* <TextBox mode="password">
                               <Validator>
                                 <RequiredRule message="Confirm Password is required" />
                                 <CompareRule message="Password and Confirm Password do not match" comparisonTarget={this.passwordComparison} />
                               </Validator>
-                            </TextBox>
+                            </TextBox> */}
                           </div>
                         </div>
                         <br /><br />

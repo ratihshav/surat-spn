@@ -112,6 +112,52 @@ class UserAdd extends Component {
               <div className="col-12">
                 <Card>
                   <CardBody>
+                    <Row className="form-group">
+                      <label
+                        htmlFor="fullName"
+                        className="col-sm-2 col-form-label">Nama Lengkap
+                      </label>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="text"
+                          id="fullName"
+                          name="fullName"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+                    
+                    <Row className="form-group">
+                      <label htmlFor="username" className="col-sm-2 col-form-label" >
+                        Username
+                      </label>
+                      <Col sm={10}>
+                        <input
+                          name="username"
+                          className="form-control"
+                          type="text"
+                          id="username"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+                    
+                    <Row className="form-group">
+                      <label
+                        htmlFor="idEmployee"
+                        className="col-sm-2 col-form-label">NIP
+                      </label>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="number"
+                          id="idEmployee"
+                          name="idEmployee"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
 
                     <Row className="form-group">
                       <label className="col-sm-2 col-form-label">
@@ -131,17 +177,15 @@ class UserAdd extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        Username
-                    </label>
+                        htmlFor="email"
+                        className="col-sm-2 col-form-label" > E-mail
+                      </label>
                       <Col sm={10}>
                         <input
-                          name="username"
                           className="form-control"
-                          type="text"
-                          id="example-text-input"
+                          type="email"
+                          id="email"
+                          name="email"
                           ref={node => (this.inputNode = node)}
                         />
                       </Col>
@@ -149,17 +193,17 @@ class UserAdd extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="password"
                         className="col-sm-2 col-form-label"
                       >
-                        Nama Lengkap
+                        Password
                     </label>
                       <Col sm={10}>
                         <input
                           className="form-control"
-                          type="text"
-                          id="example-text-input"
-                          name="fullName"
+                          type="password"
+                          id="password"
+                          name="password"
                           ref={node => (this.inputNode = node)}
                         />
                       </Col>
@@ -167,11 +211,9 @@ class UserAdd extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        Jenis Kelamin
-                    </label>
+                        htmlFor="customRadioInline1"
+                        className="col-sm-2 col-form-label">Jenis Kelamin
+                      </label>
                       <Col sm={10}>
                         <div className="custom-control custom-radio custom-control-inline">
                           <Input
@@ -184,79 +226,34 @@ class UserAdd extends Component {
                           />
                           <Label
                             className="custom-control-label"
-                            for="customRadioInline1"
-                          >
-                            Laki-laki
-                            </Label>
-                        </div>
-                          &nbsp;
-                          <div className="custom-control custom-radio custom-control-inline">
-                          <Input
-                            type="radio"
+                            for="customRadioInline1"> Laki-laki
+                          </Label>
+                        </div> &nbsp;
+                        <div className="custom-control custom-radio custom-control-inline">
+                          <Input type="radio"
                             id="customRadioInline2"
                             name="customRadioInline1"
                             className="custom-control-input"
                             innerRef={this.input}
-                            value="perempuan"
-                          />
+                            value="perempuan" />
                           <Label
                             className="custom-control-label"
-                            for="customRadioInline2"
-                          >
+                            for="customRadioInline2">
                             Perempuan
-                            </Label>
+                          </Label>
                         </div>
                       </Col>
                     </Row>
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        NIP
-                    </label>
+                        htmlFor="birthDate"
+                        className="col-sm-2 col-form-label" > Tanggal Lahir
+                      </label>
                       <Col sm={10}>
-                        <input
-                          className="form-control"
-                          type="number"
-                          id="example-text-input"
-                          name="idEmployee"
-                          ref={node => (this.inputNode = node)}
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row className="form-group">
-                      <label
-                        htmlFor="example-text-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        E-mail
-                    </label>
-                      <Col sm={10}>
-                        <input
-                          className="form-control"
-                          type="email"
-                          id="example-text-input"
-                          name="email"
-                          ref={node => (this.inputNode = node)}
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row className="form-group">
-                      <label
-                        htmlFor="example-text-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        Tanggal Lahir
-                    </label>
-                      <Col sm={10}>
-                        <input
-                          className="form-control"
+                        <input className="form-control"
                           type="date"
-                          id="example-text-input"
+                          id="birthDate"
                           name="birthDate"
                           ref={node => (this.inputNode = node)}
                         />
@@ -265,34 +262,14 @@ class UserAdd extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        Password
-                    </label>
-                      <Col sm={10}>
-                        <input
-                          className="form-control"
-                          type="password"
-                          id="example-text-input"
-                          name="password"
-                          ref={node => (this.inputNode = node)}
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row className="form-group">
-                      <label
-                        htmlFor="example-text-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        No. Handphone
-                    </label>
+                        htmlFor="phone"
+                        className="col-sm-2 col-form-label" > No. Handphone
+                      </label>
                       <Col sm={10}>
                         <input
                           className="form-control"
                           type="text"
-                          id="example-text-input"
+                          id="phone"
                           name="phone"
                           ref={node => (this.inputNode = node)}
                         />
@@ -301,15 +278,13 @@ class UserAdd extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        Alamat
-                    </label>
+                        htmlFor="address"
+                        className="col-sm-2 col-form-label" > Alamat
+                      </label>
                       <Col sm={10}>
                         <textarea
                           className="form-control"
-                          id="w3review"
+                          id="address"
                           name="address"
                           rows="4"
                           cols="50"
@@ -317,40 +292,14 @@ class UserAdd extends Component {
                       </Col>
                     </Row>
 
-                    {/* <Row className="form-group">
-                      <label
-                        htmlFor="example-search-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        Diajukan Kepada
-                    </label>
-                      <Col sm={10}>
-                        <Select
-                          value={selectedSubmit}
-                          onChange={this.handleSelectSubmit}
-                          options={optionsSubmit}
-                          name="sendto"
-                          ref={node => (this.inputNode = node)}
-                        />
-                      </Col>
-                    </Row> */}
-
-
                     <div className="text-right mt-4">
-                      <Button
-                        color="success"
-                        className="mt-1" >
+                      <Button color="success" className="mt-1" >
                         <i className="typcn typcn-input-checked" />Simpan
-                    </Button>
-
-                    &nbsp; &nbsp;
-                    <Button
-                        color="grayMed"
-                        className="mt-1"
-                        onClick={this.goBack}>
+                      </Button>
+                      &nbsp; &nbsp;
+                      <Button color="grayMed" className="mt-1" onClick={this.goBack}>
                         <i className="ion ion-md-arrow-round-back" /> Kembali
                       </Button>
-
                     </div>
                   </CardBody>
                 </Card>

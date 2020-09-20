@@ -1,82 +1,67 @@
 import React, { Component } from "react";
-import {
-  Row,
-  Col,
-} from "reactstrap";
+import { Row, Col, Button, Modal } from "reactstrap";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import "chartist/dist/scss/chartist.scss";
-import DataGrid, {
-  Column,
-  Editing,
-  Paging,
-  FilterRow,
-  Pager,
-} from 'devextreme-react/data-grid';
-import DataStore from 'devextreme/data/data_source';
 import { getMasterGroupServices, deleteMasterGroupService } from '../../helpers/master/group'
 import toast from '../UI/toast';
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
+import DataTable from 'react-data-table-component';
+import memoize from 'memoize-one';
+import {Action, FilterComponent, AddButtonComponent} from '../../components/tabelComponents';
 
+const columns = memoize(actHandler =>[
+  {
+    name: 'Kode Unit Kerja',
+    selector: 'group_code',
+    sortable: true,
+  }, {
+    name: 'Nama Unit Kerja',
+    selector: 'group_name',
+    sortable: true,
+  }, {
+    name: 'Aksi',
+    ignoreRowClick: true,
+    allowOverflow: true,
+    button: true,
+    cell: data => <Action data={data} actHandler={actHandler} />
+  }
+])
 
 class Group extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      groupId: null,
+      dataGroup: [],
+      modalConfirm: false,
       isModalVisible: false,
-      dataUser: [],
-      totalCount: 0
+      row: null,
+      filterText: "",
+      resetPaginationToggle: false
     };
   }
 
-  cLoad = () => {
-    return new DataStore({
-      load: (loadOptions) => {
-        return getMasterGroupServices()
-      },
-      remove: (values) => { this.onDeleteGroup(values) }
-    })
-  }
-
-  onDeleteGroup = (values) => {
-    deleteMasterGroupService(values)
+  componentDidMount() {
+    getMasterGroupServices()
       .then((data) => {
-        this.alertSuccess()
-        this.props.history.push('/group');
+        this.setState({
+          dataGroup: data.data
+        })
       })
       .catch((e) => {
-        this.alertError(e)
+        return (
+          this.alertError(e)
+        )
       });
   }
 
-  alertSuccess = () => {
+  alertSuccess = (e) => {
     toast.success('Sukses Menghapus data!')
   };
 
   alertError = (e) => {
     toast.error(e)
-  }
-
-  navigateToEdit = (val) => {
-    const data = val.row.data
-    localStorage.setItem('idDivisi', JSON.stringify(data.id))
-    this.props.history.push({
-      pathname: '/group-edit',
-      params: data,
-    });
-  }
-
-
-  onToolbarPreparing = (e) => {
-    e.toolbarOptions.items.unshift({
-      location: 'after',
-      widget: 'dxButton',
-      options: {
-        icon: 'add',
-        text: 'Tambah Baru',
-        onClick: this.navigateToAdd
-      }
-    });
   }
 
   navigateToAdd = () => {
@@ -85,10 +70,96 @@ class Group extends Component {
     });
   }
 
-  render() {
+  navigateToEdit = (id) => {
+    localStorage.setItem('idDivisi', JSON.stringify(Number(id)))
+    this.props.history.push({
+      pathname: '/group-edit'
+    });
+  }
+
+  navigateToDelete = (id) => {
+    this.setState({ groupId: id })
+    this.setState({ modalConfirm: true })
+  }
+
+  showModalConfirm = () => {
+    this.setState(prevState => ({
+      modalConfirm: !prevState.modalConfirm
+    }));
+    document.body.classList.add("no_padding");
+  }
+
+  deleteGroup = () => {
+    const { groupId } = this.state
+    deleteMasterGroupService(groupId)
+      .then((data) => {
+        const { dataGroup } = this.state;
+        const { row } = this.state;
+        const index = dataGroup.findIndex(r => r === row);
+
+        this.setState(state => ({
+          // dataGroup: [...state.dataGroup.slice(0, index), ...state.dataGroup.slice(index + 1)]
+          dataGroup: [...state.dataGroup.slice(0, index)]
+        }));
+
+        this.alertSuccess(data)
+        this.props.history.push('/group')
+        this.setState({ modalConfirm: false })
+      })
+      .catch((e) => {
+        this.alertError(e)
+      });
+  }
+
+  handleButtonClick = (state) => {
+    this.setState({ row: state.target.value })
+    const act = state.target.name === 'edit' ? this.navigateToEdit(state.target.id)
+      : state.target.name === 'delete' ? this.navigateToDelete(state.target.id) : null
+  }
+
+  handleClear = () => {
+    const { resetPaginationToggle, filterText } = this.state;
+
+    if (filterText) {
+      this.setState({
+        resetPaginationToggle: !resetPaginationToggle,
+        filterText: ""
+      });
+    }
+  };
+  
+  getSubHeaderComponent = () => {
+    const { dataGroup, filterText } = this.state
     const { perms } = this.props.data
-    const granted = ['unit_save', 'is_admin']
+    const granted = ['user_save', 'is_admin']
     const isAbleCreate = granted.some(x => perms.includes(x));
+    return (
+      <Row>
+        <FilterComponent onFilter={(e) => {
+          let newFilterText = e.target.value;
+          this.filteredItems = dataGroup.filter(
+            (item) =>
+              item.group_name &&
+              item.group_name.toLowerCase().includes(newFilterText.toLowerCase())
+          );
+          this.setState({ filterText: newFilterText });
+        }}
+          onClear={this.handleClear}
+          filterText={filterText}
+        /> &nbsp; &nbsp;
+
+        { isAbleCreate ?
+          <AddButtonComponent
+            onClick={this.navigateToAdd}
+          />
+          : null}
+      </Row>
+    );
+  };
+  
+  render() {
+    const { dataGroup, resetPaginationToggle, filterText, modalConfirm } = this.state
+    const filteredItems = dataGroup.filter(item => item.group_name && item.group_name.toLowerCase().includes(filterText.toLowerCase()));
 
     return (
       <React.Fragment>
@@ -115,43 +186,56 @@ class Group extends Component {
             <div className="col-12">
               <div className="card">
                 <div className="card-body">
-                  <DataGrid
-                    dataSource={this.cLoad()}
-                    // remoteOperations={true}
-                    rowAlternationEnabled={true}
-                    showColumnLines={false}
-                    columnAutoWidth={true}
-                    onToolbarPreparing={isAbleCreate ? this.onToolbarPreparing : null}
-
-                  >
-                    <Editing
-                      mode="row"
-                      allowDeleting={true} />
-                    <FilterRow visible={true} />
-                    <Paging defaultPageSize={10} />
-                    <Pager
-                      showPageSizeSelector={true}
-                      allowedPageSizes={[5, 10, 20]}
-                      showInfo={true} />
-
-                    <Column dataField="id" visible={false} />
-                    <Column caption="Kode Unit" dataField="group_code" />
-                    <Column caption="Nama Unit" dataField="group_name" />
-                    <Column type="buttons"
-                      buttons={[{
-                        hint: 'Edit',
-                        text: 'Edit',
-                        onClick: this.navigateToEdit
-                      }, 'delete']}
-                    />
-
-                  </DataGrid>
+                  <DataTable title="Tabel Unit Kerja"
+                    columns={columns(this.handleButtonClick)}
+                    onSelectedRowsChange={this.handleButtonClick}
+                    data={filteredItems}
+                    pagination
+                    highlightOnHover
+                    striped
+                    dense
+                    subHeader
+                    subHeaderComponent={this.getSubHeaderComponent()}
+                    paginationResetDefaultPage={resetPaginationToggle}
+                  />
                 </div>
               </div>
             </div>
           </div>
-
         </div>
+        <Modal isOpen={modalConfirm}>
+          <div className="modal-header text-white bg-danger">
+            <h5 className="modal-title mt-0">Konfirmasi</h5>
+            <button
+              type="button"
+              onClick={() =>
+                this.setState({ modalConfirm: false })
+              }
+              className="close"
+              data-dismiss="modal"
+              aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <h5>Apakah Anda yakin ingin menghapus Unit Kerja ini?</h5>
+          </div>
+          <div className="modal-footer">
+            <Button
+              color="danger"
+              className="mt-1"
+              onClick={this.deleteGroup}
+              data-target=".bs-example-modal-center">
+              Hapus
+            </Button>
+            <Button
+              className="btn btn-info"
+              onClick={() => this.setState({ modalConfirm: false })}
+              data-target=".bs-example-modal-center">
+              Batal
+            </Button>
+          </div>
+        </Modal>
       </React.Fragment>
     );
   }
