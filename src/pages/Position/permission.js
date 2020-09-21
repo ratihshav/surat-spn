@@ -84,7 +84,7 @@ class PositionPermission extends Component {
     } else {
       selectedPermission = this.state.selectedPermission.filter(el => el !== value);
     }
-    this.setState({ selectedPermission }, () => console.log(this.state.selectedPermission));
+    this.setState({ selectedPermission });
   }
 
   saveUpdatedGranted = (e) => {
