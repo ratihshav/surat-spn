@@ -187,7 +187,7 @@ class TemplateMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="templateType"
                         className="col-sm-2 col-form-label"
                       >
                         Tipe Template Surat
@@ -197,7 +197,7 @@ class TemplateMailEdit extends Component {
                           name="type"
                           className="form-control"
                           type="text"
-                          id="example-text-input"
+                          id="templateType"
                           ref={node => (this.inputNode = node)}
                           required
                           defaultValue={dataDetail.template_type}
@@ -207,7 +207,7 @@ class TemplateMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="templateName"
                         className="col-sm-2 col-form-label"
                       >
                         Nama Template Surat
@@ -216,7 +216,7 @@ class TemplateMailEdit extends Component {
                         <input
                           className="form-control"
                           type="text"
-                          id="example-text-input"
+                          id="templateName"
                           name="name"
                           ref={node => (this.inputNode = node)}
                           required
@@ -227,7 +227,7 @@ class TemplateMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
+                        htmlFor="Document"
                         className="col-sm-2 col-form-label">
                         Dokumen
                           </label>

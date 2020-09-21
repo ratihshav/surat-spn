@@ -495,7 +495,7 @@ class OutgoingMailDetail extends Component {
 
                             <Row className="form-group">
                               <label
-                                htmlFor="example-text-input"
+                                htmlFor="status"
                                 className="col-sm-2 col-form-label">
                                 Status
                               </label>
@@ -525,10 +525,9 @@ class OutgoingMailDetail extends Component {
                             {selectedStatusMail !== '0' ?
                               <Row className="form-group">
                                 <label
-                                  htmlFor="example-search-input"
                                   className="col-sm-2 col-form-label">
                                   Diteruskan kepada
-                         </label>
+                                </label>
                                 <Col sm={10}>
                                   <Select
                                     value={selectedSignature}
@@ -543,17 +542,17 @@ class OutgoingMailDetail extends Component {
 
                             <Row className="form-group">
                               <label
-                                htmlFor="example-search-input"
+                                htmlFor="keterangan"
                                 className="col-sm-2 col-form-label">
                                 Keterangan
-                          </label>
+                              </label>
                               <Col sm={10}>
                                 <input
                                   name="keterangan"
                                   className="form-control"
                                   type="text"
                                   defaultValue=""
-                                  id="example-text-input"
+                                  id="keterangan"
                                   ref={node => (this.inputNode = node)}
                                 />
                               </Col>
@@ -566,7 +565,7 @@ class OutgoingMailDetail extends Component {
                                 data-toggle="modal"
                                 data-target=".bs-example-modal-center">
                                 <i className="typcn typcn-input-checked" />Submit
-                         </Button>
+                              </Button>
                             </div>
                           </form>
                         </div>
@@ -607,7 +606,7 @@ class OutgoingMailDetail extends Component {
 
                             <Row className="form-group">
                               <label
-                                htmlFor="example-text-input"
+                                htmlFor="status_setuju"
                                 className="col-sm-2 col-form-label">
                                 Status
                               </label>
@@ -638,10 +637,10 @@ class OutgoingMailDetail extends Component {
                             {selectedStatusMail !== '0' ?
                               <Row className="form-group">
                                 <label
-                                  htmlFor="example-search-input"
+                                  htmlFor="forwardto"
                                   className="col-sm-2 col-form-label">
                                   Diteruskan kepada
-                         </label>
+                                </label>
                                 <Col sm={10}>
                                   <Select
                                     value={selectedSignature}
@@ -656,17 +655,17 @@ class OutgoingMailDetail extends Component {
 
                             <Row className="form-group">
                               <label
-                                htmlFor="example-search-input"
+                                htmlFor="desc"
                                 className="col-sm-2 col-form-label">
                                 Keterangan
-                          </label>
+                              </label>
                               <Col sm={10}>
                                 <input
                                   name="description"
                                   className="form-control"
                                   type="text"
                                   defaultValue=""
-                                  id="example-text-input"
+                                  id="desc"
                                   ref={node => (this.inputNode = node)}
                                 />
                               </Col>
@@ -675,17 +674,17 @@ class OutgoingMailDetail extends Component {
                             {selectedStatusMail !== '0' ?
                               <Row className="form-group">
                                 <label
-                                  htmlFor="example-search-input"
+                                  htmlFor="fileInput"
                                   className="col-sm-2 col-form-label">
                                   File
-                           </label>
+                              </label>
                                 <Col sm={10}>
                                   <input
                                     name="existingFile"
                                     className="form-control"
                                     type="text"
                                     value={detailList.disposisi ? detailList.disposisi[detailList.disposisi.length - 1].file_name : null}
-                                    id="example-text-input"
+                                    id="fileInput"
                                     ref={node => (this.inputNode = node)}
                                     disabled
                                   />
@@ -696,17 +695,17 @@ class OutgoingMailDetail extends Component {
                             {selectedStatusMail !== '0' ?
                               <Row className="form-group">
                                 <label
-                                  htmlFor="example-search-input"
+                                  htmlFor="fileApprove"
                                   className="col-sm-2 col-form-label">
                                   Ganti File (Jika ada perubahan)
-                           </label>
+                                </label>
                                 <Col sm={10}>
                                   <form action="#">
                                     <div className="custom-file">
                                       <input
                                         type="file"
                                         className="form-control"
-                                        id="validatedCustomFile"
+                                        id="fileApprove"
                                         required
                                         onChange={this.onFileChange}
                                         accept=".doc, .docx, .pdf"
@@ -725,7 +724,7 @@ class OutgoingMailDetail extends Component {
                                 data-toggle="modal"
                                 data-target=".bs-example-modal-center">
                                 <i className="typcn typcn-input-checked" />Submit
-                         </Button>
+                              </Button>
                             </div>
                           </form>
                         </div>
@@ -734,14 +733,14 @@ class OutgoingMailDetail extends Component {
                     &nbsp;&nbsp;
 
                     {detailList.agenda_file_path === null && detailList.can_agenda ?
-                        <Button
-                          color="orange"
-                          className="mt-1"
-                          onClick={this.showModalGenerate}
-                          data-target=".bs-example-modal-center">
-                          <i className="typcn typcn-input-checked" />Agenda
+                      <Button
+                        color="orange"
+                        className="mt-1"
+                        onClick={this.showModalGenerate}
+                        data-target=".bs-example-modal-center">
+                        <i className="typcn typcn-input-checked" />Agenda
                       </Button>
-                        : null}
+                      : null}
 
                       <Modal
                         isOpen={isShowModalGenerate}
@@ -766,15 +765,15 @@ class OutgoingMailDetail extends Component {
 
                             <Row className="form-group">
                               <label
-                                htmlFor="example-text-input"
+                                htmlFor="dateMailPopup"
                                 className="col-sm-2 col-form-label" >
                                 Tanggal Surat
-                            </label>
+                              </label>
                               <Col sm={10}>
                                 <input
                                   className="form-control"
                                   type="date"
-                                  id="example-text-input"
+                                  id="dateMailPopup"
                                   name="dateMail"
                                   min={new Date().toISOString().substring(0, 10)}
                                   defaultValue={detailList.tgl_surat}
@@ -783,7 +782,6 @@ class OutgoingMailDetail extends Component {
                               </Col>
                             </Row>
 
-
                             <div className="text-right mt-8">
                               <Button
                                 color="success"
@@ -791,7 +789,7 @@ class OutgoingMailDetail extends Component {
                                 data-toggle="modal"
                                 data-target=".bs-example-modal-center">
                                 <i className="typcn typcn-input-checked" />Submit
-                         </Button>
+                              </Button>
                             </div>
                           </form>
                         </div>
@@ -833,7 +831,7 @@ class OutgoingMailDetail extends Component {
 
                             <Row className="form-group">
                               <label
-                                htmlFor="example-text-input"
+                                htmlFor="statusApprove"
                                 className="col-sm-2 col-form-label">
                                 Status
                               </label>
@@ -861,16 +859,16 @@ class OutgoingMailDetail extends Component {
                             </Row>
                             <Row className="form-group">
                               <label
-                                htmlFor="example-search-input"
+                                htmlFor="descApprove"
                                 className="col-sm-2 col-form-label">
                                 Keterangan
-                          </label>
+                              </label>
                               <Col sm={10}>
                                 <input
                                   name="description"
                                   className="form-control"
                                   type="text"
-                                  id="example-text-input"
+                                  id="descApprove"
                                   ref={node => (this.inputNode = node)}
                                 />
                               </Col>
@@ -882,7 +880,7 @@ class OutgoingMailDetail extends Component {
                                 data-toggle="modal"
                                 data-target=".bs-example-modal-center">
                                 <i className="typcn typcn-input-checked" />Submit
-                         </Button>
+                              </Button>
                             </div>
                           </div>
                         </form>

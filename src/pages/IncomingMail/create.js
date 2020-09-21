@@ -195,10 +195,9 @@ class IncomingMailCreate extends Component {
               <div className="col-12">
                 <Card>
                   <CardBody>
-
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="origin"
                         className="col-sm-2 col-form-label">
                         Asal Surat
                       </label>
@@ -207,7 +206,7 @@ class IncomingMailCreate extends Component {
                           name="origin"
                           className="form-control"
                           type="text"
-                          id="example-text-input"
+                          id="origin"
                           ref={node => (this.inputNode = node)}
                           required
                         />
@@ -216,7 +215,7 @@ class IncomingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="subject"
                         className="col-sm-2 col-form-label">
                         Perihal
                       </label>
@@ -224,7 +223,7 @@ class IncomingMailCreate extends Component {
                         <input
                           className="form-control"
                           type="text"
-                          id="example-text-input"
+                          id="subject"
                           name="subject"
                           ref={node => (this.inputNode = node)}
                           required
@@ -234,7 +233,7 @@ class IncomingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="numMail"
                         className="col-sm-2 col-form-label">
                         Nomor Surat
                       </label>
@@ -242,7 +241,7 @@ class IncomingMailCreate extends Component {
                         <input
                           className="form-control"
                           type="text"
-                          id="example-text-input"
+                          id="numMail"
                           name="numMail"
                           ref={node => (this.inputNode = node)}
                           required
@@ -252,7 +251,7 @@ class IncomingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="date"
                         className="col-sm-2 col-form-label"
                       >
                         Tanggal Surat
@@ -261,7 +260,7 @@ class IncomingMailCreate extends Component {
                         <input
                           className="form-control"
                           type="date"
-                          id="example-text-input"
+                          id="date"
                           name="date"
                           ref={node => (this.inputNode = node)}
                         />
@@ -270,7 +269,6 @@ class IncomingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
                         className="col-sm-2 col-form-label"
                       >
                         Diajukan Kepada
@@ -289,7 +287,6 @@ class IncomingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
                         className="col-sm-2 col-form-label"
                       >
                         Sifat Surat
@@ -307,7 +304,7 @@ class IncomingMailCreate extends Component {
                     </Row>
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="attachment"
                         className="col-sm-2 col-form-label"
                       >
                         Lampiran Surat
@@ -317,7 +314,7 @@ class IncomingMailCreate extends Component {
                           className="form-control"
                           type="text"
                           defaultValue=""
-                          id="example-text-input"
+                          id="attachment"
                           name="attachment"
                           ref={node => (this.inputNode = node)}
                           required
@@ -325,29 +322,8 @@ class IncomingMailCreate extends Component {
                       </Col>
                     </Row>
 
-                    {/* for later */}
-                    {/* <Row className="form-group">
-                      <label
-                        htmlFor="example-search-input"
-                        className="col-sm-2 col-form-label"
-                      >
-                        Prioritas
-                    </label>
-                      <Col sm={10}>
-                        <Select
-                          value={selectedUrgency}
-                          onChange={this.handleSelectUrgency}
-                          options={urgency}
-                          name="urgency"
-                          ref={node => (this.inputNode = node)}
-                          required
-                        />
-                      </Col>
-                    </Row> */}
-
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
                         className="col-sm-2 col-form-label"
                       >
                         Klasifikasi Surat
@@ -366,7 +342,7 @@ class IncomingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="description"
                         className="col-sm-2 col-form-label">
                         Keterangan
                       </label>
@@ -375,7 +351,7 @@ class IncomingMailCreate extends Component {
                           name="description"
                           className="form-control"
                           type="text"
-                          id="example-text-input"
+                          id="description"
                           ref={node => (this.inputNode = node)}
                           required
                         />
@@ -384,7 +360,6 @@ class IncomingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
                         className="col-sm-2 col-form-label"
                       >
                         Dokumen
