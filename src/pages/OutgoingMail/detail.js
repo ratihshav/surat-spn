@@ -9,10 +9,10 @@ import 'moment/locale/id';
 import {
   getDetailOutgoingMailService,
   createDisposeOutgoingMailService,
-  createAgendaOutgoingMailService,
   approveOutgoingMailService,
   generateNumMailService,
-  verifyOutgoingMailService
+  verifyOutgoingMailService,
+  discardOutgoingMailService
 } from "../../helpers/master/outgoingMail"
 import { searchUserSKService } from "../../helpers/master/user"
 import logoPdf from "../../assets/images/logo-pdf.png";
@@ -35,7 +35,8 @@ class OutgoingMailDetail extends Component {
       isShowModalConfirm: false,
       isShowModalHistory: false,
       isShowModalGenerate: false,
-      isShowModalVerify: false
+      isShowModalVerify: false,
+      isShowModalVoid: false
     };
   }
 
@@ -90,6 +91,13 @@ class OutgoingMailDetail extends Component {
     this.removeBodyCss();
   }
 
+  showModalVoid = () => {
+    this.setState(prevState => ({
+      isShowModalVoid: !prevState.isShowModalVoid
+    }));
+    this.removeBodyCss();
+  }
+
   handleSelectSignature = selectedSignature => {
     this.setState({ selectedSignature })
   }
@@ -139,7 +147,25 @@ class OutgoingMailDetail extends Component {
         )
       });
     e.preventDefault();
+  }
 
+  discardMail = (e) => {
+    const params = {
+      id: this.state.stateIdMail,
+      remark: e.target.remark.value,
+    }
+
+    discardOutgoingMailService(params)
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/outgoing-mail');
+      })
+      .catch((e) => {
+        return (
+          this.alertError(e)
+        )
+      });
+    e.preventDefault();
   }
 
   generateNoMail = (e) => {
@@ -380,6 +406,7 @@ class OutgoingMailDetail extends Component {
       isShowModalGenerate,
       isShowModalVerify,
       selectedStatusMail,
+      isShowModalVoid,
       dataUser } = this.state;
 
     const optionsSignature = dataUser.length !== 0 ?
@@ -462,6 +489,69 @@ class OutgoingMailDetail extends Component {
 
                     <Col style={{ justifyContent: 'flex-end' }}>
 
+                      {detailList.can_void ?
+                        <Button
+                          color="danger"
+                          className="mt-1"
+                          onClick={this.showModalVoid}
+                          data-toggle="modal"
+                          data-target=".bs-example-modal-center">
+                          <i className="typcn typcn-input-checked" />Batalkan Surat
+                      </Button>
+                        : null}
+                      <Modal
+                        isOpen={isShowModalVoid}
+                        toggle={this.showModalVoid} >
+                        <div className="modal-header text-white bg-danger">
+                          <h5 className="modal-title mt-0">Batalkan Surat</h5>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              this.setState({ isShowModalVoid: false })
+                            }
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+
+                        <div className="modal-body">
+                          <form action="#" onSubmit={this.discardMail}>
+
+                            <Row className="form-group">
+                              <label
+                                htmlFor="keterangan"
+                                className="col-sm-2 col-form-label">
+                                Keterangan
+                          </label>
+                              <Col sm={10}>
+                                <input
+                                  name="remark"
+                                  className="form-control"
+                                  type="text"
+                                  defaultValue=""
+                                  id="keterangan"
+                                  ref={node => (this.inputNode = node)}
+                                />
+                              </Col>
+                            </Row>
+
+                            <div className="text-right mt-8">
+                              <Button
+                                color="success"
+                                className="mt-1"
+                                data-toggle="modal"
+                                data-target=".bs-example-modal-center">
+                                <i className="typcn typcn-input-checked" />Submit
+                         </Button>
+                            </div>
+                          </form>
+                        </div>
+                      </Modal>
+
+                      &nbsp; &nbsp;
                       {detailList.can_verify ?
                         <Button
                           color="primary"
@@ -495,7 +585,7 @@ class OutgoingMailDetail extends Component {
 
                             <Row className="form-group">
                               <label
-                                htmlFor="example-text-input"
+                                htmlFor="status"
                                 className="col-sm-2 col-form-label">
                                 Status
                               </label>
@@ -525,7 +615,6 @@ class OutgoingMailDetail extends Component {
                             {selectedStatusMail !== '0' ?
                               <Row className="form-group">
                                 <label
-                                  htmlFor="example-search-input"
                                   className="col-sm-2 col-form-label">
                                   Diteruskan kepada
                          </label>
@@ -543,7 +632,7 @@ class OutgoingMailDetail extends Component {
 
                             <Row className="form-group">
                               <label
-                                htmlFor="example-search-input"
+                                htmlFor="ket"
                                 className="col-sm-2 col-form-label">
                                 Keterangan
                           </label>
@@ -553,7 +642,7 @@ class OutgoingMailDetail extends Component {
                                   className="form-control"
                                   type="text"
                                   defaultValue=""
-                                  id="example-text-input"
+                                  id="ket"
                                   ref={node => (this.inputNode = node)}
                                 />
                               </Col>

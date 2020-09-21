@@ -217,7 +217,6 @@ class OutgoingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
                         className="col-sm-2 col-form-label"
                       >
                         Klasifikasi Surat
@@ -236,7 +235,6 @@ class OutgoingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
                         className="col-sm-2 col-form-label"
                       >
                         Sifat Surat
@@ -255,7 +253,7 @@ class OutgoingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="tujuanSurat"
                         className="col-sm-2 col-form-label"
                       >
                         Tujuan Surat
@@ -265,7 +263,7 @@ class OutgoingMailCreate extends Component {
                           name="destination"
                           className="form-control"
                           type="text"
-                          id="example-text-input"
+                          id="tujuanSurat"
                           ref={node => (this.inputNode = node)}
                           required
                         />
@@ -274,7 +272,7 @@ class OutgoingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="halSurat"
                         className="col-sm-2 col-form-label"
                       >
                         Hal Surat
@@ -283,7 +281,7 @@ class OutgoingMailCreate extends Component {
                         <input
                           className="form-control"
                           type="text"
-                          id="example-text-input"
+                          id="halSurat"
                           name="subject"
                           ref={node => (this.inputNode = node)}
                           required
@@ -293,7 +291,7 @@ class OutgoingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="lampiran"
                         className="col-sm-2 col-form-label"
                       >
                         Lampiran Surat
@@ -302,7 +300,7 @@ class OutgoingMailCreate extends Component {
                         <input
                           className="form-control"
                           type="text"
-                          id="example-text-input"
+                          id="lampiran"
                           name="attachment"
                           ref={node => (this.inputNode = node)}
                           required
@@ -312,7 +310,6 @@ class OutgoingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
                         className="col-sm-2 col-form-label"
                       >
                         Penandatanganan Surat
@@ -331,7 +328,6 @@ class OutgoingMailCreate extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
                         className="col-sm-2 col-form-label"
                       >
                         Diajukan Kepada
@@ -349,7 +345,7 @@ class OutgoingMailCreate extends Component {
                     </Row>
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
+                        htmlFor="dokumen"
                         className="col-sm-2 col-form-label"
                       >
                         Dokumen
@@ -360,7 +356,7 @@ class OutgoingMailCreate extends Component {
                             <input
                               type="file"
                               className="form-control"
-                              id="validatedCustomFile"
+                              id="dokumen"
                               required
                               onChange={this.onFileChange}
                               accept=".doc, .docx"
@@ -369,7 +365,7 @@ class OutgoingMailCreate extends Component {
                             />
                             <label
                               className="custom-file-label"
-                              htmlFor="validatedCustomFile"
+                              htmlFor="dokumen"
                               style={{ zIndex: 0 }}>
                               {selectedFile !== null && selectedFile !== undefined ? selectedFile.name : 'No file chosen'}
                             </label>

@@ -442,7 +442,7 @@ class IncomingMailDetail extends Component {
                         <form action="#" onSubmit={this.doDisposition}>
                           <Row className="form-group">
                             <label
-                              htmlFor="example-search-input"
+                              htmlFor="diteruskanKpd"
                               className="col-sm-2 col-form-label">
                               Diteruskan kepada
                          </label>
@@ -460,7 +460,7 @@ class IncomingMailDetail extends Component {
 
                           <Row className="form-group">
                             <label
-                              htmlFor="example-search-input"
+                              htmlFor="arahan"
                               className="col-sm-2 col-form-label">
                               Arahan
                           </label>
@@ -470,7 +470,7 @@ class IncomingMailDetail extends Component {
                                 className="form-control"
                                 type="text"
                                 defaultValue=""
-                                id="example-text-input"
+                                id="arahan"
                                 ref={node => (this.inputNode = node)}
                               />
                             </Col>

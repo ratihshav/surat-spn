@@ -8,7 +8,7 @@ import {
 } from "reactstrap";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
-import { changePasswordUserService } from '../../helpers/master/user';
+import { changePasswordProfileService } from '../../helpers/master/profile';
 import toast from '../UI/toast';
 
 class ProfileChangePassword extends Component {
@@ -37,13 +37,13 @@ class ProfileChangePassword extends Component {
     const idUser = window.localStorage.getItem('id');
 
     const params = {
-      password: this.state.password,
+      password: e.target.password.value,
       id: idUser
     }
 
-    changePasswordUserService(params)
+    changePasswordProfileService(params)
       .then((data) => {
-        this.alertSuccess()
+        this.alertSuccess(data.data.messages[0])
         this.props.history.push('/profile');
       })
       .catch((e) => {

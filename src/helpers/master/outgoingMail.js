@@ -180,6 +180,21 @@ export const verifyOutgoingMailService = (request) => {
     .catch((e) => { throw e.response.data.messages[0] });
 };
 
+export const discardOutgoingMailService = (request) => {
+  const id = request.id
+  const formData = new FormData();
+  formData.append('remark', request.remark);
+
+  const VERIFY_OUT_MAIL_API = config.api_endpoint + `/suratKeluar/void/${id}`;
+  return instance.post(VERIFY_OUT_MAIL_API, formData)
+    .then((data) => {
+      return {
+        data: data
+      };
+    })
+    .catch((e) => { throw e.response.data.messages[0] });
+};
+
 export async function _handleError(error) {
   // var errorCode = error.code;
   var errorMessage = error.message;

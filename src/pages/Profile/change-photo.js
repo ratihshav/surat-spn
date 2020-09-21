@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import Dropzone from "react-dropzone";
 import toast from '../UI/toast';
-import { changePhotoUserService } from '../../helpers/master/user';
+import { changePhotoProfileService } from '../../helpers/master/profile';
 
 class ProfileChangePhoto extends Component {
   constructor(props) {
@@ -52,9 +52,9 @@ class ProfileChangePhoto extends Component {
       id: idUser
     }
 
-    changePhotoUserService(params)
+    changePhotoProfileService(params)
       .then((data) => {
-        this.alertSuccess()
+        this.alertSuccess(data.data.messages[0])
         this.props.history.push('/profile');
       })
       .catch((e) => {
