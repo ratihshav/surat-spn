@@ -34,7 +34,6 @@ export const ClearButton = styled(Button)`
 `;
 
 export const Action = ({ actHandler, data }) => (
-  console.log('data', data),
   <Row>
     {data.disposisi_id
       ? <Button type="button" onClick={actHandler} id={data.id} value={JSON.stringify(data)} name={"detail"} className="btn btn-orange btn-sm" color="success" title="Ubah">Detail</Button>

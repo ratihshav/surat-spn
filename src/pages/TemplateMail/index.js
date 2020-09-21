@@ -11,7 +11,6 @@ import memoize from 'memoize-one';
 import { Action, FilterComponent, AddButtonComponent } from '../../components/tabelComponents';
 
 const Document = (data) => {
-  console.log('daya', data)
   return (
     <div>
       {data.data.detail.map(function (item, index) {

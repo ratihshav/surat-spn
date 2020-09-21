@@ -103,7 +103,7 @@ class UserChangePassword extends Component {
                   <CardBody>
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="newPass"
                         className="col-sm-2 col-form-label"
                       >
                         Password Baru
@@ -113,7 +113,7 @@ class UserChangePassword extends Component {
                           name="password"
                           className="form-control"
                           type="password"
-                          id="example-text-input"
+                          id="newPass"
                           ref={node => (this.inputNode = node)}
                           required
                           autoComplete="new-password"

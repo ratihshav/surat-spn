@@ -208,7 +208,7 @@ class IncomingMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="asalSurat"
+                        htmlFor="origin"
                         className="col-sm-2 col-form-label">
                         Asal Surat
                         </label>
@@ -218,7 +218,7 @@ class IncomingMailEdit extends Component {
                           className="form-control"
                           type="text"
                           defaultValue={detailList.asal_surat}
-                          id="asalSurat"
+                          id="origin"
                           ref={node => (this.inputNode = node)}
                           required
                         />
@@ -227,7 +227,7 @@ class IncomingMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="perihal"
+                        htmlFor="subject"
                         className="col-sm-2 col-form-label">
                         Perihal
                         </label>
@@ -236,7 +236,7 @@ class IncomingMailEdit extends Component {
                           className="form-control"
                           type="text"
                           defaultValue={detailList.perihal}
-                          id="perihal"
+                          id="subject"
                           name="subject"
                           ref={node => (this.inputNode = node)}
                           required
@@ -246,7 +246,7 @@ class IncomingMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="nomorSurat"
+                        htmlFor="numMail"
                         className="col-sm-2 col-form-label">
                         Nomor Surat
                         </label>
@@ -255,7 +255,7 @@ class IncomingMailEdit extends Component {
                           className="form-control"
                           type="text"
                           defaultValue={detailList.nomor_surat}
-                          id="nomorSurat"
+                          id="numMail"
                           name="numMail"
                           ref={node => (this.inputNode = node)}
                           required
@@ -265,7 +265,7 @@ class IncomingMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="tglSurat"
+                        htmlFor="date"
                         className="col-sm-2 col-form-label"
                       >
                         Tanggal Surat
@@ -274,7 +274,7 @@ class IncomingMailEdit extends Component {
                         <input
                           className="form-control"
                           type="date"
-                          id="tglSurat"
+                          id="date"
                           name="date"
                           value={detailList.tgl_surat}
                           ref={node => (this.inputNode = node)}
@@ -321,7 +321,7 @@ class IncomingMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="lampiran"
+                        htmlFor="attachment"
                         className="col-sm-2 col-form-label"
                       >
                         Lampiran Surat
@@ -331,7 +331,7 @@ class IncomingMailEdit extends Component {
                           className="form-control"
                           type="text"
                           defaultValue={detailList.lampiran}
-                          id="lampiran"
+                          id="attachment"
                           name="attachment"
                           ref={node => (this.inputNode = node)}
                           required
@@ -361,7 +361,7 @@ class IncomingMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="keterangan"
+                        htmlFor="description"
                         className="col-sm-2 col-form-label">
                         Keterangan
                         </label>
@@ -371,7 +371,7 @@ class IncomingMailEdit extends Component {
                           className="form-control"
                           defaultValue={detailList.keterangan}
                           type="text"
-                          id="keterangan"
+                          id="description"
                           ref={node => (this.inputNode = node)}
                           required
                         />
@@ -380,7 +380,6 @@ class IncomingMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="dokumen"
                         className="col-sm-2 col-form-label"
                       >
                         Dokumen
