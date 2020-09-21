@@ -17,11 +17,18 @@ class NotificationDropdown extends Component {
       dataView: [],
       totalCount: '',
     };
+    this._isMounted = false;
   }
 
   componentDidMount() {
+    this._isMounted = true;
+
     this.getCountNotif()
-    this.getDataFromApi()
+    this._isMounted && this.getDataFromApi()
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   getCountNotif = () => {
@@ -46,14 +53,13 @@ class NotificationDropdown extends Component {
 
     echo.private(`App.User.${userid}`).notification((data) => {
       this.setState({ totalCount: data.totalCount })
-      console.log('dataPusher', data);
     });
   }
 
-  getDataFromApi = () => {
-    getNotifCountService()
+  getDataFromApi = async () => {
+    await getNotifCountService()
       .then((data) => {
-        this.setState({
+        this._isMounted && this.setState({
           totalCount: data.data.data,
         });
       })
@@ -157,15 +163,6 @@ class NotificationDropdown extends Component {
                 </div>}
 
             </SimpleBar>
-            {/* <div className="p-2 border-top">
-              <Link
-                className="btn btn-sm btn-link font-size-14 btn-block text-center"
-                to="#"
-              >
-                {" "}
-                View all{" "}
-              </Link>
-            </div> */}
           </DropdownMenu>
         </Dropdown>
       </React.Fragment>
