@@ -89,7 +89,7 @@ class ProfileChangePassword extends Component {
                   <CardBody>
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="password"
                         className="col-sm-2 col-form-label"
                       >
                         Password Baru
@@ -99,7 +99,7 @@ class ProfileChangePassword extends Component {
                           name="password"
                           className="form-control"
                           type="password"
-                          id="example-text-input"
+                          id="password"
                           ref={node => (this.inputNode = node)}
                           required
                           autoComplete="new-password"

@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { Row, Col, Card, CardBody, Button, Form } from "reactstrap";
-import Select from "react-select";
+import { Row, Col, Card, CardBody, Button } from "reactstrap";
 import { connect } from "react-redux";
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
-import Dropzone from "react-dropzone";
 
 import { createTemplateMailService } from "../../helpers/master/templateMail"
 import toast from '../UI/toast';
