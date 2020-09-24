@@ -8,31 +8,9 @@ import { createIncomingMailService } from "../../helpers/master/incomingMail"
 import { searchUserSMService } from "../../helpers/master/user"
 import { getMasterGroupServices } from "../../helpers/master/group"
 import { searchMasterClassService } from '../../helpers/master/classification'
+import { searchMasterCharMailService } from "../../helpers/master/charMail"
+import { searchMasterTypeMailService } from "../../helpers/master/typeMail"
 import toast from '../UI/toast';
-
-// const type = [
-//   {
-//     label: "Pilih Tipe Surat",
-//     options: [
-//       { label: "Surat Keterangan", value: "Surat Keterangan" },
-//       { label: "Surat Biasa", value: "Surat Biasa" },
-//       { label: "Surat Perintah", value: "Surat Perintah" }
-//     ]
-//   },
-// ];
-
-//  for later
-const urgency = [
-  {
-    label: "Pilih Sifat Surat",
-    options: [
-      { label: "Biasa", value: "Biasa" },
-      { label: "Segera", value: "Segera" },
-      { label: "Penting", value: "Penting" }
-    ]
-  }
-]
-
 
 class IncomingMailCreate extends Component {
   constructor(props) {
@@ -46,13 +24,33 @@ class IncomingMailCreate extends Component {
       selectedClass: null,
       dataGroup: [],
       dataUser: [],
-      dataClass: []
+      dataClass: [],
+      dataSifatSurat: [],
+      dataTipeSurat: []
     };
   }
 
   componentDidMount() {
     this.getDataUser()
     this.getDataClass()
+    this.getSifatSurat()
+    this.getTipeSurat()
+  }
+
+  getTipeSurat = () => {
+    searchMasterTypeMailService()
+      .then((data) => {
+        this.setState({ dataTipeSurat: data.data.data })
+      })
+      .catch((e) => { throw e });
+  }
+
+  getSifatSurat = () => {
+    searchMasterCharMailService()
+      .then((data) => {
+        this.setState({ dataSifatSurat: data.data.data })
+      })
+      .catch((e) => { throw e });
   }
 
   getDataClass = () => {
@@ -62,7 +60,7 @@ class IncomingMailCreate extends Component {
           dataClass: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e });
   }
 
   getDataUser = () => {
@@ -70,7 +68,7 @@ class IncomingMailCreate extends Component {
       .then((data) => {
         this.setState({ dataUser: data.data.data })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e });
   }
 
   getDataGroup = () => {
@@ -80,7 +78,7 @@ class IncomingMailCreate extends Component {
           dataGroup: data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e })
   }
 
   handleSelectType = selectedType => {
@@ -116,7 +114,7 @@ class IncomingMailCreate extends Component {
       to_user_id: e.target.sendto.value,
       sifat_surat: e.target.urgency.value,
       lampiran: e.target.attachment.value,
-      // prioritas: e.target.urgency.value,
+      jenis_surat: e.target.type.value,
       klasifikasi_id: e.target.classification.value,
       keterangan: e.target.description.value,
       file: this.state.selectedFile
@@ -155,7 +153,9 @@ class IncomingMailCreate extends Component {
       selectedSubmit,
       selectedType,
       selectedClass,
-      dataClass
+      dataClass,
+      dataTipeSurat,
+      dataSifatSurat
     } = this.state;
 
     const optionsSubmit = dataUser.length !== 0 ?
@@ -169,6 +169,18 @@ class IncomingMailCreate extends Component {
         return { value: data.id, label: data.text };
       })
       : null
+
+    const optionsTipe = dataTipeSurat.length !== 0 ?
+      dataTipeSurat.map(function (data) {
+        return { value: data.text, label: data.text };
+      })
+      : 'Tidak ada data'
+
+    const optionsSifat = dataSifatSurat.length !== 0 ?
+      dataSifatSurat.map(function (data) {
+        return { value: data.text, label: data.text };
+      })
+      : 'Tidak ada data'
 
     return (
       <React.Fragment>
@@ -286,6 +298,22 @@ class IncomingMailCreate extends Component {
                     </Row>
 
                     <Row className="form-group">
+                      <label className="col-sm-2 col-form-label">
+                        Tipe Surat
+                    </label>
+                      <Col sm={10}>
+                        <Select
+                          value={selectedType}
+                          onChange={this.handleSelectType}
+                          options={optionsTipe}
+                          name="type"
+                          ref={node => (this.inputNode = node)}
+                          required
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
                       <label
                         className="col-sm-2 col-form-label"
                       >
@@ -295,7 +323,7 @@ class IncomingMailCreate extends Component {
                         <Select
                           value={selectedUrgency}
                           onChange={this.handleSelectUrgency}
-                          options={urgency}
+                          options={optionsSifat}
                           name="urgency"
                           ref={node => (this.inputNode = node)}
                           required

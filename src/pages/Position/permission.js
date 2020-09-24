@@ -51,7 +51,7 @@ class PositionPermission extends Component {
           dataPosition: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e })
   }
 
   getGrantedPermission = (idPosition) => {
@@ -62,7 +62,7 @@ class PositionPermission extends Component {
           selectedPermission: data.data.data[0]
         })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e })
   }
 
   getAllPermission = () => {
@@ -72,7 +72,7 @@ class PositionPermission extends Component {
           allPermission: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e })
   }
 
 

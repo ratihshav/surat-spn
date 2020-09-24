@@ -55,7 +55,7 @@ class PositionAdd extends Component {
           dataGroup: data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e})
   }
 
   getPositionParent = () => {
@@ -65,7 +65,7 @@ class PositionAdd extends Component {
           dataParent: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e})
   }
 
   alertSuccess = () => {

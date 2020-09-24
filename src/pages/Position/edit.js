@@ -41,7 +41,7 @@ class PositionEdit extends Component {
           dataPosition: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e })
   }
 
   getDataGroup = () => {
@@ -51,7 +51,7 @@ class PositionEdit extends Component {
           dataGroup: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e })
   }
 
   getPositionParent = () => {
@@ -61,7 +61,7 @@ class PositionEdit extends Component {
           dataParent: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e })
   }
 
 

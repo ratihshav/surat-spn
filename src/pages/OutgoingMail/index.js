@@ -263,7 +263,7 @@ class OutgoingMail extends Component {
           data: data
         };
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e; });
   }
 
   render() {

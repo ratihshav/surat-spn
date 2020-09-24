@@ -34,7 +34,7 @@ class TemplateMailEdit extends Component {
           existingFile: data.data.data.detail
         })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; })
+      .catch((e) => { throw e; })
   }
 
   onFileChange = event => {

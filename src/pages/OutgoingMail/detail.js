@@ -55,7 +55,7 @@ class OutgoingMailDetail extends Component {
       .then((data) => {
         this.setState({ detailList: data.data.data })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e; });
   }
 
   getDataUser = () => {
@@ -63,7 +63,7 @@ class OutgoingMailDetail extends Component {
       .then((data) => {
         this.setState({ dataUser: data.data.data })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e; });
   }
 
   removeBodyCss = () => {

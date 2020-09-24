@@ -62,7 +62,7 @@ class UserAdd extends Component {
           dataPosition: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e })
   }
 
   alertSuccess = () => {

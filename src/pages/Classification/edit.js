@@ -26,7 +26,7 @@ class ClassificationEdit extends Component {
           dataClass: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e })
   }
 
   updateClass = (e) => {

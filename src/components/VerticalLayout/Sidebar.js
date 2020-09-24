@@ -120,6 +120,27 @@ const SidebarContent = props => {
               : null
             }
 
+            <li>
+              <Link to="/type-mail">
+                <i className="fas fa-file"></i>
+                <span>Tipe Surat</span>
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/char-mail">
+                <i className="fas fa-file"></i>
+                <span>Sifat Surat</span>
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/audit-trail">
+                <i className="fas fa-file"></i>
+                <span>Audit Trail</span>
+              </Link>
+            </li>
+
           </ul>
         </li>
 

@@ -57,7 +57,7 @@ class Profile extends Component {
           dataUser: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; })
+      .catch((e) => { throw e })
   }
 
   getDataPosition = () => {
@@ -67,7 +67,7 @@ class Profile extends Component {
           dataPosition: data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; })
+      .catch((e) => { throw e })
   }
 
   submitUpdatedData = (e) => {

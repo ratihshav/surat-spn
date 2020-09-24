@@ -32,7 +32,7 @@ class ProfileMenu extends Component {
         window.localStorage.clear()
         window.location = '/'
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e });
   }
 
   render() {

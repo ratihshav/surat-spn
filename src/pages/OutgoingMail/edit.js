@@ -11,26 +11,9 @@ import {
 } from "../../helpers/master/outgoingMail"
 import { searchUserService } from "../../helpers/master/user"
 import { searchMasterClassService } from '../../helpers/master/classification'
+import { searchMasterCharMailService } from "../../helpers/master/charMail"
+import { searchMasterTypeMailService } from "../../helpers/master/typeMail"
 import toast from '../UI/toast';
-
-const type = [
-
-  { label: "Surat Keterangan", value: "Surat Keterangan" },
-  { label: "Surat Biasa", value: "Surat Biasa" },
-  { label: "Surat Perintah", value: "Surat Perintah" }
-
-];
-
-const urgency = [
-  {
-    label: "Pilih Sifat Surat",
-    options: [
-      { label: "Biasa", value: "Biasa" },
-      { label: "Segera", value: "Segera" },
-      { label: "Penting", value: "Penting" }
-    ]
-  }
-]
 
 class OutgoingMailEdit extends Component {
   constructor(props) {
@@ -45,7 +28,9 @@ class OutgoingMailEdit extends Component {
       dataClass: [],
       dataUser: [],
       detailList: [],
-      optionsValues: []
+      optionsValues: [],
+      dataSifatSurat: [],
+      dataTipeSurat: []
     };
   }
 
@@ -56,6 +41,25 @@ class OutgoingMailEdit extends Component {
     this.getDataGroup()
     this.getDataUser()
     this.getDataClass()
+    this.getSifatSurat()
+    this.getTipeSurat()
+  }
+
+
+  getTipeSurat = () => {
+    searchMasterTypeMailService()
+      .then((data) => {
+        this.setState({ dataTipeSurat: data.data.data })
+      })
+      .catch((e) => { throw e });
+  }
+
+  getSifatSurat = () => {
+    searchMasterCharMailService()
+      .then((data) => {
+        this.setState({ dataSifatSurat: data.data.data })
+      })
+      .catch((e) => { throw e });
   }
 
   getDataClass = () => {
@@ -65,7 +69,7 @@ class OutgoingMailEdit extends Component {
           dataClass: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e; });
   }
 
   getDetailList = (idMail) => {
@@ -84,7 +88,7 @@ class OutgoingMailEdit extends Component {
           optionsValues: optionsValue
         })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e; });
   }
 
   getDataUser = () => {
@@ -92,7 +96,7 @@ class OutgoingMailEdit extends Component {
       .then((data) => {
         this.setState({ dataUser: data.data.data })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e; });
   }
 
   getDataGroup = () => {
@@ -102,7 +106,7 @@ class OutgoingMailEdit extends Component {
           dataGroup: data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e })
   }
 
   handleSelectClass = selectedClass => {
@@ -187,7 +191,9 @@ class OutgoingMailEdit extends Component {
       detailList,
       optionsValues,
       selectedClass,
-      dataClass } = this.state;
+      dataClass,
+      dataTipeSurat,
+      dataSifatSurat } = this.state;
 
     const optionsSignature = dataUser.length !== 0 ?
       dataUser.map((data) => {
@@ -206,6 +212,18 @@ class OutgoingMailEdit extends Component {
         return { value: data.id, label: data.text };
       })
       : null
+
+    const optionsTipe = dataTipeSurat.length !== 0 ?
+      dataTipeSurat.map(function (data) {
+        return { value: data.text, label: data.text };
+      })
+      : 'Tidak ada data'
+
+    const optionsSifat = dataSifatSurat.length !== 0 ?
+      dataSifatSurat.map(function (data) {
+        return { value: data.text, label: data.text };
+      })
+      : 'Tidak ada data'
 
     const defValClass = {
       value: detailList.klasifikasi_id,
@@ -238,7 +256,7 @@ class OutgoingMailEdit extends Component {
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">
-                <h4 className="font-size-18">Buat Surat Keluar</h4>
+                <h4 className="font-size-18">Edit Surat Keluar</h4>
                 <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
                     <Link to="#">Surat</Link>
@@ -246,7 +264,7 @@ class OutgoingMailEdit extends Component {
                   <li className="breadcrumb-item">
                     <Link to="/outgoing-mail">Surat</Link>
                   </li>
-                  <li className="breadcrumb-item active">Buat Surat Keluar</li>
+                  <li className="breadcrumb-item active">Edit Surat Keluar</li>
                 </ol>
               </div>
             </Col>
@@ -266,7 +284,7 @@ class OutgoingMailEdit extends Component {
                         <Select
                           value={selectedType}
                           onChange={this.handleSelectType}
-                          options={type}
+                          options={optionsTipe}
                           name="type"
                           ref={node => (this.inputNode = node)}
                           required
@@ -308,7 +326,7 @@ class OutgoingMailEdit extends Component {
                         <Select
                           value={selectedUrgency}
                           onChange={this.handleSelectUrgency}
-                          options={urgency}
+                          options={optionsSifat}
                           name="urgency"
                           ref={node => (this.inputNode = node)}
                           required

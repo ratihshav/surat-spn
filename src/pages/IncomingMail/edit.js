@@ -7,30 +7,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { updateIncomingMailService, getDetailIncomingMailService } from "../../helpers/master/incomingMail"
 import { searchUserSMService } from "../../helpers/master/user"
 import { searchMasterClassService } from '../../helpers/master/classification'
+import { searchMasterCharMailService } from "../../helpers/master/charMail"
+import { searchMasterTypeMailService } from "../../helpers/master/typeMail"
 import toast from '../UI/toast';
 import moment from 'moment';
-
-// const type = [
-//   {
-//     label: "Pilih Tipe Surat",
-//     options: [
-//       { label: "Surat Keterangan", value: "Surat Keterangan" },
-//       { label: "Surat Biasa", value: "Surat Biasa" },
-//       { label: "Surat Perintah", value: "Surat Perintah" }
-//     ]
-//   },
-// ];
-
-// const urgency = [
-//   {
-//     label: "Pilih Sifat Surat",
-//     options: [
-//       { label: "Biasa", value: "Biasa" },
-//       { label: "Segera", value: "Segera" },
-//       { label: "Penting", value: "Penting" }
-//     ]
-//   }
-// ]
 
 class IncomingMailEdit extends Component {
   constructor(props) {
@@ -40,9 +20,13 @@ class IncomingMailEdit extends Component {
       selectedSignature: null,
       selectedSubmit: null,
       selectedClass: null,
+      selectedType: null,
+      selectedUrgency: null,
       dataClass: [],
       dataUser: [],
-      detailList: []
+      detailList: [],
+      dataSifatSurat: [],
+      dataTipeSurat: []
     };
   }
 
@@ -52,6 +36,24 @@ class IncomingMailEdit extends Component {
     this.getDetailList(idMail)
     this.getDataUser()
     this.getDataClass()
+    this.getSifatSurat()
+    this.getTipeSurat()
+  }
+
+  getTipeSurat = () => {
+    searchMasterTypeMailService()
+      .then((data) => {
+        this.setState({ dataTipeSurat: data.data.data })
+      })
+      .catch((e) => { throw e });
+  }
+
+  getSifatSurat = () => {
+    searchMasterCharMailService()
+      .then((data) => {
+        this.setState({ dataSifatSurat: data.data.data })
+      })
+      .catch((e) => { throw e });
   }
 
   getDataClass = () => {
@@ -61,7 +63,7 @@ class IncomingMailEdit extends Component {
           dataClass: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e });
   }
 
   getDataUser = () => {
@@ -69,7 +71,7 @@ class IncomingMailEdit extends Component {
       .then((data) => {
         this.setState({ dataUser: data.data.data })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e });
   }
 
   getDetailList = (idMail) => {
@@ -82,9 +84,16 @@ class IncomingMailEdit extends Component {
           detailList: detail,
         })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e });
   }
 
+  handleSelectType = selectedType => {
+    this.setState({ selectedType });
+  };
+
+  handleSelectUrgency = selectedUrgency => {
+    this.setState({ selectedUrgency })
+  }
 
   handleSelectClass = selectedClass => {
     this.setState({ selectedClass });
@@ -106,7 +115,9 @@ class IncomingMailEdit extends Component {
     const {
       detailList,
       selectedClass,
-      selectedSubmit
+      selectedSubmit,
+      selectedType,
+      selectedUrgency,
     } = this.state
 
     const params = {
@@ -115,9 +126,9 @@ class IncomingMailEdit extends Component {
       nomor_surat: e.target.numMail.value,
       tgl_surat: e.target.date.value,
       to_user_id: detailList.to_user_id ? detailList.to_user_id : selectedSubmit,
-      sifat_surat: e.target.type.value,
+      sifat_surat: detailList.sifat_surat ? detailList.sifat_surat : selectedUrgency,
       lampiran: e.target.attachment.value,
-      // prioritas: e.target.urgency.value,
+      jenis_surat: detailList.jenis_surat ? detailList.jenis_surat : selectedType,
       klasifikasi_id: detailList.klasifikasi_id ? detailList.klasifikasi_id : selectedClass,
       keterangan: e.target.description.value,
       file: this.state.selectedFile
@@ -155,7 +166,11 @@ class IncomingMailEdit extends Component {
       selectedSubmit,
       detailList,
       selectedClass,
-      dataClass
+      dataClass,
+      dataTipeSurat,
+      dataSifatSurat,
+      selectedType,
+      selectedUrgency
     } = this.state;
 
     const optionsSubmit = dataUser.length !== 0 ?
@@ -170,6 +185,18 @@ class IncomingMailEdit extends Component {
       })
       : null
 
+    const optionsTipe = dataTipeSurat.length !== 0 ?
+      dataTipeSurat.map(function (data) {
+        return { value: data.text, label: data.text };
+      })
+      : 'Tidak ada data'
+
+    const optionsSifat = dataSifatSurat.length !== 0 ?
+      dataSifatSurat.map(function (data) {
+        return { value: data.text, label: data.text };
+      })
+      : 'Tidak ada data'
+
     const defValPosition = {
       value: detailList.to_user_id,
       label: detailList.to_user_name
@@ -178,6 +205,16 @@ class IncomingMailEdit extends Component {
     const defValClass = {
       value: detailList.klasifikasi_id,
       label: detailList.klasifikasi_name
+    }
+
+    const defValType = {
+      value: detailList.jenis_surat,
+      label: detailList.jenis_surat
+    }
+
+    const defValUrge = {
+      value: detailList.sifat_surat,
+      label: detailList.sifat_surat
     }
 
     return (
@@ -304,17 +341,39 @@ class IncomingMailEdit extends Component {
 
                     <Row className="form-group">
                       <label className="col-sm-2 col-form-label">
-                        Sifat Surat
-                      </label>
+                        Tipe Surat
+                    </label>
                       <Col sm={10}>
-                        <input
-                          className="form-control"
-                          type="text"
-                          id="example-text-input"
+                        <Select
+                          value={selectedType}
+                          onChange={this.handleSelectType}
+                          options={optionsTipe}
                           name="type"
                           ref={node => (this.inputNode = node)}
                           required
-                          defaultValue={detailList.sifat_surat}
+                          placeholder={[detailList.jenis_surat]}
+                          defaultValue={defValType}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="example-search-input"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Sifat Surat
+                    </label>
+                      <Col sm={10}>
+                        <Select
+                          value={selectedUrgency}
+                          onChange={this.handleSelectUrgency}
+                          options={optionsSifat}
+                          name="urgency"
+                          ref={node => (this.inputNode = node)}
+                          required
+                          placeholder={[detailList.sifat_surat]}
+                          defaultValue={defValUrge}
                         />
                       </Col>
                     </Row>

@@ -2,36 +2,14 @@ import React, { Component } from "react";
 import { Row, Col, Card, CardBody, Button, Toast } from "reactstrap";
 import Select from "react-select";
 import { connect } from "react-redux";
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
-import { getMasterGroupServices } from "../../helpers/master/group"
 import { createOutgoingMailService } from "../../helpers/master/outgoingMail"
 import { searchUserSKService, searchUserTtdService } from "../../helpers/master/user"
 import { searchMasterClassService } from '../../helpers/master/classification'
+import { searchMasterCharMailService } from "../../helpers/master/charMail"
+import { searchMasterTypeMailService } from "../../helpers/master/typeMail"
 import toast from '../UI/toast';
-
-const type = [
-  {
-    label: "Pilih Tipe Surat",
-    options: [
-      { label: "Surat Keterangan", value: "Surat Keterangan" },
-      { label: "Surat Biasa", value: "Surat Biasa" },
-      { label: "Surat Perintah", value: "Surat Perintah" }
-    ]
-  },
-];
-
-const urgency = [
-  {
-    label: "Pilih Sifat Surat",
-    options: [
-      { label: "Biasa", value: "Biasa" },
-      { label: "Segera", value: "Segera" },
-      { label: "Penting", value: "Penting" }
-    ]
-  }
-]
-
 
 class OutgoingMailCreate extends Component {
   constructor(props) {
@@ -45,7 +23,9 @@ class OutgoingMailCreate extends Component {
       selectedClass: null,
       dataClass: [],
       dataUserTtd: [],
-      dataUserSK: []
+      dataUserSK: [],
+      dataSifatSurat: [],
+      dataTipeSurat: []
     };
   }
 
@@ -53,6 +33,24 @@ class OutgoingMailCreate extends Component {
     this.getUserTtd()
     this.getUserSK()
     this.getDataClass()
+    this.getSifatSurat()
+    this.getTipeSurat()
+  }
+
+  getTipeSurat = () => {
+    searchMasterTypeMailService()
+      .then((data) => {
+        this.setState({ dataTipeSurat: data.data.data })
+      })
+      .catch((e) => { throw e });
+  }
+
+  getSifatSurat = () => {
+    searchMasterCharMailService()
+      .then((data) => {
+        this.setState({ dataSifatSurat: data.data.data })
+      })
+      .catch((e) => { throw e });
   }
 
   getUserTtd = () => {
@@ -60,7 +58,7 @@ class OutgoingMailCreate extends Component {
       .then((data) => {
         this.setState({ dataUserTtd: data.data.data })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e });
   }
 
   getUserSK = () => {
@@ -68,7 +66,7 @@ class OutgoingMailCreate extends Component {
       .then((data) => {
         this.setState({ dataUserSK: data.data.data })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e });
   }
 
   getDataClass = () => {
@@ -78,7 +76,7 @@ class OutgoingMailCreate extends Component {
           dataClass: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; });
+      .catch((e) => { throw e });
   }
 
   handleSelectClass = selectedClass => {
@@ -153,7 +151,9 @@ class OutgoingMailCreate extends Component {
       selectedClass,
       dataClass,
       dataUserSK,
-      dataUserTtd } = this.state;
+      dataUserTtd,
+      dataTipeSurat,
+      dataSifatSurat } = this.state;
 
     const optionsSignature = dataUserTtd.length !== 0 ?
       dataUserTtd.map(function (data) {
@@ -172,6 +172,18 @@ class OutgoingMailCreate extends Component {
         return { value: data.id, label: data.text };
       })
       : null
+
+    const optionsTipe = dataTipeSurat.length !== 0 ?
+      dataTipeSurat.map(function (data) {
+        return { value: data.text, label: data.text };
+      })
+      : 'Tidak ada data'
+
+    const optionsSifat = dataSifatSurat.length !== 0 ?
+      dataSifatSurat.map(function (data) {
+        return { value: data.text, label: data.text };
+      })
+      : 'Tidak ada data'
 
     return (
       <React.Fragment>
@@ -207,7 +219,7 @@ class OutgoingMailCreate extends Component {
                         <Select
                           value={selectedType}
                           onChange={this.handleSelectType}
-                          options={type}
+                          options={optionsTipe}
                           name="type"
                           ref={node => (this.inputNode = node)}
                           required
@@ -243,7 +255,7 @@ class OutgoingMailCreate extends Component {
                         <Select
                           value={selectedUrgency}
                           onChange={this.handleSelectUrgency}
-                          options={urgency}
+                          options={optionsSifat}
                           name="urgency"
                           ref={node => (this.inputNode = node)}
                           required

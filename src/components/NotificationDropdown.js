@@ -63,7 +63,7 @@ class NotificationDropdown extends Component {
           totalCount: data.data.data,
         });
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e })
   }
 
   toggle = () => {
@@ -74,7 +74,7 @@ class NotificationDropdown extends Component {
           menu: !this.state.menu
         });
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e })
   }
 
   readNotif = (val) => {
@@ -82,7 +82,7 @@ class NotificationDropdown extends Component {
       .then((data) => {
         this.setState({ totalCount: data.data.data })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e })
   }
 
 

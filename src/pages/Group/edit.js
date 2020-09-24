@@ -30,7 +30,7 @@ class GroupEdit extends Component {
           dataDivisi: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengambil Data' })
+      .catch((e) => { throw e })
   }
 
   updateGroup = (e) => {

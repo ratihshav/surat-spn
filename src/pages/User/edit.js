@@ -68,7 +68,7 @@ class UserEdit extends Component {
           dataPosition: data.data.data
         })
       })
-      .catch(() => { throw 'Gagal Mengubah Data'; })
+      .catch((e) => { throw e; })
   }
 
   submitUpdatedData = (e) => {

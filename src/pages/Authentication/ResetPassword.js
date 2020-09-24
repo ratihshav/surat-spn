@@ -43,7 +43,7 @@ class ResetPassword extends Component {
     const params = {
       email: paramsUrl.email,
       konci_pas: paramsUrl.konci_pas,
-      password: password
+      password: e.target.password.value,
     }
     resetPasswordService(params)
       .then((data) => {

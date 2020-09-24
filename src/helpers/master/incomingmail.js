@@ -25,7 +25,7 @@ export const createIncomingMailService = (request) => {
   formData.append('to_user_id', request.to_user_id);
   formData.append('sifat_surat', request.sifat_surat);
   formData.append('klasifikasi_id', request.klasifikasi_id);
-  // formData.append('prioritas', request.prioritas);
+  formData.append('jenis_surat', request.jenis_surat);
   formData.append('keterangan', request.keterangan);
   formData.append('file', request.file);
 

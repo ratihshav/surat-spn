@@ -49,6 +49,15 @@ import Classification from "../pages/Classification"
 import ClassificationAdd from '../pages/Classification/add'
 import ClassificationEdit from '../pages/Classification/edit'
 
+import TypeMail from "../pages/TypeMail"
+import TypeMailCreate from "../pages/TypeMail/create"
+
+import CharMail from "../pages/CharMail"
+import CharMailCreate from "../pages/CharMail/create"
+
+import AuditTrail from "../pages/AuditTrail"
+
+
 const authProtectedRoutes = [
 
   { path: "/dashboard", component: Dashboard },
@@ -97,6 +106,17 @@ const authProtectedRoutes = [
   { path: "/classification", component: Classification },
   { path: "/classification-add", component: ClassificationAdd },
   { path: "/classification-edit", component: ClassificationEdit },
+
+  //Tipe Surat
+  { path: "/type-mail", component: TypeMail },
+  { path: "/type-mail-create", component: TypeMailCreate },
+
+  //Sifat Surat
+  { path: "/char-mail", component: CharMail },
+  { path: "/char-mail-create", component: CharMailCreate },
+
+  { path: "/audit-trail", component: AuditTrail },
+
 
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
 ];
