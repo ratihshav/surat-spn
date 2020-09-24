@@ -191,7 +191,7 @@ class IncomingMailDetail extends Component {
             </CardBody>
           </Card>
           <div>
-            {detailList.disposition_file_path !== null && detailList.disposition_kasi || isAdmin ? <Card>
+            {detailList.disposition_file_path !== null && detailList.disposition_kasi || (isAdmin && detailList.disposition_file_path !== null ) ? <Card>
               <CardBody style={{ padding: 0 }}>
                 <table className="table table-hover table-centered table-bordered mb-0">
                   <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
@@ -237,6 +237,10 @@ class IncomingMailDetail extends Component {
                     <tr>
                       <th>Hal:</th>
                       <td>{detailList.perihal}</td>
+                    </tr>
+                    <tr>
+                      <th>Tipe Surat:</th>
+                      <td>{detailList.jenis_surat}</td>
                     </tr>
                     <tr>
                       <th>Sifat Surat:</th>
