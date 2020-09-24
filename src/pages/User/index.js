@@ -43,6 +43,14 @@ const columns = memoize(actHandler => [
   }
 ])
 
+const search = [{
+  name: 'Jabatan',
+  value: 'position_name'
+}, {
+  name: 'Email',
+  value: 'email'
+}];
+
 class User extends Component {
   constructor(props) {
     super(props);
@@ -142,7 +150,9 @@ class User extends Component {
     return (
       <Row>
         <FilterComponent onFilter={(e) => {
+          console.log(123,e.target.name)
           let newFilterText = e.target.value;
+          let filterSearch = e.target.name
           this.filteredItems = dataUser.filter(
             (item) =>
               item.full_name &&
@@ -150,8 +160,9 @@ class User extends Component {
           );
           this.setState({ filterText: newFilterText });
         }}
-          onClear={this.handleClear}
-          filterText={filterText}
+        onClear={this.handleClear}
+        filterText={filterText}
+        search={search}
         /> &nbsp; &nbsp;
 
         { isAbleCreate ?
