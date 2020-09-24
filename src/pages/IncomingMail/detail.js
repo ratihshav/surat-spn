@@ -385,7 +385,7 @@ class IncomingMailDetail extends Component {
                         color="dark"
                         className="mt-1"
                         onClick={this.showModalHistory}>
-                        <i className="typcn typcn-input-checked" />Histori Surat
+                        <i className="typcn typcn-input-checked" />Log Aktifitas
                       </Button>
 
                       <Modal
@@ -394,7 +394,7 @@ class IncomingMailDetail extends Component {
                         size={30}
                         scrollable >
                         <div className="modal-header  text-white bg-info">
-                          <h5 className="modal-title mt-0">Histori Surat</h5>
+                          <h5 className="modal-title mt-0">Log Aktifitas</h5>
                           <button
                             type="button"
                             onClick={() =>
