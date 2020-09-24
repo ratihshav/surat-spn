@@ -122,21 +122,21 @@ const SidebarContent = props => {
 
             <li>
               <Link to="/type-mail">
-                <i className="fas fa-file"></i>
+                <i className="fas fa-list-alt"></i>
                 <span>Tipe Surat</span>
               </Link>
             </li>
 
             <li>
               <Link to="/char-mail">
-                <i className="fas fa-file"></i>
+                <i className="fas fa-list-ul"></i>
                 <span>Sifat Surat</span>
               </Link>
             </li>
 
             <li>
               <Link to="/audit-trail">
-                <i className="fas fa-file"></i>
+                <i className="fas fa-history"></i>
                 <span>Audit Trail</span>
               </Link>
             </li>
