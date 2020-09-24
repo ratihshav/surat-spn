@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Row, Col, Card, CardBody, Alert, Button } from "reactstrap";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
-import { AvForm, AvField } from "availity-reactstrap-validation";
 import { userForgetPassword } from "../../store/actions";
 import { resetPasswordService } from "../../helpers/master/user"
 import logoKabKerinci from "../../assets/images/logo-kab-kerinci.png"

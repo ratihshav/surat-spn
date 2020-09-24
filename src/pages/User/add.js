@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Row, Col, Card, CardBody, Button, Label, Input } from "reactstrap";
 import Select from "react-select";
 import { connect } from "react-redux";
-import { withRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { searchPositionService } from "../../helpers/master/position"
 import { saveMasterUserService } from "../../helpers/master/user"

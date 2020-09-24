@@ -296,7 +296,6 @@ class OutgoingMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
                         className="col-sm-2 col-form-label"
                       >
                         Klasifikasi Surat
@@ -317,7 +316,6 @@ class OutgoingMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
                         className="col-sm-2 col-form-label"
                       >
                         Sifat Surat
@@ -338,7 +336,7 @@ class OutgoingMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="destination"
                         className="col-sm-2 col-form-label"
                       >
                         Tujuan Surat
@@ -348,7 +346,7 @@ class OutgoingMailEdit extends Component {
                           name="destination"
                           className="form-control"
                           type="text"
-                          id="example-text-input"
+                          id="destination"
                           ref={node => (this.inputNode = node)}
                           required
                           defaultValue={detailList.tujuan_surat}
@@ -359,7 +357,7 @@ class OutgoingMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="subject"
                         className="col-sm-2 col-form-label"
                       >
                         Hal Surat
@@ -369,7 +367,7 @@ class OutgoingMailEdit extends Component {
                           className="form-control"
                           type="text"
                           defaultValue={detailList.hal_surat}
-                          id="example-text-input"
+                          id="subject"
                           name="subject"
                           ref={node => (this.inputNode = node)}
                           required
@@ -379,7 +377,7 @@ class OutgoingMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-text-input"
+                        htmlFor="attachment"
                         className="col-sm-2 col-form-label"
                       >
                         Lampiran Surat
@@ -389,7 +387,7 @@ class OutgoingMailEdit extends Component {
                           className="form-control"
                           type="text"
                           defaultValue={detailList.lampiran_surat}
-                          id="example-text-input"
+                          id="attachment"
                           name="attachment"
                           ref={node => (this.inputNode = node)}
                           required
@@ -399,7 +397,6 @@ class OutgoingMailEdit extends Component {
 
                     <Row className="form-group">
                       <label
-                        htmlFor="example-search-input"
                         className="col-sm-2 col-form-label"
                       >
                         Penandatanganan Surat

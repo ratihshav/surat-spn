@@ -260,7 +260,7 @@ class Profile extends Component {
                                   <CardText>
                                     <Row className="form-group">
                                       <label
-                                        htmlFor="example-text-input"
+                                        htmlFor="idEmployee"
                                         className="col-sm-2 col-form-label">
                                         NIP
                                     </label>
@@ -269,7 +269,7 @@ class Profile extends Component {
                                           className="form-control"
                                           type="text"
                                           defaultValue={dataUser.nip}
-                                          id="example-text-input"
+                                          id="idEmployee"
                                           name="idEmployee"
                                           ref={node => (this.inputNode = node)}
                                           required
@@ -286,7 +286,7 @@ class Profile extends Component {
                                   <CardText>
                                     <Row className="form-group">
                                       <label
-                                        htmlFor="example-text-input"
+                                        htmlFor="fullName"
                                         className="col-sm-2 col-form-label">
                                         Nama Lengkap
                                      </label>
@@ -295,7 +295,7 @@ class Profile extends Component {
                                           className="form-control"
                                           type="text"
                                           defaultValue={dataUser.full_name}
-                                          id="example-text-input"
+                                          id="fullName"
                                           name="fullName"
                                           ref={node => (this.inputNode = node)}
                                           required
@@ -311,7 +311,7 @@ class Profile extends Component {
                                   <CardText>
                                     <Row className="form-group">
                                       <label
-                                        htmlFor="example-text-input"
+                                        htmlFor="username"
                                         className="col-sm-2 col-form-label">
                                         Username
                                     </label>
@@ -320,7 +320,7 @@ class Profile extends Component {
                                           className="form-control"
                                           type="text"
                                           defaultValue={dataUser.username}
-                                          id="example-text-input"
+                                          id="username"
                                           name="username"
                                           ref={node => (this.inputNode = node)}
                                           required
@@ -334,7 +334,7 @@ class Profile extends Component {
                                         <CardText>
                                           <Row className="form-group">
                                             <label
-                                              htmlFor="example-text-input"
+                                              htmlFor="email"
                                               className="col-sm-2 col-form-label">
                                               E-mail
                                           </label>
@@ -343,7 +343,7 @@ class Profile extends Component {
                                                 className="form-control"
                                                 type="email"
                                                 defaultValue={dataUser.email}
-                                                id="example-text-input"
+                                                id="email"
                                                 name="email"
                                                 ref={node => (this.inputNode = node)}
                                                 required
@@ -357,7 +357,7 @@ class Profile extends Component {
 
                                     <Row className="form-group">
                                       <label
-                                        htmlFor="example-text-input"
+                                        htmlFor="birthDate"
                                         className="col-sm-2 col-form-label">
                                         Tanggal Lahir
                                     </label>
@@ -366,7 +366,7 @@ class Profile extends Component {
                                           className="form-control"
                                           type="date"
                                           defaultValue={dataUser.ttl}
-                                          id="example-text-input"
+                                          id="birthDate"
                                           name="birthDate"
                                           ref={node => (this.inputNode = node)}
                                         />
@@ -377,7 +377,6 @@ class Profile extends Component {
                                       <Col sm="12">
                                         <Row className="form-group">
                                           <label
-                                            htmlFor="example-text-input"
                                             className="col-sm-2 col-form-label">
                                             Jenis Kelamin
                                            </label>
@@ -410,7 +409,7 @@ class Profile extends Component {
 
                                     <Row className="form-group">
                                       <label
-                                        htmlFor="example-text-input"
+                                        htmlFor="phone"
                                         className="col-sm-2 col-form-label">
                                         No. Handphone
                                     </label>
@@ -419,7 +418,7 @@ class Profile extends Component {
                                           className="form-control"
                                           type="text"
                                           defaultValue={dataUser.phone}
-                                          id="example-text-input"
+                                          id="phone"
                                           name="phone"
                                           ref={node => (this.inputNode = node)}
                                         />
@@ -428,14 +427,14 @@ class Profile extends Component {
 
                                     <Row className="form-group">
                                       <label
-                                        htmlFor="example-text-input"
+                                        htmlFor="address"
                                         className="col-sm-2 col-form-label">
                                         Alamat
                                     </label>
                                       <Col sm={10}>
                                         <textarea
                                           className="form-control"
-                                          id="w3review"
+                                          id="address"
                                           name="address"
                                           rows="4"
                                           cols="50"
@@ -453,7 +452,6 @@ class Profile extends Component {
                                 <Col sm="12">
                                   <Row className="form-group">
                                     <label
-                                      htmlFor="example-search-input"
                                       className="col-sm-2 col-form-label">
                                       Nama Jabatan
                                   </label>
@@ -481,7 +479,7 @@ class Profile extends Component {
                                   <CardText>
                                     <Row className="form-group">
                                       <label
-                                        htmlFor="example-text-input"
+                                        htmlFor="email"
                                         className="col-sm-2 col-form-label">
                                         Nama Unit
                                           </label>
@@ -490,7 +488,7 @@ class Profile extends Component {
                                           className="form-control"
                                           type="email"
                                           defaultValue={dataUser.group_name}
-                                          id="example-text-input"
+                                          id="email"
                                           name="group"
                                           ref={node => (this.inputNode = node)}
                                           required
