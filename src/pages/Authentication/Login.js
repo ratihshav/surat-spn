@@ -18,6 +18,7 @@ class Login extends Component {
   }
 
   render() {
+    const { error, loading } = this.props
 
     return (
       < React.Fragment >
@@ -37,7 +38,7 @@ class Login extends Component {
             <Row className="justify-content-center">
               <Col md={8} lg={6} xl={5}>
                 <div className="position-relative">
-                  {this.props.loading ? <Loader /> : null}
+                  {loading ? <Loader /> : null}
 
                   <div className="text-primary text-center p-4">
                     <Link to="/" className="logo logo-admin">
@@ -72,8 +73,8 @@ class Login extends Component {
                           className="form-horizontal mt-4"
                           onValidSubmit={this.handleValidSubmit}
                         >
-                          {this.props.error ? (
-                            <Alert color="danger">{this.props.error}</Alert>
+                          {Object.keys(error).length !== 0 ? (
+                            <Alert color="danger">{error}</Alert>
                           ) : null}
 
                           <div className="form-group">
