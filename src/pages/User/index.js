@@ -150,7 +150,7 @@ class User extends Component {
     return (
       <Row>
         <FilterComponent onFilter={(e) => {
-          console.log(123,e.target.name)
+          console.log(123, e.target.name)
           let newFilterText = e.target.value;
           let filterSearch = e.target.name
           this.filteredItems = dataUser.filter(
@@ -160,9 +160,10 @@ class User extends Component {
           );
           this.setState({ filterText: newFilterText });
         }}
-        onClear={this.handleClear}
-        filterText={filterText}
-        search={search}
+          onClear={this.handleClear}
+          filterText={filterText}
+          search={search}
+          isFromMail={false}
         /> &nbsp; &nbsp;
 
         { isAbleCreate ?

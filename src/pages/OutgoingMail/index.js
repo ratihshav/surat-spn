@@ -57,6 +57,14 @@ const columns = memoize(actHandler => [
   }
 ])
 
+const search = [{
+  name: 'Jenis Surat',
+  value: 'jenis_surat'
+}, {
+  name: 'Perihal',
+  value: 'hal_surat'
+}];
+
 class OutgoingMail extends Component {
   constructor(props) {
     super(props);
@@ -67,6 +75,7 @@ class OutgoingMail extends Component {
       modalConfirm: false,
       row: null,
       filterText: "",
+      queryText: "",
       resetPaginationToggle: false,
       loading: false,
       page: 0,
@@ -80,12 +89,14 @@ class OutgoingMail extends Component {
   }
 
   getListOutgoingMail = () => {
-    const { perPage, page } = this.state;
+    const { perPage, page, queryText, filterText } = this.state;
     let order = null;
     const params = {
       order,
       page,
-      perPage
+      perPage,
+      queryText: '',
+      filterText: ''
     }
 
     this.setState({ loading: true });
@@ -219,23 +230,60 @@ class OutgoingMail extends Component {
   }
 
   getSubHeaderComponent = () => {
-    const { dataSurat, filterText } = this.state
+    const { dataSurat, filterText, queryText, perPage, page } = this.state
     const { perms } = this.props.data
     const granted = ['suratKeluar_save', 'is_admin']
     const isAbleCreate = granted.some(x => perms.includes(x));
     return (
       <Row>
-        <FilterComponent onFilter={(e) => {
-          let newFilterText = e.target.value;
-          this.filteredItems = dataSurat.filter(
-            (item) =>
-              item.nomor_surat &&
-              item.nomor_surat.toLowerCase().includes(newFilterText.toLowerCase())
-          );
-          this.setState({ filterText: newFilterText });
-        }}
+        <FilterComponent
+
+          onFilter={(e) => {
+            let newFilterText = e.target.value;
+            this.setState({ filterText: newFilterText });
+          }}
+          onQuery={(e) => {
+            let newQueryText = e.target.value;
+            this.setState({ queryText: newQueryText });
+
+            // this.filteredItems = dataSurat.filter(
+            //   (item) =>
+            //     item.nomor_surat &&
+            //     item.nomor_surat.toLowerCase().includes(newQueryText.toLowerCase())
+            // );
+
+            console.log('queryText', this.state.queryText, newQueryText)
+            let order = null;
+            const params = {
+              queryText,
+              filterText,
+              order,
+              page,
+              perPage
+            }
+
+            this.setState({ loading: true });
+
+            getOutgoingMailService(params)
+              .then((data) => {
+                this.setState({
+                  dataSurat: data.data,
+                  totalRows: data.total,
+                  loading: false,
+                })
+              })
+              .catch((e) => {
+                return (
+                  this.alertError(e)
+                )
+              });
+
+            // this.setState({ queryText: newQueryText });
+          }}
           onClear={this.handleClear}
           filterText={filterText}
+          isFromMail={true}
+          search={search}
         /> &nbsp; &nbsp;
 
         { isAbleCreate ?

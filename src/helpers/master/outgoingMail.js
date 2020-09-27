@@ -5,7 +5,7 @@ import instance, { cancel } from "../axios";
 export const getOutgoingMailService = (request) => {
   const GET_OUTGOING_MAIL_API = config.api_endpoint + `/suratKeluar/list`;
   let sort = request.order !== null ? `&order=${request.order}` : '';
-  const req = `?page=${request.page}&per_page=${request.perPage}${sort}`
+  const req = `?page=${request.page}&per_page=${request.perPage}${sort}&filter=${request.filterText}&q=${request.queryText}`
   return instance.get(GET_OUTGOING_MAIL_API + `${req}`)
     .then((data) => {
       return {

@@ -142,18 +142,22 @@ class Position extends Component {
     const isAbleCreate = granted.some(x => perms.includes(x));
     return (
       <Row>
-        <FilterComponent onFilter={(e) => {
-          let newFilterText = e.target.value;
-          this.filteredItems = dataPosition.filter(
-            (item) =>
-              item.position_name &&
-              item.position_name.toLowerCase().includes(newFilterText.toLowerCase())
-          );
-          this.setState({ filterText: newFilterText });
-        }}
+        <FilterComponent
+          onFilter={(e) => {
+            let newFilterText = e.target.value;
+            this.filteredItems = dataPosition.filter(
+              (item) =>
+                item.position_name &&
+                item.position_name.toLowerCase().includes(newFilterText.toLowerCase())
+            );
+            this.setState({ filterText: newFilterText });
+          }}
           onClear={this.handleClear}
           filterText={filterText}
-        /> &nbsp; &nbsp;
+          isFromMail={false}
+        />
+
+        &nbsp; &nbsp;
 
         { isAbleCreate ?
           <AddButtonComponent

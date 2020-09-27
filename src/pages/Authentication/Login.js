@@ -73,7 +73,7 @@ class Login extends Component {
                           className="form-horizontal mt-4"
                           onValidSubmit={this.handleValidSubmit}
                         >
-                          {Object.keys(error).length !== 0 ? (
+                          {error && Object.keys(error).length !== 0 ? (
                             <Alert color="danger">{error}</Alert>
                           ) : null}
 

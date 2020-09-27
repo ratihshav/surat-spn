@@ -43,6 +43,14 @@ const columns = memoize(actHandler => [
     cell: data => <Action data={data} actHandler={actHandler} />
   }
 ])
+
+const search = [{
+  name: 'Asal Surat',
+  value: 'asal_surat'
+}, {
+  name: 'Perihal',
+  value: 'perihal'
+}];
 class IncomingMail extends Component {
   constructor(props) {
     super(props);
@@ -220,17 +228,22 @@ class IncomingMail extends Component {
     const isAbleCreate = granted.some(x => perms.includes(x));
     return (
       <Row>
-        <FilterComponent onFilter={(e) => {
-          let newFilterText = e.target.value;
-          this.filteredItems = dataSurat.filter(
-            (item) =>
-              item.nomor_surat &&
-              item.nomor_surat.toLowerCase().includes(newFilterText.toLowerCase())
-          );
-          this.setState({ filterText: newFilterText });
-        }}
+        <FilterComponent
+          onFilter={(e) => {
+            console.log('123', e.target.name)
+            let newFilterText = e.target.value;
+            let filterSearch = e.target.name
+            this.filteredItems = dataSurat.filter(
+              (item) =>
+                item.nomor_surat &&
+                item.nomor_surat.toLowerCase().includes(newFilterText.toLowerCase())
+            );
+            this.setState({ filterText: newFilterText }, () => console.log('filterText', filterText));
+          }}
           onClear={this.handleClear}
           filterText={filterText}
+          search={search}
+          isFromMail={true}
         /> &nbsp; &nbsp;
 
         { isAbleCreate ?

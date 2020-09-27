@@ -140,6 +140,7 @@ class Group extends Component {
         }}
           onClear={this.handleClear}
           filterText={filterText}
+          isFromMail={false}
         /> &nbsp; &nbsp;
 
         { isAbleCreate ?

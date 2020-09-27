@@ -54,27 +54,34 @@ export const Action = ({ actHandler, data }) => (
   </Row>
 );
 
-export const FilterComponent = ({ filterText, onFilter, onClear, search }) => (
+export const FilterComponent = ({ filterText, onFilter, onClear, search, isFromMail, onQuery, queryText }) => (
   <>
-    <TextField id="search" type="text" placeholder="Filter" aria-label="Search Input" value={filterText} onChange={onFilter} />
-    <ClearButton type="button" onClick={onClear}>X</ClearButton>
-    
-  <div className="col-lg-8 col-md-12">
-    <div className="input-group col-lg-10 col-md-12">
-      <div className="input-group-prepend"><span className="form-control bg-light text-white rounded-0 text-primary"><i className="fa fa-search" aria-hidden="true"></i></span></div>
-      <input className="form-control" type="text" value={filterText} id="search" name="search" onChange={onFilter} placeholder="Search for... " />
-      <div className="input-group-append">
-        <select className="form-control bg-light rounded-0 text-capitalize" onChange={onFilter} id="search-filter" name="search-filter">
-          <option value="">All</option>
-          {
-            search.map((item, i) => {
-              return(<option value={item.value}>{item.name}</option> )
-            })
-          }
-        </select>
+
+    {!isFromMail ?
+      <div>
+        <TextField id="search" type="text" placeholder="Filter" aria-label="Search Input" value={filterText} onChange={onFilter} />
+        <ClearButton type="button" onClick={onClear}>X</ClearButton>
       </div>
-    </div>
-  </div>
+      : null}
+
+    {isFromMail ?
+      <div className="col-lg-8 col-md-12">
+        <div className="input-group">
+          <div className="input-group-prepend"><span className="form-control bg-light text-white rounded-0 text-primary"><i className="fa fa-search" aria-hidden="true"></i></span></div>
+          <input className="form-control" type="text" value={queryText} id="search" name="search" onChange={onQuery} placeholder="Search for... " />
+          <div className="input-group-append">
+            <select className="form-control bg-light rounded-0 text-capitalize" onChange={onFilter} id="search-filter" name="search-filter">
+              <option value="">All</option>
+              {
+                search.map((item, i) => {
+                  return (<option value={item.value}>{item.name}</option>)
+                })
+              }
+            </select>
+          </div>
+        </div>
+      </div>
+      : null}
   </>
 );
 

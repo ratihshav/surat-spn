@@ -245,7 +245,7 @@ export const getNotifCountService = (request) => {
         data: data.data
       };
     })
-    .catch((e) => { throw e.response.data.messages[0] });
+    .catch((e) => { throw e.message });
 }
 export const getNotifReadService = (request) => {
 
