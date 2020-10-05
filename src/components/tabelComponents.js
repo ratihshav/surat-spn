@@ -56,9 +56,8 @@ export const Action = ({ actHandler, data }) => (
 
 export const FilterComponent = ({ filterText, onFilter, onClear, search, isFromMail, onQuery, queryText }) => (
   <>
-
     {!isFromMail ?
-      <div>
+      <div className="input-group-append">
         <TextField id="search" type="text" placeholder="Filter" aria-label="Search Input" value={filterText} onChange={onFilter} />
         <ClearButton type="button" onClick={onClear}>X</ClearButton>
       </div>
@@ -74,7 +73,7 @@ export const FilterComponent = ({ filterText, onFilter, onClear, search, isFromM
               <option value="">All</option>
               {
                 search.map((item, i) => {
-                  return (<option value={item.value}>{item.name}</option>)
+                  return (<option key={i} value={item.value}>{item.name}</option>)
                 })
               }
             </select>

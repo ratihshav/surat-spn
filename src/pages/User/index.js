@@ -51,6 +51,25 @@ const search = [{
   value: 'email'
 }];
 
+const CustomExpandTable = ({data}) => (
+  <table className="table table-condensed">
+    <tbody>
+      <tr>
+        <td style={{width: "150px"}}>NIP</td>
+        <td>: {data.nip}</td>
+      </tr>
+      <tr>
+        <td>Jenis Kelamin</td>
+        <td>: {data.jenis_kelamin ? data.jenis_kelamin : " belum diisi"}</td>
+      </tr>
+      <tr>
+        <td>Telepon</td>
+        <td>: {data.phone ? data.phone : " -"}</td>
+      </tr>
+    </tbody>
+  </table>
+);
+
 class User extends Component {
   constructor(props) {
     super(props);
@@ -203,8 +222,9 @@ class User extends Component {
                   <DataTable
                     columns={columns(this.handleButtonClick)}
                     data={filteredItems}
-                    // expandableRows
-                    // expandOnRowClicked
+                    expandableRows
+                    expandOnRowClicked
+                    expandableRowsComponent={<CustomExpandTable/>}
                     pagination
                     highlightOnHover
                     striped
