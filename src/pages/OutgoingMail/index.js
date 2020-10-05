@@ -322,7 +322,6 @@ class OutgoingMail extends Component {
       modalConfirm,
       loading,
       totalRows } = this.state
-    const filteredItems = dataSurat.filter(item => item.nomor_surat && item.nomor_surat.toLowerCase().includes(filterText.toLowerCase()));
 
     return (
       <React.Fragment>
@@ -347,7 +346,7 @@ class OutgoingMail extends Component {
                 <div className="card-body">
                   <DataTable
                     columns={columns(this.handleButtonClick)}
-                    data={filteredItems}
+                    data={dataSurat}
                     pagination
                     highlightOnHover
                     striped

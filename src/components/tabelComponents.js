@@ -64,10 +64,10 @@ export const FilterComponent = ({ filterText, onFilter, onClear, search, isFromM
       : null}
 
     {isFromMail ?
-      <div className="col-lg-8 col-md-12">
+      <Row>
         <div className="input-group">
           <div className="input-group-prepend"><span className="form-control bg-light text-white rounded-0 text-primary"><i className="fa fa-search" aria-hidden="true"></i></span></div>
-          <input className="form-control" type="text" value={queryText} id="search" name="search" onChange={onQuery} placeholder="Search for... " />
+          <input className="form-control" type="text" value={queryText} id="search" name="search" onChange={onQuery} placeholder="Cari" />
           <div className="input-group-append">
             <select className="form-control bg-light rounded-0 text-capitalize" onChange={onFilter} id="search-filter" name="search-filter">
               <option value="">All</option>
@@ -79,7 +79,7 @@ export const FilterComponent = ({ filterText, onFilter, onClear, search, isFromM
             </select>
           </div>
         </div>
-      </div>
+      </Row>
       : null}
   </>
 );
