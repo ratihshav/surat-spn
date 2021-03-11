@@ -174,19 +174,21 @@ class IncomingMailDetail extends Component {
           <Card>
             <CardBody style={{ padding: 0 }}>
               <table className="table table-hover table-centered table-bordered mb-0">
-                <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
-                  <th>Dokumen: </th>
-                </tr>
-                <tr>
-                  <th>
-                    {detailList.file_path ?
-                      <a href={config.url_img + detailList.file_path} target="_blank" download>
-                        <img src={logoPdf} alt="" height="60" />
-                        <p style={{ fontWeight: '800' }}>{detailList.file_name}</p>
-                      </a>
-                      : <p style={{ fontWeight: '800' }}>Belum ada dokumen yang ditandatangani</p>}
-                  </th>
-                </tr>
+                <tbody>
+                  <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                    <th>Dokumen: </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      {detailList.file_path ?
+                        <a href={config.url_img + detailList.file_path} target="_blank" download>
+                          <img src={logoPdf} alt="" height="60" />
+                          <p style={{ fontWeight: '800' }}>{detailList.file_name}</p>
+                        </a>
+                        : <p style={{ fontWeight: '800' }}>Belum ada dokumen yang ditandatangani</p>}
+                    </th>
+                  </tr>
+                </tbody>
               </table>
             </CardBody>
           </Card>
@@ -194,19 +196,21 @@ class IncomingMailDetail extends Component {
             {detailList.disposition_file_path !== null && detailList.disposition_kasi || (isAdmin && detailList.disposition_file_path !== null ) ? <Card>
               <CardBody style={{ padding: 0 }}>
                 <table className="table table-hover table-centered table-bordered mb-0">
-                  <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
-                    <th>Lembar Disposisi: </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      {detailList.file_path ?
-                        <a href={config.url_img + detailList.disposition_file_path} target="_blank" download>
-                          <img src={logoPdf} alt="" height="60" />
-                          <p style={{ fontWeight: '800' }}>{detailList.disposition_file_name}</p>
-                        </a>
-                        : <p style={{ fontWeight: '800' }}>Belum ada dokumen disposisi</p>}
-                    </th>
-                  </tr>
+                  <tbody>
+                    <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                      <th>Lembar Disposisi: </th>
+                    </tr>
+                    <tr>
+                      <th>
+                        {detailList.file_path ?
+                          <a href={config.url_img + detailList.disposition_file_path} target="_blank" download>
+                            <img src={logoPdf} alt="" height="60" />
+                            <p style={{ fontWeight: '800' }}>{detailList.disposition_file_name}</p>
+                          </a>
+                          : <p style={{ fontWeight: '800' }}>Belum ada dokumen disposisi</p>}
+                      </th>
+                    </tr>
+                  </tbody>
                 </table>
               </CardBody>
             </Card> : null}
@@ -218,39 +222,40 @@ class IncomingMailDetail extends Component {
               <Card>
                 <CardBody style={{ padding: 0 }}>
                   <table className="table table-bordered mb-0">
-                    <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
-                      <th style={{ width: 200 }}>Asal Surat:</th>
-                      <td id="combo-1610-inputCell">{detailList.asal_surat}</td>
-                    </tr>
-                    <tr>
-                      <th>Nomor Surat:</th>
-                      <td>{detailList.nomor_surat}</td>
-                    </tr>
-                    <tr>
-                      <th>Tanggal Surat:</th>
-                      <td>{moment(detailList.tgl_surat).format("DD MMMM YYYY")}</td>
-                    </tr>
-                    <tr>
-                      <th>Klasifikasi:</th>
-                      <td>{detailList.klasifikasi_name}</td>
-                    </tr>
-                    <tr>
-                      <th>Hal:</th>
-                      <td>{detailList.perihal}</td>
-                    </tr>
-                    <tr>
-                      <th>Tipe Surat:</th>
-                      <td>{detailList.jenis_surat}</td>
-                    </tr>
-                    <tr>
-                      <th>Sifat Surat:</th>
-                      <td>{detailList.sifat_surat}</td>
-                    </tr>
-                    <tr>
-                      <th>Lampiran:</th>
-                      <td>{detailList.lampiran}</td>
-                    </tr>
-
+                    <tbody>
+                      <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                        <th style={{ width: 200 }}>Asal Surat:</th>
+                        <td id="combo-1610-inputCell">{detailList.asal_surat}</td>
+                      </tr>
+                      <tr>
+                        <th>Nomor Surat:</th>
+                        <td>{detailList.nomor_surat}</td>
+                      </tr>
+                      <tr>
+                        <th>Tanggal Surat:</th>
+                        <td>{moment(detailList.tgl_surat).format("DD MMMM YYYY")}</td>
+                      </tr>
+                      <tr>
+                        <th>Klasifikasi:</th>
+                        <td>{detailList.klasifikasi_name}</td>
+                      </tr>
+                      <tr>
+                        <th>Hal:</th>
+                        <td>{detailList.perihal}</td>
+                      </tr>
+                      <tr>
+                        <th>Tipe Surat:</th>
+                        <td>{detailList.jenis_surat}</td>
+                      </tr>
+                      <tr>
+                        <th>Sifat Surat:</th>
+                        <td>{detailList.sifat_surat}</td>
+                      </tr>
+                      <tr>
+                        <th>Lampiran:</th>
+                        <td>{detailList.lampiran}</td>
+                      </tr>
+                    </tbody>
                   </table>
                 </CardBody>
               </Card>
@@ -262,22 +267,24 @@ class IncomingMailDetail extends Component {
               <Card>
                 <CardBody style={{ padding: 0 }}>
                   <table className="table table-bordered mb-0">
-                    <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
-                      <th style={{ width: 200 }}>Ditujukan Kepada:</th>
-                      <td id="combo-1610-inputCell">{detailList.to_user_name}</td>
-                    </tr>
-                    <tr>
-                      <th>Jabatan:</th>
-                      <td>{detailList.to_position_name}</td>
-                    </tr>
-                    <tr>
-                      <th>Diarsip Oleh:</th>
-                      <td>{detailList.created_by}</td>
-                    </tr>
-                    <tr>
-                      <th>Tanggal Diterima:</th>
-                      <td>{moment(detailList.tgl_diterima).format("DD MMMM YYYY")}</td>
-                    </tr>
+                    <tbody>
+                      <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                        <th style={{ width: 200 }}>Ditujukan Kepada:</th>
+                        <td id="combo-1610-inputCell">{detailList.to_user_name}</td>
+                      </tr>
+                      <tr>
+                        <th>Jabatan:</th>
+                        <td>{detailList.to_position_name}</td>
+                      </tr>
+                      <tr>
+                        <th>Diarsip Oleh:</th>
+                        <td>{detailList.created_by}</td>
+                      </tr>
+                      <tr>
+                        <th>Tanggal Diterima:</th>
+                        <td>{moment(detailList.tgl_diterima).format("DD MMMM YYYY")}</td>
+                      </tr>
+                    </tbody>
                   </table>
                 </CardBody>
               </Card>
@@ -290,22 +297,24 @@ class IncomingMailDetail extends Component {
                 <Card>
                   <CardBody style={{ padding: 0 }}>
                     <table className="table table-bordered mb-0">
-                      <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
-                        <th style={{ width: 200 }}>Didisposisikan Oleh:</th>
-                        <td id="combo-1610-inputCell">{detailList.disposition_name}</td>
-                      </tr>
-                      <tr>
-                        <th>Jabatan:</th>
-                        <td>{detailList.disposition_position_name}</td>
-                      </tr>
-                      <tr>
-                        <th>Arahan:</th>
-                        <td>{detailList.disposition_arahan}</td>
-                      </tr>
-                      <tr>
-                        <th>Tanggal Didisposisikan:</th>
-                        <td>{moment(detailList.disposition_created_at).format("DD MMMM YYYY")}</td>
-                      </tr>
+                      <tbody>
+                        <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                          <th style={{ width: 200 }}>Didisposisikan Oleh:</th>
+                          <td id="combo-1610-inputCell">{detailList.disposition_name}</td>
+                        </tr>
+                        <tr>
+                          <th>Jabatan:</th>
+                          <td>{detailList.disposition_position_name}</td>
+                        </tr>
+                        <tr>
+                          <th>Arahan:</th>
+                          <td>{detailList.disposition_arahan}</td>
+                        </tr>
+                        <tr>
+                          <th>Tanggal Didisposisikan:</th>
+                          <td>{moment(detailList.disposition_created_at).format("DD MMMM YYYY")}</td>
+                        </tr>
+                      </tbody>
                     </table>
                   </CardBody>
                 </Card>
@@ -387,7 +396,7 @@ class IncomingMailDetail extends Component {
                         onClick={this.showModalHistory}>
                         <i className="typcn typcn-input-checked" />Log Aktifitas
                       </Button>
-
+                      
                       <Modal
                         isOpen={isShowModalHistory}
                         toggle={this.showModalHistory}

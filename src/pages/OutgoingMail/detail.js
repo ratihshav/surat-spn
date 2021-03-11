@@ -12,7 +12,8 @@ import {
   approveOutgoingMailService,
   generateNumMailService,
   verifyOutgoingMailService,
-  discardOutgoingMailService
+  discardOutgoingMailService,
+  deleteOutgoingMailService
 } from "../../helpers/master/outgoingMail"
 import { searchUserSKService } from "../../helpers/master/user"
 import logoPdf from "../../assets/images/logo-pdf.png";
@@ -30,6 +31,8 @@ class OutgoingMailDetail extends Component {
       status: '',
       selectedFile: null,
       stateIdMail: '',
+      suratId: null,
+      modalConfirm: false,
       isShowModalDispose: false,
       selectedStatusMail: null,
       isShowModalConfirm: false,
@@ -225,6 +228,10 @@ class OutgoingMailDetail extends Component {
     toast.success('Sukses menyelesaikan surat!')
   };
 
+  alertSuccessDelete = (msg) =>{
+    toast.success(msg)
+  }
+
   alertError = (e) => {
     toast.error(e)
   }
@@ -241,36 +248,37 @@ class OutgoingMailDetail extends Component {
           <Card>
             <CardBody style={{ padding: 0 }}>
               <table className="table table-hover table-centered table-bordered mb-0">
-                <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
-                  <th>Dokumen: </th>
-                </tr>
-                <tr>
-                  <th>
-                    {data.signed_file_path ?
-                      <a href={config.url_img + data.signed_file_path} target="_blank" download>
-                        <img src={logoPdf} alt="" height="60" />
-                        <p style={{ fontWeight: '800' }}>{data.signed_file_name}</p>
-                      </a>
-                      : <p style={{ fontWeight: '800' }}>Belum ada dokumen yang ditandatangani</p>}
-                  </th>
-                </tr>
-
-                <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
-                  <th>Log Dokumen: </th>
-                </tr>
-                {data.agenda_file_path !== null && data.can_agenda ?
+                <tbody>
+                  <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                    <th>Dokumen: </th>
+                  </tr>
                   <tr>
                     <th>
-                      <tr>
-                        <Col style={{ backgroundColor: '#E9EBEE', borderRadius: 5, textAlign: 'center', justifyContent: 'center', margin: 5 }}>
-                          <Row> Hasil Nomor Surat </Row>
-                          <Row> <a href={config.url_img + data.agenda_file_path} target="_blank" download>{data.agenda_file_name}</a></Row>
-                        </Col>
-                      </tr>
+                      {data.signed_file_path ?
+                        <a href={config.url_img + data.signed_file_path} target="_blank" download>
+                          <img src={logoPdf} alt="" height="60" />
+                          <p style={{ fontWeight: '800' }}>{data.signed_file_name}</p>
+                        </a>
+                        : <p style={{ fontWeight: '800' }}>Belum ada dokumen yang ditandatangani</p>}
                     </th>
                   </tr>
-                  : null}
-                <tr>
+
+                  <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                    <th>Log Dokumen: </th>
+                  </tr>
+                  {data.agenda_file_path !== null && data.can_agenda ?
+                    <tr>
+                      <th>
+                        <tr>
+                          <Col style={{ backgroundColor: '#E9EBEE', borderRadius: 5, textAlign: 'center', justifyContent: 'center', margin: 5 }}>
+                            <Row> Hasil Nomor Surat </Row>
+                            <Row> <a href={config.url_img + data.agenda_file_path} target="_blank" download>{data.agenda_file_name}</a></Row>
+                          </Col>
+                        </tr>
+                      </th>
+                    </tr>
+                    : null}
+                  <tr>
                   <th>
                     {disposisi ? data.disposisi.map(function (nextItem, j) {
                       return (
@@ -287,6 +295,7 @@ class OutgoingMailDetail extends Component {
                     }) : null}
                   </th>
                 </tr>
+                </tbody>
               </table>
             </CardBody>
           </Card>
@@ -297,30 +306,32 @@ class OutgoingMailDetail extends Component {
               <Card>
                 <CardBody style={{ padding: 0, paddingRight: 7 }}>
                   <table className="table table-bordered mb-0">
-                    <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
-                      <th style={{ width: 250 }}>Dikonsep Oleh:</th>
-                      <td id="combo-1610-inputCell">{data.created_by}</td>
-                    </tr>
-                    <tr>
-                      <th>Jenis Surat:</th>
-                      <td>{data.jenis_surat}</td>
-                    </tr>
-                    <tr>
-                      <th>Klasifikasi Surat:</th>
-                      <td>{data.klasifikasi_name}</td>
-                    </tr>
-                    <tr>
-                      <th>Nomor Agenda:</th>
-                      <td>{data.nomor_agenda}</td>
-                    </tr>
-                    <tr>
-                      <th>Nomor Surat:</th>
-                      <td>{data.nomor_surat}</td>
-                    </tr>
-                    <tr>
-                      <th>Tanggal Surat:</th>
-                      <td>{data.tgl_surat}</td>
-                    </tr>
+                    <tbody>
+                      <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                        <th style={{ width: 250 }}>Dikonsep Oleh:</th>
+                        <td id="combo-1610-inputCell">{data.created_by}</td>
+                      </tr>
+                      <tr>
+                        <th>Jenis Surat:</th>
+                        <td>{data.jenis_surat}</td>
+                      </tr>
+                      <tr>
+                        <th>Klasifikasi Surat:</th>
+                        <td>{data.klasifikasi_name}</td>
+                      </tr>
+                      <tr>
+                        <th>Nomor Agenda:</th>
+                        <td>{data.nomor_agenda}</td>
+                      </tr>
+                      <tr>
+                        <th>Nomor Surat:</th>
+                        <td>{data.nomor_surat}</td>
+                      </tr>
+                      <tr>
+                        <th>Tanggal Surat:</th>
+                        <td>{data.tgl_surat}</td>
+                      </tr>
+                    </tbody>
                   </table>
                 </CardBody>
               </Card>
@@ -332,26 +343,28 @@ class OutgoingMailDetail extends Component {
               <Card>
                 <CardBody style={{ padding: 0, paddingRight: 7 }}>
                   <table className="table table-bordered mb-0">
-                    <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
-                      <th style={{ width: 250 }}>Penandatangan:</th>
-                      <td id="combo-1610-inputCell">{data.sign_name}</td>
-                    </tr>
-                    <tr>
-                      <th>Perihal:</th>
-                      <td>{data.hal_surat}</td>
-                    </tr>
-                    <tr>
-                      <th>Sifat Surat:</th>
-                      <td>{data.sifat_surat}</td>
-                    </tr>
-                    <tr>
-                      <th>Lampiran:</th>
-                      <td>{data.lampiran_surat}</td>
-                    </tr>
-                    <tr>
-                      <th>Ditujukan Kepada:</th>
-                      <td>{data.tujuan_surat}</td>
-                    </tr>
+                    <tbody>
+                      <tr style={{ backgroundColor: '#5cb85c', color: 'white' }}>
+                        <th style={{ width: 250 }}>Penandatangan:</th>
+                        <td id="combo-1610-inputCell">{data.sign_name}</td>
+                      </tr>
+                      <tr>
+                        <th>Perihal:</th>
+                        <td>{data.hal_surat}</td>
+                      </tr>
+                      <tr>
+                        <th>Sifat Surat:</th>
+                        <td>{data.sifat_surat}</td>
+                      </tr>
+                      <tr>
+                        <th>Lampiran:</th>
+                        <td>{data.lampiran_surat}</td>
+                      </tr>
+                      <tr>
+                        <th>Ditujukan Kepada:</th>
+                        <td>{data.tujuan_surat}</td>
+                      </tr>
+                    </tbody>
                   </table>
                 </CardBody>
               </Card>
@@ -367,6 +380,13 @@ class OutgoingMailDetail extends Component {
       isShowModalHistory: !prevState.isShowModalHistory
     }));
     this.removeBodyCss();
+  }
+
+  showModalConfirm = () => {
+    this.setState(prevState => ({
+      modalConfirm: !prevState.modalConfirm
+    }));
+    document.body.classList.add("no_padding");
   }
 
   historyModalContent = (data) => {
@@ -394,6 +414,24 @@ class OutgoingMailDetail extends Component {
     )
   }
 
+  deleteSurat = () => {
+    const { stateIdMail } = this.state
+    deleteOutgoingMailService(stateIdMail)
+      .then((data) => {
+        this.setState({
+          modalConfirm: false
+        }, () =>
+        this.props.history.push({
+          pathname: '/outgoing-mail'
+        }),
+        this.alertSuccessDelete("Surat Keluar berhasil dihapus."),
+        )
+      })
+      .catch((e) => {
+        this.alertError(e)
+      });
+  }
+
   render() {
 
     const {
@@ -407,13 +445,16 @@ class OutgoingMailDetail extends Component {
       isShowModalVerify,
       selectedStatusMail,
       isShowModalVoid,
-      dataUser } = this.state;
+      dataUser,
+      modalConfirm } = this.state;
 
     const optionsSignature = dataUser.length !== 0 ?
       dataUser.map(function (data) {
         return { value: data.id, label: data.text };
       })
       : null
+
+      //console.log('detailList', detailList)
 
     return (
       <React.Fragment>
@@ -482,6 +523,50 @@ class OutgoingMailDetail extends Component {
                         </div>
                         <div className="modal-body">
                           {this.historyModalContent(detailList)}
+                        </div>
+                      </Modal>
+
+                      &nbsp; &nbsp;
+                      {detailList.can_delete ? 
+                      <Button
+                        color="danger"
+                        className="mt-1"
+                        onClick={this.showModalConfirm}>
+                        <i className="typcn typcn-input-checked" />Hapus
+                      </Button>
+                      : null}
+
+                      <Modal isOpen={modalConfirm} >
+                       <div className="modal-header text-white bg-danger">
+                          <h5 className="modal-title mt-0">Konfirmasi</h5>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              this.setState({ modalConfirm: false })
+                            }
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div className="modal-body">
+                          <h5>Apakah Anda yakin ingin menghapus Surat Keluar ini?</h5>
+                        </div>
+                        <div className="modal-footer">
+                          <Button
+                            color="danger"
+                            className="mt-1"
+                            onClick={this.deleteSurat}
+                            data-target=".bs-example-modal-center">
+                            Hapus
+                          </Button>
+                          <Button
+                            className="btn btn-info"
+                            onClick={() => this.setState({ modalConfirm: false })}
+                            data-target=".bs-example-modal-center">
+                            Batal
+                          </Button>
                         </div>
                       </Modal>
                     </Col>

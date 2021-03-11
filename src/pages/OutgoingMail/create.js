@@ -363,7 +363,7 @@ class OutgoingMailCreate extends Component {
                         Dokumen
                     </label>
                       <Col sm={10}>
-                        <form action="#">
+                        {/* <form action="#"> */}
                           <div className="custom-file">
                             <input
                               type="file"
@@ -382,7 +382,7 @@ class OutgoingMailCreate extends Component {
                               {selectedFile !== null && selectedFile !== undefined ? selectedFile.name : 'No file chosen'}
                             </label>
                           </div>
-                        </form>
+                        {/* </form> */}
                       </Col>
                     </Row>
 
