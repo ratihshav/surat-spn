@@ -257,7 +257,7 @@ class PositionEdit extends Component {
                           onChange={this.handleCheckboxParent}
                           value={isParent === false ? 0 : 1}
                           checked={dataPosition.is_parent ? dataPosition.is_parent : isParent}
-                          ref={node => (this.inputNode = node)}
+                          forwardRef={node => (this.inputNode = node)}
                         />
                       </Col>
                     </Row>

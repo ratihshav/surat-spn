@@ -161,6 +161,8 @@ class UserEdit extends Component {
       })
       : null
 
+    const finalOptions = optionsPosition ? optionsPosition.unshift({ value: 0, label: 'Tidak ada' }) : null
+
     const defaValPosition = {
       value: dataUser.position_id,
       label: dataUser.position_name
@@ -237,10 +239,10 @@ class UserEdit extends Component {
                             <NavItem style={{ cursor: "pointer" }}>
                               <NavLink
                                 className={classnames({
-                                  active: this.state.activeTabJustify === "6"
+                                  active: this.state.activeTabJustify === "2"
                                 })}
                                 onClick={() => {
-                                  this.toggleCustomJustified("6");
+                                  this.toggleCustomJustified("2");
                                 }}>
                                 <span class="d-none d-sm-block">Data Jabatan</span>
                               </NavLink>
@@ -248,10 +250,10 @@ class UserEdit extends Component {
                             <NavItem style={{ cursor: "pointer" }}>
                               <NavLink
                                 className={classnames({
-                                  active: this.state.activeTabJustify === "7"
+                                  active: this.state.activeTabJustify === "3"
                                 })}
                                 onClick={() => {
-                                  this.toggleCustomJustified("7");
+                                  this.toggleCustomJustified("3");
                                 }}>
                                 <span class="d-none d-sm-block">Data Unit</span>
                               </NavLink>
@@ -424,7 +426,7 @@ class UserEdit extends Component {
                               </Row>
                             </TabPane>
 
-                            <TabPane tabId="6" className="p-3">
+                            <TabPane tabId="2" className="p-3">
                               <Row>
                                 <Col sm="12">
                                   <Row className="form-group">
@@ -441,11 +443,12 @@ class UserEdit extends Component {
                                         ref={node => (this.inputNode = node)} />
                                     </Col>
                                   </Row>
+                                  <br></br><br></br> <br></br><br></br> <br></br><br></br> <br></br><br></br><br></br><br></br>  <br></br><br></br>  <br></br><br></br>
                                 </Col>
                               </Row>
                             </TabPane>
 
-                            <TabPane tabId="7" className="p-3">
+                            <TabPane tabId="3" className="p-3">
                               <Row>
                                 <Col sm="12">
                                   <CardText>
