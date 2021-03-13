@@ -11,6 +11,7 @@ const SidebarContent = props => {
   const divisi = props.data != null ? props.data.perms.includes('divisi_list') : null;
   const klasifikasi = props.data != null ? props.data.perms.includes('klasifikasi_list') : null;
   const template = props.data != null ? props.data.perms.includes('templateSurat_list') : null;
+  const auditTrail = props.data != null ? props.data.perms.includes('auditTrail_list') : null;
   const jabatan = props.data != null ? props.data.perms.includes('jabatan_list') : null;
   const user = props.data != null ? props.data.perms.includes('user_list') : null;
   const isAdmin = props.data != null ? props.data.perms.includes('is_admin') : null
@@ -134,13 +135,15 @@ const SidebarContent = props => {
               </Link>
             </li>
 
-            <li>
-              <Link to="/audit-trail">
-                <i className="fas fa-history"></i>
-                <span>Audit Trail</span>
-              </Link>
-            </li>
-
+            {auditTrail || isAdmin ?
+              <li>
+                <Link to="/audit-trail">
+                  <i className="fas fa-history"></i>
+                  <span>Audit Trail</span>
+                </Link>
+              </li>
+              : null
+            }
           </ul>
         </li>
 

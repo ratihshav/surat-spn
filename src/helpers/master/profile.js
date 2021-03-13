@@ -25,7 +25,7 @@ export const updateMasterProfileService = (request) => {
   formData.append('address', request.address);
   formData.append('jenis_kelamin', request.jenis_kelamin)
 
-  const UPDATE_MASTER_USER_API = config.api_endpoint + `/user/save/${id}`;
+  const UPDATE_MASTER_USER_API = config.api_endpoint + `/profile/save/${id}`;
 
   return instance.post(UPDATE_MASTER_USER_API, formData)
     .then((data) => {
