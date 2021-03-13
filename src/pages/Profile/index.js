@@ -272,33 +272,9 @@ class Profile extends Component {
                                           id="idEmployee"
                                           name="idEmployee"
                                           ref={node => (this.inputNode = node)}
+                                          style={{ backgroundColor: "#cdcbcb9c" }}
                                           required
                                           disabled
-                                        />
-                                      </Col>
-                                    </Row>
-                                  </CardText>
-                                </Col>
-                              </Row>
-
-                              <Row>
-                                <Col sm="12">
-                                  <CardText>
-                                    <Row className="form-group">
-                                      <label
-                                        htmlFor="fullName"
-                                        className="col-sm-2 col-form-label">
-                                        Nama Lengkap
-                                     </label>
-                                      <Col sm={10}>
-                                        <input
-                                          className="form-control"
-                                          type="text"
-                                          defaultValue={dataUser.full_name}
-                                          id="fullName"
-                                          name="fullName"
-                                          ref={node => (this.inputNode = node)}
-                                          required
                                         />
                                       </Col>
                                     </Row>
@@ -323,9 +299,35 @@ class Profile extends Component {
                                           id="username"
                                           name="username"
                                           ref={node => (this.inputNode = node)}
+                                          style={{ backgroundColor: "#cdcbcb9c" }}
                                           required
                                           disabled
                                         />
+                                      </Col>
+                                    </Row>
+
+                                    <Row>
+                                      <Col sm="12">
+                                        <CardText>
+                                          <Row className="form-group">
+                                            <label
+                                              htmlFor="fullName"
+                                              className="col-sm-2 col-form-label">
+                                              Nama Lengkap
+                                          </label>
+                                            <Col sm={10}>
+                                              <input
+                                                className="form-control"
+                                                type="text"
+                                                defaultValue={dataUser.full_name}
+                                                id="fullName"
+                                                name="fullName"
+                                                ref={node => (this.inputNode = node)}
+                                                required
+                                              />
+                                            </Col>
+                                          </Row>
+                                        </CardText>
                                       </Col>
                                     </Row>
 
@@ -491,6 +493,7 @@ class Profile extends Component {
                                           id="email"
                                           name="group"
                                           ref={node => (this.inputNode = node)}
+                                          style={{ backgroundColor: "#cdcbcb9c" }}
                                           required
                                           disabled
                                         />
