@@ -39,7 +39,8 @@ class OutgoingMailDetail extends Component {
       isShowModalHistory: false,
       isShowModalGenerate: false,
       isShowModalVerify: false,
-      isShowModalVoid: false
+      isShowModalVoid: false,
+      isShowModalDelete: false
     };
   }
 
@@ -382,9 +383,9 @@ class OutgoingMailDetail extends Component {
     this.removeBodyCss();
   }
 
-  showModalConfirm = () => {
+  showModalDelete = () => {
     this.setState(prevState => ({
-      modalConfirm: !prevState.modalConfirm
+      isShowModalDelete: !prevState.isShowModalDelete
     }));
     document.body.classList.add("no_padding");
   }
@@ -419,7 +420,7 @@ class OutgoingMailDetail extends Component {
     deleteOutgoingMailService(stateIdMail)
       .then((data) => {
         this.setState({
-          modalConfirm: false
+          isShowModalDelete: false
         }, () =>
         this.props.history.push({
           pathname: '/outgoing-mail'
@@ -445,8 +446,9 @@ class OutgoingMailDetail extends Component {
       isShowModalVerify,
       selectedStatusMail,
       isShowModalVoid,
+      isShowModalDelete,
       dataUser,
-      modalConfirm } = this.state;
+     } = this.state;
 
     const optionsSignature = dataUser.length !== 0 ?
       dataUser.map(function (data) {
@@ -531,18 +533,18 @@ class OutgoingMailDetail extends Component {
                       <Button
                         color="danger"
                         className="mt-1"
-                        onClick={this.showModalConfirm}>
+                        onClick={this.showModalDelete}>
                         <i className="typcn typcn-input-checked" />Hapus
                       </Button>
                       : null}
 
-                      <Modal isOpen={modalConfirm} >
+                      <Modal isOpen={isShowModalDelete} >
                        <div className="modal-header text-white bg-danger">
                           <h5 className="modal-title mt-0">Konfirmasi</h5>
                           <button
                             type="button"
                             onClick={() =>
-                              this.setState({ modalConfirm: false })
+                              this.setState({ isShowModalDelete: false })
                             }
                             className="close"
                             data-dismiss="modal"
@@ -563,7 +565,7 @@ class OutgoingMailDetail extends Component {
                           </Button>
                           <Button
                             className="btn btn-info"
-                            onClick={() => this.setState({ modalConfirm: false })}
+                            onClick={() => this.setState({ isShowModalDelete: false })}
                             data-target=".bs-example-modal-center">
                             Batal
                           </Button>
