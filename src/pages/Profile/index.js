@@ -1,125 +1,130 @@
 import React, { Component } from "react";
-import SettingMenu from "../Shared/SettingMenu";
 import {
-  Row,
-  Col,
-  Button,
-  Input,
-  Card,
-  CardBody,
+  TabContent,
+  TabPane,
   Nav,
   NavItem,
   NavLink,
-  TabContent,
-  TabPane,
+  Card,
   CardText,
-  Table
+  Row,
+  Col,
+  CardBody,
+  Button
 } from "reactstrap";
-import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import classnames from "classnames";
-import Editable from "react-bootstrap-editable";
+import Select from "react-select";
 
-
-// Custom Scrollbar
-import SimpleBar from "simplebar-react";
-
+import {
+  getDetailProfileService,
+  updateMasterProfileService
+} from '../../helpers/master/profile';
+import { getMasterPositionServices } from '../../helpers/master/position'
+import toast from '../UI/toast';
+import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
+import Loader from "../../components/Loader";
 
 // import images
-import servicesIcon1 from "../../assets/images/services-icon/01.png";
-import servicesIcon2 from "../../assets/images/services-icon/02.png";
-import servicesIcon3 from "../../assets/images/services-icon/03.png";
-import servicesIcon4 from "../../assets/images/services-icon/04.png";
-import user2 from "../../assets/images/users/user-2.jpg";
-import user3 from "../../assets/images/users/user-3.jpg";
-import user4 from "../../assets/images/users/user-4.jpg";
-import user5 from "../../assets/images/users/user-5.jpg";
-import user6 from "../../assets/images/users/user-6.jpg";
-import smimg1 from "../../assets/images/small/img-1.jpg";
-import smimg2 from "../../assets/images/small/img-2.jpg";
+import config from '../../helpers/config'
+import userAva from "../../assets/images/users/avatar-1.jpg"
 
-// Charts
-import LineAreaChart from "../AllCharts/apex/lineareachart";
-import RadialChart from "../AllCharts/apex/apexdonut";
-import Apexdonut from "../AllCharts/apex/apexdonut1";
-import SparkLine from "../AllCharts/sparkline/sparkline";
-import SparkLine1 from "../AllCharts/sparkline/sparkline1";
-import Salesdonut from "../AllCharts/apex/salesdonut";
 
-import "chartist/dist/scss/chartist.scss";
-
-class Dashboard extends Component {
+class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: "1",
-      activeTab1: "5",
-      activeTab2: "9",
-      activeTab3: "13",
-      customActiveTab: "1",
-      activeTabJustify: "5",
-      col1: true,
-      col2: false,
-      col3: false,
-      col5: true
+      dataUser: [],
+      activeTabJustify: "1",
+      dataPosition: [],
+      selectedPosition: null,
+      selectedGender: null
     };
-    this.toggle = this.toggle.bind(this);
-    this.toggle1 = this.toggle1.bind(this);
-
-    this.t_col1 = this.t_col1.bind(this);
-    this.t_col2 = this.t_col2.bind(this);
-    this.t_col3 = this.t_col3.bind(this);
-    this.t_col5 = this.t_col5.bind(this);
-
-    this.toggle2 = this.toggle2.bind(this);
-    this.toggle3 = this.toggle3.bind(this);
-
-    this.toggleCustomJustified = this.toggleCustomJustified.bind(this);
-    this.toggleCustom = this.toggleCustom.bind(this);
   }
 
-  t_col1() {
-    this.setState({ col1: !this.state.col1 });
-  }
-  t_col2() {
-    this.setState({ col2: !this.state.col2 });
-  }
-  t_col3() {
-    this.setState({ col3: !this.state.col3 });
-  }
-  t_col5() {
-    this.setState({ col5: !this.state.col5 });
+  componentDidMount() {
+    const idUser = window.localStorage.getItem('id');
+
+    this.getDetailUser(idUser)
+    this.getDataPosition()
   }
 
-  toggle(tab) {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab
-      });
+  getDetailUser = (idUser) => {
+    getDetailProfileService(idUser)
+      .then((data) => {
+        this.setState({
+          dataUser: data.data.data
+        })
+      })
+      .catch((e) => { throw e })
+  }
+
+  getDataPosition = () => {
+    getMasterPositionServices()
+      .then((data) => {
+        this.setState({
+          dataPosition: data.data
+        })
+      })
+      .catch((e) => { throw e })
+  }
+
+  submitUpdatedData = (e) => {
+    const { userid } = this.props.data
+    const { selectedPosition, dataUser } = this.state
+    const params = {
+      id: userid,
+      position_id: selectedPosition === null ? dataUser.position_id : e.target.type.value,
+      username: e.target.username.value,
+      full_name: e.target.fullName.value,
+      nip: e.target.idEmployee.value,
+      email: e.target.email.value,
+      ttl: e.target.birthDate.value,
+      phone: e.target.phone.value,
+      address: e.target.address.value,
+      jenis_kelamin: e.target.gender.value
     }
-  }
-  toggle1(tab) {
-    if (this.state.activeTab1 !== tab) {
-      this.setState({
-        activeTab1: tab
+
+    updateMasterProfileService(params)
+      .then((data) => {
+        this.alertSuccess()
+        window.location.reload()
+      })
+      .catch((e) => {
+        return (
+          this.alertError(e)
+        )
       });
-    }
-  }
-  toggle2(tab) {
-    if (this.state.activeTab2 !== tab) {
-      this.setState({
-        activeTab2: tab
-      });
-    }
-  }
-  toggle3(tab) {
-    if (this.state.activeTab3 !== tab) {
-      this.setState({
-        activeTab3: tab
-      });
-    }
+    e.preventDefault()
   }
 
-  toggleCustomJustified(tab) {
+  alertSuccess = () => {
+    toast.success('Sukses menyimpan data!')
+  };
+
+  alertError = (e) => {
+    toast.error(e)
+  }
+
+  goToChangePassword = () => {
+    const data = this.props.location.params
+    this.props.history.push({
+      pathname: '/profile-change-password',
+      params: data,
+    });
+  }
+
+  goToChangePhoto = () => {
+    const data = this.props.location.params
+    this.props.history.push({
+      pathname: '/profile-change-photo',
+      params: data,
+    });
+  }
+
+
+  toggleCustomJustified = (tab) => {
     if (this.state.activeTabJustify !== tab) {
       this.setState({
         activeTabJustify: tab
@@ -127,67 +132,99 @@ class Dashboard extends Component {
     }
   }
 
-  toggleCustom(tab) {
-    if (this.state.customActiveTab !== tab) {
-      this.setState({
-        customActiveTab: tab
-      });
-    }
+  handleSelectPosition = selectedPosition => {
+    this.setState({ selectedPosition })
+  }
+
+  handleSelectGroup = selectedGroup => {
+    this.setState({ selectedGroup })
+  }
+
+  handleChangeGender = e => {
+    this.setState({ selectedGender: e.target.value })
   }
 
   render() {
+    const {
+      dataUser,
+      dataPosition,
+      selectedPosition,
+    } = this.state;
+
+    const optionsPosition = dataPosition.length !== 0 ?
+      dataPosition.map(function (data) {
+        return { value: data.id, label: data.position_name };
+      })
+      : null
+
+    const defaValPosition = {
+      value: dataUser.position_id,
+      label: dataUser.position_name
+    }
+
+    const valMale = dataUser.length !== 0 ?
+      dataUser.jenis_kelamin === 'Laki-laki' ? true : false
+      : null
+
+    const valFemale = dataUser.length !== 0 ?
+      dataUser.jenis_kelamin === 'Perempuan' ? true : false
+      : null
+
     return (
       <React.Fragment>
         <div className="container-fluid">
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">
-                <h4 className="font-size-18">Profile</h4>
+                <h4 className="font-size-18">Profil</h4>
               </div>
             </Col>
           </Row>
 
-
-          <Row>
-            <Col xl={12}>
-              <Card>
-                <CardBody>
-                  <Row>
-                    <Col lg={2}>
-                      <div>
-                        <img
-                          className="rounded-circle center"
-                          src={user2}
-                          alt="veltrix"
-                          width="150"
-                          data-holder-rendered="true"
-                        />
-                        <br /> <br />
-                        <Button
-                          color="primary"
-                          className="btn btn-primary btn-block waves-effect waves-light"
-                        >
-                          Edit Profil
-                    </Button>
-                      </div>
-                    </Col>
-                    {/* <Col lg={5}>
-                      <Row> */}
-                    <Col md={8}>
-                      <div className="card">
-                        <div className="card-body">
-
+          {dataUser.length !== 0 ?
+            <Row>
+              <Col xl={12}>
+                <Card>
+                  <CardBody>
+                    <Row>
+                      <Col lg={2}>
+                        <div>
+                          <img
+                            className="rounded-circle center"
+                            src={dataUser.path_foto ? config.url_img + dataUser.path_foto : userAva}
+                            alt="foto_user"
+                            width="150"
+                            alt={dataUser.username}
+                            data-holder-rendered="true"
+                          />
+                          <br /> <br />
+                          <Button
+                            color="primary"
+                            className="btn btn-primary btn-block waves-effect waves-light"
+                            onClick={this.goToChangePhoto}>
+                            Ganti Foto
+                        </Button>
+                          <Button
+                            color="primary"
+                            className="btn btn-primary btn-block waves-effect waves-light"
+                            onClick={this.goToChangePassword}>
+                            Ganti Password
+                        </Button>
+                        </div>
+                      </Col>
+                      <Col md={8}>
+                        <form action="#" onSubmit={this.submitUpdatedData}>
                           <Nav tabs className="nav-tabs-custom nav-justified">
                             <NavItem>
                               <NavLink
                                 className={classnames({
-                                  active: this.state.activeTabJustify === "5"
+                                  active: this.state.activeTabJustify === "1"
                                 })}
                                 onClick={() => {
-                                  this.toggleCustomJustified("5");
+                                  this.toggleCustomJustified("1");
                                 }}
                               >
-                                <span class="d-none d-sm-block">Basic Information</span>
+                                <span className="d-none d-sm-block">Data Pribadi</span>
                               </NavLink>
                             </NavItem>
                             <NavItem>
@@ -199,7 +236,7 @@ class Dashboard extends Component {
                                   this.toggleCustomJustified("6");
                                 }}
                               >
-                                <span class="d-none d-sm-block">Profile</span>
+                                <span className="d-none d-sm-block">Data Jabatan</span>
                               </NavLink>
                             </NavItem>
                             <NavItem>
@@ -211,146 +248,287 @@ class Dashboard extends Component {
                                   this.toggleCustomJustified("7");
                                 }}
                               >
-                                <span class="d-none d-sm-block">Messages</span>
-                              </NavLink>
-                            </NavItem>
-                            <NavItem>
-                              <NavLink
-                                className={classnames({
-                                  active: this.state.activeTabJustify === "8"
-                                })}
-                                onClick={() => {
-                                  this.toggleCustomJustified("8");
-                                }}
-                              >
-                                <span class="d-none d-sm-block">Settings</span>
+                                <span className="d-none d-sm-block">Data Unit</span>
                               </NavLink>
                             </NavItem>
                           </Nav>
 
                           <TabContent activeTab={this.state.activeTabJustify}>
-                            <TabPane tabId="5" className="p-3">
-                              <Row>
-                                <Col sm="12">
-                                  <div className="table-responsive">
-                                    <Table responsive striped className="mb-0">
-                                      <thead>
-                                        <tr>
-                                          <th style={{ width: "50%" }}>Nama Lengkap</th>
-                                          <th>Afdal Zikri</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr>
-                                          <td>Simple Text Field</td>
-                                          <td>
-                                            a
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <td>Empty text field, required</td>
-                                          <td>
-                                            a
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <td>Select, local array, custom display</td>
-                                          <td>
-                                            a
-                                          </td>
-                                        </tr>
-
-                                        <tr>
-                                          <td>Combodate</td>
-                                          <td>
-                                            a
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <td>Textarea, buttons below. Submit by ctrl+enter</td>
-                                          <td>
-                                            a
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                    </Table>
-                                  </div>
-                                </Col>
-                              </Row>
-                            </TabPane>
-                            <TabPane tabId="6" className="p-3">
+                            <TabPane tabId="1" className="p-3">
                               <Row>
                                 <Col sm="12">
                                   <CardText>
-                                    Food truck fixie locavore, accusamus mcsweeney's
-                                    marfa nulla single-origin coffee squid. Exercitation
-                                    +1 labore velit, blog sartorial PBR leggings next
-                                    level wes anderson artisan four loko farm-to-table
-                                    craft beer twee. Qui photo booth letterpress,
-                                    commodo enim craft beer mlkshk aliquip jean shorts
-                                    ullamco ad vinyl cillum PBR. Homo nostrud organic,
-                                    assumenda labore aesthetic magna delectus mollit.
-                                    Keytar helvetica VHS salvia yr, vero magna velit
-                                    sapiente labore stumptown. Vegan fanny pack odio
-                                    cillum wes anderson 8-bit.
-                          </CardText>
+                                    <Row className="form-group">
+                                      <label
+                                        htmlFor="idEmployee"
+                                        className="col-sm-2 col-form-label">
+                                        NIP
+                                    </label>
+                                      <Col sm={10}>
+                                        <input
+                                          className="form-control"
+                                          type="text"
+                                          defaultValue={dataUser.nip}
+                                          id="idEmployee"
+                                          name="idEmployee"
+                                          ref={node => (this.inputNode = node)}
+                                          style={{ backgroundColor: "#cdcbcb9c" }}
+                                          required
+                                          disabled
+                                        />
+                                      </Col>
+                                    </Row>
+                                  </CardText>
+                                </Col>
+                              </Row>
+
+                              <Row>
+                                <Col sm="12">
+                                  <CardText>
+                                    <Row className="form-group">
+                                      <label
+                                        htmlFor="username"
+                                        className="col-sm-2 col-form-label">
+                                        Username
+                                    </label>
+                                      <Col sm={10}>
+                                        <input
+                                          className="form-control"
+                                          type="text"
+                                          defaultValue={dataUser.username}
+                                          id="username"
+                                          name="username"
+                                          ref={node => (this.inputNode = node)}
+                                          style={{ backgroundColor: "#cdcbcb9c" }}
+                                          required
+                                          disabled
+                                        />
+                                      </Col>
+                                    </Row>
+
+                                    <Row>
+                                      <Col sm="12">
+                                        <CardText>
+                                          <Row className="form-group">
+                                            <label
+                                              htmlFor="fullName"
+                                              className="col-sm-2 col-form-label">
+                                              Nama Lengkap
+                                          </label>
+                                            <Col sm={10}>
+                                              <input
+                                                className="form-control"
+                                                type="text"
+                                                defaultValue={dataUser.full_name}
+                                                id="fullName"
+                                                name="fullName"
+                                                ref={node => (this.inputNode = node)}
+                                                required
+                                              />
+                                            </Col>
+                                          </Row>
+                                        </CardText>
+                                      </Col>
+                                    </Row>
+
+                                    <Row>
+                                      <Col sm="12">
+                                        <CardText>
+                                          <Row className="form-group">
+                                            <label
+                                              htmlFor="email"
+                                              className="col-sm-2 col-form-label">
+                                              E-mail
+                                          </label>
+                                            <Col sm={10}>
+                                              <input
+                                                className="form-control"
+                                                type="email"
+                                                defaultValue={dataUser.email}
+                                                id="email"
+                                                name="email"
+                                                ref={node => (this.inputNode = node)}
+                                                required
+                                                disabled
+                                              />
+                                            </Col>
+                                          </Row>
+                                        </CardText>
+                                      </Col>
+                                    </Row>
+
+                                    <Row className="form-group">
+                                      <label
+                                        htmlFor="birthDate"
+                                        className="col-sm-2 col-form-label">
+                                        Tanggal Lahir
+                                    </label>
+                                      <Col sm={10}>
+                                        <input
+                                          className="form-control"
+                                          type="date"
+                                          defaultValue={dataUser.ttl}
+                                          id="birthDate"
+                                          name="birthDate"
+                                          ref={node => (this.inputNode = node)}
+                                        />
+                                      </Col>
+                                    </Row>
+
+                                    <Row>
+                                      <Col sm="12">
+                                        <Row className="form-group">
+                                          <label
+                                            className="col-sm-2 col-form-label">
+                                            Jenis Kelamin
+                                           </label>
+                                          <Col sm={10}>
+                                            <input
+                                              type="radio"
+                                              id="male"
+                                              name="gender"
+                                              value="Laki-laki"
+                                              defaultChecked={valMale}
+                                              onChange={this.handleChangeGender}
+                                              ref={node => (this.inputNode = node)} />&nbsp;
+                                            <label htmlFor="accept"> Laki-laki</label>
+
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                            <input
+                                              type="radio"
+                                              id="female"
+                                              name="gender"
+                                              value="Perempuan"
+                                              defaultChecked={valFemale}
+                                              onChange={this.handleChangeGender}
+                                              ref={node => (this.inputNode = node)} />&nbsp;
+                                            <label htmlFor="reject"> Perempuan</label>
+                                          </Col>
+                                        </Row>
+                                      </Col>
+                                    </Row>
+
+                                    <Row className="form-group">
+                                      <label
+                                        htmlFor="phone"
+                                        className="col-sm-2 col-form-label">
+                                        No. Handphone
+                                    </label>
+                                      <Col sm={10}>
+                                        <input
+                                          className="form-control"
+                                          type="text"
+                                          defaultValue={dataUser.phone}
+                                          id="phone"
+                                          name="phone"
+                                          ref={node => (this.inputNode = node)}
+                                        />
+                                      </Col>
+                                    </Row>
+
+                                    <Row className="form-group">
+                                      <label
+                                        htmlFor="address"
+                                        className="col-sm-2 col-form-label">
+                                        Alamat
+                                    </label>
+                                      <Col sm={10}>
+                                        <textarea
+                                          className="form-control"
+                                          id="address"
+                                          name="address"
+                                          rows="4"
+                                          cols="50"
+                                          defaultValue={dataUser.address}
+                                          ref={node => (this.inputNode = node)} />
+                                      </Col>
+                                    </Row>
+                                  </CardText>
                                 </Col>
                               </Row>
                             </TabPane>
+
+                            <TabPane tabId="6" className="p-3">
+                              <Row>
+                                <Col sm="12">
+                                  <Row className="form-group">
+                                    <label
+                                      className="col-sm-2 col-form-label">
+                                      Nama Jabatan
+                                  </label>
+                                    <Col sm={10}>
+                                      <Select
+                                        value={selectedPosition === null ? dataUser.position_id : selectedPosition}
+                                        placeholder={[dataUser.position_name]}
+
+                                        defaultValue={defaValPosition}
+                                        onChange={this.handleSelectPosition}
+                                        options={optionsPosition}
+                                        name="type"
+                                        isDisabled
+                                        ref={node => (this.inputNode = node)}
+                                      />
+                                    </Col>
+                                  </Row>
+                                </Col>
+                              </Row>
+                            </TabPane>
+
                             <TabPane tabId="7" className="p-3">
                               <Row>
                                 <Col sm="12">
                                   <CardText>
-                                    Etsy mixtape wayfarers, ethical wes anderson tofu
-                                    before they sold out mcsweeney's organic lomo retro
-                                    fanny pack lo-fi farm-to-table readymade. Messenger
-                                    bag gentrify pitchfork tattooed craft beer, iphone
-                                    skateboard locavore carles etsy salvia banksy hoodie
-                                    helvetica. DIY synth PBR banksy irony. Leggings
-                                    gentrify squid 8-bit cred pitchfork. Williamsburg
-                                    banh mi whatever gluten-free, carles pitchfork
-                                    biodiesel fixie etsy retro mlkshk vice blog.
-                                    Scenester cred you probably haven't heard of them,
-                                    vinyl craft beer blog stumptown. Pitchfork
-                                    sustainable tofu synth chambray yr.
-                          </CardText>
+                                    <Row className="form-group">
+                                      <label
+                                        htmlFor="email"
+                                        className="col-sm-2 col-form-label">
+                                        Nama Unit
+                                          </label>
+                                      <Col sm={10}>
+                                        <input
+                                          className="form-control"
+                                          type="email"
+                                          defaultValue={dataUser.group_name}
+                                          id="email"
+                                          name="group"
+                                          ref={node => (this.inputNode = node)}
+                                          style={{ backgroundColor: "#cdcbcb9c" }}
+                                          required
+                                          disabled
+                                        />
+                                      </Col>
+                                    </Row>
+                                  </CardText>
                                 </Col>
                               </Row>
-                            </TabPane>
 
-                            <TabPane tabId="8" className="p-3">
-                              <Row>
-                                <Col sm="12">
-                                  <CardText>
-                                    Trust fund seitan letterpress, keytar raw denim
-                                    keffiyeh etsy art party before they sold out master
-                                    cleanse gluten-free squid scenester freegan cosby
-                                    sweater. Fanny pack portland seitan DIY, art party
-                                    locavore wolf cliche high life echo park Austin.
-                                    Cred vinyl keffiyeh DIY salvia PBR, banh mi before
-                                    they sold out farm-to-table VHS viral locavore cosby
-                                    sweater. Lomo wolf viral, mustache readymade
-                                    thundercats keffiyeh craft beer marfa ethical. Wolf
-                                    salvia freegan, sartorial keffiyeh echo park vegan.
-                          </CardText>
-                                </Col>
-                              </Row>
                             </TabPane>
                           </TabContent>
-                        </div>
-                      </div>
-                    </Col>
-                    {/* </Row>
-                    </Col> */}
-                  </Row>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
+                          <div className="text-right mt-4">
+                            <Button
+                              color="success"
+                              className="mt-1">
+                              <i className="typcn typcn-input-checked" />Simpan
+                          </Button>
+                          </div>
+                        </form>
+                      </Col>
+                    </Row>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+            : <Loader />}
         </div>
       </React.Fragment>
     );
   }
 }
 
-export default Dashboard;
+const mapStatetoProps = state => {
+  const { error, loading, data } = state.Login;
+  return { error, loading, data };
+};
+
+export default withRouter(connect(mapStatetoProps, { loginUser, loginUserSuccess, loginUserFail })(Profile));

@@ -74,11 +74,11 @@ class Register extends Component {
                             </Alert>
                           ) : null}
                           {this.props.registrationError &&
-                          this.props.registrationError ? (
-                            <Alert color="danger">
-                              {this.props.registrationError}
-                            </Alert>
-                          ) : null}
+                            this.props.registrationError ? (
+                              <Alert color="danger">
+                                {this.props.registrationError}
+                              </Alert>
+                            ) : null}
 
                           <div className="form-group">
                             <AvField
@@ -145,8 +145,7 @@ class Register extends Component {
                     </Link>{" "}
                   </p>
                   <p>
-                    © {new Date().getFullYear()} Veltrix. Crafted with{" "}
-                    <i className="mdi mdi-heart text-danger"></i> by Themesbrand
+                    © {new Date().getFullYear()} Dinas Pendidikan Kab. Kerinci
                   </p>
                 </div>
               </Col>

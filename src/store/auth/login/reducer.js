@@ -1,40 +1,62 @@
-import { LOGIN_USER, LOGIN_SUCCESS, LOGOUT_USER, LOGOUT_USER_SUCCESS, API_ERROR } from './actionTypes';
+import {
+  LOGIN_USER,
+  LOGIN_USER_SUCCESS,
+  LOGIN_USER_FAIL,
+  LOGOUT_USER,
+  LOGOUT_USER_SUCCESS,
+  LOGOUT_USER_FAIL
+} from './actionTypes';
 
 const initialState = {
-    error: null,
-    loading: false
+  error: null,
+  loading: false,
+  data: null
 }
 
 const login = (state = initialState, action) => {
-    const response = action;
-    switch (action.type) {
-        case LOGIN_USER:
-            state = {
-                ...state,
-                loading: true
-            }
-            break;
-        case LOGIN_SUCCESS:
-            state = {
-                ...state,
-                loading: false,
-                response
-            }
-            break;
-        case LOGOUT_USER:
-            state = { ...state };
-            break;
-        case LOGOUT_USER_SUCCESS:
-            state = { ...state };
-            break;
-        case API_ERROR:
-            state = { ...state, error: action.payload, loading: false };
-            break;
-        default:
-            state = { ...state };
-            break;
-    }
-    return state;
+  switch (action.type) {
+
+    case LOGIN_USER:
+      return {
+        ...state,
+        loading: true
+      };
+    case LOGIN_USER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        data: action.payload,
+      }
+    case LOGIN_USER_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        loading: false
+      }
+
+
+    case LOGOUT_USER:
+      return {
+        ...state,
+        loading: true
+      };
+    case LOGOUT_USER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        data: action.payload,
+      }
+    case LOGOUT_USER_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        loading: false
+      }
+
+    default:
+      return state;
+  }
+
 }
 
 export default login;

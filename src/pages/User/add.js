@@ -1,330 +1,315 @@
 import React, { Component } from "react";
-import SettingMenu from "../Shared/SettingMenu";
-import {
-  Row,
-  Col,
-  Button,
-  Input,
-  Card,
-  CardBody,
-  Nav,
-  NavItem,
-  NavLink,
-  TabContent,
-  TabPane,
-  CardText,
-  Table
-} from "reactstrap";
+import { Row, Col, Card, CardBody, Button, Label, Input } from "reactstrap";
+import Select from "react-select";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { MDBDataTable, MDBBtn, MDBTableHead, MDBTableBody } from "mdbreact";
-import "chartist/dist/scss/chartist.scss";
+import 'react-toastify/dist/ReactToastify.css';
+import { searchPositionService } from "../../helpers/master/position"
+import { saveMasterUserService } from "../../helpers/master/user"
+import toast from '../UI/toast';
 
 class UserAdd extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      selectedPosition: null,
+      dataUser: [],
+      dataPosition: []
     };
+
+    this.input = React.createRef();
   }
 
+  componentDidMount() {
+    this.getDataPosition()
+  }
+
+  handleSelectPosition = selectedPosition => {
+    this.setState({ selectedPosition });
+  };
+
+  saveNewUser = (e) => {
+    const params = {
+      position_id: e.target.type.value,
+      username: e.target.username.value,
+      full_name: e.target.fullName.value,
+      nip: e.target.idEmployee.value,
+      email: e.target.email.value,
+      ttl: e.target.birthDate.value,
+      password: e.target.password.value,
+      phone: e.target.phone.value,
+      address: e.target.address.value,
+      jenis_kelamin: this.input.current.value
+    }
+
+    saveMasterUserService(params)
+      .then((data) => {
+        this.alertSuccess()
+        this.props.history.push('/user');
+      })
+      .catch((e) => {
+        return (
+          this.alertError(e)
+        )
+      });
+    e.preventDefault()
+  }
+
+  getDataPosition = () => {
+    searchPositionService()
+      .then((data) => {
+        this.setState({
+          dataPosition: data.data.data
+        })
+      })
+      .catch((e) => { throw e })
+  }
+
+  alertSuccess = () => {
+    toast.success('Sukses menyimpan data!')
+  };
+
+  alertError = (e) => {
+    toast.error(e)
+  }
+
+  goBack = () => {
+    this.props.history.push('/user')
+  }
 
   render() {
+    const {
+      selectedPosition,
+      dataPosition } = this.state;
+
+    const optionsPosition = dataPosition.length !== 0 ?
+      dataPosition.map((data) => {
+        return { value: data.id, label: data.text };
+      })
+      : null
+
+    const finalOptions = optionsPosition ? optionsPosition.push({ value: null, label: 'Sudah pensiun' }) : null
+
     return (
       <React.Fragment>
         <div className="container-fluid">
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">
-                <h4 className="font-size-18">Tambah User</h4>
+                <h4 className="font-size-18">Tambah User Baru</h4>
                 <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
-                    <Link to="#">Veltrix</Link>
+                    <Link to="/user">User</Link>
                   </li>
-                  <li className="breadcrumb-item">
-                    <Link to="#">User</Link>
-                  </li>
-                  <li className="breadcrumb-item active">Tambah User</li>
+                  <li className="breadcrumb-item active">Tambah User Baru</li>
                 </ol>
               </div>
             </Col>
           </Row>
 
-          <Row>
-            <div className="col-12">
-              <Card>
-                <CardBody>
+          <form action="#" onSubmit={this.saveNewUser}>
+            <Row>
+              <div className="col-12">
+                <Card>
+                  <CardBody>
+                    <Row className="form-group">
+                      <label
+                        htmlFor="fullName"
+                        className="col-sm-2 col-form-label">Nama Lengkap
+                      </label>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="text"
+                          id="fullName"
+                          name="fullName"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
 
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Text
+                    <Row className="form-group">
+                      <label htmlFor="username" className="col-sm-2 col-form-label" >
+                        Username
+                      </label>
+                      <Col sm={10}>
+                        <input
+                          name="username"
+                          className="form-control"
+                          type="text"
+                          id="username"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="idEmployee"
+                        className="col-sm-2 col-form-label">NIP
+                      </label>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="number"
+                          id="idEmployee"
+                          name="idEmployee"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label className="col-sm-2 col-form-label">
+                        Jabatan
                     </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="text"
-                        defaultValue="Artisanal kale"
-                        id="example-text-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-search-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Search
+                      <Col sm={10}>
+                        <Select
+                          value={selectedPosition}
+                          onChange={this.handleSelectPosition}
+                          options={optionsPosition}
+                          name="type"
+                          ref={node => (this.inputNode = node)}
+                          required
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="email"
+                        className="col-sm-2 col-form-label" > E-mail
+                      </label>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="email"
+                          id="email"
+                          name="email"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="password"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Password
                     </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="search"
-                        defaultValue="How do I shoot web"
-                        id="example-search-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-email-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Email
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="email"
-                        defaultValue="bootstrap@example.com"
-                        id="example-email-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-url-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      URL
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="url"
-                        defaultValue="https://getbootstrap.com"
-                        id="example-url-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-tel-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Telephone
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="tel"
-                        defaultValue="1-(555)-555-5555"
-                        id="example-tel-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-password-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Password
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="password"
-                        defaultValue="hunter2"
-                        id="example-password-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-number-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Number
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="number"
-                        defaultValue="42"
-                        id="example-number-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-datetime-local-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Date and time
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="datetime-local"
-                        defaultValue="2011-08-19T13:45:00"
-                        id="example-datetime-local-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-date-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Date
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="date"
-                        defaultValue="2011-08-19"
-                        id="example-date-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-month-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Month
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="month"
-                        defaultValue="2011-08"
-                        id="example-month-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-week-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Week
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="week"
-                        defaultValue="2011-W33"
-                        id="example-week-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-time-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Time
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="time"
-                        defaultValue="13:45:00"
-                        id="example-time-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-color-input"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Color
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control"
-                        type="color"
-                        defaultValue="#02a499"
-                        id="example-color-input"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label className="col-sm-2 col-form-label">Select</label>
-                    <Col sm={10}>
-                      <select className="form-control">
-                        <option>Select</option>
-                        <option>Large select</option>
-                        <option>Small select</option>
-                      </select>
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label className="col-sm-2 col-form-label">
-                      Custom Select
-                    </label>
-                    <Col sm={10}>
-                      <select className="custom-select">
-                        <option defaultValue>Open this select menu</option>
-                        <option defaultValue="1">One</option>
-                        <option defaultValue="2">Two</option>
-                        <option defaultValue="3">Three</option>
-                      </select>
-                    </Col>
-                  </Row>
-                  <Row className="form-group">
-                    <label
-                      htmlFor="example-text-input-lg"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Large
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control form-control-lg"
-                        type="text"
-                        placeholder=".form-control-lg"
-                        id="example-text-input-lg"
-                      />
-                    </Col>
-                  </Row>
-                  <Row className="form-group mb-0">
-                    <label
-                      htmlFor="example-text-input-sm"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Small
-                    </label>
-                    <Col sm={10}>
-                      <input
-                        className="form-control form-control-sm"
-                        type="text"
-                        placeholder=".form-control-sm"
-                        id="example-text-input-sm"
-                      />
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-            </div>
-          </Row>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="password"
+                          id="password"
+                          name="password"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="customRadioInline1"
+                        className="col-sm-2 col-form-label">Jenis Kelamin
+                      </label>
+                      <Col sm={10}>
+                        <div className="custom-control custom-radio custom-control-inline">
+                          <Input
+                            type="radio"
+                            id="customRadioInline1"
+                            name="customRadioInline1"
+                            className="custom-control-input"
+                            innerRef={this.input}
+                            value="Laki-laki"
+                          />
+                          <Label
+                            className="custom-control-label"
+                            for="customRadioInline1"> Laki-laki
+                          </Label>
+                        </div> &nbsp;
+                        <div className="custom-control custom-radio custom-control-inline">
+                          <Input type="radio"
+                            id="customRadioInline2"
+                            name="customRadioInline1"
+                            className="custom-control-input"
+                            innerRef={this.input}
+                            value="Perempuan" />
+                          <Label
+                            className="custom-control-label"
+                            for="customRadioInline2">
+                            Perempuan
+                          </Label>
+                        </div>
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="birthDate"
+                        className="col-sm-2 col-form-label" > Tanggal Lahir
+                      </label>
+                      <Col sm={10}>
+                        <input className="form-control"
+                          type="date"
+                          id="birthDate"
+                          name="birthDate"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="phone"
+                        className="col-sm-2 col-form-label" > No. Handphone
+                      </label>
+                      <Col sm={10}>
+                        <input
+                          className="form-control"
+                          type="text"
+                          id="phone"
+                          name="phone"
+                          ref={node => (this.inputNode = node)}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="form-group">
+                      <label
+                        htmlFor="address"
+                        className="col-sm-2 col-form-label" > Alamat
+                      </label>
+                      <Col sm={10}>
+                        <textarea
+                          className="form-control"
+                          id="address"
+                          name="address"
+                          rows="4"
+                          cols="50"
+                          ref={node => (this.inputNode = node)} />
+                      </Col>
+                    </Row>
+
+                    <div className="text-right mt-4">
+                      <Button color="success" className="mt-1" >
+                        <i className="typcn typcn-input-checked" />Simpan
+                      </Button>
+                      &nbsp; &nbsp;
+                      <Button color="grayMed" className="mt-1" onClick={this.goBack}>
+                        <i className="ion ion-md-arrow-round-back" /> Kembali
+                      </Button>
+                    </div>
+                  </CardBody>
+                </Card>
+              </div>
+            </Row>
+          </form>
         </div>
       </React.Fragment>
     );
   }
 }
 
-export default UserAdd;
+export default connect()(UserAdd);

@@ -8,9 +8,10 @@ class Logout extends Component {
     /**
      * Redirect to login
      */
-    componentDidMount = () => {
+    componentDidMount() {
         // emit the event
-        this.props.logoutUser(this.props.history);
+        localStorage.removeItem("authUser");
+        this.props.logoutUser();
     };
 
     render() {

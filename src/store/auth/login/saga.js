@@ -1,50 +1,40 @@
-import { takeEvery, fork, put, all, call } from 'redux-saga/effects';
+import { takeEvery, fork, put, call } from 'redux-saga/effects';
 
 // Login Redux States
-import { LOGIN_USER, LOGOUT_USER } from './actionTypes';
-import { loginSuccess, logoutUserSuccess, apiError } from './actions';
-import { loginUserService } from '../../../helpers/auth';
+import {
+  LOGIN_USER,
+} from './actionTypes';
+
+import {
+  loginUserSuccess,
+  loginUserFail,
+} from './actions';
+
+import {
+  loginUserService,
+} from '../../../helpers/auth';
 
 
-//AUTH related methods
-import { getFirebaseBackend } from '../../../helpers/authUtils';
-
-const fireBaseBackend = getFirebaseBackend();
-
-function* loginUser({ payload: { user, history } }) {
-    try {
-        const response = yield call(loginUserService, user);
-        yield put(loginSuccess(response));
-        history.push('/dashboard');
-    } catch (error) {
-        yield put(apiError(error));
-    }
-}
-
-function* logoutUser({ payload: { history } }) {
-    try {
-        const response = yield call(fireBaseBackend.logout);
-        yield put(logoutUserSuccess(response));
-        history.push('/login');
-    } catch (error) {
-        yield put(apiError(error));
-    }
+function* loginUserSaga({ payload: { request } }) {
+  try {
+    const response = yield call(loginUserService, request);
+    yield put(loginUserSuccess(response));
+    this.props.history.push('/dashboard', 'fromLogin')
+  } catch (error) {
+    yield put(loginUserFail(error));
+  }
 }
 
 
 export function* watchUserLogin() {
-    yield takeEvery(LOGIN_USER, loginUser)
+  yield takeEvery(LOGIN_USER, loginUserSaga)
 }
 
-export function* watchUserLogout() {
-    yield takeEvery(LOGOUT_USER, logoutUser)
-}
 
 function* authSaga() {
-    yield all([
-        fork(watchUserLogin),
-        fork(watchUserLogout),
-    ]);
+  yield (
+    fork(watchUserLogin)
+  );
 }
 
 export default authSaga;
