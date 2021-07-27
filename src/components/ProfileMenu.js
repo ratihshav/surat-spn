@@ -62,12 +62,7 @@ class ProfileMenu extends Component {
               <span>Profile</span>
             </Link>
             <div className="dropdown-divider"></div>
-            <Link
-              to='/'
-              className="dropdown-item">
-              <i className="mdi mdi-logout font-size-17 align-middle mr-1"></i>
-              <span onClick={this.logout}>Logout</span>
-            </Link>
+            <button class="dropdown-item" onClick={this.logout}><i class="mdi mdi-logout font-size-17 align-middle mr-1"></i><span>Logout</span></button>
           </DropdownMenu>
         </Dropdown>
       </React.Fragment >
