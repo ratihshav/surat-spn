@@ -19,6 +19,7 @@ import { searchUserSKService } from "../../helpers/master/user"
 import logoPdf from "../../assets/images/logo-pdf.png";
 import toast from '../UI/toast';
 import config from '../../helpers/config'
+import Loader from "../../components/Loader";
 
 class OutgoingMailDetail extends Component {
   constructor(props) {
@@ -40,7 +41,8 @@ class OutgoingMailDetail extends Component {
       isShowModalGenerate: false,
       isShowModalVerify: false,
       isShowModalVoid: false,
-      isShowModalDelete: false
+      isShowModalDelete: false,
+      loading: false
     };
   }
 
@@ -111,6 +113,7 @@ class OutgoingMailDetail extends Component {
   };
 
   doDisposition = (e) => {
+    this.setState({loading: true})
     const { stateIdMail, selectedSignature } = this.state
     const params = {
       surat_keluar_id: stateIdMail,
@@ -122,11 +125,13 @@ class OutgoingMailDetail extends Component {
 
     createDisposeOutgoingMailService(params)
       .then((data) => {
+        this.setState({loading: false})
         this.alertSuccess()
         this.props.history.push('/outgoing-mail');
       })
       .catch((e) => {
         return (
+          this.setState({loading: false}),
           this.alertError(e)
         )
       });
@@ -134,6 +139,7 @@ class OutgoingMailDetail extends Component {
   }
 
   doApproveMail = (e) => {
+    this.setState({loading: true})
     const params = {
       id: this.state.stateIdMail,
       keterangan: e.target.description.value,
@@ -142,11 +148,13 @@ class OutgoingMailDetail extends Component {
 
     approveOutgoingMailService(params)
       .then((data) => {
+        this.setState({loading: false})
         this.alertSuccess()
         this.props.history.push('/outgoing-mail');
       })
       .catch((e) => {
         return (
+          this.setState({loading: false}),
           this.alertError(e)
         )
       });
@@ -154,6 +162,7 @@ class OutgoingMailDetail extends Component {
   }
 
   discardMail = (e) => {
+    this.setState({loading: true})
     const params = {
       id: this.state.stateIdMail,
       remark: e.target.remark.value,
@@ -161,11 +170,13 @@ class OutgoingMailDetail extends Component {
 
     discardOutgoingMailService(params)
       .then((data) => {
+        this.setState({loading: false})
         this.alertSuccess()
         this.props.history.push('/outgoing-mail');
       })
       .catch((e) => {
         return (
+          this.setState({loading: false}),
           this.alertError(e)
         )
       });
@@ -173,6 +184,7 @@ class OutgoingMailDetail extends Component {
   }
 
   generateNoMail = (e) => {
+    this.setState({loading: true})
     moment.locale('id')
     const tgl = e.target.dateMail.value
     const params = {
@@ -183,12 +195,14 @@ class OutgoingMailDetail extends Component {
 
     generateNumMailService(params)
       .then((data) => {
+        this.setState({loading: false})
         this.setState({ isShowModalGenerate: false })
         this.alertSuccess()
         window.location.reload()
       })
       .catch((e) => {
         return (
+          this.setState({loading: false}),
           this.alertError(e)
         )
       });
@@ -197,6 +211,7 @@ class OutgoingMailDetail extends Component {
   }
 
   verifyMail = (e) => {
+    this.setState({loading: true})
     const params = {
       id: this.state.stateIdMail,
       approved: e.target.status.value,
@@ -206,12 +221,14 @@ class OutgoingMailDetail extends Component {
 
     verifyOutgoingMailService(params)
       .then((data) => {
+        this.setState({loading: false})
         this.setState({ isShowModalVerify: false })
         this.alertSuccess()
         window.location.reload()
       })
       .catch((e) => {
         return (
+          this.setState({loading: false}),
           this.alertError(e)
         )
       });
@@ -434,11 +451,9 @@ class OutgoingMailDetail extends Component {
   }
 
   render() {
-
     const {
       detailList,
       selectedSignature,
-      selectedFile,
       isShowModalDispose,
       isShowModalConfirm,
       isShowModalHistory,
@@ -448,6 +463,7 @@ class OutgoingMailDetail extends Component {
       isShowModalVoid,
       isShowModalDelete,
       dataUser,
+      loading
      } = this.state;
 
     const optionsSignature = dataUser.length !== 0 ?
@@ -461,6 +477,7 @@ class OutgoingMailDetail extends Component {
     return (
       <React.Fragment>
         <div className="container-fluid">
+          {loading && <Loader/>}
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">

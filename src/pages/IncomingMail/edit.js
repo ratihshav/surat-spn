@@ -10,7 +10,7 @@ import { searchMasterClassService } from '../../helpers/master/classification'
 import { searchMasterCharMailService } from "../../helpers/master/charMail"
 import { searchMasterTypeMailService } from "../../helpers/master/typeMail"
 import toast from '../UI/toast';
-import moment from 'moment';
+import Loader from "../../components/Loader";
 
 class IncomingMailEdit extends Component {
   constructor(props) {
@@ -26,7 +26,8 @@ class IncomingMailEdit extends Component {
       dataUser: [],
       detailList: [],
       dataSifatSurat: [],
-      dataTipeSurat: []
+      dataTipeSurat: [],
+      loading: false
     };
   }
 
@@ -112,6 +113,7 @@ class IncomingMailEdit extends Component {
   };
 
   updateIncomingMail = (e) => {
+    this.setState({loading: true})
     const {
       detailList,
       selectedClass,
@@ -136,10 +138,12 @@ class IncomingMailEdit extends Component {
 
     updateIncomingMailService(params)
       .then((data) => {
+        this.setState({loading: false})
         this.alertSuccess()
         this.props.history.push('/incoming-mail');
       })
       .catch((e) => {
+        this.setState({loading: false})
         return (
           this.alertError(e)
         )
@@ -170,7 +174,8 @@ class IncomingMailEdit extends Component {
       dataTipeSurat,
       dataSifatSurat,
       selectedType,
-      selectedUrgency
+      selectedUrgency,
+      loading
     } = this.state;
 
     const optionsSubmit = dataUser.length !== 0 ?
@@ -220,6 +225,7 @@ class IncomingMailEdit extends Component {
     return (
       <React.Fragment>
         <div className="container-fluid">
+          {loading && <Loader/>}
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">

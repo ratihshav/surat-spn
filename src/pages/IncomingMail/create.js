@@ -11,6 +11,7 @@ import { searchMasterClassService } from '../../helpers/master/classification'
 import { searchMasterCharMailService } from "../../helpers/master/charMail"
 import { searchMasterTypeMailService } from "../../helpers/master/typeMail"
 import toast from '../UI/toast';
+import Loader from "../../components/Loader";
 
 class IncomingMailCreate extends Component {
   constructor(props) {
@@ -26,7 +27,8 @@ class IncomingMailCreate extends Component {
       dataUser: [],
       dataClass: [],
       dataSifatSurat: [],
-      dataTipeSurat: []
+      dataTipeSurat: [],
+      loading: false
     };
   }
 
@@ -106,6 +108,7 @@ class IncomingMailCreate extends Component {
   };
 
   saveIncomingMail = (e) => {
+    this.setState({loading: true})
     const params = {
       asal_surat: e.target.origin.value,
       perihal: e.target.subject.value,
@@ -122,11 +125,13 @@ class IncomingMailCreate extends Component {
 
     createIncomingMailService(params)
       .then((data) => {
+        this.setState({loading: false})
         this.alertSuccess()
         this.props.history.push('/incoming-mail');
       })
       .catch((e) => {
         return (
+          this.setState({loading: false}),
           this.alertError(e)
         )
       });
@@ -155,7 +160,8 @@ class IncomingMailCreate extends Component {
       selectedClass,
       dataClass,
       dataTipeSurat,
-      dataSifatSurat
+      dataSifatSurat,
+      loading
     } = this.state;
 
     const optionsSubmit = dataUser.length !== 0 ?
@@ -185,6 +191,7 @@ class IncomingMailCreate extends Component {
     return (
       <React.Fragment>
         <div className="container-fluid">
+          {loading && <Loader/>}
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">

@@ -15,6 +15,7 @@ import config from '../../helpers/config'
 import moment from 'moment'
 import 'moment/locale/id';
 import { loginUser, loginUserSuccess, loginUserFail } from "../../store/actions";
+import Loader from "../../components/Loader";
 
 class IncomingMailDetail extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class IncomingMailDetail extends Component {
       numPages: null,
       pageNumber: 1,
       isShowModalHistory: false,
+      loading: false
     };
   }
 
@@ -89,6 +91,7 @@ class IncomingMailDetail extends Component {
 
 
   doDisposition = (e) => {
+    this.setState({loading: true})
     const { stateIdMail, selectedSignature } = this.state
     const mapped = selectedSignature.map(function (data) {
       return data.value
@@ -98,13 +101,16 @@ class IncomingMailDetail extends Component {
       to_user_id: mapped,
       arahan: e.target.instruction.value
     }
+    
     createDisposeIncomingMailService(params)
       .then((data) => {
+        this.setState({loading: false})
         this.alertSuccess()
         this.props.history.push('/incoming-mail');
       })
       .catch((e) => {
         return (
+          this.setState({loading: false}),
           this.alertError(e)
         )
       });
@@ -112,15 +118,18 @@ class IncomingMailDetail extends Component {
   }
 
   closeIncomingMail = () => {
+    this.setState({loading: true})
     const { stateIdMail } = this.state
 
     closeIncomingMailService(stateIdMail)
       .then((data) => {
+        this.setState({loading: false})
         this.alertSuccess()
         this.props.history.push('/incoming-mail');
       })
       .catch((e) => {
         return (
+          this.setState({loading: false}),
           this.alertError(e)
         )
       });
@@ -167,7 +176,6 @@ class IncomingMailDetail extends Component {
   }
 
   getTableContent = (detailList, isAdmin) => {
-    const { pageNumber, numPages } = this.state;
     return (
       <Row style={{ fontWeight: 'bold', paddingLeft: 7, paddingRight: 7 }}>
         <Col xl={4}>
@@ -326,8 +334,6 @@ class IncomingMailDetail extends Component {
     )
   }
 
-
-
   render() {
     const { perms } = this.props.data
     const granted = ['is_admin']
@@ -336,11 +342,11 @@ class IncomingMailDetail extends Component {
     const {
       detailList,
       selectedSignature,
-      selectedFile,
       dataUser,
       modalCenter,
       modalConfirm,
-      isShowModalHistory
+      isShowModalHistory,
+      loading
     } = this.state;
 
     const optionsSignature = dataUser.length !== 0 ?
@@ -353,6 +359,7 @@ class IncomingMailDetail extends Component {
     return (
       <React.Fragment>
         <div className="container-fluid">
+        {loading && <Loader/>}
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">

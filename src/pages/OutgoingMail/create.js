@@ -10,6 +10,7 @@ import { searchMasterClassService } from '../../helpers/master/classification'
 import { searchMasterCharMailService } from "../../helpers/master/charMail"
 import { searchMasterTypeMailService } from "../../helpers/master/typeMail"
 import toast from '../UI/toast';
+import Loader from "../../components/Loader";
 
 class OutgoingMailCreate extends Component {
   constructor(props) {
@@ -25,7 +26,8 @@ class OutgoingMailCreate extends Component {
       dataUserTtd: [],
       dataUserSK: [],
       dataSifatSurat: [],
-      dataTipeSurat: []
+      dataTipeSurat: [],
+      loading: false
     };
   }
 
@@ -104,6 +106,7 @@ class OutgoingMailCreate extends Component {
   };
 
   saveOutgoingMail = (e) => {
+    this.setState({loading: true})
     const params = {
       jenis_surat: e.target.type.value,
       klasifikasi_id: e.target.classification.value,
@@ -118,11 +121,13 @@ class OutgoingMailCreate extends Component {
 
     createOutgoingMailService(params)
       .then((data) => {
+        this.setState({loading: false})
         this.alertSuccess()
         this.props.history.push('/outgoing-mail');
       })
       .catch((e) => {
         return (
+          this.setState({loading: false}),
           this.alertError(e)
         )
       });
@@ -153,7 +158,8 @@ class OutgoingMailCreate extends Component {
       dataUserSK,
       dataUserTtd,
       dataTipeSurat,
-      dataSifatSurat } = this.state;
+      dataSifatSurat,
+      loading } = this.state;
 
     const optionsSignature = dataUserTtd.length !== 0 ?
       dataUserTtd.map(function (data) {
@@ -188,6 +194,7 @@ class OutgoingMailCreate extends Component {
     return (
       <React.Fragment>
         <div className="container-fluid">
+          {loading && <Loader/>}
           <Row className="align-items-center">
             <Col sm={6}>
               <div className="page-title-box">
